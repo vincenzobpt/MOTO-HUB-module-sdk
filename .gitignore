@@ -1,0 +1,11 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+.DS_Store
+# A developer key never belongs in a repository; the plugin keeps it in ~/.motohub/.
+*.key
+*.pem
+# The Android Auto head-unit identity is not part of this SDK.
+modules/android-auto/identity/

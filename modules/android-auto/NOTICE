@@ -1,0 +1,19 @@
+MOTO-HUB Android Auto module
+Copyright (C) 2026 Vincenzo Buonomano and the MOTO-HUB contributors.
+Licensed under the GNU Affero General Public License, version 3 only (see LICENSE).
+
+This module contains code ported and adapted from:
+
+  Open Headunit (headunit-revived)
+  https://github.com/andreknieriem/headunit-revived
+  GNU Affero General Public License v3
+
+  which is itself a revival of "headunit" by Michael Reid
+  https://github.com/mikereidis/headunit
+  GNU Affero General Public License v3
+
+Files carrying code from those projects say so in their header. The Android Auto wire-protocol
+messages under io/motohub/android/aa/proto are generated protocol-buffer classes.
+
+The head-unit identity (certificate and key material) that the published module carries is not
+part of this source release; see README.md.

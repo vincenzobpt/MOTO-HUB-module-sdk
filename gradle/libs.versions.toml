@@ -1,0 +1,29 @@
+# Written by ADV-SOLO tools/export-module-sdk.sh. These are the versions MOTO-HUB
+# ships: a module borrows these libraries from the app, so it must compile against them.
+
+[versions]
+agp = "8.12.3"
+kotlin = "2.0.21"
+composeBom = "2024.09.00"
+carApp = "1.7.0"
+protobuf = "3.25.1"
+conscrypt = "2.5.3"
+coroutines = "1.8.1"
+junit = "4.13.2"
+
+[libraries]
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-car-app = { module = "androidx.car.app:app", version.ref = "carApp" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui" }
+androidx-compose-runtime = { module = "androidx.compose.runtime:runtime" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
+protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf" }
+conscrypt-android = { module = "org.conscrypt:conscrypt-android", version.ref = "conscrypt" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+junit = { module = "junit:junit", version.ref = "junit" }
+
+[plugins]
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

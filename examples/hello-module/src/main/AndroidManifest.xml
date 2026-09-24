@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A module never merges a manifest into the app: it runs inside MOTO-HUB's process with MOTO-HUB's
+  permissions, and cannot add components. This file exists because the Android library plugin
+  requires one.
+-->
+<manifest />

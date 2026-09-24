@@ -1,0 +1,20 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (C) 2026 Vincenzo Buonomano and the MOTO-HUB contributors.
+// Part of MOTO-HUB. Free software under the GNU AGPL v3; see LICENSE.
+// Ported from headunit-revived (AGPLv3): aap/protocol/messages/MediaAck.kt
+package io.motohub.android.aa
+
+import com.google.protobuf.Message
+import io.motohub.android.aa.proto.Media
+
+class MediaAck(channel: Int, sessionId: Int)
+    : AapMessage(channel, Media.MsgType.MEDIA_MESSAGE_ACK_VALUE, makeProto(sessionId)) {
+
+    companion object {
+        private fun makeProto(sessionId: Int): Message =
+            Media.Ack.newBuilder().apply {
+                this.sessionId = sessionId
+                this.ack = 1
+            }.build()
+    }
+}
