@@ -4,21 +4,16 @@
 // The module's front door: what the app loads by name and everything it can reach from there.
 package io.motohub.android.aa.plugin
 
-import io.motohub.android.aa.AaAudioTap
 import io.motohub.android.aa.AaLog
 import io.motohub.android.aa.AaNavigationGuidance
 import io.motohub.android.aa.AaReceiver
 import io.motohub.android.aa.AaSelfMode
 import io.motohub.android.aa.AapPhoneHandshake
-import io.motohub.android.aa.AapProxyBridge
 import io.motohub.android.aa.AndroidAutoSelfModeHelp
 import io.motohub.android.aa.UsbAoaAccessoryConnection
 import io.motohub.android.aaplugin.AaPluginContract
-import io.motohub.android.module.ModuleAccessoryBridge
 import io.motohub.android.module.ModuleAccessoryProbe
 import io.motohub.android.module.ModuleAccessoryStreams
-import io.motohub.android.module.ModuleAudio
-import io.motohub.android.module.ModuleAudioSink
 import io.motohub.android.module.ModuleGuidance
 import io.motohub.android.module.ModuleGuidanceListener
 import io.motohub.android.module.ModuleNavigation
@@ -48,8 +43,8 @@ private class AndroidAutoModule(private val host: MotoHubModuleHost) : MotoHubMo
 
     override val manifest = ModuleManifest(
         id = "android-auto",
-        version = "0.2.6",
-        contractVersion = 10,
+        version = "0.1.5",
+        contractVersion = 5,
         entryClass = AaPluginContract.ENTRY_CLASS,
         displayName = "Android Auto",
         description = "Runs Android Auto on the motorcycle's screen."
@@ -63,8 +58,6 @@ private class AndroidAutoModule(private val host: MotoHubModuleHost) : MotoHubMo
         ModuleProjection::class.java -> receiverCapability as T
         ModuleNavigation::class.java -> receiverCapability as T
         ModuleAccessoryProbe::class.java -> receiverCapability as T
-        ModuleAccessoryBridge::class.java -> receiverCapability as T
-        ModuleAudio::class.java -> receiverCapability as T
         ModuleFeatures::class.java -> featureCapability as T
         else -> null
     }
@@ -81,7 +74,7 @@ private class AndroidAutoModule(private val host: MotoHubModuleHost) : MotoHubMo
  * specific to Android Auto is now entirely on this side of the boundary: which app to poke, which
  * port to listen on, what its wire format means.
  */
-private class AaModule : ModuleProjection, ModuleNavigation, ModuleAccessoryProbe, ModuleAccessoryBridge, ModuleAudio {
+private class AaModule : ModuleProjection, ModuleNavigation, ModuleAccessoryProbe {
 
     override fun createSource(host: MotoHubModuleHost, spec: ModuleProjectionSpec): ModuleProjectionSource =
         ModuleReceiver(host, spec)
@@ -118,8 +111,6 @@ private class AaModule : ModuleProjection, ModuleNavigation, ModuleAccessoryProb
         AaNavigationGuidance.setListener { snapshot -> listener.onGuidance(snapshot.toModule()) }
     }
 
-    override fun setAudioSink(sink: ModuleAudioSink?) = AaAudioTap.install(sink)
-
     override fun probe(host: MotoHubModuleHost, streams: ModuleAccessoryStreams): ModuleProbeOutcome {
         val outcome = AapPhoneHandshake.run(
             context = host.context,
@@ -132,13 +123,7 @@ private class AaModule : ModuleProjection, ModuleNavigation, ModuleAccessoryProb
         return ModuleProbeOutcome(outcome.success, outcome.detail)
     }
 
-    override fun bridge(host: MotoHubModuleHost, streams: ModuleAccessoryStreams): ModuleProbeOutcome {
-        val outcome = AapProxyBridge.run(streams) { host.log.log(it) }
-        return ModuleProbeOutcome(outcome.success, outcome.detail)
-    }
-
     fun release() {
-        AaAudioTap.install(null)
         AaNavigationGuidance.setListener(null)
         AaLog.sink = null
     }

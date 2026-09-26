@@ -30,20 +30,3 @@ class ModuleProbeOutcome(val success: Boolean, val detail: String)
 interface ModuleAccessoryProbe {
     fun probe(host: MotoHubModuleHost, streams: ModuleAccessoryStreams): ModuleProbeOutcome
 }
-
-/**
- * The capability a module offers when it can sit between a real head unit and Android Auto.
- *
- * Diagnostics, and a way in. MOTO-HUB holds the USB accessory the head unit created and, at the
- * same time, dials Android Auto's own head unit server on the loopback - so Google's app believes
- * it is talking to a head unit, the head unit believes it is talking to a phone, and every byte
- * between them passes through here where it can be read. It is the same trick the wireless
- * dongles play, minus the wireless.
- *
- * What it answers is the question no amount of reasoning could: what the phone actually puts on
- * that wire first. That MOTO-HUB's own handshake attempt got no reply is only interesting once
- * there is something to compare it against.
- */
-interface ModuleAccessoryBridge {
-    fun bridge(host: MotoHubModuleHost, streams: ModuleAccessoryStreams): ModuleProbeOutcome
-}

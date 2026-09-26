@@ -37,5 +37,4 @@ dependencies {
     api(platform(libs.androidx.compose.bom))
     api(libs.androidx.compose.runtime)
     api(libs.kotlinx.coroutines.android)
-    api(libs.androidx.car.app)
 }

@@ -4,7 +4,6 @@
 package io.motohub.android.aa
 
 import io.motohub.android.aa.proto.Control
-import io.motohub.android.aa.proto.Media
 import io.motohub.android.aaplugin.AaVideoConfig
 import io.motohub.android.aaplugin.AaVideoPreset
 import org.junit.Assert.assertEquals
@@ -40,15 +39,10 @@ class ServiceDiscoveryResponseTest {
         sourceLabel = "TEST"
     )
 
-    private fun AaVideoConfig.respond(audioSinks: Boolean = false): Control.ServiceDiscoveryResponse =
-        ServiceDiscoveryResponse(this, audioSinks)
+    private fun AaVideoConfig.respond(): Control.ServiceDiscoveryResponse =
+        ServiceDiscoveryResponse(this)
             .parse(Control.ServiceDiscoveryResponse.newBuilder())
             .build()
-
-    private fun Control.ServiceDiscoveryResponse.audioSink(channel: Int) = servicesList
-        .firstOrNull { it.id == channel }
-        ?.takeIf { it.hasMediaSinkService() }
-        ?.mediaSinkService
 
     private fun Control.ServiceDiscoveryResponse.video() = servicesList
         .first { it.id == Channel.ID_VID }
@@ -62,39 +56,13 @@ class ServiceDiscoveryResponseTest {
         .touchscreen
 
     @Test
-    fun `claims no music or speech unless the app has somewhere to put them`() {
-        val response = config(AaVideoPreset.LANDSCAPE_800X480, 160, 800, 480).respond()
-
-        assertEquals(null, response.audioSink(Channel.ID_AUD))
-        assertEquals(null, response.audioSink(Channel.ID_AU1))
-        // The system-sounds sink is the one Android Auto insists on; always there.
-        assertEquals(Media.AudioStreamType.SYSTEM, response.audioSink(Channel.ID_AU2)?.audioType)
-    }
-
-    @Test
-    fun `claims music and speech as PCM when asked`() {
-        val response = config(AaVideoPreset.LANDSCAPE_800X480, 160, 800, 480).respond(audioSinks = true)
-
-        val media = response.audioSink(Channel.ID_AUD)!!
-        assertEquals(Media.AudioStreamType.MEDIA, media.audioType)
-        assertEquals(Media.MediaCodecType.MEDIA_CODEC_AUDIO_PCM, media.availableType)
-        assertEquals(48_000, media.audioConfigsList.single().sampleRate)
-        assertEquals(2, media.audioConfigsList.single().numberOfChannels)
-
-        val speech = response.audioSink(Channel.ID_AU1)!!
-        assertEquals(Media.AudioStreamType.SPEECH, speech.audioType)
-        assertEquals(16_000, speech.audioConfigsList.single().sampleRate)
-        assertEquals(1, speech.audioConfigsList.single().numberOfChannels)
-    }
-
-    @Test
     fun `announces the head unit identity Android Auto is known to accept`() {
         val response = config(AaVideoPreset.LANDSCAPE_800X480, 160, 800, 480).respond()
 
-        assertEquals("MOTO-HUB", response.make)
+        assertEquals("OpenCfMoto", response.make)
         assertEquals("MotoPlay", response.model)
         assertEquals("2024", response.year)
-        assertEquals("motohub", response.vehicleId)
+        assertEquals("opencfmoto", response.vehicleId)
         assertEquals("CFMoto", response.headUnitMake)
         assertEquals("CFDL16-6GUV", response.headUnitModel)
         assertEquals("0.1.0", response.headUnitSoftwareVersion)

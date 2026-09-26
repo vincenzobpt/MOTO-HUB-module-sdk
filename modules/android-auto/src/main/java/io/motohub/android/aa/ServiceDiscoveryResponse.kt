@@ -2,9 +2,8 @@
 // Copyright (C) 2026 Vincenzo Buonomano and the MOTO-HUB contributors.
 // Part of MOTO-HUB. Free software under the GNU AGPL v3; see LICENSE.
 // Adapted from headunit-revived (AGPLv3): aap/protocol/messages/ServiceDiscoveryResponse.kt
-// Video-only Android Auto receiver profile. The head unit half of the identity (make, model,
-// software version) is a real CFMOTO dash, which is what Gearhead is known to accept; the
-// vehicle half is ours. The decoder output is composed into the T-Box canvas negotiated at runtime.
+// Video-only Android Auto receiver profile. These identity values match the proven-compatible
+// OpenCfMoto profile; the decoder output is composed into the T-Box canvas negotiated at runtime.
 package io.motohub.android.aa
 
 import com.google.protobuf.Message
@@ -16,23 +15,15 @@ import io.motohub.android.aa.proto.Media
 import io.motohub.android.aa.proto.Sensors
 
 class ServiceDiscoveryResponse(
-    profile: AaVideoConfig,
-    /**
-     * Whether to ask Android Auto for its music and speech as well as its picture.
-     *
-     * False keeps the phone playing them itself. True is only right when something on our side
-     * will actually play what arrives - Android Auto stops routing those streams to the phone's
-     * own output the moment a head unit claims them.
-     */
-    audioSinks: Boolean = false
+    profile: AaVideoConfig
 ) : AapMessage(
     Channel.ID_CTR,
     Control.ControlMsgType.MESSAGE_SERVICE_DISCOVERY_RESPONSE_VALUE,
-    makeProto(profile, audioSinks)
+    makeProto(profile)
 ) {
 
     companion object {
-        private fun makeProto(profile: AaVideoConfig, audioSinks: Boolean): Message {
+        private fun makeProto(profile: AaVideoConfig): Message {
             val services = mutableListOf<Control.Service>()
 
             // --- Sensor service (driving status + night) ---
@@ -99,42 +90,6 @@ class ServiceDiscoveryResponse(
                     )
                 }.build()
             }.build())
-
-            // --- Media and speech sinks, only when the app has somewhere to put them. ---
-            //     Claiming these is what moves Spotify, YouTube Music and the navigator's voice off
-            //     the phone's own output and onto the AAP link as plain PCM - no capture consent,
-            //     no per-app opt-out. Same formats headunit-revived negotiates: media 48 kHz
-            //     stereo, speech 16 kHz mono.
-            if (audioSinks) {
-                services.add(Control.Service.newBuilder().also { service ->
-                    service.id = Channel.ID_AUD
-                    service.mediaSinkService = Control.Service.MediaSinkService.newBuilder().also { sink ->
-                        sink.availableType = Media.MediaCodecType.MEDIA_CODEC_AUDIO_PCM
-                        sink.audioType = Media.AudioStreamType.MEDIA
-                        sink.addAudioConfigs(
-                            Media.AudioConfiguration.newBuilder().apply {
-                                sampleRate = AaAudioTap.MEDIA_SAMPLE_RATE
-                                numberOfBits = 16
-                                numberOfChannels = AaAudioTap.MEDIA_CHANNELS
-                            }.build()
-                        )
-                    }.build()
-                }.build())
-                services.add(Control.Service.newBuilder().also { service ->
-                    service.id = Channel.ID_AU1
-                    service.mediaSinkService = Control.Service.MediaSinkService.newBuilder().also { sink ->
-                        sink.availableType = Media.MediaCodecType.MEDIA_CODEC_AUDIO_PCM
-                        sink.audioType = Media.AudioStreamType.SPEECH
-                        sink.addAudioConfigs(
-                            Media.AudioConfiguration.newBuilder().apply {
-                                sampleRate = AaAudioTap.SPEECH_SAMPLE_RATE
-                                numberOfBits = 16
-                                numberOfChannels = AaAudioTap.SPEECH_CHANNELS
-                            }.build()
-                        )
-                    }.build()
-                }.build())
-            }
 
             // --- Microphone service (required for AA connection / Assistant) ---
             services.add(Control.Service.newBuilder().also { service ->
@@ -214,10 +169,10 @@ class ServiceDiscoveryResponse(
                 Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._2160x3840
         }
 
-        private const val VEHICLE_MAKE = "MOTO-HUB"
+        private const val VEHICLE_MAKE = "OpenCfMoto"
         private const val VEHICLE_MODEL = "MotoPlay"
         private const val VEHICLE_YEAR = "2024"
-        private const val VEHICLE_ID = "motohub"
+        private const val VEHICLE_ID = "opencfmoto"
         private const val HEAD_UNIT_MAKE = "CFMoto"
         private const val HEAD_UNIT_MODEL = "CFDL16-6GUV"
         private const val HEAD_UNIT_BUILD = "1"

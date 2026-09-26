@@ -17,7 +17,7 @@ import java.io.File
  *
  * Rule of the road: **append, never insert or rename.** An older module answering a newer app
  * must fail on the capability it lacks, not misbehave on one it misreads.
- * See docs/contract.md in the MOTO-HUB module SDK.
+ * See documentation/MODULE_SYSTEM_PLAN.md.
  */
 object MotoHubModuleContract {
     /**
@@ -38,25 +38,8 @@ object MotoHubModuleContract {
      * 5: the host gained ui, lending a module the app's own screen vocabulary, and features
      *    gained the MODULES placement - a page about the module, where a rider goes looking for
      *    it. Both appends, both on the app's side of the boundary.
-     * 6: a module can hand over the sound of what it projects (ModuleAudio). A new capability,
-     *    which an older module simply does not answer - so the minimum stays at 3.
-     * 7: the other direction. A module can put the app's own Ride Dashboard on somebody else's
-     *    head unit (ModuleNavigator), and to do it the host lends it the dashboard itself
-     *    (MotoHubModuleHost.dashboard) and where the rider is going (MotoHubModuleHost.guidance).
-     *    The capability is the module's and an older one does not answer it; both host members
-     *    are appends on the app's side of the boundary - so, again, the minimum stays at 3.
-     * 8: ModuleDashboardHost.setAutoDrive, so a head unit's "drive this route for me" reaches the
-     *    only side that has positions to move. An append on the app's side again; the minimum
-     *    stays at 3, and a module built against 7 simply never asks.
-     * 9: the three things a head unit could ask for and the app had no way to answer - ending the
-     *    ride it started (stopNavigating), a destination named rather than located
-     *    (navigateToQuery), and which unit the rider reads distances in (distanceUnits). All
-     *    appends on the app's side; the minimum stays at 3.
-     * 10: ModuleAccessoryBridge, for a module that can sit between a real head unit and Android
-     *    Auto and read what passes. The capability is the module's and an older one does not
-     *    answer it, so the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 10
+    const val CONTRACT_VERSION = 5
 
     /**
      * The oldest contract this app can still run.
@@ -177,18 +160,6 @@ interface MotoHubModuleHost {
      * app's own components, which is why this exists at all.
      */
     val ui: ModuleUi
-
-    /**
-     * The app's own Ride Dashboard, for a module that has somebody else's screen to fill.
-     *
-     * The mirror image of [ModuleProjection]: there the module supplies the picture and the app
-     * owns the screen; here the app supplies the picture and the module owns the screen. See
-     * [ModuleDashboardHost].
-     */
-    val dashboard: ModuleDashboardHost
-
-    /** Where the rider is going, for a module whose host wants to draw its own turn card. */
-    val guidance: ModuleGuidanceSource
 }
 
 /**
