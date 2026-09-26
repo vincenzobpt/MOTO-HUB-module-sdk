@@ -20,7 +20,7 @@ import androidx.car.app.Session
  *
  * Why any of it is in a module when a `CarAppService` has to be declared in the manifest: the
  * service is a shell, and everything it would say lives here. See
- * docs/capabilities.md in the MOTO-HUB module SDK.
+ * documentation/NAVIGATOR_MODULE_PLAN.md.
  */
 
 /**
