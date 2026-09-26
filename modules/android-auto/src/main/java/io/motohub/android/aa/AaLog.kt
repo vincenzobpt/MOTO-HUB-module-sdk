@@ -25,7 +25,7 @@ import android.util.Log
  * it was not in the APK: in the shipped 0.1.20 build `ArraysKt` has 23 methods and not one is
  * named `last*`. Every AA error the receiver tried to write therefore threw `NoSuchMethodError`
  * on the transport's poll thread and killed the process — mid-ride, on a background thread, with
- * the phone in the rider's pocket (seven installations, 2026-09-20).
+ * the phone in the rider's pocket (support 13274a94 and six other installations, 2026-09-20).
  *
  * The logger is the last place that may fail: it runs precisely when something else already has.
  * So the error path below uses array indexing and a StringBuilder — language constructs, not

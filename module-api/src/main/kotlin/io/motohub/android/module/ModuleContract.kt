@@ -17,7 +17,7 @@ import java.io.File
  *
  * Rule of the road: **append, never insert or rename.** An older module answering a newer app
  * must fail on the capability it lacks, not misbehave on one it misreads.
- * See docs/contract.md in the MOTO-HUB module SDK.
+ * See documentation/MODULE_SYSTEM_PLAN.md.
  */
 object MotoHubModuleContract {
     /**
