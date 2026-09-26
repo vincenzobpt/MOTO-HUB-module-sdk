@@ -91,10 +91,10 @@ class ServiceDiscoveryResponseTest {
     fun `announces the head unit identity Android Auto is known to accept`() {
         val response = config(AaVideoPreset.LANDSCAPE_800X480, 160, 800, 480).respond()
 
-        assertEquals("MOTO-HUB", response.make)
+        assertEquals("OpenCfMoto", response.make)
         assertEquals("MotoPlay", response.model)
         assertEquals("2024", response.year)
-        assertEquals("motohub", response.vehicleId)
+        assertEquals("opencfmoto", response.vehicleId)
         assertEquals("CFMoto", response.headUnitMake)
         assertEquals("CFDL16-6GUV", response.headUnitModel)
         assertEquals("0.1.0", response.headUnitSoftwareVersion)

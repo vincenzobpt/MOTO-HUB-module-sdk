@@ -2,9 +2,8 @@
 // Copyright (C) 2026 Vincenzo Buonomano and the MOTO-HUB contributors.
 // Part of MOTO-HUB. Free software under the GNU AGPL v3; see LICENSE.
 // Adapted from headunit-revived (AGPLv3): aap/protocol/messages/ServiceDiscoveryResponse.kt
-// Video-only Android Auto receiver profile. The head unit half of the identity (make, model,
-// software version) is a real CFMOTO dash, which is what Gearhead is known to accept; the
-// vehicle half is ours. The decoder output is composed into the T-Box canvas negotiated at runtime.
+// Video-only Android Auto receiver profile. These identity values match the proven-compatible
+// OpenCfMoto profile; the decoder output is composed into the T-Box canvas negotiated at runtime.
 package io.motohub.android.aa
 
 import com.google.protobuf.Message
@@ -214,10 +213,10 @@ class ServiceDiscoveryResponse(
                 Control.Service.MediaSinkService.VideoConfiguration.VideoCodecResolutionType._2160x3840
         }
 
-        private const val VEHICLE_MAKE = "MOTO-HUB"
+        private const val VEHICLE_MAKE = "OpenCfMoto"
         private const val VEHICLE_MODEL = "MotoPlay"
         private const val VEHICLE_YEAR = "2024"
-        private const val VEHICLE_ID = "motohub"
+        private const val VEHICLE_ID = "opencfmoto"
         private const val HEAD_UNIT_MAKE = "CFMoto"
         private const val HEAD_UNIT_MODEL = "CFDL16-6GUV"
         private const val HEAD_UNIT_BUILD = "1"
