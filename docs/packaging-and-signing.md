@@ -32,7 +32,7 @@ signed.
 
 ### Signed by you: developer mode
 
-**MOTO-HUB → Modules → Developer mode** (ADV-SOLO 0.1.24 or later) lets **Install from a file…**
+**Settings ▸ 11 Modules ▸ Developer mode** (ADV-SOLO 0.1.25 or later) lets **Install from a file…**
 accept a package signed by the key it carries in `module.pub`. Such a signature proves only that
 the file has not changed since its author signed it. It says nothing about who the author is,
 which is why developer mode is off by default and asks for confirmation.

@@ -1,7 +1,11 @@
 # MOTO-HUB module SDK
 
-Everything you need to write a **module** for MOTO-HUB (ADV-SOLO), the Android app that connects
+Everything you need to write a **module** for [MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases), the Android app that connects
 a phone to a motorcycle's TFT dashboard.
+
+[![Discord](https://img.shields.io/badge/Discord-module%20ideas%20%26%20help-5865F2?logo=discord&logoColor=white)](https://discord.gg/FzhXZtPhC8)
+[![Website](https://img.shields.io/badge/website-motohub.techub.eu-111111)](https://motohub.techub.eu)
+[![Module catalogue](https://img.shields.io/badge/catalogue-MOTO--HUB--modules-e10600)](https://github.com/vincenzobpt/MOTO-HUB-modules)
 
 A module is a single file (`.mhm`) that MOTO-HUB downloads or installs from storage and **loads
 into its own process while it runs**. It can add pages to the app, fill the motorcycle's screen
@@ -27,7 +31,7 @@ here to meet that licence, and each published version of it has a matching tag i
 ## Quick start
 
 Requirements: JDK 17 or 21, the Android SDK (platform 36, build-tools with `d8`), `adb`, and a
-phone running **ADV-SOLO 0.1.24 or later**.
+phone running **[ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases/releases/latest) 0.1.25 or later**.
 
 ```bash
 git clone https://github.com/vincenzobpt/MOTO-HUB-module-sdk
@@ -35,7 +39,7 @@ cd MOTO-HUB-module-sdk
 ./gradlew :examples:hello-module:pushModule
 ```
 
-Then on the phone: **MOTO-HUB → Modules → Developer mode** (on), **Install from a file…**, pick
+Then on the phone: **Settings ▸ 11 Modules**, turn on **Developer mode** at the bottom, **Install from a file…**, pick
 `hello-0.1.0.mhm` from Download. The module's card appears; **About** opens the page it brought.
 
 The full walk-through, including how to start your own module, is in
@@ -56,4 +60,10 @@ The full walk-through, including how to start your own module, is in
 The contract is at **version 10**. It only grows by appending, and the app still loads modules
 built against contract 3 or later. See [docs/contract.md](docs/contract.md#versioning).
 
-Questions and module ideas: the MOTO-HUB Discord, or an issue in this repository.
+## Community
+
+Questions and module ideas: the **[MOTO-HUB Discord](https://discord.gg/FzhXZtPhC8)**, or an issue in this repository.
+
+- **[motohub.techub.eu](https://motohub.techub.eu)**: the MOTO-HUB website, with news, release notes and the dashboard gallery.
+- **[MOTO-HUB-modules](https://github.com/vincenzobpt/MOTO-HUB-modules)**: the catalogue the app reads, where published modules live.
+- **[MOTO-HUB ADV-SOLO](https://github.com/vincenzobpt/MOTO-HUB-ADV-SOLO-releases)**: the app that loads your module.

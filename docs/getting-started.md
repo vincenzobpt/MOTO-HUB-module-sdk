@@ -6,7 +6,7 @@
 - **Android SDK** with platform `android-36` and a build-tools that has `d8`. The plugin finds
   the SDK through `ANDROID_HOME`, `ANDROID_SDK_ROOT`, or the `sdk.dir` Android Studio writes to
   `local.properties`.
-- **A phone with ADV-SOLO 0.1.24 or later**, reachable over `adb`.
+- **A phone with ADV-SOLO 0.1.25 or later**, reachable over `adb`.
 - Opening the repository in Android Studio works; nothing here needs it.
 
 ## 2. Build and install the example
@@ -28,7 +28,7 @@ The result is `examples/hello-module/build/module/out/hello-0.1.0.mhm`.
 
 On the phone:
 
-1. **MOTO-HUB → Modules**, scroll to the bottom, turn on **Developer mode** and confirm.
+1. **Settings ▸ 11 Modules**, scroll to the bottom, turn on **Developer mode** and confirm.
 2. **Install from a file…** → `Download/hello-0.1.0.mhm`.
 3. The card reads **DEVELOPER**, with your key's fingerprint under the version.
 4. **About** opens the module's page. Press the button, leave, come back: the count survives,
