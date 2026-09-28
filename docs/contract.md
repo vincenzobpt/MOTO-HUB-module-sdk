@@ -99,6 +99,10 @@ other way to know your objects are gone.
 | `keySinks` | Where a running projection registers to receive handlebar and phone keys. |
 | `dashboardNetwork()` | The motorcycle's Wi-Fi SSID and password while connected, else `null`. |
 | `dashboard`, `guidance` | The Ride Dashboard and route guidance, for navigator modules. |
+| `rides` | The rider's recorded rides and saved routes, read-only (contract 11); see [rides-and-scene.md](rides-and-scene.md). |
+| `scene` | A 3D terrain scene your module directs, and can export to a video (contract 11); see [rides-and-scene.md](rides-and-scene.md#the-3d-scene-modulescenehost). |
+| `openedFor()` | The ride or route a `RIDE_ACTION` or `ROUTE_ACTION` feature was opened on, else `null` (contract 14). |
+| `ai` | The language model the rider set up in the app, without its key (contract 14); see [rides-and-scene.md](rides-and-scene.md#the-riders-language-model-moduleai). |
 
 ## Rules that are easy to break
 
@@ -121,7 +125,7 @@ These all come from real failures on real motorcycles.
 
 ## Versioning
 
-`MotoHubModuleContract.CONTRACT_VERSION` (currently **10**) is bumped whenever anything in
+`MotoHubModuleContract.CONTRACT_VERSION` (currently **14**) is bumped whenever anything in
 `io.motohub.android.module` changes shape. The contract **only grows by appending**: new
 capabilities, and new members on interfaces the *app* implements. An older module simply does
 not answer a capability it predates, and never calls a host member it does not know.
@@ -132,8 +136,20 @@ The app refuses a module whose `contractVersion` is:
 - **lower** than `MINIMUM_CONTRACT_VERSION` (currently **3**): the shapes changed in a way that
   is not backwards compatible.
 
-So build against the newest `module-api` unless you have a reason not to. A module built against
-contract 10 installs on every app that speaks 10 or more. The history of each version is in the
-KDoc of `MotoHubModuleContract`.
+So **compile against the newest `module-api`, and declare the highest contract whose members you
+actually use**. A module that declares 10 installs on every app that speaks 10 or more, even when
+it was compiled against 14. Declaring more than you use only turns away riders on older apps;
+declaring less lets an older app load your module and fail with `AbstractMethodError` at the
+first call it does not have. The example declares 10 for that reason, and so does the Android
+Auto module. Every member added after contract 10 names its contract in its KDoc, and the full
+history is in the KDoc of `MotoHubModuleContract`.
+
+| Contract | Adds | ADV-SOLO that installs your build |
+|---|---|---|
+| 10 | `ModuleAccessoryBridge` | 0.1.25, the first with developer mode |
+| 11 | `host.rides`, `host.scene` | 0.1.29 |
+| 12 | `ModuleScene.setLook`, `setMarkers`; `ModuleRideLibrary.engineRpm`; `ModuleUi.Backdrop` | 0.1.29 |
+| 13 | `ModuleScene.export` | 0.1.29 |
+| 14 | `RIDE_ACTION`, `ROUTE_ACTION`, `TRIPS_HEADER`; `host.openedFor()`, `host.ai`; scene lens, engine, weather, extras, blend | 0.1.29 |
 
 This repository tags every contract release as `contract-<n>`.

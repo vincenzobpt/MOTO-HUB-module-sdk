@@ -57,9 +57,10 @@ when the check fails.
 4. In `build.gradle.kts`, set `motohubModule { id, version, entryClass, displayName, description }`.
    - `id` is permanent: it is what the app files your module under, and what an update must
      match. Letters, digits, `-` and `_`.
-   - `contractVersion` is `MotoHubModuleContract.CONTRACT_VERSION` from the `module-api` you
-     compile against. Leave it as the example has it, unless you are deliberately targeting an
-     older app; see [contract.md](contract.md#versioning).
+   - `contractVersion` is the highest contract whose members you call. The example's 10 is
+     right until you use something newer: the host's rides, scene or AI, a Trips placement,
+     `Backdrop`. Then raise it to the contract named in that member's KDoc. See
+     [contract.md](contract.md#versioning).
 5. Keep the `ModuleManifest` your module reports in step with those values (the example shows
    where).
 6. Every dependency stays `compileOnly` unless you are certain the app does not already carry it.

@@ -17,6 +17,10 @@ as the Android Auto module does.
 Where only one module can serve (projection, navigator), the app takes the **first installed**
 module that answers. That is a deliberate, predictable choice until a second one is meaningful.
 
+What the host *lends* your module (its storage, log, UI, the rider's rides, the 3D scene, the
+rider's AI) is not a capability: see [contract.md](contract.md#what-the-host-lends-you) and
+[rides-and-scene.md](rides-and-scene.md).
+
 ---
 
 ## Pages: `ModuleFeatures` and `ModuleUi`
@@ -43,6 +47,12 @@ class ModuleFeature(
 | `SETTINGS` | A row in Settings. Only for a real choice the rider makes. |
 | `RIDE_MODE` | Listed with the app's own ways of driving the motorcycle's screen. |
 | `NONE` | Nowhere. Reached from your own pages with `host.openFeature(id)`. |
+| `RIDE_ACTION` | On a recorded trip's page, as an action on that ride (contract 14). |
+| `ROUTE_ACTION` | On a route's preview, as an action on that route (contract 14). |
+| `TRIPS_HEADER` | A small pill with your `title` at the top of Trips (contract 14). |
+
+For the last three, `host.openedFor()` says which ride or route; see
+[rides-and-scene.md](rides-and-scene.md#actions-on-one-ride-or-route).
 
 `features()` is called again after every install, so the list can depend on state. It must be
 cheap, because it is called from the UI. `screen` is called with the back action the host chose:
@@ -59,6 +69,7 @@ without a rebuild:
 | `Fact(label, value, technical)` | A read-only line. `technical = true` for ports, paths and versions: shown so a rider can tell they are not for them. |
 | `ActionRow(title, description) { … }` | A tappable row that opens something. |
 | `PrimaryButton(text, enabled) { … }` | The page's main action. |
+| `Backdrop(onBack) { … }` | The app's page ground (the rider's theme colour and backdrop) for a full-screen layout of your own instead of a `Screen`. Back goes to `onBack`, not out of the app (contract 12). |
 
 None of these have default arguments, so always pass every one (see
 [contract.md](contract.md#rules-that-are-easy-to-break)). Plain Compose is available for anything

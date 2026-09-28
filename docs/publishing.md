@@ -60,8 +60,8 @@ distribute it to.
 ## Checklist before you publish
 
 - [ ] `id` is final. Changing it later makes it a different module.
-- [ ] `contractVersion` is the one you built against, and the module was tested on the oldest app
-      you claim to support.
+- [ ] `contractVersion` is the highest contract whose members you call, and the module was tested
+      on the oldest app that speaks it.
 - [ ] `checkModuleLinkage` is clean against the current ADV-SOLO release.
 - [ ] `release()` clears everything you registered with the host.
 - [ ] A `MODULES` page says what the module does and whether it can run right now.

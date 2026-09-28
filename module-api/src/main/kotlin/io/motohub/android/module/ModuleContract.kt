@@ -55,8 +55,27 @@ object MotoHubModuleContract {
      * 10: ModuleAccessoryBridge, for a module that can sit between a real head unit and Android
      *    Auto and read what passes. The capability is the module's and an older one does not
      *    answer it, so the minimum stays at 3.
+     * 11: the host lends the rider's rides and routes (MotoHubModuleHost.rides) and a 3D terrain
+     *    scene a module can direct (MotoHubModuleHost.scene) - for a module that turns a ride into
+     *    a film. Both appends on the app's side; the minimum stays at 3.
+     * 12: ModuleScene.setLook (map style, relief, haze, how the track is drawn),
+     *    ModuleScene.setMarkers (labelled pins on the terrain), ModuleRideLibrary.engineRpm
+     *    (the OBD engine speed along a ride) and ModuleUi.Backdrop (the app's page ground for a
+     *    module's own full-screen layout). Appends to interfaces the app implements; the minimum
+     *    stays at 3.
+     * 13: ModuleScene.export, rendering a scene's film to a video frame by frame with a module's
+     *    overlay drawn over it. An append on the app's side; the minimum stays at 3.
+     * 14: features can be actions on one ride or route - the RIDE_ACTION and ROUTE_ACTION
+     *    placements, drawn on a recorded trip's page and on a route's preview - and the host says
+     *    which one a feature was opened on (MotoHubModuleHost.openedFor). A route only previewed,
+     *    neither saved nor being navigated, is ModuleRideEntry.KIND_PREVIEW_ROUTE. A scene can
+     *    film through a 360° or little-planet lens (ModuleScene.setLens), be drawn by ArcGIS with its
+     *    weather (ModuleScene.setEngine, setWeather), blend a second camera for dissolves
+     *    (ModuleScene.setBlend), a feature can be a button at the top of Trips (the TRIPS_HEADER
+     *    placement), and a module can ask the rider's own language model (MotoHubModuleHost.ai).
+     *    All appends; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 10
+    const val CONTRACT_VERSION = 14
 
     /**
      * The oldest contract this app can still run.
@@ -189,6 +208,37 @@ interface MotoHubModuleHost {
 
     /** Where the rider is going, for a module whose host wants to draw its own turn card. */
     val guidance: ModuleGuidanceSource
+
+    /** The rider's recorded rides and saved routes, read-only. See [ModuleRideLibrary]. */
+    val rides: ModuleRideLibrary
+
+    /** The app's 3D terrain scene, for a module that directs a camera over a track. See [ModuleSceneHost]. */
+    val scene: ModuleSceneHost
+
+    /**
+     * The ride or route a [ModuleFeaturePlacement.RIDE_ACTION] or
+     * [ModuleFeaturePlacement.ROUTE_ACTION] feature was opened on, handed to [rides] as it is;
+     * null for a feature opened anywhere else.
+     */
+    fun openedFor(): ModuleRideEntry?
+
+    /** The language model the rider set up in the app's AI settings, if any. See [ModuleAi]. */
+    val ai: ModuleAi
+}
+
+/**
+ * The rider's own language model, as the app's AI settings configure it (an OpenAI-compatible
+ * endpoint with the rider's key). The key never reaches the module: it asks, the app sends.
+ */
+interface ModuleAi {
+    /** Whether a key and a model are set, so [complete] can be tried at all. */
+    fun isReady(): Boolean
+
+    /**
+     * Sends [system] and [user] and returns the model's text, or throws with why not. Blocking:
+     * call it off the main thread. [json] asks for a JSON object where the server honours it.
+     */
+    fun complete(system: String, user: String, maxTokens: Int, json: Boolean): String
 }
 
 /**

@@ -17,6 +17,7 @@ runtime its class loader's parent is MOTO-HUB's, so these come from **the app's 
 | `androidx.lifecycle` | as the app | `DefaultLifecycleObserver` and `LifecycleOwner` whole; the rest by name only |
 | `androidx.core.graphics.drawable.IconCompat` | as the app | whole |
 | protobuf-java, Conscrypt | as the app | whatever the app itself uses |
+| Bouncy Castle (`org.bouncycastle`) | not exported | only the Ed25519 signer the app's signature check uses. Do not borrow it; if you need it, bundle your own **relocated** copy (see below) |
 | `io.motohub.android.module` (the contract) | this repository | whole |
 | Android framework (`android.*`, `java.*`, `org.json`, …) | the phone's | everything; not the app's to shrink |
 
@@ -64,7 +65,8 @@ report is written to `build/reports/module-linkage.txt`.
 
 In order of preference:
 
-1. **Stop calling it.** Write the few lines yourself (a loop instead of `lastOrNull()`), or call
+1. **Stop calling it.** Write the few lines yourself (a loop instead of `lastOrNull()` or
+   `toHashSet()`), or call
    the framework's equivalent (`java.util.*`, `android.*`), which is never shrunk. This is always
    the right fix on error and logging paths.
 2. **Ask for a keep rule.** If the method is genuinely needed (a Compose API, a coroutine

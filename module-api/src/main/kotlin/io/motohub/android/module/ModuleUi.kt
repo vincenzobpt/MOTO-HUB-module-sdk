@@ -79,6 +79,16 @@ interface ModuleUi {
     @ComposableTarget(UI_APPLIER)
     fun PrimaryButton(text: String, enabled: Boolean, onClick: () -> Unit)
 
+    /**
+     * The app's page ground - the rider's theme colour and chosen backdrop, as behind the app's
+     * own main screens - for a module that lays out a full screen of its own rather than a
+     * [Screen]. Text inside is drawn without the halo the app puts on text over a backdrop, and
+     * the back gesture goes to [onBack] instead of leaving the app (contract 12).
+     */
+    @Composable
+    @ComposableTarget(UI_APPLIER)
+    fun Backdrop(onBack: () -> Unit, content: @Composable @ComposableTarget(UI_APPLIER) () -> Unit)
+
     companion object {
         /** The applier every one of these draws into: the ordinary Compose UI tree. */
         const val UI_APPLIER = "androidx.compose.ui.UiComposable"

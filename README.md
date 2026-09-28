@@ -10,7 +10,7 @@ a phone to a motorcycle's TFT dashboard.
 A module is a single file (`.mhm`) that MOTO-HUB downloads or installs from storage and **loads
 into its own process while it runs**. It can add pages to the app, fill the motorcycle's screen
 (Android Auto is a module), put the Ride Dashboard on a third-party head unit, receive
-turn-by-turn guidance and projected audio, and more. The app itself knows nothing about any
+turn-by-turn guidance and projected audio, turn the rider's rides into 3D films, and more. The app itself knows nothing about any
 particular module: it asks for *capabilities* by interface and draws whatever the module offers.
 
 ## What is in this repository
@@ -49,16 +49,19 @@ The full walk-through, including how to start your own module, is in
 
 1. [Getting started](docs/getting-started.md): build, install and change the example
 2. [The contract](docs/contract.md): how a module is loaded, the manifest, versioning and the rules
-3. [Capabilities](docs/capabilities.md): everything a module can offer, and what the host lends it
-4. [Borrowed libraries](docs/borrowed-libraries.md): what you may call, and the linkage check (**read this one**)
-5. [Packaging and signing](docs/packaging-and-signing.md): the `.mhm` format, your developer key, developer mode
-6. [Publishing](docs/publishing.md): getting a module into the in-app catalogue
-7. [Troubleshooting](docs/troubleshooting.md)
+3. [Capabilities](docs/capabilities.md): everything a module can offer
+4. [Rides, the 3D scene and the rider's AI](docs/rides-and-scene.md): what the host lends a module from contract 11
+5. [Borrowed libraries](docs/borrowed-libraries.md): what you may call, and the linkage check (**read this one**)
+6. [Packaging and signing](docs/packaging-and-signing.md): the `.mhm` format, your developer key, developer mode
+7. [Publishing](docs/publishing.md): getting a module into the in-app catalogue
+8. [Troubleshooting](docs/troubleshooting.md)
 
 ## Status
 
-The contract is at **version 10**. It only grows by appending, and the app still loads modules
-built against contract 3 or later. See [docs/contract.md](docs/contract.md#versioning).
+The contract is at **version 14**. It only grows by appending, and the app still loads modules
+built against contract 3 or later. Contracts 11 to 14 (rides, the 3D scene, ride and route
+actions, the rider's AI) need ADV-SOLO 0.1.29; a module that does not use them can keep declaring
+10 and run on 0.1.25 and later. See [docs/contract.md](docs/contract.md#versioning).
 
 ## Community
 

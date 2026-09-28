@@ -45,7 +45,26 @@ enum class ModuleFeaturePlacement {
      * addressable by id through [MotoHubModuleHost.openFeature]. For the second and third
      * screens of a feature whose first one is already placed.
      */
-    NONE
+    NONE,
+
+    /**
+     * An action on one recorded ride, on that trip's page. [MotoHubModuleHost.openedFor] says
+     * which ride when [ModuleFeature.screen] opens.
+     */
+    RIDE_ACTION,
+
+    /**
+     * An action on one route - a saved one, or one just planned and previewed - on the route's
+     * preview. [MotoHubModuleHost.openedFor] says which route.
+     */
+    ROUTE_ACTION,
+
+    /**
+     * A button at the top of Trips, beside the page's title (contract 14): the way in to what a
+     * module keeps of the rides - its own list of what it made from them. Drawn by the app as a
+     * small pill with [ModuleFeature.title].
+     */
+    TRIPS_HEADER
 }
 
 /**
