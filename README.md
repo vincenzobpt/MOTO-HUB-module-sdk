@@ -58,10 +58,11 @@ The full walk-through, including how to start your own module, is in
 
 ## Status
 
-The contract is at **version 14**. It only grows by appending, and the app still loads modules
+The contract is at **version 15**. It only grows by appending, and the app still loads modules
 built against contract 3 or later. Contracts 11 to 14 (rides, the 3D scene, ride and route
-actions, the rider's AI) need ADV-SOLO 0.1.29; a module that does not use them can keep declaring
-10 and run on 0.1.25 and later. See [docs/contract.md](docs/contract.md#versioning).
+actions, the rider's AI) need ADV-SOLO 0.1.29, contract 15 (draft, real-time and H.265 video
+exports) ADV-SOLO 0.1.30; a module that does not use them can keep declaring 10 and run on 0.1.25
+and later. See [docs/contract.md](docs/contract.md#versioning).
 
 ## Community
 

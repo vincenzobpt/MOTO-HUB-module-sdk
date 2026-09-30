@@ -1,6 +1,6 @@
 # Rides, the 3D scene and the rider's AI
 
-Contracts 11 to 14 lend a module three things it could not get any other way: the rider's rides
+Contracts 11 to 15 lend a module three things it could not get any other way: the rider's rides
 and routes, the app's 3D terrain scene, and the language model the rider set up. They are
 **members of `MotoHubModuleHost`**, not capabilities: the app implements them and your module
 calls them. A module that uses any of them must declare the contract that introduced what it
@@ -153,6 +153,31 @@ export, never a stuttering film.
 - The video lands in the rider's gallery under `Movies/MOTO-HUB`. The listener gets
   `onExportProgress(done, total)`, then `onExportFinished(uri, bytes)` or
   `onExportFailed(message)`, on the main thread. `job.cancel()` stops it.
+- The screen has to stay on and MOTO-HUB in front while it renders: off-screen displays only
+  draw while the phone's does. With the screen off the export pauses and carries on from the same
+  frame when the rider is back.
+
+### Export options (contract 15)
+
+All of them have defaults, so a spec written for contract 13 or 14 compiles unchanged.
+
+| Field | What it does |
+|---|---|
+| `draft` | A lighter 3D picture for checking a film before the real export: the ArcGIS engine draws at medium quality with no shadows, reflections or buildings, and each frame loads far less. The map engine ignores it. |
+| `realTime` | The film is **filmed as it plays** instead of frame by frame: once, on an off-screen display the size of the video, straight into the hardware encoder. Minutes instead of the better part of an hour, but nothing waits for the map: imagery still loading, or a frame the phone did not manage to draw, stays in the video as it was. `parallelRenderers` is ignored. 720p is the safe size; larger ones may stutter on a busy scene. |
+| `captureSpeed` | `realTime` only, 0.05 to 1: the film plays at this share of its pace while it is filmed, and every picture is stamped with the moment of the film it shows, so the video still comes out at the film's own pace. `0.5` gives the scene twice the time for each frame and takes twice as long. |
+| `warmUp` | `realTime` only: the film is played once without filming first, so the map and relief it needs are already cached when it is filmed. Twice the time. |
+| `hevc` | H.265 instead of H.264: about half the file for the same picture. Only a hardware encoder is used; on a phone without one for this size and rate the app falls back to H.264 at a higher `bitRate`, so size `bitRate` for H.265 when you ask for it. |
+
+```kotlin
+ModuleExportSpec(width = 1280, height = 720, framesPerSecond = 30, bitRate = 2_500_000,
+    audioUri = song, audioStartMillis = 0, audioVolume = 0.8f,
+    fileName = "my-ride.mp4", parallelRenderers = 1,
+    realTime = true, captureSpeed = 0.5f, warmUp = false, hevc = true)
+```
+
+In both modes the sound is the song's own file, decoded, levelled, faded and encoded as AAC; the
+phone plays nothing aloud.
 
 ---
 

@@ -74,8 +74,12 @@ object MotoHubModuleContract {
      *    (ModuleScene.setBlend), a feature can be a button at the top of Trips (the TRIPS_HEADER
      *    placement), and a module can ask the rider's own language model (MotoHubModuleHost.ai).
      *    All appends; the minimum stays at 3.
+     * 15: ModuleExportSpec.draft, a lighter 3D picture for checking a film before the real export
+     *    (ArcGIS: medium quality, no shadows, reflections or buildings), and realTime, captureSpeed,
+     *    warmUp and hevc: a film recorded as it plays instead of frame by frame, and H.265. Appends
+     *    with defaults, so a module built against 14 still constructs its spec; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 14
+    const val CONTRACT_VERSION = 15
 
     /**
      * The oldest contract this app can still run.

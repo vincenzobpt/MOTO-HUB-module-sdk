@@ -125,7 +125,7 @@ These all come from real failures on real motorcycles.
 
 ## Versioning
 
-`MotoHubModuleContract.CONTRACT_VERSION` (currently **14**) is bumped whenever anything in
+`MotoHubModuleContract.CONTRACT_VERSION` (currently **15**) is bumped whenever anything in
 `io.motohub.android.module` changes shape. The contract **only grows by appending**: new
 capabilities, and new members on interfaces the *app* implements. An older module simply does
 not answer a capability it predates, and never calls a host member it does not know.
@@ -138,7 +138,7 @@ The app refuses a module whose `contractVersion` is:
 
 So **compile against the newest `module-api`, and declare the highest contract whose members you
 actually use**. A module that declares 10 installs on every app that speaks 10 or more, even when
-it was compiled against 14. Declaring more than you use only turns away riders on older apps;
+it was compiled against 15. Declaring more than you use only turns away riders on older apps;
 declaring less lets an older app load your module and fail with `AbstractMethodError` at the
 first call it does not have. The example declares 10 for that reason, and so does the Android
 Auto module. Every member added after contract 10 names its contract in its KDoc, and the full
@@ -151,5 +151,6 @@ history is in the KDoc of `MotoHubModuleContract`.
 | 12 | `ModuleScene.setLook`, `setMarkers`; `ModuleRideLibrary.engineRpm`; `ModuleUi.Backdrop` | 0.1.29 |
 | 13 | `ModuleScene.export` | 0.1.29 |
 | 14 | `RIDE_ACTION`, `ROUTE_ACTION`, `TRIPS_HEADER`; `host.openedFor()`, `host.ai`; scene lens, engine, weather, extras, blend | 0.1.29 |
+| 15 | `ModuleExportSpec.draft`, `realTime`, `captureSpeed`, `warmUp`, `hevc` | 0.1.30 |
 
 This repository tags every contract release as `contract-<n>`.

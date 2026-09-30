@@ -128,7 +128,7 @@ interface ModuleScene {
  * [fileName] is the name the video gets in Movies/MOTO-HUB; [parallelRenderers] is how many
  * frames are drawn at the same time.
  */
-class ModuleExportSpec(
+class ModuleExportSpec @JvmOverloads constructor(
     val width: Int,
     val height: Int,
     val framesPerSecond: Int,
@@ -142,7 +142,36 @@ class ModuleExportSpec(
      * and relief is most of a frame's time, and it waits just as well in parallel; the app may use
      * fewer if the phone cannot start them all.
      */
-    val parallelRenderers: Int
+    val parallelRenderers: Int,
+    /**
+     * A lighter 3D picture (contract 15), for checking a film before the real export: the ArcGIS
+     * engine draws at medium quality with no shadows, reflections or buildings, and each frame
+     * loads a good deal less. The map engine ignores it.
+     */
+    val draft: Boolean = false,
+    /**
+     * Filmed as it plays (contract 15): the film runs once on an off-screen display and is
+     * recorded as it goes, instead of waiting for every frame's map and relief. Minutes instead of
+     * the better part of an hour, but what the scene had not loaded yet, or a frame the phone did
+     * not manage to draw, is in the video as it was. [parallelRenderers] is ignored.
+     */
+    val realTime: Boolean = false,
+    /**
+     * [realTime] only: the share of its own pace the film plays at while it is filmed, 0.05..1.
+     * Half speed gives the scene twice the time for each frame, and the video is still the film's
+     * length: the recording is put back to its pace.
+     */
+    val captureSpeed: Float = 1f,
+    /**
+     * [realTime] only: the film is played once without filming first, so the map and the relief
+     * it needs are already in the cache when it is filmed. Twice the time.
+     */
+    val warmUp: Boolean = false,
+    /**
+     * H.265 instead of H.264 (contract 15): about half the file for the same picture. The app
+     * falls back to H.264 at a higher [bitRate] on a phone that cannot encode this size in H.265.
+     */
+    val hevc: Boolean = false
 )
 
 /**
