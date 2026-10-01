@@ -78,8 +78,11 @@ object MotoHubModuleContract {
      *    (ArcGIS: medium quality, no shadows, reflections or buildings), and realTime, captureSpeed,
      *    warmUp and hevc: a film recorded as it plays instead of frame by frame, and H.265. Appends
      *    with defaults, so a module built against 14 still constructs its spec; the minimum stays at 3.
+     * 16: ModuleScene.setCredits, credit lines a module owes for what it put in a film (its music,
+     *    its photos), written into the credit roll that already names the maps. An append; the
+     *    minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 15
+    const val CONTRACT_VERSION = 16
 
     /**
      * The oldest contract this app can still run.

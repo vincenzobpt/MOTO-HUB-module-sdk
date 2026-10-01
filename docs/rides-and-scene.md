@@ -122,6 +122,7 @@ the playback frame, clamped to the new length.
 | `setWeatherPath(weather, cloudCover)` | 14 | One weather and one amount per frame of the shot. Wins over `setWeather` where it fits the shot; `null` for one weather all along. |
 | `setExtras(ModuleSceneExtras(rider, riderColor, trackWall, placeNames, buildings))` | 14 | The rider as a dot or a motorcycle (`ModuleSceneRider`, drawn by ArcGIS), a translucent wall under the line (ArcGIS), town names and 3D buildings (both engines). |
 | `setBlend(second, mix)` | 14 | A second shot with the same frame count, blended by `mix` (0 to 1 per frame): a dissolve from one clip into the next. ArcGIS cannot blend and dips through black instead. `null` for none. |
+| `setCredits(title, lines)` | 16 | Credits the film owes for what the module put in it (its music, its photos): `title` heads the block ("MUSIC"), `lines` are its entries, one short line each. They go into the credit roll that already names the maps, imagery and relief, on screen and in an export. An empty list takes the block away. |
 
 ### Exporting a video (contract 13)
 

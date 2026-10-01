@@ -110,6 +110,15 @@ interface ModuleScene {
     fun setExtras(extras: ModuleSceneExtras)
 
     /**
+     * Credits the film owes besides the maps' own (contract 16), for the music or the photos in
+     * it: [title] heads the block ("MUSIC") and [lines] are its entries, one short line each.
+     * The scene writes them into the same credit roll that names the maps, the imagery and the
+     * relief in the film's last seconds, on screen and in an export, so the film carries all of
+     * its credits in one place. An empty list takes the block away.
+     */
+    fun setCredits(title: String, lines: List<String>)
+
+    /**
      * A second camera blended over the shot (contract 14), for a dissolve from one clip into the
      * next: [second] has the shot's frame count, [mix] how much of it shows at each frame, 0 for
      * none to 1 for all of it. The app's own engine draws both pictures and blends them; ArcGIS,
