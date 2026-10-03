@@ -220,7 +220,7 @@ abstract class CheckModuleLinkage : DefaultTask() {
         )
 
         val PLATFORM_PREFIXES = listOf(
-            "Ljava/", "Ljavax/", "Landroid/", "Ldalvik/", "Lorg/w3c/", "Lorg/xml/",
+            "Ljava/", "Ljavax/", "Landroid/", "Ldalvik/", "Lorg/w3c/", "Lorg/xml/", "Lorg/xmlpull/",
             "Lorg/json/", "Lorg/apache/http/", "Ljunit/", "Lsun/"
         )
     }

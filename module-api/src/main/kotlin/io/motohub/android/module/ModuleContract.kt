@@ -81,8 +81,33 @@ object MotoHubModuleContract {
      * 16: ModuleScene.setCredits, credit lines a module owes for what it put in a film (its music,
      *    its photos), written into the credit roll that already names the maps. An append; the
      *    minimum stays at 3.
+     * 17: ModuleScene.setActionPath and ModuleSceneAction, the rider's figure playing little
+     *    scenes along the film (a thumb up, a wave, a wheelie, a stop for a selfie); and the
+     *    models of real motorcycles among the ModuleSceneRider figures. An append; the minimum
+     *    stays at 3.
+     * 18: ModuleSceneEngine.ULTRA, a third engine for ModuleScene.setEngine: MOTO-HUB's own
+     *    game-grade world - the road as real road, forests, sky and weather drawn around it. A new
+     *    value for an existing call; an older app clamps it to an engine it has, so the minimum
+     *    stays at 3.
+     * 19: ModuleRenderSettings and ModuleExportSpec.render, segments and preview: the Real 3D
+     *    engine's export finish (TAA or SMAA, motion blur, depth of field, volumetric clouds,
+     *    water), a render of only a few stretches of the film kept as a throw-away preview,
+     *    ModuleScene.setDiagnostics and ModuleScene.setBasicMode (the live scene drawn without any
+     *    effect, for a phone that stutters). Appends with defaults; the minimum stays at 3.
+     * 20: ModuleProjectionReach, a projection that only fills a dashboard's panel (a camera)
+     *    rather than the whole screen. Every installed projection module gets its own tile among
+     *    the dashboard's map sources, and ModuleProjectionTile lets a module draw that tile itself
+     *    (picture, mark, colour, caption). New capabilities, asked for and absent in older modules;
+     *    the minimum stays at 3.
+     * 21: ModuleRenderSettings.realistic, the Real 3D engine's highest tier for a film (ULTRA-REALISTIC).
+     *    Appended with a default; the minimum stays at 3.
+     * 22: ModuleRideWriter (a module saves simulated rides and routes), ModuleRouting, ModulePlaces
+     *    and ModuleMapHost (the NAV's routing, speed limits, elevation, place search and a flat
+     *    map lent to a module), ModuleBridge and ModuleExtensions (a module opens another's feature
+     *    on a ride, and adds an entry to another module), ModuleRideLibrary.isSimulated. New host
+     *    members and a new capability; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 16
+    const val CONTRACT_VERSION = 22
 
     /**
      * The oldest contract this app can still run.
@@ -231,6 +256,21 @@ interface MotoHubModuleHost {
 
     /** The language model the rider set up in the app's AI settings, if any. See [ModuleAi]. */
     val ai: ModuleAi
+
+    /** Saves simulated rides and routes into TRIPS and the NAV (contract 22). See [ModuleRideWriter]. */
+    val rideWriter: ModuleRideWriter
+
+    /** The NAV's routing, speed limits and elevation (contract 22). See [ModuleRouting]. */
+    val routing: ModuleRouting
+
+    /** The NAV's place search (contract 22). See [ModulePlaces]. */
+    val places: ModulePlaces
+
+    /** A flat map lent by the app (contract 22). See [ModuleMapHost]. */
+    val maps: ModuleMapHost
+
+    /** Other modules: whether they are installed, opening their features, their extensions (contract 22). See [ModuleBridge]. */
+    val modules: ModuleBridge
 }
 
 /**

@@ -10,6 +10,7 @@ protobuf = "3.25.1"
 conscrypt = "2.5.3"
 coroutines = "1.8.1"
 junit = "4.13.2"
+json = "20240303"
 
 [libraries]
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
@@ -22,6 +23,7 @@ protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "p
 conscrypt-android = { module = "org.conscrypt:conscrypt-android", version.ref = "conscrypt" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 junit = { module = "junit:junit", version.ref = "junit" }
+json = { module = "org.json:json", version.ref = "json" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agp" }

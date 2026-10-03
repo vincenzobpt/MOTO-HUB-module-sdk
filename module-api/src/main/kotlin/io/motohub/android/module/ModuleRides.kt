@@ -35,6 +35,12 @@ interface ModuleRideLibrary {
      * ride recorded without an OBD adapter (contract 12).
      */
     fun engineRpm(track: ModuleRideTrack): FloatArray?
+
+    /**
+     * Whether [entry] is a simulated ride or route - one a module generated rather than the rider
+     * rode or planned (contract 22). A module that learns from the rider's rides leaves these out.
+     */
+    fun isSimulated(entry: ModuleRideEntry): Boolean
 }
 
 /**

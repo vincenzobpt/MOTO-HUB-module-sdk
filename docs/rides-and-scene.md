@@ -1,10 +1,13 @@
 # Rides, the 3D scene and the rider's AI
 
 Contracts 11 to 15 lend a module three things it could not get any other way: the rider's rides
-and routes, the app's 3D terrain scene, and the language model the rider set up. They are
-**members of `MotoHubModuleHost`**, not capabilities: the app implements them and your module
-calls them. A module that uses any of them must declare the contract that introduced what it
-calls (see [contract.md](contract.md#versioning)); they need **ADV-SOLO 0.1.29 or later**.
+and routes, the app's 3D terrain scene, and the language model the rider set up. Contract 22 adds
+what a module needs to **make** rides and routes rather than only read them: the NAV's routing,
+speed limits, elevation and place search, a place to save the result, and a flat map to choose
+points on. They are **members of `MotoHubModuleHost`**, not capabilities: the app implements them
+and your module calls them. A module that uses any of them must declare the contract that
+introduced what it calls (see [contract.md](contract.md#versioning)); contracts 11 to 15 need
+**ADV-SOLO 0.1.29 or later**, contract 22 needs **0.1.33 or later**.
 
 | Host member | Since contract | What it is |
 |---|---|---|
@@ -12,10 +15,16 @@ calls (see [contract.md](contract.md#versioning)); they need **ADV-SOLO 0.1.29 o
 | [`scene`](#the-3d-scene-modulescenehost) | 11 | A 3D terrain scene your module directs |
 | [`openedFor()`](#actions-on-one-ride-or-route) | 14 | The ride or route a `RIDE_ACTION` / `ROUTE_ACTION` feature was opened on |
 | [`ai`](#the-riders-language-model-moduleai) | 14 | The rider's own language model, without the key |
+| [`rideWriter`](#writing-rides-and-routes-moduleridewriter) | 22 | Saves simulated rides and routes into TRIPS and the NAV |
+| [`routing`](#routing-speed-limits-and-elevation-modulerouting) | 22 | The NAV's routing, speed limits and elevation |
+| [`places`](#place-search-moduleplaces) | 22 | The NAV's place search |
+| [`maps`](#a-flat-map-modulemaphost) | 22 | A flat map the app draws and your module directs |
+| `modules` | 22 | Other modules: whether they are installed, opening their features, what they add to yours; see [capabilities.md](capabilities.md#adding-to-another-module-moduleextensions-and-modulebridge) |
 
 Members added later to classes and interfaces above are marked with their contract in the KDoc
-(`ModuleRideLibrary.engineRpm` is 12, `ModuleScene.export` is 13, and so on). Calling one on an
-older app is an `AbstractMethodError`, so the contract you declare is the highest one you call.
+(`ModuleRideLibrary.engineRpm` is 12, `ModuleScene.export` is 13, `ModuleRideLibrary.isSimulated`
+is 22, and so on). Calling one on an older app is an `AbstractMethodError`, so the contract you
+declare is the highest one you call.
 
 ---
 
@@ -61,6 +70,11 @@ you draw or average.
 `engineRpm(track)` gives the engine speed at each point of that track from the OBD log recorded
 with the ride: NaN where the log has nothing, `null` when there is no engine data at all (a
 route, or a ride recorded without an OBD adapter).
+
+`isSimulated(entry)` (contract 22) says whether an entry is a ride or route a module generated
+(see [`ModuleRideWriter`](#writing-rides-and-routes-moduleridewriter)) rather than one the rider
+rode or planned. `recordedRides` and `savedRoutes` list simulated entries along with the real
+ones, so **a module that learns from the rider's rides should leave them out**.
 
 ---
 
@@ -219,3 +233,167 @@ rider's own key. **The key never reaches your module**: you ask, the app sends.
   with the reason. `json = true` asks for a JSON object where the server honours it, so parse
   defensively all the same.
 - The rider pays for every call. Ask once for something worth it, not on every frame or keystroke.
+
+---
+
+## Writing rides and routes: `ModuleRideWriter`
+
+```kotlin
+interface ModuleRideWriter {
+    fun saveSimulatedRide(ride: ModuleSimulatedRide): String?
+    fun saveSimulatedRoute(route: ModuleSavedRoute): String?
+    fun removeSimulatedRoute(id: String): Boolean
+}
+```
+
+For a module that **generates** rides: a simulator, a planner that keeps its routes. **Every call
+writes storage: call it off the main thread.** Nothing throws; what could not be saved comes
+back as `null` (or `false`).
+
+Nothing here records a real ride. A saved ride is marked as simulated wherever the app lists it,
+belongs to no motorcycle and stays out of every total and record. Tell the rider's own rides and
+the generated ones apart with [`host.rides.isSimulated(entry)`](#rides-and-routes-moduleridelibrary).
+
+- `saveSimulatedRide` puts a ride in TRIPS and returns its id.
+- `saveSimulatedRoute` keeps a route among the NAV's **simulated routes**, a list of its own
+  beside the routes the rider saved, so a generated route never pushes one the rider saved out.
+  It returns the route's id. The route carries only its arrival as a maneuver, like a route
+  imported from GPX.
+- `removeSimulatedRoute(id)` removes a simulated route **this module saved** and says whether
+  something was removed.
+
+A `ModuleSimulatedRide` is parallel arrays, one slot per sample, **all the same length**:
+
+| Field | |
+|---|---|
+| `title`, `startedAtMillis` | The ride's name, and when it started. |
+| `latitudes`, `longitudes` | Degrees. |
+| `altitudesMeters` | Above sea level, NaN where unknown. |
+| `timesMillis` | Since `startedAtMillis`, strictly increasing, never before zero. |
+| `speedsKph` | |
+| `leanDegrees` | Positive to the right, NaN where there is none. |
+| `engineRpm` | NaN where there is none. |
+| `accuracyMeters`, `satellites` | What the GPS fix would have reported. |
+| `startPlace`, `endPlace` | Where it started and ended, by name; `null` when unknown. |
+
+Write samples at **10 Hz**. The app thins the GPS track the way its own recorder does and keeps
+the sensor log (speed, lean, engine speed) at full rate. A ride comes back `null` when its arrays
+differ in length, it has fewer than two samples, or its clock starts before zero or runs
+backwards.
+
+A `ModuleSavedRoute` is a planned route as plain arrays: `title`, `latitudes`, `longitudes`,
+`altitudesMeters`, `distanceMeters`, `durationSeconds` and `destinationLabel` (the destination's
+name as the NAV shows it).
+
+- `altitudesMeters` is **either empty or one value per point**; the app keeps it only when every
+  value is a number, so fill the gaps first.
+- A route with fewer than two points, a coordinate that is not a real position, or latitudes and
+  longitudes of different lengths comes back `null`.
+- A `distanceMeters` or `durationSeconds` that is not a number is replaced by the length of the
+  line and zero.
+
+---
+
+## Routing, speed limits and elevation: `ModuleRouting`
+
+```kotlin
+interface ModuleRouting {
+    fun route(latitudes: DoubleArray, longitudes: DoubleArray, preference: Int): ModuleRouteResult
+    fun speedLimits(latitudes: DoubleArray, longitudes: DoubleArray): FloatArray?
+    fun elevations(latitudes: DoubleArray, longitudes: DoubleArray): DoubleArray?
+}
+```
+
+The NAV's own routing, so a module that plans a route gets what the rider's NAV would. The app
+picks the server (the rider's own key, or the shared demo server) and keeps to its rate limits.
+**Every call goes to the network and blocks: call it off the main thread.** A failure is an
+ordinary answer, never an exception.
+
+- **`route`** takes at least two points, in order. The first is the start, the last is the
+  destination, any others are points to pass through. `preference` is
+  `ModuleRoutePreference.FASTEST` or `SCENIC`; pass the constant, not a bare number. Latitudes
+  and longitudes that differ in number, or a point that is not a real position, come back as a
+  failed result, not a crash.
+- **`speedLimits`** gives the limit in km/h of **each segment** of a route, so one value fewer
+  than there are points, NaN where the road has none known. It is **all or nothing**: when any
+  stretch of a long route fails to answer you get `null`, never a partial list, and your
+  simulation should fall back on its own cruising speed for the whole route.
+- **`elevations`** gives metres above sea level at each point, or `null` when the elevation
+  service did not answer.
+
+A `ModuleRouteResult` has `ok`, and when it is `true` the route as `latitudes` and `longitudes`
+with its `distanceMeters` and `durationSeconds`. When it is `false`, `errorKind` says why
+(`ModuleRouteError`) and `error` is a sentence in the rider's words, ready to show:
+
+| `errorKind` | |
+|---|---|
+| `NONE` | There was no error. |
+| `NO_NETWORK` | The phone could not reach the server. |
+| `RATE_LIMITED` | The server is busy; try again in a minute. |
+| `NO_API_KEY` | The server needs a routing key the rider has not set. |
+| `TOO_LONG` | The route is too long for a single request. |
+| `OTHER` | Anything else, including "no road route between those points". |
+
+The shared demo server allows about one request a second, and the app **spaces calls to it out
+itself**, across every module. A call can therefore take longer than the network does, and you
+need no pacing of your own. Do not ask for the same route again and again.
+
+---
+
+## Place search: `ModulePlaces`
+
+```kotlin
+interface ModulePlaces {
+    fun search(query: String, nearLatitude: Double, nearLongitude: Double, limit: Int): ModulePlaceResult
+    fun reverse(latitude: Double, longitude: Double): String?
+}
+```
+
+The NAV's place search. **Both calls go to the network and block: call them off the main
+thread.**
+
+- `search` finds places matching `query`, nearest first to the point you give; pass NaN for
+  both coordinates for no bias. `limit` is how many you want, up to 20. A blank query, or one
+  over 200 characters, is refused with a message in `error`. **Debounce what the rider types**:
+  every call is one request.
+- `reverse` gives the name of the place at a point (a town, a pass), or `null` when there is
+  none or the service did not answer.
+
+A `ModulePlaceResult` is `ok`, an `error` in the rider's words when it is not, and three parallel
+arrays, `labels`, `latitudes` and `longitudes`, one slot per place.
+
+---
+
+## A flat map: `ModuleMapHost`
+
+The 3D scene is for films. For a screen where the rider **chooses points or looks at a route**,
+the app lends a flat map: its own map engine, with the rider's style and tiles, the lines and
+pins you give it and the touches it reports back.
+
+```kotlin
+val map = host.maps.open()           // yours: close() it when you are done
+map.setListener(listener)
+map.setLines(arrayOf(ModuleMapLine(lats, lons, colorArgb, widthDp, dashed)))
+map.setPins(arrayOf(ModuleMapPin(lat, lon, colorArgb, "Start")))
+map.fit(lats, lons)                  // or map.center(lat, lon, zoom)
+
+@Composable fun Picker() { map.Surface() }   // fills whatever space its parent gives it
+```
+
+- `setLines` and `setPins` **replace** everything given before. A coordinate that cannot be drawn
+  is left out; a line with fewer than two drawable points is not drawn. A pin's `label` is its
+  caption; an empty one has none.
+- `fit` frames the points you give; `center` moves to a point at a zoom (0 to 22).
+- The map keeps its lines, pins and camera in the `ModuleMap`, not in the composition, so a screen
+  that is left and entered again finds the map as it was.
+- Touches come to the `ModuleMapListener` you set: `onTap` and `onLongPress` with the position,
+  and `onPinTap(index)` with the pin's **position in the array last given to `setPins`**. Do not
+  block in them; `setListener(null)` stops them.
+- `close()` frees the map and everything it loaded. After it every call does nothing. Call it
+  from `release()` too, for a map still open when the module is unloaded.
+
+The classes are plain: `ModuleMapLine(latitudes, longitudes, colorArgb, widthDp, dashed)` and
+`ModuleMapPin(latitude, longitude, colorArgb, label)`. None of them have default arguments, so
+pass every one (see [contract.md](contract.md#rules-that-are-easy-to-break)).
+
+For a worked example of all four, see [example-route-simulator.md](example-route-simulator.md).

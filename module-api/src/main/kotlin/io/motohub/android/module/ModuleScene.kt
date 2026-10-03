@@ -85,8 +85,10 @@ interface ModuleScene {
 
     /**
      * Which 3D engine draws the scene (contract 14), one of [ModuleSceneEngine]: the app's own
-     * map engine, or ArcGIS - real sunlight with shadows, atmosphere, weather, water - with the
-     * rider's Esri key when there is one. Switching reloads the scene; the film is kept.
+     * map engine, ArcGIS - real sunlight with shadows, atmosphere, weather, water - with the
+     * rider's Esri key when there is one, or from contract 18 the Real 3D engine (ULTRA), MOTO-HUB's own
+     * game-grade world built around the road. Switching reloads the scene; the film is kept. A
+     * value this app does not know draws with the nearest one it does.
      */
     fun setEngine(engine: Int)
 
@@ -125,6 +127,58 @@ interface ModuleScene {
      * which cannot, dips through black between them. Null for none.
      */
     fun setBlend(second: ModuleSceneShot?, mix: FloatArray?)
+
+    /**
+     * What the rider's figure does along the film (contract 17): per frame of the shot, the action
+     * it plays ([codes], 0 for none - see [ModuleSceneAction]), how many [seconds] into it and how
+     * long it lasts ([lengths], seconds), and [flags] ([ModuleSceneAction.RIGHT]: the right hand or
+     * foot plays it, else the left; [ModuleSceneAction.STOPPED]: the bike stands still). Drawn by
+     * the ArcGIS engine on its motorcycles; the app's own engine shows a sign over the dot. Null,
+     * or arrays that do not fit the shot, for none.
+     */
+    fun setActionPath(codes: IntArray?, seconds: FloatArray?, lengths: FloatArray?, flags: IntArray?)
+
+    /**
+     * A small performance read-out over the live scene (contract 19): frame rate, draw calls,
+     * triangles and the graphics memory each part of the world holds. Real 3D only; never part of
+     * an export. Off by default, and while it is on the scene writes at most one summary line to
+     * the log every half minute - it never logs per frame.
+     */
+    fun setDiagnostics(overlay: Boolean) {}
+
+    /**
+     * A fast preview (contract 19): the real 3D only, for the live scene and the preview, never an
+     * export. The Real 3D engine then draws just the relief with its photo imagery (and the road,
+     * the buildings and the rider's geometry), with no post-processing, shadows, lights,
+     * atmosphere, clouds, weather or other effect, on a lighter world (fewer and nearer trees,
+     * buildings and road, no minor roads, hedges or ground cover; built again when this changes)
+     * - for a phone that cannot keep the film smooth. Off by default; any other engine ignores it.
+     */
+    fun setBasicMode(basic: Boolean) {}
+}
+
+/** The actions of [ModuleScene.setActionPath]: a code per scene, and the flags. */
+object ModuleSceneAction {
+    const val NONE = 0
+    const val THUMB_UP = 1
+    const val BIKER_WAVE = 2
+    const val WAVE = 3
+    const val WHEELIE = 4
+    const val FOOT_THANKS = 5
+    const val FIST_PUMP = 6
+    const val ROCK_ON = 7
+    const val POINT_OUT = 8
+    const val LOOK_AROUND = 9
+    const val VISOR_UP = 10
+    const val HELMET_SALUTE = 11
+    const val SELFIE = 20
+    const val STRETCH = 21
+    const val COFFEE = 22
+    const val FINAL_WAVE = 23
+    const val READY_GO = 24
+
+    const val RIGHT = 1
+    const val STOPPED = 2
 }
 
 /**
@@ -180,8 +234,85 @@ class ModuleExportSpec @JvmOverloads constructor(
      * H.265 instead of H.264 (contract 15): about half the file for the same picture. The app
      * falls back to H.264 at a higher [bitRate] on a phone that cannot encode this size in H.265.
      */
-    val hevc: Boolean = false
+    val hevc: Boolean = false,
+    /**
+     * How the Real 3D engine renders each frame (contract 19): anti-aliasing, motion blur, depth of
+     * field, volumetric clouds, water. Null for the engine's plain look. Applies to a frame by
+     * frame export only: a [realTime] film, the live scene and the other engines ignore it, and so
+     * does a 360° or little-planet lens.
+     */
+    val render: ModuleRenderSettings? = null,
+    /**
+     * Only some stretches of the film (contract 19), as flat pairs of start frame and frame count in
+     * the video's own frames (at [framesPerSecond]): `[0, 75, 600, 75]` is the first 75 frames and
+     * 75 more from frame 600. The video is those stretches one after the other. Null for the whole
+     * film. Together with [preview] this is how a module shows what a render will look like before
+     * paying for all of it. Each pair is clipped into the film, empty ones are dropped, the order
+     * given is kept and the stretches add up to at most 2400 frames; progress counts those frames.
+     * Pairs that all fall outside the film fail the export. The song, when there is one, plays from
+     * the start of the result, not of the film.
+     */
+    val segments: IntArray? = null,
+    /**
+     * A throw-away render (contract 19): the video is written to the app's cache, not the gallery -
+     * [ModuleExportListener.onExportFinished] gets a file: Uri that is valid until the app is next
+     * started or the next preview - and it has no sound, no notification of its own beyond the
+     * export's progress, and no signature outro. It is always drawn frame by frame, whatever
+     * [realTime] says, and always encoded as H.264. The overlay is drawn on every frame as in a
+     * real export. A new preview or an export replaces the file.
+     */
+    val preview: Boolean = false
 )
+
+/**
+ * The finish of a Real 3D film (contract 19), the render options of [ModuleExportSpec.render].
+ * Every option costs time, and a few cost graphics memory; all are off or plain by default.
+ */
+class ModuleRenderSettings @JvmOverloads constructor(
+    /** [AA_SMAA]: the fast edge smoothing the engine always had; [AA_TAA]: [taaSamples] jittered draws of the frame averaged. */
+    val antiAlias: Int = AA_SMAA,
+    /** [AA_TAA] only: 4, 8 or 16 draws per frame. */
+    val taaSamples: Int = 8,
+    val motionBlur: Boolean = false,
+    /** The shutter's open angle in degrees, 0..360: 180 is the cinema standard, half the frame time. */
+    val shutterDegrees: Float = 180f,
+    /** 0 light, 1 balanced, 2 smooth: how many taps along the motion. */
+    val motionBlurQuality: Int = 1,
+    val depthOfField: Boolean = false,
+    /** 0..1: how soft what is out of focus gets. */
+    val dofAmount: Float = 0.5f,
+    /** One of [DOF_FOCUS_RIDER], [DOF_FOCUS_TARGET]. */
+    val dofFocus: Int = DOF_FOCUS_RIDER,
+    val volumetricClouds: Boolean = false,
+    /** 0 fast, 1 balanced, 2 high: the steps taken through the clouds. */
+    val cloudQuality: Int = 1,
+    /** 0.5..1.5, 1 as the weather says: how much cloud there is and how thick. */
+    val cloudDensity: Float = 1f,
+    /** The clouds' shadows crossing the land. */
+    val cloudShadows: Boolean = true,
+    /** Waves, the sky's reflection and foam on lakes and rivers. */
+    val enhancedWater: Boolean = true,
+    /**
+     * The frame rate the motion-blur shutter is worked out for: the shutter is open [shutterDegrees]/360 of
+     * 1/this second. 0 (the default) is the video's own rate. A preview drawn at a lower rate than the film
+     * will have names the film's rate here, so each frame blurs as it will in the film and only the
+     * playback is choppier.
+     */
+    val shutterFps: Int = 0,
+    /**
+     * ULTRA-REALISTIC (contract 21): the Real 3D engine's highest tier for this film - the far ring of buildings, the
+     * widest and densest trees, shrubs and ground cover, full-resolution occlusion - on top of whatever else is asked
+     * here. Heavy on graphics memory: the caller keeps the renderers few. False (the default) is the export tier.
+     */
+    val realistic: Boolean = false
+) {
+    companion object {
+        const val AA_SMAA = 0
+        const val AA_TAA = 1
+        const val DOF_FOCUS_RIDER = 0
+        const val DOF_FOCUS_TARGET = 1
+    }
+}
 
 /**
  * The figure and the details on the land. [rider] is one of [ModuleSceneRider]: the glowing dot,
@@ -198,7 +329,10 @@ class ModuleSceneExtras(
     val buildings: Boolean
 )
 
-/** The figures of [ModuleSceneExtras.rider]. */
+/**
+ * The figures of [ModuleSceneExtras.rider]: the dot, six kinds of bike, and from contract 17 the
+ * models of real motorcycles, each with its own texture.
+ */
 object ModuleSceneRider {
     const val DOT = 0
     const val ADVENTURE = 1
@@ -207,12 +341,33 @@ object ModuleSceneRider {
     const val CRUISER = 4
     const val SCOOTER = 5
     const val ENDURO = 6
+    const val MT700_ADVENTURE = 7
+    const val MT800_X = 8
+    const val NK800_SPORT = 9
+    const val NK800_ADVANCE = 10
+    const val R1300_R = 11
 }
 
 /** The engines of [ModuleScene.setEngine]. */
 object ModuleSceneEngine {
+    /** The app's own map engine: the rider's map or satellite on real relief. Light and quick. */
     const val MAPLIBRE = 0
+
+    /**
+     * ArcGIS: real sunlight with shadows, atmosphere, weather and water, the rider's Esri key
+     * when there is one. Every frame waits for its imagery and relief, so it exports slower.
+     */
     const val ARCGIS = 1
+
+    /**
+     * The Real 3D engine (contract 18): MOTO-HUB's own three.js world, drawn the way a game draws
+     * one. The road is laid as real road, with its width, edges and camber, on terrain shaped to
+     * it; forests and meadows grow where the land says they do, and the sky carries its sun,
+     * clouds and weather. The sharpest picture of the three, and the heaviest: the first frame
+     * builds the whole world along the route, every frame draws a great deal more, and an export
+     * runs fewer frames at once. An app older than contract 18 draws it with ArcGIS.
+     */
+    const val ULTRA = 2
 }
 
 /** The skies of [ModuleScene.setWeather]. */

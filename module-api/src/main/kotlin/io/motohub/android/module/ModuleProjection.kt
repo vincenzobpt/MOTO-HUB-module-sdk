@@ -158,3 +158,43 @@ interface ModuleProjection {
      */
     fun explainNoConnection(host: MotoHubModuleHost, connectedAtLeastOnce: Boolean): String
 }
+
+/**
+ * How far a [ModuleProjection] reaches, offered beside it through [MotoHubModule.capability].
+ *
+ * A module that offers none is a whole-screen projection, which is what every projection was
+ * before contract 20: the app may run it as the motorcycle's whole session and calls it by name
+ * wherever the projection is meant. A module that answers false here - a camera, say - only ever
+ * fills a dashboard's panel: it gets a tile of its own among the dashboard's map sources and is
+ * never taken for the session the rider starts from the mode page.
+ *
+ * A capability of its own rather than a member of [ModuleProjection], because the modules already
+ * built implement that interface, and a member they never compiled would fail the moment the app
+ * asked them.
+ */
+interface ModuleProjectionReach {
+    val wholeScreen: Boolean
+}
+
+/**
+ * How a projection module looks on its tile among the dashboard's map sources, offered beside
+ * [ModuleProjection] through [MotoHubModule.capability].
+ *
+ * Without it the tile shows the app's generic picture of a projected screen - right for Android
+ * Auto, wrong for a camera. Drawn by the module on a plain [android.graphics.Canvas], so it needs
+ * nothing of the app's own drawing. Called on the main thread, every frame while the tile animates:
+ * draw, do not load.
+ */
+interface ModuleProjectionTile {
+    /** The colour the tile and the card are lit in while chosen, as ARGB. */
+    val accent: Int
+
+    /** One line under the tiles saying what the panel will show. */
+    val caption: String
+
+    /** The tile's picture, [width] by [height]. [phase] runs 0..1 and loops while the tile is chosen. */
+    fun drawPicture(canvas: android.graphics.Canvas, width: Float, height: Float, accent: Int, phase: Float)
+
+    /** The small mark beside the module's name, [size] square, in [color]. */
+    fun drawMark(canvas: android.graphics.Canvas, size: Float, color: Int)
+}
