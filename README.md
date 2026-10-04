@@ -53,7 +53,7 @@ The full walk-through, including how to start your own module, is in
 1. [Getting started](docs/getting-started.md): build, install and change the example
 2. [The contract](docs/contract.md): how a module is loaded, the manifest, versioning and the rules
 3. [Capabilities](docs/capabilities.md): everything a module can offer
-4. [Rides, the 3D scene and the rider's AI](docs/rides-and-scene.md): what the host lends a module from contract 11, and from contract 22 saving rides, routing, places and a flat map
+4. [Rides, the 3D scene and the rider's AI](docs/rides-and-scene.md): what the host lends a module from contract 11, from contract 22 saving rides, routing, places, sights and a flat map, and from 23 drawing a film on another computer
 5. [Borrowed libraries](docs/borrowed-libraries.md): what you may call, and the linkage check (**read this one**)
 6. [Packaging and signing](docs/packaging-and-signing.md): the `.mhm` format, your developer key, developer mode
 7. [Publishing](docs/publishing.md): getting a module into the in-app catalogue
@@ -62,14 +62,15 @@ The full walk-through, including how to start your own module, is in
 
 ## Status
 
-The contract is at **version 22**. It only grows by appending, and the app still loads modules
+The contract is at **version 23**. It only grows by appending, and the app still loads modules
 built against contract 3 or later. Contracts 11 to 14 (rides, the 3D scene, ride and route
 actions, the rider's AI) need ADV-SOLO 0.1.29, contract 15 (draft, real-time and H.265 video
 exports) ADV-SOLO 0.1.30, contract 16 (credits in the film's credit roll) ADV-SOLO 0.1.31,
 contracts 17 to 20 (the rider's figure in action, the Ultra and Real 3D finishes, projections
 that fill only a dashboard panel, and their own map-source tiles), 21 (the Real 3D engine's
 highest tier) and 22 (modules that make rides: saving simulated rides and routes, the NAV's
-routing, place search and a flat map, and adding to another module) ADV-SOLO 0.1.33; a module
+routing, place search, sights near a road and a flat map, and adding to another module) and 23
+(drawing a film on a computer running MOTO-HUB Studio) ADV-SOLO 0.1.33; a module
 that does not use them can keep declaring 10 and run on 0.1.25 and later. See [docs/contract.md](docs/contract.md#versioning).
 
 ## Community

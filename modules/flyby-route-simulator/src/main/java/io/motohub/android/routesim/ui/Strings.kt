@@ -27,7 +27,7 @@ internal object Strings {
             "stops in traffic. The result is saved in TRIPS, marked as simulated, ready for a flyby."
     const val ABOUT_NOW = "Right now"
     const val ABOUT_START = "Plan a ride"
-    const val ABOUT_START_HINT = "Pick the places, the day and the riding style"
+    const val ABOUT_START_HINT = "Choose a ready-made ride, or pick the places yourself"
     const val ABOUT_FACT_FLYBY = "Flyby"
     const val ABOUT_FACT_PLANS = "Saved plans"
     const val ABOUT_FACT_NETWORK = "Needs"
@@ -152,6 +152,45 @@ internal object Strings {
     const val PLAN_ROUTE_SAVED = "Saved among your routes in NAV"
     const val PLAN_ROUTE_FAILED = "The route could not be saved in NAV."
 
+    // Experiences: the first page, ready-made rides to choose from.
+    const val EXPERIENCES_TITLE = "Experiences"
+    const val PLAN_BY_HAND = "Plan by hand"
+    const val LOADING_RIDES = "Loading rides…"
+    const val CATALOGUE_EMPTY = "The ride catalogue is not available right now. You can still plan a ride by hand."
+    const val OFFLINE_BANNER = "Offline: detours and ride generation are not available."
+    const val DETOURS_BANNER = "Some detours could not be found. Try again."
+    const val RETRY = "Try again"
+    const val OTHER_IDEAS = "Other ideas"
+    const val FINDING_DETOURS = "Finding detours…"
+    const val DETOURS_UNAVAILABLE = "Detours unavailable"
+    const val DETOURS_SLOW_NOTICE = "Detours were not added: the map service is slow. You can plan them by hand."
+    const val FILTERS_TITLE = "Filters"
+    const val FILTERS_RESET = "Reset filters"
+    const val FILTER_DISTANCE = "Distance"
+    const val FILTER_DURATION = "Time"
+    const val FILTER_REGION = "Region"
+    const val FILTER_DETOURS = "Detours"
+    const val FILTER_ANY = "Any"
+    const val FILTER_ANY_NOTE = "Doesn't matter"
+    const val REGION_ALL = "All"
+    const val AXIS_CITY = "City"
+    const val AXIS_NATURE = "Nature"
+    const val AXIS_FAST = "Fast roads"
+    const val AXIS_BENDS = "Bends"
+    const val AXIS_TARMAC = "Tarmac"
+    const val AXIS_GRAVEL = "Gravel"
+    const val AXIS_SCENERY = "Scenery"
+    const val AXIS_CULTURE = "Culture"
+    const val ANY_DISTANCE = "Any distance"
+    const val ANY_TIME = "Any time"
+    const val DETOURS_NONE = "None"
+    const val MISMATCH_LITTLE_NATURE = "Not much nature"
+    const val MISMATCH_LITTLE_CITY = "Not much city"
+    const val MISMATCH_FEW_BENDS = "Not many bends"
+    const val MISMATCH_MANY_BENDS = "Too many bends"
+    const val MISMATCH_LITTLE_GRAVEL = "Not much gravel"
+    const val MISMATCH_MUCH_GRAVEL = "Too much gravel"
+
     fun style(style: RideStyle): String = when (style) {
         RideStyle.CALM -> "Calm"
         RideStyle.NORMAL -> "Normal"
@@ -232,6 +271,38 @@ internal object Strings {
             "and lean. It needs at least $needed rides of $minKm km or more. Nothing is learned unless you ask."
 
     fun cursorAt(clock: String): String = "at $clock"
+
+    fun distanceKm(km: Int): String = "$km km"
+
+    fun elevationMax(meters: Int): String = "max $meters m"
+
+    fun kmLonger(km: Int): String = "$km km longer than your maximum"
+
+    fun kmShorter(km: Int): String = "$km km shorter than your minimum"
+
+    fun timeLonger(text: String): String = "$text longer than your maximum"
+
+    fun timeShorter(text: String): String = "$text shorter than your minimum"
+
+    fun notInRegion(region: String): String = if (region.isBlank()) "Another region" else "Not in $region"
+
+    fun moreMismatches(count: Int): String = "+$count more"
+
+    fun rangeUpTo(text: String): String = "Up to $text"
+
+    fun rangeFrom(text: String): String = "$text or more"
+
+    fun rangeBetween(low: String, high: String): String = "$low – $high"
+
+    fun ideaNumber(number: Int): String = "Idea $number"
+
+    fun filtersSet(count: Int): String = if (count == 0) FILTERS_TITLE else "$FILTERS_TITLE · $count set"
+
+    fun planningExperience(name: String): String = "Planning $name…"
+
+    fun rideName(title: String): String = "Ride name: $title"
+
+    fun targetValue(label: String, percent: Int): String = "$label $percent%"
 
     fun defaultPlanName(labels: List<String>): String {
         if (labels.isEmpty()) return "New plan"

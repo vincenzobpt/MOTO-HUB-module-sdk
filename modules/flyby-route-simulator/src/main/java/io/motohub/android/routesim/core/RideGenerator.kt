@@ -21,9 +21,16 @@ class RideGenerator internal constructor(private val services: Services) {
 
     /**
      * The network phase: route, speed limits, elevations and the names of both ends. Needs at
-     * least two stops and refuses a route over [MAX_DISTANCE_KM].
+     * least two stops and refuses a route over [MAX_DISTANCE_KM]. The ride is titled "A → B"
+     * unless [titleOverride] says otherwise (an experience's name). The road is routed with
+     * [preference] (a [ModuleRoutePreference]); the prepared route remembers it.
      */
-    fun prepare(stops: List<Stop>, onProgress: (String) -> Unit): Prepare {
+    fun prepare(
+        stops: List<Stop>,
+        titleOverride: String? = null,
+        preference: Int = ModuleRoutePreference.FASTEST,
+        onProgress: (String) -> Unit,
+    ): Prepare {
         if (stops.size < 2) return Prepare.Failed(CoreStrings.NEED_TWO_STOPS, ModuleRouteError.OTHER)
 
         // The shortest way through the stops is never shorter than the straight lines between
@@ -40,7 +47,7 @@ class RideGenerator internal constructor(private val services: Services) {
             services.routing.route(
                 DoubleArray(stops.size) { stops[it].latitude },
                 DoubleArray(stops.size) { stops[it].longitude },
-                ModuleRoutePreference.FASTEST,
+                preference,
             )
         } catch (e: Exception) {
             return Prepare.Failed(CoreStrings.ROUTE_FAILED, ModuleRouteError.OTHER)
@@ -86,7 +93,9 @@ class RideGenerator internal constructor(private val services: Services) {
         val title = (startPlace ?: CoreStrings.coordinates(first.latitude, first.longitude)) + " → " +
             (endPlace ?: CoreStrings.coordinates(last.latitude, last.longitude))
 
-        return Prepare.Ok(PreparedRoute(stops.toList(), route, distance, startPlace, endPlace, title))
+        return Prepare.Ok(
+            PreparedRoute(stops.toList(), route, distance, startPlace, endPlace, cleanTitleOverride(titleOverride) ?: title, title, preference),
+        )
     }
 
     /** Pure and fast. The caller picks a new seed for every ride it wants to differ. */

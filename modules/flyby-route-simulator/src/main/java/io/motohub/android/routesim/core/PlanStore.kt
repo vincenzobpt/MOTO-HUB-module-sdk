@@ -63,6 +63,8 @@ class PlanStore(private val storageDir: File) {
             p.stops.forEach { put(JSONObject().put("lat", it.latitude).put("lon", it.longitude).put("label", it.label)) }
         })
         .put("settings", settingsToJson(p.settings))
+        .apply { cleanTitleOverride(p.titleOverride)?.let { put("titleOverride", it) } }
+        .apply { if (p.scenic) put("scenic", true) }
 
     private fun settingsToJson(s: RideSettings): JSONObject = JSONObject()
         .put("startAtMillis", s.startAtMillis)
@@ -90,7 +92,10 @@ class PlanStore(private val storageDir: File) {
             val s = stopsJson.getJSONObject(it)
             Stop(s.getDouble("lat"), s.getDouble("lon"), s.optString("label", ""))
         }
-        return Plan(o.getString("id"), o.optString("name", ""), stops, settingsFromJson(o.getJSONObject("settings")), o.optLong("savedAtMillis", 0L))
+        return Plan(o.getString("id"), o.optString("name", ""), stops, settingsFromJson(o.getJSONObject("settings")), o.optLong("savedAtMillis", 0L),
+            cleanTitleOverride(if (o.isNull("titleOverride")) null else o.optString("titleOverride", "")),
+            // Files from before the scenic preference have no such key: they were all routed fastest.
+            scenic = o.optBoolean("scenic", false))
     }
 
     private fun settingsFromJson(o: JSONObject): RideSettings {

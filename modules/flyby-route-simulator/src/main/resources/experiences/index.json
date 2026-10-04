@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "packs": [
+    {
+      "country": "AT",
+      "name": "Austria",
+      "version": 1,
+      "sha256": "a6ba45ba9c1c21eb3bcb955d0f746fd909dba2e26ceaffeed37f1a1185b9fdb1",
+      "bytes": 44592
+    },
+    {
+      "country": "CH",
+      "name": "Switzerland",
+      "version": 1,
+      "sha256": "0d71c2e30a2a33abbe882c3e35652a21cf659cdff5821608cfbb2ea51dd705c8",
+      "bytes": 43726
+    },
+    {
+      "country": "DE",
+      "name": "Germany",
+      "version": 1,
+      "sha256": "8383d49513489cc8357c41ea9005f5473c13453b20d63105bbc653322ab6df3e",
+      "bytes": 56532
+    },
+    {
+      "country": "ES",
+      "name": "Spain",
+      "version": 1,
+      "sha256": "035793145bc620fcd0d75532913e560104d2c219806c2813a214f45ea6f83160",
+      "bytes": 55464
+    },
+    {
+      "country": "FR",
+      "name": "France",
+      "version": 1,
+      "sha256": "e96f34305df0ad4e1264d4b598aa0e49310893adccfa90d2c20efdf743ee8e60",
+      "bytes": 57803
+    },
+    {
+      "country": "HR",
+      "name": "Croatia",
+      "version": 1,
+      "sha256": "028268c5c6b75f7057e23c62ac497fe52a153ef83baf247ccdedab547ec7f76f",
+      "bytes": 33194
+    },
+    {
+      "country": "IT",
+      "name": "Italy",
+      "version": 1,
+      "sha256": "0a26ca7909c14e5902e548ccec9454aa278aa78494d7aa4f2ded92b369e5bf86",
+      "bytes": 55670
+    },
+    {
+      "country": "PT",
+      "name": "Portugal",
+      "version": 1,
+      "sha256": "ff38682e2bac43322160fb0a2286d42c53e042bf59e32ccb7fffe051ca03e406",
+      "bytes": 32454
+    },
+    {
+      "country": "SI",
+      "name": "Slovenia",
+      "version": 1,
+      "sha256": "4bd676bc364833c7ca08ab7cb56df5e2086ee4c9cd91ec2e8439cce6b228be99",
+      "bytes": 33464
+    }
+  ]
+}

@@ -194,6 +194,28 @@ ModuleExportSpec(width = 1280, height = 720, framesPerSecond = 30, bitRate = 2_5
 In both modes the sound is the song's own file, decoded, levelled, faded and encoded as AAC; the
 phone plays nothing aloud.
 
+### Drawing a film on another computer (contract 23)
+
+A rider can pair the phone with MOTO-HUB Studio running its render server on their network; a
+film is then drawn there and comes back to the phone as a finished video.
+
+- `scene.renderServers()` lists the computers the app knows (paired, or found and not paired yet),
+  each a `ModuleRenderServer` with `paired`, `ready`, `busy`, `queue`, a `problem`
+  (`OFFLINE`, `BROWSER_MISSING`, `FFMPEG_MISSING`, `SOFTWARE_GL`, `NEEDS_PAIRING`) and the
+  `overlays` it can draw. `watchRenderServers(listener)` keeps that list fresh until you close
+  the handle; `pairRenderServer()` opens the app's own pairing screen.
+- `spec.withRemoteRender(remote, renderOn)` asks for remote drawing. `remote` is a
+  `ModuleRemoteRender`: your overlay **as data** (`overlayKind`, `overlayVersion`, `overlayJson`,
+  the `files` it refers to), because code cannot travel. `renderOn` is
+  `ModuleExportSpec.RENDER_AUTO` (a ready, idle, paired computer, otherwise the phone),
+  `RENDER_PHONE`, or one server's `id`; a named server that cannot draw makes the export fail
+  with a message rather than move elsewhere.
+- `job.renderedOn()` says which computer is drawing the film, or `null` for the phone.
+
+A computer draws only the overlay kinds it lists in `overlays` (`server.draws(kind, version)`):
+Studio carries the drawing code for those itself. Today that is Flyby's overlay, so for other
+modules a remote render is the 3D picture without your overlay unless Studio learns it.
+
 ---
 
 ## Actions on one ride or route
@@ -361,6 +383,35 @@ thread.**
 
 A `ModulePlaceResult` is `ok`, an `error` in the rider's words when it is not, and three parallel
 arrays, `labels`, `latitudes` and `longitudes`, one slot per place.
+
+
+Since 0.1.33 `ModulePlaces` also has `lastKnownPosition()`: the rider's last known position as
+`[latitude, longitude]`, or `null` when the app has none (no permission, no fix, or one a week old
+or more). It never asks for the permission and never waits for a fix; it is meant for a coarse
+use such as choosing a starting country, not for tracking.
+
+---
+
+## Sights near a road: `ModuleSights`
+
+```kotlin
+interface ModuleSights {
+    fun along(latitudes: DoubleArray, longitudes: DoubleArray, radiusMeters: Int, kinds: Int): ModuleSightResult
+}
+```
+
+`host.sights` (contract 22) finds things worth a detour within `radiusMeters` of a road, from
+OpenStreetMap. The app owns the Overpass side: which instances to ask, spacing, caching. **The
+call goes to the network and blocks: call it off the main thread.** A failure is an answer, never
+an exception.
+
+- `kinds` is a mask of `ModuleSightKind.VIEWPOINT` (viewpoints, waterfalls, caves, natural
+  arches), `HERITAGE` (castles, ruins, abbeys, monuments, museums, notable churches) and `PASS`
+  (named passes the road itself climbs; the radius does not widen it).
+- The radius is clamped to 500 m..15 km. Every sight has a name; unnamed ones are left out.
+- `ModuleSightResult` is `ok`/`error`, `complete` (false when the road ran on past what the search
+  covered) and parallel arrays `names`, `latitudes`, `longitudes`, `kinds`, `elevations` (NaN
+  when unknown). Sights come in no particular order: order them along your own road.
 
 ---
 

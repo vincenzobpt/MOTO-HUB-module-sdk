@@ -18,36 +18,43 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import io.motohub.android.module.ModuleUi
 
-/** The id of the planner among the module's features; it is shown nowhere, reached by id. */
+/** The id of the page that opens on the Experiences and leads to the planner; it is shown nowhere, reached by id. */
 internal const val SIMULATE_FEATURE_ID = "simulate"
 
-/** The same planner, offered inside Flyby through [io.motohub.android.module.ModuleExtensions]. */
+/** The same page, offered inside Flyby through [io.motohub.android.module.ModuleExtensions]. */
 internal const val SIMULATE_EXTENSION_ID = "simulate-in-flyby"
 
 /** The calibration page on its own, reached from the module's page under Modules; shown nowhere else. */
 internal const val CALIBRATE_FEATURE_ID = "calibrate"
 
-private enum class Page { PLANNER, PREVIEW, PLANS, CALIBRATION }
+private enum class Page { EXPERIENCES, PLANNER, PREVIEW, PLANS, CALIBRATION }
 
 /**
- * The planner and the two screens it leads to, on the app's page ground.
+ * The Experiences page, the planner and the screens it leads to, on the app's page ground.
  *
- * The planner is the first page (the calibration page, when [startOnCalibration]) and keeps everything the rider set; the preview and the saved
- * plans are pushed over it and Back pops them, so a ride can be regenerated and a plan opened
- * without losing the stops. Back on the planner leaves the module's screen through [onExit], which
- * is the way back the host gave it.
+ * The Experiences page is the first (the calibration page, when [startOnCalibration]). A card or
+ * "Plan by hand" pushes the planner over it. A card replaces the planner's stops by the experience's
+ * (and plans its road the scenic way, as the card was). "Plan by hand" keeps the planner as it is when
+ * it holds stops the rider made themselves; it starts a blank plan only when the planner is empty or
+ * holds an experience's stops. The preview and
+ * the saved plans are pushed over the planner and Back pops them, so a ride can be regenerated and
+ * a plan opened without losing the stops. A saved plan that is opened replaces the stack by the
+ * Experiences page and the planner, so Back from it is still the Experiences page. Back on the first
+ * page leaves the module's screen through [onExit], which is the way back the host gave it.
  */
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
 internal fun RouteSimulatorApp(env: RsEnv, startOnCalibration: Boolean, onExit: () -> Unit) {
+    val experiences = remember { ExperiencesModel(env) }
     val planner = remember { PlannerModel(env) }
     val plans = remember { PlansModel(env) }
     val calibration = remember { CalibrationModel(env) }
-    var stack by remember { mutableStateOf<List<Page>>(listOf(if (startOnCalibration) Page.CALIBRATION else Page.PLANNER)) }
+    var stack by remember { mutableStateOf<List<Page>>(listOf(if (startOnCalibration) Page.CALIBRATION else Page.EXPERIENCES)) }
 
     LaunchedEffect(Unit) { env.refreshFlyby() }
     DisposableEffect(Unit) {
         onDispose {
+            experiences.dispose()
             planner.dispose()
             plans.cancel()
             calibration.cancel()
@@ -70,6 +77,19 @@ internal fun RouteSimulatorApp(env: RsEnv, startOnCalibration: Boolean, onExit: 
     env.host.ui.Backdrop(back) {
         Box(Modifier.fillMaxSize().background(RsColors.Bg)) {
             when (stack[stack.size - 1]) {
+                Page.EXPERIENCES -> ExperiencesScreen(
+                    env, experiences,
+                    { plan ->
+                        planner.openExperience(plan)
+                        go(Page.PLANNER)
+                    },
+                    {
+                        planner.planByHand()
+                        go(Page.PLANNER)
+                    },
+                    { go(Page.PLANS) },
+                    back
+                )
                 Page.PLANNER -> PlannerScreen(env, planner, { go(Page.PREVIEW) }, { go(Page.PLANS) }, { go(Page.CALIBRATION) }, back)
                 Page.PREVIEW -> {
                     val preview = planner.preview
@@ -82,7 +102,7 @@ internal fun RouteSimulatorApp(env: RsEnv, startOnCalibration: Boolean, onExit: 
                 }
                 Page.PLANS -> PlansScreen(env, plans, { plan ->
                     planner.load(plan)
-                    stack = listOf(Page.PLANNER)
+                    stack = listOf(Page.EXPERIENCES, Page.PLANNER)
                 }, back)
                 Page.CALIBRATION -> CalibrationScreen(env, calibration, back)
             }

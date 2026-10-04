@@ -101,13 +101,19 @@ object MotoHubModuleContract {
      *    the minimum stays at 3.
      * 21: ModuleRenderSettings.realistic, the Real 3D engine's highest tier for a film (ULTRA-REALISTIC).
      *    Appended with a default; the minimum stays at 3.
-     * 22: ModuleRideWriter (a module saves simulated rides and routes), ModuleRouting, ModulePlaces
-     *    and ModuleMapHost (the NAV's routing, speed limits, elevation, place search and a flat
-     *    map lent to a module), ModuleBridge and ModuleExtensions (a module opens another's feature
+     * 22: ModuleRideWriter (a module saves simulated rides and routes), ModuleRouting, ModulePlaces,
+     *    ModuleSights and ModuleMapHost (the NAV's routing, speed limits, elevation, place search
+     *    (and the rider's last known position), the viewpoints, passes and landmarks near a road, and a flat map lent to a module), ModuleBridge and ModuleExtensions (a module opens another's feature
      *    on a ride, and adds an entry to another module), ModuleRideLibrary.isSimulated. New host
      *    members and a new capability; the minimum stays at 3.
+     * 23: remote rendering. A film can be drawn on another computer on the rider's network: a module
+     *    lists those computers (ModuleScene.renderServers, watchRenderServers, pairRenderServer),
+     *    hands over its overlay as data (ModuleRemoteRender, ModuleExportSpec.withRemoteRender) and
+     *    says where the film should be drawn (ModuleExportSpec.renderOn); ModuleExportJob.renderedOn
+     *    says where it is. Appends with defaults, and none of them in an existing constructor; the
+     *    minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 22
+    const val CONTRACT_VERSION = 23
 
     /**
      * The oldest contract this app can still run.
@@ -265,6 +271,9 @@ interface MotoHubModuleHost {
 
     /** The NAV's place search (contract 22). See [ModulePlaces]. */
     val places: ModulePlaces
+
+    /** The viewpoints, passes and landmarks near a road, from OpenStreetMap (contract 22). See [ModuleSights]. */
+    val sights: ModuleSights
 
     /** A flat map lent by the app (contract 22). See [ModuleMapHost]. */
     val maps: ModuleMapHost

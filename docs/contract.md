@@ -105,7 +105,8 @@ other way to know your objects are gone.
 | `ai` | The language model the rider set up in the app, without its key (contract 14); see [rides-and-scene.md](rides-and-scene.md#the-riders-language-model-moduleai). |
 | `rideWriter` | Saves simulated rides and routes into TRIPS and the NAV (contract 22); see [rides-and-scene.md](rides-and-scene.md#writing-rides-and-routes-moduleridewriter). |
 | `routing` | The NAV's routing, speed limits and elevation (contract 22); see [rides-and-scene.md](rides-and-scene.md#routing-speed-limits-and-elevation-modulerouting). |
-| `places` | The NAV's place search (contract 22); see [rides-and-scene.md](rides-and-scene.md#place-search-moduleplaces). |
+| `places` | The NAV's place search and the rider's last known position (contract 22); see [rides-and-scene.md](rides-and-scene.md#place-search-moduleplaces). |
+| `sights` | Viewpoints, heritage and passes near a road, from OpenStreetMap (contract 22); see [rides-and-scene.md](rides-and-scene.md#sights-near-a-road-modulesights). |
 | `maps` | A flat map the app draws and your module directs (contract 22); see [rides-and-scene.md](rides-and-scene.md#a-flat-map-modulemaphost). |
 | `modules` | Whether another module is installed, opening its features on a ride, and what other modules add to yours (contract 22); see [capabilities.md](capabilities.md#adding-to-another-module-moduleextensions-and-modulebridge). |
 
@@ -130,7 +131,7 @@ These all come from real failures on real motorcycles.
 
 ## Versioning
 
-`MotoHubModuleContract.CONTRACT_VERSION` (currently **22**) is bumped whenever anything in
+`MotoHubModuleContract.CONTRACT_VERSION` (currently **23**) is bumped whenever anything in
 `io.motohub.android.module` changes shape. The contract **only grows by appending**: new
 capabilities, and new members on interfaces the *app* implements. An older module simply does
 not answer a capability it predates, and never calls a host member it does not know.
@@ -143,7 +144,7 @@ The app refuses a module whose `contractVersion` is:
 
 So **compile against the newest `module-api`, and declare the highest contract whose members you
 actually use**. A module that declares 10 installs on every app that speaks 10 or more, even when
-it was compiled against 22. Declaring more than you use only turns away riders on older apps;
+it was compiled against 23. Declaring more than you use only turns away riders on older apps;
 declaring less lets an older app load your module and fail with `AbstractMethodError` at the
 first call it does not have. The example declares 10 for that reason, and so does the Android
 Auto module. Every member added after contract 10 names its contract in its KDoc, and the full
@@ -163,6 +164,7 @@ history is in the KDoc of `MotoHubModuleContract`.
 | 19 | `ModuleRenderSettings`; `ModuleExportSpec.render`, `segments`, `preview`; `ModuleScene.setDiagnostics`, `setBasicMode` | 0.1.33 |
 | 20 | `ModuleProjectionReach`, `ModuleProjectionTile` | 0.1.33 |
 | 21 | `ModuleRenderSettings.realistic` (the Real 3D engine's ULTRA-REALISTIC tier) | 0.1.33 |
-| 22 | `host.rideWriter`, `host.routing`, `host.places`, `host.maps`, `host.modules`; `ModuleExtensions`; `ModuleRideLibrary.isSimulated` | 0.1.33 |
+| 22 | `host.rideWriter`, `host.routing`, `host.places`, `host.sights`, `host.maps`, `host.modules`; `ModulePlaces.lastKnownPosition`; `ModuleExtensions`; `ModuleRideLibrary.isSimulated` | 0.1.33 |
+| 23 | `ModuleScene.renderServers`, `watchRenderServers`, `pairRenderServer`; `ModuleRemoteRender`, `ModuleExportSpec.withRemoteRender`, `renderOn`; `ModuleExportJob.renderedOn` | 0.1.33 |
 
 This repository tags every contract release as `contract-<n>`.

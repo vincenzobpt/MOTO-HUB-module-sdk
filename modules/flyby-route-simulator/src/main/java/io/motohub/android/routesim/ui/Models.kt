@@ -20,8 +20,13 @@ import io.motohub.android.routesim.core.RideSettings
 import io.motohub.android.routesim.core.GeneratedRide
 import io.motohub.android.routesim.core.Save
 import io.motohub.android.routesim.core.Stop
+import io.motohub.android.routesim.core.cleanTitleOverride
 import io.motohub.android.routesim.core.defaultStartMillis
+import io.motohub.android.routesim.core.routePreferenceOf
 import io.motohub.android.routesim.core.previewSeries
+import io.motohub.android.routesim.experiences.ExperienceCatalog
+import io.motohub.android.routesim.experiences.ExperienceRoutes
+import io.motohub.android.routesim.experiences.FilterStore
 import io.motohub.android.routesim.learn.Learner
 import io.motohub.android.routesim.learn.LearnedProfile
 import io.motohub.android.routesim.learn.LearnedProfileStore
@@ -34,6 +39,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.ZoneId
 import java.util.concurrent.CancellationException
+import java.util.concurrent.atomic.AtomicBoolean
 
 /** How many points the preview's charts and map line are drawn from. */
 internal const val PREVIEW_POINTS = 500
@@ -57,6 +63,29 @@ internal class RsEnv(val host: MotoHubModuleHost, val scope: CoroutineScope) {
     val learner = Learner(host)
     val learnedStore = LearnedProfileStore(host.storage)
     val zone: ZoneId get() = ZoneId.systemDefault()
+
+    /** The experiences catalogue (the module's own packs and the downloaded ones) and the rider's filters. */
+    val catalog = ExperienceCatalog(host.storage)
+    val filterStore = FilterStore(host.storage)
+
+    /**
+     * Routes of the experiences, cached for as long as the module is loaded; made when first needed.
+     * The sights found are also kept in the module's storage, so a new start does not ask the public
+     * map servers again.
+     */
+    val experienceRoutes: ExperienceRoutes by lazy {
+        ExperienceRoutes(host.routing, host.sights, storageDir = host.storage)
+    }
+
+    private val catalogUpdateClaimed = AtomicBoolean(false)
+
+    /** True once per module load: the first page to ask is the one that refreshes the catalogue. */
+    fun claimCatalogUpdate(): Boolean = catalogUpdateClaimed.compareAndSet(false, true)
+
+    /** The refresh that was claimed could not reach the server: let the next page that opens try again. */
+    fun releaseCatalogUpdate() {
+        catalogUpdateClaimed.set(false)
+    }
 
     /**
      * What the module learned from the rider's rides, or null for the generic styles. Read once
@@ -135,9 +164,18 @@ internal class PlannerModel(val env: RsEnv) {
     /** The preview of the ride just generated, while its screen is up. */
     var preview by mutableStateOf<PreviewModel?>(null)
 
-    /** The route planned for the stops whose key is [preparedKey]; kept so a regeneration costs no network. */
+    /** The route planned for the stops and preference whose key is [preparedKey]; kept so a regeneration costs no network. */
     var prepared by mutableStateOf<PreparedRoute?>(null)
     var preparedKey by mutableStateOf("")
+
+    /** What the ride is called instead of "A → B": the experience the stops came from. Null for a plan made by hand. */
+    var titleOverride by mutableStateOf<String?>(null)
+
+    /**
+     * The road is planned the scenic way, as the experience's card was: true while the stops are an
+     * experience's. Editing the stops keeps it, as it keeps the title; "Clear all" and a blank plan reset it.
+     */
+    var scenic by mutableStateOf(false)
 
     private var planId: String? = null
     private var planName: String? = null
@@ -163,7 +201,7 @@ internal class PlannerModel(val env: RsEnv) {
     /** The route to draw: the planned one, while it still belongs to the stops. */
     fun routeToShow(): PreparedRoute? {
         val route = prepared ?: return null
-        return if (preparedKey == stopsKey(stops)) route else null
+        return if (preparedKey == ExperiencesLogic.preparedKeyFor(stopsKey(stops), scenic)) route else null
     }
 
     // ---- stops
@@ -230,7 +268,42 @@ internal class PlannerModel(val env: RsEnv) {
         selected = -1
         planId = null
         planName = null
+        titleOverride = null
+        scenic = false
         stopsChanged()
+    }
+
+    /** A new, empty plan, as the planner has always opened; whatever was running stops. */
+    fun startBlank() {
+        cancelRun()
+        clearStops()
+        fitVersion++
+    }
+
+    /**
+     * "Plan by hand": the planner as the rider left it when it holds stops of their own making (nothing
+     * is cleared, nothing is cancelled); a blank plan when it is empty or holds an experience's stops.
+     */
+    fun planByHand() {
+        if (ExperiencesLogic.byHandKeepsPlanner(stops.isNotEmpty(), titleOverride)) return
+        startBlank()
+    }
+
+    /**
+     * A new plan from an experience: its stops, and its name as the ride's title. The rider sees the
+     * stops and can edit them; [OpenPlan.note] (a detour that could not be had, no connection) is shown as a notice.
+     */
+    fun openExperience(plan: OpenPlan) {
+        cancelRun()
+        stops = ArrayList(plan.stops)
+        selected = -1
+        planId = null
+        planName = null
+        titleOverride = cleanTitleOverride(plan.title)
+        scenic = true
+        fitVersion++
+        stopsChanged()
+        plan.note?.let { notice(it, false) }
     }
 
     fun select(index: Int) {
@@ -286,6 +359,8 @@ internal class PlannerModel(val env: RsEnv) {
         selected = -1
         planId = plan.id
         planName = plan.name
+        titleOverride = plan.titleOverride
+        scenic = plan.scenic
         fitVersion++
         stopsChanged()
     }
@@ -296,8 +371,8 @@ internal class PlannerModel(val env: RsEnv) {
         val labels = ArrayList<String>()
         for (s in stops) labels.add(Fmt.shortLabel(s.label))
         val id = planId ?: java.util.UUID.randomUUID().toString()
-        val name = planName ?: Strings.defaultPlanName(labels)
-        val plan = Plan(id, name, ArrayList(stops), settings, System.currentTimeMillis())
+        val name = planName ?: titleOverride ?: Strings.defaultPlanName(labels)
+        val plan = Plan(id, name, ArrayList(stops), settings, System.currentTimeMillis(), titleOverride, scenic)
         planId = id
         planName = name
         env.scope.launch(Dispatchers.Default) {
@@ -345,6 +420,8 @@ internal class PlannerModel(val env: RsEnv) {
             return
         }
         val snapshot = settings
+        val title = titleOverride
+        val roadScenic = scenic
         generation += 1
         val mine = generation
         busy = true
@@ -353,7 +430,7 @@ internal class PlannerModel(val env: RsEnv) {
         progress = Strings.PROGRESS_ROUTING
         job = env.scope.launch(Dispatchers.Default) {
             try {
-                val route = ensurePrepared(list, mine) ?: return@launch
+                val route = ensurePrepared(list, title, roadScenic, mine) ?: return@launch
                 progress = Strings.PROGRESS_SIMULATING
                 val ride = env.generator.generate(route, snapshot, java.util.Random().nextLong())
                 if (mode == RunMode.PREVIEW) {
@@ -429,12 +506,20 @@ internal class PlannerModel(val env: RsEnv) {
         messageIsError = true
     }
 
-    /** Blocking: the planned route for [list], from the cache when the stops did not move. */
-    private fun ensurePrepared(list: List<Stop>, mine: Int): PreparedRoute? {
-        val key = stopsKey(list)
+    /**
+     * Blocking: the planned route for [list], from the cache when neither the stops nor the routing
+     * preference ([scenic] or not) changed. The route carries [title] as its ride title when there is
+     * one, a cached route too.
+     */
+    private fun ensurePrepared(list: List<Stop>, title: String?, scenic: Boolean, mine: Int): PreparedRoute? {
+        val key = ExperiencesLogic.preparedKeyFor(stopsKey(list), scenic)
         val cached = prepared
-        if (cached != null && key == preparedKey) return cached
-        val result = env.generator.prepare(list) { text -> if (mine == generation) { progress = text } }
+        if (cached != null && key == preparedKey) {
+            val titled = cached.withTitle(title)
+            if (titled.title != cached.title) prepared = titled
+            return titled
+        }
+        val result = env.generator.prepare(list, title, routePreferenceOf(scenic)) { text -> if (mine == generation) { progress = text } }
         return when (result) {
             is Prepare.Ok -> {
                 prepared = result.route
@@ -619,7 +704,7 @@ internal class PlansModel(private val env: RsEnv) {
         noticeId = null
         job = env.scope.launch(Dispatchers.Default) {
             try {
-                when (val result = env.generator.prepare(plan.stops) { text -> busyText = text }) {
+                when (val result = env.generator.prepare(plan.stops, plan.titleOverride, plan.routePreference) { text -> busyText = text }) {
                     is Prepare.Ok -> {
                         busyText = Strings.PROGRESS_SAVING
                         val id = env.generator.savePlanAsRoute(plan, result.route)

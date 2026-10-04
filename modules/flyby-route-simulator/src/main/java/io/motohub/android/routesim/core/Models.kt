@@ -4,6 +4,7 @@
 // The values the planner, the generator and the saved plans pass around. Plain Kotlin, no Android.
 package io.motohub.android.routesim.core
 
+import io.motohub.android.module.ModuleRoutePreference
 import io.motohub.android.routesim.sim.DrivingProfile
 import io.motohub.android.routesim.sim.RideStyle
 import io.motohub.android.routesim.sim.SimOutput
@@ -29,7 +30,30 @@ fun defaultStartMillis(nowMillis: Long, zone: ZoneId): Long {
     return today.atTime(LocalTime.of(10, 0)).atZone(zone).toInstant().toEpochMilli()
 }
 
-class Plan(val id: String, val name: String, val stops: List<Stop>, val settings: RideSettings, val savedAtMillis: Long)
+/**
+ * A saved plan. [titleOverride] is the name the generated ride carries instead of "A → B": the
+ * experience the stops came from. Null for a plan made by hand. [scenic] says the route was planned
+ * with the scenic preference (an experience's card is), so it is prepared the same way again.
+ */
+class Plan(
+    val id: String,
+    val name: String,
+    val stops: List<Stop>,
+    val settings: RideSettings,
+    val savedAtMillis: Long,
+    val titleOverride: String? = null,
+    val scenic: Boolean = false,
+) {
+    /** The [ModuleRoutePreference] this plan is routed with. */
+    val routePreference: Int get() = routePreferenceOf(scenic)
+}
+
+/** The routing preference for a plan or planner that is [scenic] or not. */
+fun routePreferenceOf(scenic: Boolean): Int =
+    if (scenic) ModuleRoutePreference.SCENIC else ModuleRoutePreference.FASTEST
+
+/** [text] trimmed, or null when it is null or blank: a blank name is no name. */
+fun cleanTitleOverride(text: String?): String? = text?.trim()?.takeIf { it.isNotEmpty() }
 
 /** The result of the network phase, reusable for Regenerate. */
 class PreparedRoute(
@@ -39,9 +63,17 @@ class PreparedRoute(
     val distanceMeters: Double,
     val startPlace: String?,
     val endPlace: String?,
-    /** "A → B", or coordinates where a place has no name. */
+    /** The ride's name: the planner's override when there is one, otherwise [defaultTitle]. */
     val title: String,
-)
+    /** "A → B", or coordinates where a place has no name. */
+    val defaultTitle: String = title,
+    /** The [ModuleRoutePreference] the road was routed with: a prepared route is only reusable for the same one. */
+    val preference: Int = ModuleRoutePreference.FASTEST,
+) {
+    /** The same route under [override] as its title (or under the default one when it is blank or null). */
+    fun withTitle(override: String?): PreparedRoute =
+        PreparedRoute(stops, route, distanceMeters, startPlace, endPlace, cleanTitleOverride(override) ?: defaultTitle, defaultTitle, preference)
+}
 
 sealed class Prepare {
     class Ok(val route: PreparedRoute) : Prepare()

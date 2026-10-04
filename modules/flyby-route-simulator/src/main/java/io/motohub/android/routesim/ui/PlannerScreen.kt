@@ -171,6 +171,7 @@ private fun StopsCard(model: PlannerModel) {
                 TextAction(Strings.CLEAR_ALL, RsColors.Bad, true) { model.clearStops() }
             }
         }
+        model.titleOverride?.let { Txt(Strings.rideName(it), color = RsColors.Text2, size = 14, maxLines = 2) }
         if (model.stops.isEmpty()) {
             Txt(Strings.STOPS_EMPTY, color = RsColors.Dim, size = 15)
         } else {

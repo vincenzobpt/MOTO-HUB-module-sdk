@@ -130,6 +130,9 @@ class MotoHubModulePlugin : Plugin<Project> {
 
             from(dexDir)
             from(layout.buildDirectory.dir("module/manifest"))
+            // d8 copies classes only: a module's src/main/resources travel in the zip at the same
+            // relative paths, where the app's class loader serves them to getResourceAsStream.
+            from(layout.projectDirectory.dir("src/main/resources"))
             archiveFileName.set(module.id.zip(module.version) { id, version -> "$id-$version.jar" })
             destinationDirectory.set(layout.buildDirectory.dir("module/out"))
         }

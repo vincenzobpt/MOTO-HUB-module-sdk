@@ -45,6 +45,7 @@ class FakePlaces : ModulePlaces {
     override fun search(query: String, nearLatitude: Double, nearLongitude: Double, limit: Int): ModulePlaceResult =
         throw NotImplementedError()
     override fun reverse(latitude: Double, longitude: Double): String? = names["$latitude,$longitude"]
+    override fun lastKnownPosition(): DoubleArray? = null
 }
 
 class FakeRideWriter : ModuleRideWriter {

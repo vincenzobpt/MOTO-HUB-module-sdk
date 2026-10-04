@@ -155,7 +155,90 @@ interface ModuleScene {
      * - for a phone that cannot keep the film smooth. Off by default; any other engine ignores it.
      */
     fun setBasicMode(basic: Boolean) {}
+
+    /**
+     * The computers the rider has set up to draw films (contract 23), as the app knows them now:
+     * the ones paired with this phone, found or not, and the ones found on the network that are not
+     * paired yet. Empty when there is none, and on an app that does not do this. The status of each
+     * is refreshed in the background while somebody is watching ([watchRenderServers]); this is the
+     * latest known, not a new round of questions.
+     */
+    fun renderServers(): List<ModuleRenderServer> = emptyList()
+
+    /**
+     * Calls [listener] now and whenever the list of [renderServers] or the state of one of them changes (contract 23),
+     * on the main thread, and keeps the app asking those computers how they are (every few seconds) until the
+     * returned handle is closed. Close it when the screen that shows the list goes away.
+     */
+    fun watchRenderServers(listener: (List<ModuleRenderServer>) -> Unit): AutoCloseable {
+        listener(emptyList())
+        return AutoCloseable { }
+    }
+
+    /**
+     * Opens the app's own screen for pairing a computer with this phone (contract 23): the code Studio shows, typed or read from
+     * its QR. The app owns it, the module only asks for it; [renderServers] changes when it is done.
+     */
+    fun pairRenderServer() {}
 }
+
+/**
+ * A computer that can draw a module's film for it (contract 23): MOTO-HUB Studio with its render server switched on.
+ *
+ * [id] is stable and is what [ModuleExportSpec.renderOn] names. [paired]: this phone may use it; a computer that is found but
+ * not paired is listed so that the module can offer to pair it ([ModuleScene.pairRenderServer]). [ready]: it is answering and
+ * can draw now - false when it is not found on this network ([problem] [PROBLEM_OFFLINE]) or lacks something it needs.
+ * [busy]: it is drawing another film; [queue] how many wait behind that one - a film sent now waits too. [overlays]: the remote
+ * overlays it can draw, by [ModuleRemoteRender.overlayKind] and the versions of each one's format it reads; a module whose
+ * overlay is not in it has to say the computer needs updating rather than send it a film it cannot draw.
+ */
+class ModuleRenderServer @JvmOverloads constructor(
+    val id: String,
+    val name: String,
+    val paired: Boolean,
+    val ready: Boolean,
+    val busy: Boolean,
+    /** One of the PROBLEM_ constants, or null. */
+    val problem: String?,
+    val queue: Int = 0,
+    val overlays: Map<String, List<Int>> = emptyMap()
+) {
+    /** Whether this server draws [kind] at [version] of its format. */
+    fun draws(kind: String, version: Int): Boolean = overlays[kind]?.contains(version) == true
+
+    companion object {
+        /** A paired computer that is not answering on this network now. */
+        const val PROBLEM_OFFLINE = "OFFLINE"
+        const val PROBLEM_BROWSER_MISSING = "BROWSER_MISSING"
+        const val PROBLEM_FFMPEG_MISSING = "FFMPEG_MISSING"
+
+        /** It draws, but on the processor, not a graphics card: much slower. */
+        const val PROBLEM_SOFTWARE_GL = "SOFTWARE_GL"
+
+        /** The phone's pairing with it is no longer good (revoked, or the computer was reset): pair again. */
+        const val PROBLEM_NEEDS_PAIRING = "NEEDS_PAIRING"
+    }
+}
+
+/**
+ * What a module hands over so that its film can be drawn on another computer (contract 23): the overlay as data, because code
+ * cannot travel. The computer draws the picture from the same sources as the phone and the overlay from its own copy of the
+ * module's drawing code, reading [overlayJson] in the format [overlayKind] at [overlayVersion].
+ *
+ * [files] are what the overlay refers to (pictures), by the relative path the overlay's data names them under, e.g.
+ * `photos/p1.jpg`. [lens360] marks the film as a whole sphere, for the phone to put in the video's metadata once it is back.
+ * [overlayHash] is a fingerprint of the source of the module's drawing code that this film was written for: a computer whose own
+ * copy has another one says so to the rider ("the overlay is out of date") and draws the film all the same. Empty when the
+ * module does not keep one.
+ */
+class ModuleRemoteRender @JvmOverloads constructor(
+    val overlayKind: String,
+    val overlayVersion: Int,
+    val overlayJson: String,
+    val files: Map<String, java.io.File> = emptyMap(),
+    val lens360: Boolean = false,
+    val overlayHash: String = ""
+)
 
 /** The actions of [ModuleScene.setActionPath]: a code per scene, and the flags. */
 object ModuleSceneAction {
@@ -262,7 +345,50 @@ class ModuleExportSpec @JvmOverloads constructor(
      * real export. A new preview or an export replaces the file.
      */
     val preview: Boolean = false
-)
+) {
+    /**
+     * Where the film is drawn, when not on the phone (contract 23): what the module gives a render server to draw its overlay
+     * with. Null: no remote drawing is possible for this film, and it is drawn on the phone. Set with [withRemoteRender]; read by
+     * the app.
+     *
+     * Not constructor parameters on purpose: a module built before 23 calls the constructor, and Kotlin compiles a call that
+     * leaves arguments out to a hidden constructor whose shape lists every parameter - adding one would break every such module
+     * on this app. A copy that carries these is the append that costs nobody anything.
+     */
+    var remote: ModuleRemoteRender? = null
+        private set
+
+    /**
+     * Where the module wants the film drawn (contract 23): [RENDER_AUTO] (the default: a paired computer that is ready and not busy,
+     * otherwise the phone), [RENDER_PHONE], or the [ModuleRenderServer.id] of one computer. A named computer that is not paired, not
+     * answering or busy is not replaced by another, silently: the export fails with a message and the module offers the phone.
+     */
+    var renderOn: String = RENDER_AUTO
+        private set
+
+    /**
+     * A copy of this spec that asks to be drawn remotely (contract 23): [remote] for the overlay, [renderOn] for where.
+     * A render server always draws frame by frame, so [realTime], [captureSpeed], [warmUp] and [parallelRenderers] are
+     * ignored there; [preview] and [segments] are always drawn on the phone.
+     */
+    @JvmOverloads
+    fun withRemoteRender(remote: ModuleRemoteRender?, renderOn: String = RENDER_AUTO): ModuleExportSpec =
+        ModuleExportSpec(
+            width, height, framesPerSecond, bitRate, audioUri, audioStartMillis, audioVolume, fileName, parallelRenderers,
+            draft, realTime, captureSpeed, warmUp, hevc, render, segments, preview
+        ).also {
+            it.remote = remote
+            it.renderOn = renderOn
+        }
+
+    companion object {
+        /** [renderOn]: the app chooses - a ready, idle, paired computer if there is one, otherwise the phone. */
+        const val RENDER_AUTO = "auto"
+
+        /** [renderOn]: draw it on the phone. */
+        const val RENDER_PHONE = "phone"
+    }
+}
 
 /**
  * The finish of a Real 3D film (contract 19), the render options of [ModuleExportSpec.render].
@@ -398,6 +524,12 @@ interface ModuleExportListener {
 
 interface ModuleExportJob {
     fun cancel()
+
+    /**
+     * The computer drawing this film (contract 23), or null when the phone is: known as soon as the export starts. A module that
+     * is told the export failed asks it, to know whether the phone's own drawing is still an answer to offer.
+     */
+    fun renderedOn(): ModuleRenderServer? = null
 }
 
 /**
