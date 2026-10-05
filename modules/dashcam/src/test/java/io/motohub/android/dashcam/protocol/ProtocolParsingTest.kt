@@ -19,6 +19,22 @@ class ProtocolParsingTest {
     }
 
     @Test
+    fun `xml values are case-insensitive, span lines and take the first occurrence`() {
+        val xml = "<Function>\n<Cmd>3012</Cmd>\n<STATUS>0</STATUS>\n<String>NA51055\n_V1</String><Cmd>9</Cmd></Function>"
+        assertEquals("3012", Answers.xmlValue(xml, "Cmd"))
+        assertEquals("0", Answers.xmlValue(xml, "Status"))
+        assertEquals("NA51055\n_V1", Answers.xmlValue(xml, "String"))
+        assertNull(Answers.xmlValue(xml, "Value"))
+    }
+
+    @Test
+    fun `xml blocks list every element in order`() {
+        val xml = "<LIST><file><name>a</name></file><FILE><name>b</name></FILE></LIST>"
+        assertEquals(listOf("<name>a</name>", "<name>b</name>"), Answers.xmlBlocks(xml, "file"))
+        assertEquals(emptyList<String>(), Answers.xmlBlocks(xml, "folder"))
+    }
+
+    @Test
     fun `eeasy settings pair each list with its current value and leave recording out`() {
         val items = JSONObject(
             """{"result":0,"info":[{"name":"mic","items":["off","on"],"index":[0,1]},

@@ -42,9 +42,9 @@ import java.io.File
  * A `-keep` for that one method would have fixed that one method. This task instead states the
  * rule the module system actually depends on and enforces it before a build leaves the machine:
  * **every method a module names must exist in the APK it will be loaded into, or on the
- * platform.** No disassembly is involved — a dex's `method_ids` table already lists every method
- * the file names, and a reference the code never reaches still has to resolve for its class to
- * verify.
+ * platform.** The calls are read from the `invoke-*` instructions of the module classes that
+ * actually load (see [Dex.uses]); a call the code never reaches still has to resolve for its
+ * class to verify, so reachability is not asked.
  *
  * ### What it does not check
  *
@@ -107,10 +107,17 @@ abstract class CheckModuleLinkage : DefaultTask() {
         val failures = mutableListOf<String>()
         moduleFiles.forEach { moduleFile ->
             val dexes = Dex.readAll(moduleFile)
-            val defined = dexes.flatMap { it.classDefs() }.map { it.descriptor }.toSet()
-            val borrowed = dexes.asSequence()
-                .flatMap { it.methodReferences().asSequence() }
-                .filter { it.owner !in defined }
+            val uses = dexes.flatMap { it.uses().entries }.associate { it.key to it.value }
+            // What the module's own loader serves: the classes it carries and the app does not.
+            // DexClassLoader asks the app's loader first, so a class both carry is the APK's at
+            // runtime and the module's copy is never read: dashcam 0.4.1 packs its own
+            // kotlin-stdlib (pulled in by media3), its copy of kotlin.text.Regex had
+            // Regex(String, Set), the APK's did not, and this check trusted the copy that never
+            // loads (NoSuchMethodError on a rider's phone, 2026-10-05).
+            val own = uses.keys.filterNot(app::knows).toSet()
+            val borrowed = loadedFrom(Dex.moduleEntry(moduleFile), own, uses).asSequence()
+                .flatMap { uses.getValue(it).calls.asSequence() }
+                .filter { it.owner !in own }
                 .filterNot { isPlatform(it.owner) }
                 // A method named on an array type resolves against java.lang.Object, which is
                 // never in the APK to begin with.
@@ -160,6 +167,24 @@ abstract class CheckModuleLinkage : DefaultTask() {
         }
     }
 
+    /**
+     * The module's own classes that can load: everything reachable from [entry] through the
+     * classes their code names. The rest of what a module carries - most of a bundled library -
+     * never loads, and its calls are not this module's calls. Without a manifest to start from,
+     * every own class counts.
+     */
+    private fun loadedFrom(entry: String?, own: Set<String>, uses: Map<String, Dex.Uses>): Set<String> {
+        if (entry == null || entry !in own) return own
+        val loaded = mutableSetOf<String>()
+        val queue = ArrayDeque(listOf(entry))
+        while (queue.isNotEmpty()) {
+            val descriptor = queue.removeFirst().trimStart('[')
+            if (descriptor !in own || !loaded.add(descriptor)) continue
+            uses[descriptor]?.classes?.forEach(queue::addLast)
+        }
+        return loaded
+    }
+
     /** Descriptors that come from the boot classpath, so no APK is expected to carry them. */
     private fun isPlatform(descriptor: String): Boolean = PLATFORM_PREFIXES.any(descriptor::startsWith)
 
@@ -176,6 +201,13 @@ abstract class CheckModuleLinkage : DefaultTask() {
          * module calls through an interface the app happens not to implement itself.
          */
         fun resolves(reference: Dex.MethodRef): Boolean {
+            // A constructor is never inherited: `new Regex(String, Set)` needs that exact <init>
+            // on Regex itself. Walking up from it reached java.io.Serializable, which Regex
+            // implements, and dashcam 0.4.1 passed this check with a constructor R8 had removed
+            // (NoSuchMethodError on a rider's phone, 2026-10-05).
+            if (reference.signature.startsWith("<init>(")) {
+                return classes[reference.owner]?.methods?.contains(reference.signature) == true
+            }
             val seen = mutableSetOf<String>()
             val queue = ArrayDeque(listOf(reference.owner))
             while (queue.isNotEmpty()) {
@@ -190,8 +222,14 @@ abstract class CheckModuleLinkage : DefaultTask() {
                     continue
                 }
                 // Any other boot-classpath ancestor is not in the APK to be read, and is not
-                // ours to shrink either: nothing can be proved about it, so it is not blamed.
-                if (PLATFORM_PREFIXES.any(descriptor::startsWith)) return true
+                // ours to shrink. A java.* one is asked of the JDK this build runs on, which
+                // carries the same types: java.io.Serializable declares nothing, so reaching it
+                // proves nothing. One the JDK does not have (android.*) cannot be checked, so it
+                // is not blamed.
+                if (PLATFORM_PREFIXES.any(descriptor::startsWith)) {
+                    if (platformDeclares(descriptor, reference.signature) != false) return true
+                    continue
+                }
                 val definition = classes[descriptor] ?: continue
                 if (reference.signature in definition.methods) return true
                 definition.superclass?.let(queue::addLast)
@@ -203,6 +241,44 @@ abstract class CheckModuleLinkage : DefaultTask() {
 
     private companion object {
         const val OBJECT = "Ljava/lang/Object;"
+
+        /**
+         * Whether a java.* type, or anything it extends or implements, declares [signature]:
+         * null when the type is not one this JVM can answer for.
+         */
+        fun platformDeclares(descriptor: String, signature: String): Boolean? {
+            if (!descriptor.startsWith("Ljava/")) return null
+            val name = descriptor.substring(1, descriptor.length - 1).replace('/', '.')
+            val root = runCatching { Class.forName(name, false, null) }.getOrNull() ?: return null
+            val seen = mutableSetOf<Class<*>>()
+            val queue = ArrayDeque<Class<*>>(listOf(root))
+            while (queue.isNotEmpty()) {
+                val type = queue.removeFirst()
+                if (!seen.add(type)) continue
+                if (type.declaredMethods.any { signatureOf(it) == signature }) return true
+                type.superclass?.let(queue::addLast)
+                type.interfaces.forEach(queue::addLast)
+            }
+            return false
+        }
+
+        private fun signatureOf(method: java.lang.reflect.Method): String =
+            method.name + method.parameterTypes.joinToString("", "(", ")", transform = ::descriptorOf) +
+                descriptorOf(method.returnType)
+
+        private fun descriptorOf(type: Class<*>): String = when {
+            type.isArray -> type.name.replace('.', '/')
+            type == Void.TYPE -> "V"
+            type == java.lang.Boolean.TYPE -> "Z"
+            type == java.lang.Byte.TYPE -> "B"
+            type == java.lang.Character.TYPE -> "C"
+            type == java.lang.Short.TYPE -> "S"
+            type == Integer.TYPE -> "I"
+            type == java.lang.Long.TYPE -> "J"
+            type == java.lang.Float.TYPE -> "F"
+            type == java.lang.Double.TYPE -> "D"
+            else -> "L" + type.name.replace('.', '/') + ";"
+        }
 
         val OBJECT_METHODS = setOf(
             "<init>()V",

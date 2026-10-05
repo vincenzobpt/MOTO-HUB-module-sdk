@@ -6,6 +6,7 @@ package io.motohub.android.dashcam.protocol
 import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.regex.Pattern
 import org.json.JSONObject
 
 /**
@@ -18,14 +19,28 @@ internal object Answers {
     fun json(text: String): JSONObject? = runCatching { JSONObject(text.trim()) }.getOrNull()
 
     /** `<Tag>value</Tag>`, first occurrence, case-insensitive. */
-    fun xmlValue(xml: String, tag: String): String? =
-        Regex("<$tag>(.*?)</$tag>", setOf(RegexOption.IGNORE_CASE, RegexOption.DOT_MATCHES_ALL))
-            .find(xml)?.groupValues?.get(1)?.trim()
+    fun xmlValue(xml: String, tag: String): String? {
+        val m = element(tag).matcher(xml)
+        return if (m.find()) m.group(1)?.trim() else null
+    }
 
     /** Every `<tag>…</tag>` block, for lists of files. */
-    fun xmlBlocks(xml: String, tag: String): List<String> =
-        Regex("<$tag>(.*?)</$tag>", setOf(RegexOption.IGNORE_CASE, RegexOption.DOT_MATCHES_ALL))
-            .findAll(xml).map { it.groupValues[1] }.toList()
+    fun xmlBlocks(xml: String, tag: String): List<String> {
+        val m = element(tag).matcher(xml)
+        val out = ArrayList<String>()
+        while (m.find()) out += m.group(1).orEmpty()
+        return out
+    }
+
+    /*
+     * java.util.regex, not kotlin.text.Regex. The module runs on the app's copy of the Kotlin
+     * stdlib, which R8 has shrunk to what the app itself calls: dashcam 0.4.1 used
+     * Regex(String, Set<RegexOption>), the APK no longer had that constructor, and the first
+     * Novatek detect killed the app (NoSuchMethodError, 2026-10-05). The platform's regex is not
+     * the app's to shrink.
+     */
+    private fun element(tag: String): Pattern =
+        Pattern.compile("<$tag>(.*?)</$tag>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
 
     /** `var key="value";` lines (HiSilicon), and plain `key=value` lines (MStar). */
     fun assignments(text: String): Map<String, String> {

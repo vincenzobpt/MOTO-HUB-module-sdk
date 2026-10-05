@@ -26,7 +26,7 @@ private class DashcamModule(private val host: MotoHubModuleHost) : MotoHubModule
 
     override val manifest = ModuleManifest(
         id = "dashcam",
-        version = "0.4.1",
+        version = "0.4.2",
         contractVersion = 20,
         entryClass = "io.motohub.android.dashcam.plugin.DashcamEntry",
         displayName = "Dashcam",

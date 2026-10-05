@@ -127,7 +127,22 @@ private fun WindowMode(landscape: Boolean) {
             }
         }
     }
+    // Opened from a tap on the dashboard's panel, the dashboard's own clean-up shows the bars again
+    // after they were hidden here, and Android's clock and icons land on the title. Keep them hidden
+    // while the video is up; a swipe still peeks them, and transient bars do not count as shown.
+    LaunchedEffect(landscape) {
+        if (!landscape) return@LaunchedEffect
+        while (true) {
+            delay(BARS_CHECK_MS)
+            val insets = view.rootWindowInsets ?: continue
+            if (insets.isVisible(WindowInsets.Type.statusBars()) || insets.isVisible(WindowInsets.Type.navigationBars())) {
+                view.context.findActivity()?.window?.decorView?.windowInsetsController?.hide(WindowInsets.Type.systemBars())
+            }
+        }
+    }
 }
+
+private const val BARS_CHECK_MS = 400L
 
 private tailrec fun Context.findActivity(): Activity? = when (this) {
     is Activity -> this
