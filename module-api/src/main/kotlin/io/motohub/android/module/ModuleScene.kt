@@ -430,13 +430,63 @@ class ModuleRenderSettings @JvmOverloads constructor(
      * widest and densest trees, shrubs and ground cover, full-resolution occlusion - on top of whatever else is asked
      * here. Heavy on graphics memory: the caller keeps the renderers few. False (the default) is the export tier.
      */
-    val realistic: Boolean = false
+    val realistic: Boolean = false,
+    // ---- contract 24: the look of a valley after the rain (Real 3D, export only) ----
+    /**
+     * Wet asphalt that mirrors the sky, the slopes and the lane markings, with puddles. On its own it
+     * wets the road whatever the weather; under rain or after the rain the road is at least as wet as
+     * the weather makes it.
+     */
+    val wetRoad: Boolean = false,
+    /** 0..1: how much water stands on the road when [wetRoad] is on, 1 a film of water all over. */
+    val roadWetness: Float = 0.7f,
+    /** 0..1: how many puddles, and how wide. */
+    val puddles: Float = 0.4f,
+    /** One of [REFLECTION_QUARTER], [REFLECTION_HALF], [REFLECTION_FULL]: the resolution the reflections are traced at. */
+    val reflectionQuality: Int = REFLECTION_HALF,
+    /** Rings spreading on the puddles, as when the last drops still fall. */
+    val rainRipples: Boolean = false,
+    /** Mist lying in the valleys and drifting in the wind, thickest on the valley floor. */
+    val valleyFog: Boolean = false,
+    /** 0..2: how thick the valley mist is, 1 as the weather says. */
+    val fogDensity: Float = 1f,
+    /** 50..800: metres above the valley floor the mist reaches. */
+    val fogHeight: Float = 250f,
+    /** 0..1: how far the cloud base comes down onto the ridges, 0 where the weather puts it. */
+    val lowClouds: Float = 0f,
+    /** One of [SEASON_AUTO], [SEASON_SPRING], [SEASON_SUMMER], [SEASON_AUTUMN]: the colour of meadows and leaves. */
+    val season: Int = SEASON_AUTO,
+    /** Tall, dense grass near the camera, where the land is meadow. */
+    val lushGrass: Boolean = false,
+    /** 0.5..4: how dense that grass is; past 3 only on a computer. */
+    val grassDensity: Float = 1f,
+    /** 0..1: wild flowers in that grass and along the verges. */
+    val wildflowers: Float = 0f,
+    /** Post-and-wire fences along the edges of meadows and fields near the road. */
+    val fences: Boolean = false,
+    /** Falls of white water where a mapped stream drops down a steep slope. */
+    val waterfalls: Boolean = false,
+    /** One of [GRADE_NEUTRAL], [GRADE_ALPINE_WET], [GRADE_WARM], [GRADE_COOL]: the colour grade. */
+    val gradePreset: Int = GRADE_NEUTRAL
 ) {
     companion object {
         const val AA_SMAA = 0
         const val AA_TAA = 1
         const val DOF_FOCUS_RIDER = 0
         const val DOF_FOCUS_TARGET = 1
+        const val REFLECTION_QUARTER = 0
+        const val REFLECTION_HALF = 1
+        const val REFLECTION_FULL = 2
+        /** The season of the ride's own date and place. */
+        const val SEASON_AUTO = 0
+        const val SEASON_SPRING = 1
+        const val SEASON_SUMMER = 2
+        const val SEASON_AUTUMN = 3
+        const val GRADE_NEUTRAL = 0
+        /** Cool shadows, saturated greens, strong local contrast: an alpine valley after the rain. */
+        const val GRADE_ALPINE_WET = 1
+        const val GRADE_WARM = 2
+        const val GRADE_COOL = 3
     }
 }
 
@@ -503,6 +553,13 @@ object ModuleSceneWeather {
     const val RAINY = 2
     const val SNOWY = 3
     const val FOGGY = 4
+
+    /**
+     * Just after the rain (contract 24): a soaked land under a low grey deck, mist in the air and
+     * nothing falling. The amount is how freshly it stopped, 1 soaked, 0 nearly dry. Real 3D wets the
+     * road and the meadows; ArcGIS draws a heavy grey sky. An app older than contract 24 draws fog.
+     */
+    const val AFTER_RAIN = 5
 }
 
 /** The lenses of [ModuleScene.setLens]. */

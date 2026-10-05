@@ -112,8 +112,12 @@ object MotoHubModuleContract {
      *    says where the film should be drawn (ModuleExportSpec.renderOn); ModuleExportJob.renderedOn
      *    says where it is. Appends with defaults, and none of them in an existing constructor; the
      *    minimum stays at 3.
+     * 24: the look of a valley after the rain. ModuleSceneWeather.AFTER_RAIN, and ModuleRenderSettings
+     *    gains the Real 3D export's wet road and its reflections, valley mist and low cloud, season,
+     *    dense grass and flowers, fences, waterfalls and a colour grade. Appended with defaults that
+     *    draw today's picture; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 23
+    const val CONTRACT_VERSION = 24
 
     /**
      * The oldest contract this app can still run.
