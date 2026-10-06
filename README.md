@@ -42,7 +42,7 @@ cd MOTO-HUB-module-sdk
 ./gradlew :examples:hello-module:pushModule
 ```
 
-Then on the phone: **Settings ▸ 11 Modules**, turn on **Developer mode** at the bottom, **Install from a file…**, pick
+Then on the phone: **Settings ▸ 9 Modules**, turn on **Developer mode** at the bottom, **Install from a file…**, pick
 `hello-0.1.0.mhm` from Download. The module's card appears; **About** opens the page it brought.
 
 The full walk-through, including how to start your own module, is in
