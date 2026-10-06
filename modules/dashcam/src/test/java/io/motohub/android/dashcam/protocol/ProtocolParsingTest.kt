@@ -122,6 +122,27 @@ class ProtocolParsingTest {
     }
 
     @Test
+    fun `mstar opens the stream the camera names, then av1, then av4`() {
+        assertEquals(listOf("/liveRTSP/av1", "/liveRTSP/av4"), MstarProtocol.livePaths("1"))
+        assertEquals(listOf("/liveRTSP/v1", "/liveRTSP/av1", "/liveRTSP/av4"), MstarProtocol.livePaths("2"))
+        assertEquals(listOf("/liveRTSP/av2", "/liveRTSP/av1", "/liveRTSP/av4"), MstarProtocol.livePaths("3"))
+        assertEquals(listOf("/liveRTSP/av4", "/liveRTSP/av1"), MstarProtocol.livePaths("4/1"))
+        assertEquals(listOf("/liveRTSP/av1", "/liveRTSP/av4"), MstarProtocol.livePaths(" 1 / 4 "))
+        // Nothing said: av1 as the camera's own app does, and still av4, the address 0.4.2 used.
+        assertEquals(listOf("/liveRTSP/av1", "/liveRTSP/av4"), MstarProtocol.livePaths(null))
+        assertEquals(listOf("/liveRTSP/av1", "/liveRTSP/av4"), MstarProtocol.livePaths(""))
+    }
+
+    @Test
+    fun `mstar B112 firmware switches recording on and off instead of toggling`() {
+        // As the mt022 reported it on 2026-10-05.
+        assertTrue(MstarProtocol.isRecordOnOffFirmware("MS;ms8336;LL02;B112;00;MT02201;MT022_20250329;xx;00:11:22:33:44:55"))
+        assertFalse(MstarProtocol.isRecordOnOffFirmware("MS;ms8336;LL02;B110;00;MT02201;MT022_20250329"))
+        assertFalse(MstarProtocol.isRecordOnOffFirmware("FW_B1120"))
+        assertFalse(MstarProtocol.isRecordOnOffFirmware(""))
+    }
+
+    @Test
     fun `hisilicon assignments read var lines`() {
         val values = Answers.assignments("var softversion=\"V1.0.2\";\nvar model=\"HX-1\";\n")
         assertEquals("V1.0.2", values["softversion"])

@@ -161,7 +161,8 @@ class DashcamController(private val host: MotoHubModuleHost) {
         val (proto, client, identity) = found
         protocol = proto
         http = client
-        log("dashcam: ${proto.family} at ${client.host}, ${identity.maker} ${identity.model} ${identity.firmware}")
+        log("dashcam: ${proto.family} at ${client.host}, ${identity.maker} ${identity.model} ${identity.firmware}" +
+            identity.details.joinToString("") { (k, v) -> ", $k: $v" })
         runCatching { proto.logon(client, wifi.phoneAddress()) }.onFailure { log("dashcam: logon: ${it.message}") }
         runCatching { proto.syncClock(client) }
         val status = runCatching { proto.status(client) }.getOrNull()
@@ -314,10 +315,10 @@ class DashcamController(private val host: MotoHubModuleHost) {
     }
 
     private fun newLivePlayer(): LivePlayer = LivePlayer(
-        prepare = {
+        prepare = { misses ->
             val proto = protocol ?: throw IOException("Not connected to the camera.")
             val client = http ?: throw IOException("Not connected to the camera.")
-            proto.prepareLive(client)
+            proto.prepareLive(client, misses).also { if (misses > 0) log("live: no picture in $misses session(s); trying $it") }
         },
         bind = wifi::bind,
         log = ::log,

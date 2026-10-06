@@ -8,11 +8,13 @@ import io.motohub.android.dashcam.net.CameraHttp
 /**
  * MStar / SigmaStar firmware: `http://<camera>/cgi-bin/Config.cgi?action=get|set|dir|del&property=…`
  * answering `0\nOK\nkey=value` lines, usually at 192.72.1.1, live video at
- * `rtsp://<camera>/liveRTSP/av4`.
+ * `rtsp://<camera>/liveRTSP/av<n>` (see [livePaths]).
  *
  * EXPERIMENTAL: written from the protocol and never run against a camera.
  */
 object MstarProtocol : CameraProtocol {
+    private const val LIVE_STREAMS = "Camera.Preview.RTSP.av"
+
     override val family = "MStar"
     override val experimental = true
     override val defaultHosts = listOf("192.72.1.1")
@@ -35,18 +37,60 @@ object MstarProtocol : CameraProtocol {
     private fun property(http: CameraHttp, name: String): String? =
         runCatching { Answers.assignments(config(http, "get&property=$name"))[name] }.getOrNull()
 
+    /**
+     * Whether this camera's firmware is the "B112" line (the mt022 of 2026-10-05 reports
+     * `MS;ms8336;LL02;B112;…`), which takes recordon/recordoff instead of the record toggle.
+     * Set by [detect]; one camera is connected at a time.
+     */
+    @Volatile private var recordOnOff = false
+
     override fun detect(http: CameraHttp): CameraIdentity? {
         val text = runCatching { http.text("/cgi-bin/Config.cgi?action=get&property=Net.WIFI_AP.SSID", 3000) }.getOrNull() ?: return null
         if (text.lineSequence().firstOrNull()?.trim() != "0") return null
         val ssid = Answers.assignments(text)["Net.WIFI_AP.SSID"].orEmpty()
-        return CameraIdentity(model = ssid, maker = "", firmware = property(http, "Camera.Menu.FWversion").orEmpty(), details = emptyList())
+        val firmware = property(http, "Camera.Menu.FWversion").orEmpty()
+        recordOnOff = isRecordOnOffFirmware(firmware)
+        val streams = property(http, LIVE_STREAMS)
+        return CameraIdentity(
+            model = ssid,
+            maker = "",
+            firmware = firmware,
+            details = listOfNotNull(streams?.let { "Live streams" to it })
+        )
     }
+
+    internal fun isRecordOnOffFirmware(firmware: String) = firmware.split(';').any { it.trim() == "B112" }
 
     override fun heartbeat(http: CameraHttp) {
         config(http, "get&property=Camera.Preview.MJPEG.status.record")
     }
 
-    override fun prepareLive(http: CameraHttp): String = "rtsp://${http.host}/liveRTSP/av4"
+    override fun prepareLive(http: CameraHttp): String = prepareLive(http, 0)
+
+    /**
+     * The camera says which live streams it has (`Camera.Preview.RTSP.av`, e.g. `1` or `1/4`), and
+     * that, not a fixed path, picks the address - the way the camera's own app (Roadcam, Viidure)
+     * does it. 0.4.2 always opened av4: the mt022 accepted PLAY and sent nothing. When a session
+     * shows no picture the next address is tried, ending with av4 so a camera that worked before
+     * still gets it.
+     */
+    override fun prepareLive(http: CameraHttp, misses: Int): String {
+        val paths = livePaths(property(http, LIVE_STREAMS))
+        return "rtsp://${http.host}${paths[misses % paths.size]}"
+    }
+
+    /** The addresses to try, in order, for what the camera answered to [LIVE_STREAMS]. */
+    internal fun livePaths(advertised: String?): List<String> {
+        val first = advertised?.split('/')?.map { it.trim() }?.firstOrNull { it.isNotEmpty() }
+        val fromCamera = when (first) {
+            null -> null
+            "1" -> "/liveRTSP/av1"
+            "2" -> "/liveRTSP/v1"
+            "3" -> "/liveRTSP/av2"
+            else -> "/liveRTSP/av$first"
+        }
+        return listOfNotNull(fromCamera, "/liveRTSP/av1", "/liveRTSP/av4").distinct()
+    }
 
     override fun status(http: CameraHttp): CameraStatus {
         val record = property(http, "Camera.Preview.MJPEG.status.record")
@@ -63,6 +107,10 @@ object MstarProtocol : CameraProtocol {
     }
 
     override fun setRecording(http: CameraHttp, on: Boolean) {
+        if (recordOnOff) {
+            config(http, "set&property=Video&value=" + if (on) "recordon" else "recordoff")
+            return
+        }
         // "record" toggles on this family: only send it when the state is not already the one asked for.
         val recording = property(http, "Camera.Preview.MJPEG.status.record")?.equals("Recording", ignoreCase = true)
         if (recording != on) config(http, "set&property=Video&value=record")

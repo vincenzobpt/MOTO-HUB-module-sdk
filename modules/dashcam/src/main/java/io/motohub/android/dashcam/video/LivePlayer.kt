@@ -34,8 +34,11 @@ data class LiveState(
  * waits for its own clock is a live view that is late.
  */
 class LivePlayer(
-    /** Readies the camera and returns its RTSP URL. Blocking; throws with a reason a rider can read. */
-    private val prepare: () -> String,
+    /**
+     * Readies the camera and returns its RTSP URL, given how many sessions in a row ended without
+     * a picture. Blocking; throws with a reason a rider can read.
+     */
+    private val prepare: (misses: Int) -> String,
     private val bind: (Socket) -> Unit,
     private val log: (String) -> Unit,
     /** Called once per RTSP session, when its first picture is on screen. */
@@ -56,6 +59,9 @@ class LivePlayer(
      * [running] true again: each thread checks that it is still the current generation.
      */
     @Volatile private var generation = 0
+
+    /** Whether the current session has put a picture on screen. */
+    @Volatile private var pictured = false
 
     fun setSurface(s: Surface?) {
         surface = s
@@ -81,10 +87,12 @@ class LivePlayer(
 
     private fun loop(mine: Int) {
         var attempt = 0
+        var misses = 0
         while (isCurrent(mine)) {
+            pictured = false
             try {
                 _state.value = _state.value.copy(status = if (attempt == 0) "Asking the camera for its picture…" else "Reconnecting…", playing = false)
-                val url = prepare()
+                val url = prepare(misses)
                 if (!isCurrent(mine)) break
                 _state.value = _state.value.copy(status = "Opening the video…")
                 val rtsp = RtspClient(url, bind, log)
@@ -100,6 +108,9 @@ class LivePlayer(
                 SystemClock.sleep((1500L * attempt).coerceAtMost(6000L))
             } finally {
                 if (generation == mine) client = null
+                // A session that showed a picture proves the address; one that never did counts
+                // toward trying another (see CameraProtocol.prepareLive).
+                if (pictured) misses = 0 else if (isCurrent(mine)) misses++
             }
         }
         if (generation == mine || !running) _state.value = _state.value.copy(status = "Stopped", playing = false, fps = 0)
@@ -309,6 +320,7 @@ class LivePlayer(
                         }
                         if (!announced) {
                             announced = true
+                            pictured = true
                             onFirstPicture()
                         }
                     }

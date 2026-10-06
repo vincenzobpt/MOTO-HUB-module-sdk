@@ -105,6 +105,13 @@ interface CameraProtocol {
     /** Readies the live picture and returns the RTSP address to open. */
     fun prepareLive(http: CameraHttp): String
 
+    /**
+     * The same, told how many sessions in a row opened without ever showing a picture ([misses]),
+     * so a family whose cameras disagree on the address can try the next one. A family with one
+     * address ignores it: this default is exactly [prepareLive].
+     */
+    fun prepareLive(http: CameraHttp, misses: Int): String = prepareLive(http)
+
     fun status(http: CameraHttp): CameraStatus
     fun setRecording(http: CameraHttp, on: Boolean)
     fun snapshot(http: CameraHttp)
