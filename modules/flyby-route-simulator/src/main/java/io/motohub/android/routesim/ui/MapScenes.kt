@@ -83,7 +83,11 @@ internal object MapScenes {
         }
     }
 
-    /** Start, finish and, when there is a cursor, the point it stands on. */
+    /**
+     * Start, finish and, when there is a cursor, the point it stands on. The cursor's pin carries no
+     * label: a pin is drawn for a letter, and "42 km/h" ran out from under the dot and was covered by
+     * it. The speed at the cursor is written above the chart already.
+     */
     fun previewPins(series: PreviewSeries, cursorIndex: Int): Array<ModuleMapPin> {
         val n = series.latitudes.size
         if (n == 0) return arrayOf<ModuleMapPin>()
@@ -91,8 +95,7 @@ internal object MapScenes {
         pins.add(ModuleMapPin(series.latitudes[0], series.longitudes[0], MapColors.START, "A"))
         pins.add(ModuleMapPin(series.latitudes[n - 1], series.longitudes[n - 1], MapColors.FINISH, "B"))
         if (cursorIndex in 0 until n) {
-            val speed = if (cursorIndex < series.speedKph.size) series.speedKph[cursorIndex] else Float.NaN
-            pins.add(ModuleMapPin(series.latitudes[cursorIndex], series.longitudes[cursorIndex], MapColors.CURSOR, Fmt.speed(speed)))
+            pins.add(ModuleMapPin(series.latitudes[cursorIndex], series.longitudes[cursorIndex], MapColors.CURSOR, ""))
         }
         return Array(pins.size) { pins[it] }
     }

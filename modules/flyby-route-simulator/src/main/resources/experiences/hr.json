@@ -2,7 +2,7 @@
   "schema": 1,
   "country": "HR",
   "name": "Croatia",
-  "version": 1,
+  "version": 2,
   "experiences": [
     {
       "id": "hr-istria-hill-towns",
@@ -88,6 +88,248 @@
         [45.37594, 13.73208],
         [45.38406, 13.72515],
         [45.37902, 13.72192]
+      ],
+      "sights": [
+        {
+          "name": "crkva svete Eufemije",
+          "lat": 45.08319,
+          "lon": 13.63107,
+          "kind": 2
+        },
+        {
+          "name": "Balbijev luk",
+          "lat": 45.08215,
+          "lon": 13.63421,
+          "kind": 2
+        },
+        {
+          "name": "Zavičajni muzej Grada Rovinja",
+          "lat": 45.08252,
+          "lon": 13.63414,
+          "kind": 2
+        },
+        {
+          "name": "Ecomuseo della Batana",
+          "lat": 45.08166,
+          "lon": 13.6329,
+          "kind": 2
+        },
+        {
+          "name": "Grad Rovinj",
+          "lat": 45.08204,
+          "lon": 13.634,
+          "kind": 2
+        },
+        {
+          "name": "Banjol",
+          "lat": 45.07406,
+          "lon": 13.61062,
+          "kind": 1
+        },
+        {
+          "name": "Aquarium Ruđer Bošković",
+          "lat": 45.08554,
+          "lon": 13.63949,
+          "kind": 2
+        },
+        {
+          "name": "Monkodonja",
+          "lat": 45.07058,
+          "lon": 13.69804,
+          "kind": 2
+        },
+        {
+          "name": "Aussichtspunkt",
+          "lat": 45.13428,
+          "lon": 13.68134,
+          "kind": 1
+        },
+        {
+          "name": "Romualdova pećina",
+          "lat": 45.12753,
+          "lon": 13.73737,
+          "kind": 1
+        },
+        {
+          "name": "Limska gradina",
+          "lat": 45.13261,
+          "lon": 13.73927,
+          "kind": 2
+        },
+        {
+          "name": "Jama na Mrgani",
+          "lat": 45.13639,
+          "lon": 13.77407,
+          "kind": 1
+        },
+        {
+          "name": "Dvigrad",
+          "lat": 45.1271,
+          "lon": 13.81199,
+          "kind": 2
+        },
+        {
+          "name": "Jama kod Burići",
+          "lat": 45.11045,
+          "lon": 13.83429,
+          "kind": 1
+        },
+        {
+          "name": "Srednjovjekovni Tematski Park Sanc Michael",
+          "lat": 45.07959,
+          "lon": 13.85926,
+          "kind": 2
+        },
+        {
+          "name": "Jama Mačkovec",
+          "lat": 45.18584,
+          "lon": 13.91165,
+          "kind": 1
+        },
+        {
+          "name": "Jama na krase",
+          "lat": 45.19399,
+          "lon": 13.89339,
+          "kind": 1
+        },
+        {
+          "name": "Središte Istre",
+          "lat": 45.2071,
+          "lon": 13.91223,
+          "kind": 2
+        },
+        {
+          "name": "crkva svete Marije na Škriljinah",
+          "lat": 45.25659,
+          "lon": 13.90711,
+          "kind": 2
+        },
+        {
+          "name": "Kalvarija",
+          "lat": 45.23848,
+          "lon": 13.92758,
+          "kind": 2
+        },
+        {
+          "name": "Pazinska jama",
+          "lat": 45.23961,
+          "lon": 13.93002,
+          "kind": 1
+        },
+        {
+          "name": "Pazinski kaštel",
+          "lat": 45.24027,
+          "lon": 13.93067,
+          "kind": 2
+        },
+        {
+          "name": "Zarečki krov",
+          "lat": 45.24892,
+          "lon": 13.96135,
+          "kind": 1
+        },
+        {
+          "name": "Pogled prema Pazinu",
+          "lat": 45.2575,
+          "lon": 13.96719,
+          "kind": 1
+        },
+        {
+          "name": "Mali slap Butoniga",
+          "lat": 45.28918,
+          "lon": 13.95954,
+          "kind": 1
+        },
+        {
+          "name": "Račji waterfall",
+          "lat": 45.28011,
+          "lon": 14.06567,
+          "kind": 1
+        },
+        {
+          "name": "Sv. Bartul",
+          "lat": 45.3046,
+          "lon": 14.04343,
+          "kind": 2
+        },
+        {
+          "name": "Sv. Silvestar",
+          "lat": 45.32472,
+          "lon": 14.01836,
+          "kind": 2
+        },
+        {
+          "name": "Gradska vrata Huma",
+          "lat": 45.34823,
+          "lon": 14.05053,
+          "kind": 2
+        },
+        {
+          "name": "Zelenšćak",
+          "lat": 45.37672,
+          "lon": 13.99937,
+          "kind": 1
+        },
+        {
+          "name": "Vela peč",
+          "lat": 45.39349,
+          "lon": 13.99579,
+          "kind": 1
+        },
+        {
+          "name": "Vela vrata",
+          "lat": 45.40541,
+          "lon": 13.96819,
+          "kind": 2
+        },
+        {
+          "name": "Pietrapelosa",
+          "lat": 45.40557,
+          "lon": 13.89944,
+          "kind": 2
+        },
+        {
+          "name": "Kamenolom sveti Stjepan",
+          "lat": 45.38151,
+          "lon": 13.88351,
+          "kind": 1
+        },
+        {
+          "name": "Belvedere Oprtalj",
+          "lat": 45.38105,
+          "lon": 13.8233,
+          "kind": 1
+        },
+        {
+          "name": "Zamask",
+          "lat": 45.32639,
+          "lon": 13.87835,
+          "kind": 1
+        },
+        {
+          "name": "Panorama Motovun",
+          "lat": 45.32359,
+          "lon": 13.82716,
+          "kind": 1
+        },
+        {
+          "name": "Muzej narodnih instrumenata",
+          "lat": 45.37355,
+          "lon": 13.77272,
+          "kind": 2
+        },
+        {
+          "name": "Belvedere Križ",
+          "lat": 45.33444,
+          "lon": 13.76249,
+          "kind": 1
+        },
+        {
+          "name": "Sveti Juraj vrh brda",
+          "lat": 45.37728,
+          "lon": 13.75919,
+          "kind": 1
+        }
       ]
     },
     {
@@ -159,6 +401,248 @@
         [45.21064, 13.60247],
         [45.22241, 13.60646],
         [45.22689, 13.59525]
+      ],
+      "sights": [
+        {
+          "name": "Fort Casoni Vecchi",
+          "lat": 44.85277,
+          "lon": 13.84591,
+          "kind": 2
+        },
+        {
+          "name": "crkva Gospe od Mora",
+          "lat": 44.86233,
+          "lon": 13.83533,
+          "kind": 2
+        },
+        {
+          "name": "Battery San Giovanni",
+          "lat": 44.83674,
+          "lon": 13.83176,
+          "kind": 2
+        },
+        {
+          "name": "Fort Stoja",
+          "lat": 44.85568,
+          "lon": 13.81371,
+          "kind": 2
+        },
+        {
+          "name": "Utvrda San Michele",
+          "lat": 44.86615,
+          "lon": 13.85365,
+          "kind": 2
+        },
+        {
+          "name": "Borcima narodnooslobodilačke borbe i žrtvama fašizma 1941-1945",
+          "lat": 44.87275,
+          "lon": 13.84711,
+          "kind": 2
+        },
+        {
+          "name": "Utvrda Monvidal",
+          "lat": 44.87306,
+          "lon": 13.85694,
+          "kind": 2
+        },
+        {
+          "name": "Fort San Giorgio",
+          "lat": 44.88186,
+          "lon": 13.85549,
+          "kind": 2
+        },
+        {
+          "name": "Fort Punta Christo",
+          "lat": 44.89185,
+          "lon": 13.79768,
+          "kind": 2
+        },
+        {
+          "name": "Fort Valmarin",
+          "lat": 44.90003,
+          "lon": 13.86366,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Blaža",
+          "lat": 44.96081,
+          "lon": 13.84774,
+          "kind": 2
+        },
+        {
+          "name": "Sv.Mihovil",
+          "lat": 44.97175,
+          "lon": 13.80783,
+          "kind": 2
+        },
+        {
+          "name": "Kažuni - 3 dry stone houses",
+          "lat": 44.97503,
+          "lon": 13.79177,
+          "kind": 2
+        },
+        {
+          "name": "Kažun - stone house",
+          "lat": 45.0145,
+          "lon": 13.77103,
+          "kind": 2
+        },
+        {
+          "name": "Crkva Sveti Duh",
+          "lat": 45.0402,
+          "lon": 13.78655,
+          "kind": 2
+        },
+        {
+          "name": "Smokvina",
+          "lat": 45.07148,
+          "lon": 13.76423,
+          "kind": 1
+        },
+        {
+          "name": "Paleo Park",
+          "lat": 45.01573,
+          "lon": 13.71641,
+          "kind": 2
+        },
+        {
+          "name": "Monsego",
+          "lat": 45.06799,
+          "lon": 13.70815,
+          "kind": 2
+        },
+        {
+          "name": "Monkodonja",
+          "lat": 45.07058,
+          "lon": 13.69804,
+          "kind": 2
+        },
+        {
+          "name": "Geološki park Fantazija Monfiorenzo",
+          "lat": 45.08122,
+          "lon": 13.66996,
+          "kind": 2
+        },
+        {
+          "name": "crkva svete Eufemije",
+          "lat": 45.08319,
+          "lon": 13.63107,
+          "kind": 2
+        },
+        {
+          "name": "Ecomuseo della Batana",
+          "lat": 45.08166,
+          "lon": 13.6329,
+          "kind": 2
+        },
+        {
+          "name": "Church of St. Bartol",
+          "lat": 45.11945,
+          "lon": 13.64097,
+          "kind": 2
+        },
+        {
+          "name": "Mini Croatia",
+          "lat": 45.09496,
+          "lon": 13.67325,
+          "kind": 2
+        },
+        {
+          "name": "Sveta Cecilija",
+          "lat": 45.0921,
+          "lon": 13.69325,
+          "kind": 2
+        },
+        {
+          "name": "Maklavun",
+          "lat": 45.10848,
+          "lon": 13.75283,
+          "kind": 2
+        },
+        {
+          "name": "Dvigrad",
+          "lat": 45.1271,
+          "lon": 13.81199,
+          "kind": 2
+        },
+        {
+          "name": "Romualdova pećina",
+          "lat": 45.12753,
+          "lon": 13.73737,
+          "kind": 1
+        },
+        {
+          "name": "Limska gradina",
+          "lat": 45.13261,
+          "lon": 13.73927,
+          "kind": 2
+        },
+        {
+          "name": "Jama Golubinka",
+          "lat": 45.1307,
+          "lon": 13.72791,
+          "kind": 1
+        },
+        {
+          "name": "Jankova špilja",
+          "lat": 45.13885,
+          "lon": 13.70626,
+          "kind": 1
+        },
+        {
+          "name": "Jama kod Begi",
+          "lat": 45.1734,
+          "lon": 13.71047,
+          "kind": 1
+        },
+        {
+          "name": "Jama pod Veliki Debeljak",
+          "lat": 45.1611,
+          "lon": 13.67555,
+          "kind": 1
+        },
+        {
+          "name": "Pirates Cave",
+          "lat": 45.13549,
+          "lon": 13.65446,
+          "kind": 1
+        },
+        {
+          "name": "Secret Beach",
+          "lat": 45.12923,
+          "lon": 13.65167,
+          "kind": 1
+        },
+        {
+          "name": "Valalta Belvedere",
+          "lat": 45.13027,
+          "lon": 13.62901,
+          "kind": 1
+        },
+        {
+          "name": "Turtles Waterfall",
+          "lat": 45.16878,
+          "lon": 13.60752,
+          "kind": 1
+        },
+        {
+          "name": "Sv. Martin",
+          "lat": 45.19207,
+          "lon": 13.61291,
+          "kind": 2
+        },
+        {
+          "name": "Spomenik, Edo Murtic",
+          "lat": 45.20259,
+          "lon": 13.58881,
+          "kind": 2
+        },
+        {
+          "name": "Mali Sveti Anđeo (Istarski megalitski krug)",
+          "lat": 45.21307,
+          "lon": 13.62782,
+          "kind": 2
+        }
       ]
     },
     {
@@ -245,6 +729,248 @@
         [45.12543, 14.12116],
         [45.10096, 14.11458],
         [45.09286, 14.12183]
+      ],
+      "sights": [
+        {
+          "name": "Crkva Gospe Trsatske",
+          "lat": 45.33113,
+          "lon": 14.45722,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Jurja mučenika",
+          "lat": 45.3319,
+          "lon": 14.45531,
+          "kind": 2
+        },
+        {
+          "name": "Trsatski kaštel",
+          "lat": 45.33246,
+          "lon": 14.45535,
+          "kind": 2
+        },
+        {
+          "name": "Prirodoslovni muzej Rijeka",
+          "lat": 45.3296,
+          "lon": 14.44403,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Romualda i Svih Svetih",
+          "lat": 45.33279,
+          "lon": 14.44404,
+          "kind": 2
+        },
+        {
+          "name": "crkva Gospe Lurdske",
+          "lat": 45.32856,
+          "lon": 14.43721,
+          "kind": 2
+        },
+        {
+          "name": "Židovska sinagoga",
+          "lat": 45.3311,
+          "lon": 14.43418,
+          "kind": 2
+        },
+        {
+          "name": "Muzej moderne i suvremene umjetnosti",
+          "lat": 45.33052,
+          "lon": 14.43183,
+          "kind": 2
+        },
+        {
+          "name": "Muzej Grada Rijeke",
+          "lat": 45.33066,
+          "lon": 14.43107,
+          "kind": 2
+        },
+        {
+          "name": "crkva Marije Pomoćnice",
+          "lat": 45.3389,
+          "lon": 14.42367,
+          "kind": 2
+        },
+        {
+          "name": "Zavičajni muzej Drenove",
+          "lat": 45.35862,
+          "lon": 14.42742,
+          "kind": 2
+        },
+        {
+          "name": "Islamski centar",
+          "lat": 45.34591,
+          "lon": 14.3976,
+          "kind": 2
+        },
+        {
+          "name": "Pomorski i povijesni musej hrvatskog primorja Rijeka",
+          "lat": 45.37306,
+          "lon": 14.34873,
+          "kind": 2
+        },
+        {
+          "name": "Vidikovac",
+          "lat": 45.35618,
+          "lon": 14.28576,
+          "kind": 1
+        },
+        {
+          "name": "Kristova crkva",
+          "lat": 45.32489,
+          "lon": 14.29874,
+          "kind": 2
+        },
+        {
+          "name": "kapela svetog Ivana od Boga",
+          "lat": 45.31491,
+          "lon": 14.28818,
+          "kind": 2
+        },
+        {
+          "name": "Mlin",
+          "lat": 45.31303,
+          "lon": 14.26308,
+          "kind": 2
+        },
+        {
+          "name": "Mala Rečina 7",
+          "lat": 45.30507,
+          "lon": 14.23344,
+          "kind": 1
+        },
+        {
+          "name": "Lužinski breg",
+          "lat": 45.29272,
+          "lon": 14.24717,
+          "kind": 1
+        },
+        {
+          "name": "Šipičin",
+          "lat": 45.27817,
+          "lon": 14.25129,
+          "kind": 1
+        },
+        {
+          "name": "Zijavica",
+          "lat": 45.2529,
+          "lon": 14.24218,
+          "kind": 1
+        },
+        {
+          "name": "Interpretacijski centar ribarske i pomorske baštine Kuća od mora",
+          "lat": 45.23789,
+          "lon": 14.25566,
+          "kind": 2
+        },
+        {
+          "name": "Muzejska zbirka Mošćenice",
+          "lat": 45.22656,
+          "lon": 14.24888,
+          "kind": 2
+        },
+        {
+          "name": "Pijana pruga",
+          "lat": 45.21026,
+          "lon": 14.18205,
+          "kind": 2
+        },
+        {
+          "name": "Stari grad Kožljak",
+          "lat": 45.19448,
+          "lon": 14.19222,
+          "kind": 2
+        },
+        {
+          "name": "Golubera",
+          "lat": 45.17673,
+          "lon": 14.23519,
+          "kind": 1
+        },
+        {
+          "name": "Provrtenica",
+          "lat": 45.17667,
+          "lon": 14.20319,
+          "kind": 1
+        },
+        {
+          "name": "Bukovo",
+          "lat": 45.15902,
+          "lon": 14.19165,
+          "kind": 1
+        },
+        {
+          "name": "Sea view",
+          "lat": 45.12204,
+          "lon": 14.20422,
+          "kind": 1
+        },
+        {
+          "name": "Goričica",
+          "lat": 45.13569,
+          "lon": 14.18893,
+          "kind": 2
+        },
+        {
+          "name": "Grbac",
+          "lat": 45.15744,
+          "lon": 14.17753,
+          "kind": 1
+        },
+        {
+          "name": "Kastell von Krsan",
+          "lat": 45.17113,
+          "lon": 14.13733,
+          "kind": 2
+        },
+        {
+          "name": "Arsiana",
+          "lat": 45.08056,
+          "lon": 14.08408,
+          "kind": 2
+        },
+        {
+          "name": "Teleferika",
+          "lat": 45.07358,
+          "lon": 14.15297,
+          "kind": 2
+        },
+        {
+          "name": "Vlidikovac Fortica",
+          "lat": 45.08664,
+          "lon": 14.12532,
+          "kind": 1
+        },
+        {
+          "name": "Gradska loža",
+          "lat": 45.08549,
+          "lon": 14.12304,
+          "kind": 2
+        },
+        {
+          "name": "Narodni muzej Labin",
+          "lat": 45.08605,
+          "lon": 14.12422,
+          "kind": 2
+        },
+        {
+          "name": "Gradska vrata Sv. Flora",
+          "lat": 45.08575,
+          "lon": 14.12313,
+          "kind": 2
+        },
+        {
+          "name": "Uskočka vrata",
+          "lat": 45.08558,
+          "lon": 14.12412,
+          "kind": 2
+        },
+        {
+          "name": "Palača Francovich",
+          "lat": 45.08609,
+          "lon": 14.12309,
+          "kind": 2
+        }
       ]
     },
     {
@@ -316,6 +1042,248 @@
         [44.98421, 14.72513],
         [44.97369, 14.74017],
         [44.9706, 14.75424]
+      ],
+      "sights": [
+        {
+          "name": "crkva Gospe Lurdske",
+          "lat": 45.32856,
+          "lon": 14.43721,
+          "kind": 2
+        },
+        {
+          "name": "Muzej moderne i suvremene umjetnosti",
+          "lat": 45.33052,
+          "lon": 14.43183,
+          "kind": 2
+        },
+        {
+          "name": "Muzej Grada Rijeke",
+          "lat": 45.33066,
+          "lon": 14.43107,
+          "kind": 2
+        },
+        {
+          "name": "Židovska sinagoga",
+          "lat": 45.3311,
+          "lon": 14.43418,
+          "kind": 2
+        },
+        {
+          "name": "Islamski centar",
+          "lat": 45.34591,
+          "lon": 14.3976,
+          "kind": 2
+        },
+        {
+          "name": "Zavičajni muzej Drenove",
+          "lat": 45.35862,
+          "lon": 14.42742,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Romualda i Svih Svetih",
+          "lat": 45.33279,
+          "lon": 14.44404,
+          "kind": 2
+        },
+        {
+          "name": "crkva Marije Pomoćnice",
+          "lat": 45.3389,
+          "lon": 14.42367,
+          "kind": 2
+        },
+        {
+          "name": "Prirodoslovni muzej Rijeka",
+          "lat": 45.3296,
+          "lon": 14.44403,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Jurja mučenika",
+          "lat": 45.3319,
+          "lon": 14.45531,
+          "kind": 2
+        },
+        {
+          "name": "Trsatski kaštel",
+          "lat": 45.33246,
+          "lon": 14.45535,
+          "kind": 2
+        },
+        {
+          "name": "Crkva Gospe Trsatske",
+          "lat": 45.33113,
+          "lon": 14.45722,
+          "kind": 2
+        },
+        {
+          "name": "Sablićevo",
+          "lat": 45.31801,
+          "lon": 14.46618,
+          "kind": 1
+        },
+        {
+          "name": "Galileo",
+          "lat": 45.32498,
+          "lon": 14.48292,
+          "kind": 1
+        },
+        {
+          "name": "Kuća kostrenskih pomoraca",
+          "lat": 45.29098,
+          "lon": 14.53449,
+          "kind": 2
+        },
+        {
+          "name": "Rimska kuća",
+          "lat": 45.30718,
+          "lon": 14.53303,
+          "kind": 2
+        },
+        {
+          "name": "Šterna",
+          "lat": 45.28416,
+          "lon": 14.60429,
+          "kind": 2
+        },
+        {
+          "name": "Kaštel Hreljin",
+          "lat": 45.27428,
+          "lon": 14.60261,
+          "kind": 2
+        },
+        {
+          "name": "Tunera Carovo",
+          "lat": 45.27677,
+          "lon": 14.56357,
+          "kind": 2
+        },
+        {
+          "name": "Utvrda Almis",
+          "lat": 45.24627,
+          "lon": 14.56582,
+          "kind": 2
+        },
+        {
+          "name": "F-84G Thunderjet",
+          "lat": 45.22087,
+          "lon": 14.57146,
+          "kind": 2
+        },
+        {
+          "name": "Fortičina",
+          "lat": 45.20706,
+          "lon": 14.55361,
+          "kind": 2
+        },
+        {
+          "name": "Mirine",
+          "lat": 45.20392,
+          "lon": 14.54414,
+          "kind": 2
+        },
+        {
+          "name": "Špilja Biserujka",
+          "lat": 45.18742,
+          "lon": 14.60978,
+          "kind": 1
+        },
+        {
+          "name": "Roman Forum at Fulfinum, Mirine, Omišalj",
+          "lat": 45.20309,
+          "lon": 14.54483,
+          "kind": 2
+        },
+        {
+          "name": "Ostaci crkve Svih Svetih",
+          "lat": 45.15327,
+          "lon": 14.5794,
+          "kind": 2
+        },
+        {
+          "name": "Crkvica Svetog Mavra",
+          "lat": 45.14407,
+          "lon": 14.59636,
+          "kind": 2
+        },
+        {
+          "name": "Haludovo Palace Resort Hotel",
+          "lat": 45.1312,
+          "lon": 14.52747,
+          "kind": 2
+        },
+        {
+          "name": "Cickini",
+          "lat": 45.12591,
+          "lon": 14.55143,
+          "kind": 2
+        },
+        {
+          "name": "Kapela Sv. Juraj",
+          "lat": 45.09679,
+          "lon": 14.50609,
+          "kind": 2
+        },
+        {
+          "name": "Kastel Salatić",
+          "lat": 45.04903,
+          "lon": 14.54872,
+          "kind": 2
+        },
+        {
+          "name": "Frankopanski kaštel",
+          "lat": 45.02579,
+          "lon": 14.57631,
+          "kind": 2
+        },
+        {
+          "name": "Krčka katedrala",
+          "lat": 45.02585,
+          "lon": 14.57588,
+          "kind": 2
+        },
+        {
+          "name": "Crkva Sv. Jura",
+          "lat": 45.00207,
+          "lon": 14.6265,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Dunata",
+          "lat": 45.03997,
+          "lon": 14.62006,
+          "kind": 2
+        },
+        {
+          "name": "Sv. Petar",
+          "lat": 45.03323,
+          "lon": 14.63177,
+          "kind": 2
+        },
+        {
+          "name": "Ⰰ",
+          "lat": 45.02783,
+          "lon": 14.67759,
+          "kind": 2
+        },
+        {
+          "name": "Ⰾ",
+          "lat": 44.98319,
+          "lon": 14.72687,
+          "kind": 2
+        },
+        {
+          "name": "crkva svete Lucije",
+          "lat": 44.97774,
+          "lon": 14.73827,
+          "kind": 2
+        },
+        {
+          "name": "Kapela sv. Kristofora",
+          "lat": 44.97407,
+          "lon": 14.75789,
+          "kind": 2
+        }
       ]
     },
     {
@@ -402,6 +1370,250 @@
         [45.35234, 14.46449],
         [45.33707, 14.46836],
         [45.32647, 14.44168]
+      ],
+      "sights": [
+        {
+          "name": "Nacionalno Svetište Svetog Josipa",
+          "lat": 45.49537,
+          "lon": 15.53158,
+          "kind": 2
+        },
+        {
+          "name": "Muzej Domovinskog rata",
+          "lat": 45.46253,
+          "lon": 15.56681,
+          "kind": 2
+        },
+        {
+          "name": "Galerija \"Šoto\"",
+          "lat": 45.44878,
+          "lon": 15.50125,
+          "kind": 2
+        },
+        {
+          "name": "Župnijska cerkev svete Trojice",
+          "lat": 45.46995,
+          "lon": 15.34493,
+          "kind": 2
+        },
+        {
+          "name": "Stari grad Stelnik",
+          "lat": 45.41811,
+          "lon": 15.30105,
+          "kind": 2
+        },
+        {
+          "name": "Grad Vinica",
+          "lat": 45.45954,
+          "lon": 15.25602,
+          "kind": 2
+        },
+        {
+          "name": "Spominska hiša Otona Župančiča",
+          "lat": 45.46103,
+          "lon": 15.25426,
+          "kind": 2
+        },
+        {
+          "name": "Stari grad Bosiljevo",
+          "lat": 45.408,
+          "lon": 15.28392,
+          "kind": 2
+        },
+        {
+          "name": "Đutno špilja",
+          "lat": 45.41556,
+          "lon": 15.23306,
+          "kind": 1
+        },
+        {
+          "name": "Dvorac Frankopan",
+          "lat": 45.42153,
+          "lon": 15.16907,
+          "kind": 2
+        },
+        {
+          "name": "Kobiljača",
+          "lat": 45.44293,
+          "lon": 15.14012,
+          "kind": 1
+        },
+        {
+          "name": "Medina marimba",
+          "lat": 45.36268,
+          "lon": 15.06793,
+          "kind": 1
+        },
+        {
+          "name": "megaphone",
+          "lat": 45.3596,
+          "lon": 15.06705,
+          "kind": 2
+        },
+        {
+          "name": "Xylophone",
+          "lat": 45.36264,
+          "lon": 15.06796,
+          "kind": 2
+        },
+        {
+          "name": "Kavranova Stijena",
+          "lat": 45.42854,
+          "lon": 14.91054,
+          "kind": 1
+        },
+        {
+          "name": "Zeleni vir",
+          "lat": 45.42343,
+          "lon": 14.89577,
+          "kind": 1
+        },
+        {
+          "name": "Ponor Kosica",
+          "lat": 45.37884,
+          "lon": 14.93,
+          "kind": 1
+        },
+        {
+          "name": "Dedin",
+          "lat": 45.39118,
+          "lon": 14.83093,
+          "kind": 4,
+          "ele": 860
+        },
+        {
+          "name": "Vidikovac",
+          "lat": 45.38091,
+          "lon": 14.81961,
+          "kind": 1
+        },
+        {
+          "name": "Deer's Zoo",
+          "lat": 45.39442,
+          "lon": 14.79551,
+          "kind": 2
+        },
+        {
+          "name": "Spilja Lokvarka",
+          "lat": 45.36172,
+          "lon": 14.76266,
+          "kind": 1
+        },
+        {
+          "name": "Ciganska poluspilja",
+          "lat": 45.34867,
+          "lon": 14.76082,
+          "kind": 1
+        },
+        {
+          "name": "Vidikovac Lokvarsko Jezero",
+          "lat": 45.3573,
+          "lon": 14.72115,
+          "kind": 1
+        },
+        {
+          "name": "Špilja Vrelo",
+          "lat": 45.32646,
+          "lon": 14.70423,
+          "kind": 1
+        },
+        {
+          "name": "Gornje Jelenje",
+          "lat": 45.36555,
+          "lon": 14.61884,
+          "kind": 4,
+          "ele": 881
+        },
+        {
+          "name": "Vela Pliš",
+          "lat": 45.3877,
+          "lon": 14.59143,
+          "kind": 1
+        },
+        {
+          "name": "Treska",
+          "lat": 45.40608,
+          "lon": 14.57093,
+          "kind": 1
+        },
+        {
+          "name": "Podhumskim žrtvama",
+          "lat": 45.37554,
+          "lon": 14.49718,
+          "kind": 2
+        },
+        {
+          "name": "Grad Grobnik",
+          "lat": 45.37131,
+          "lon": 14.46057,
+          "kind": 2
+        },
+        {
+          "name": "Zavičajni muzej Drenove",
+          "lat": 45.35862,
+          "lon": 14.42742,
+          "kind": 2
+        },
+        {
+          "name": "Crkva Gospe Trsatske",
+          "lat": 45.33113,
+          "lon": 14.45722,
+          "kind": 2
+        },
+        {
+          "name": "Trsatski kaštel",
+          "lat": 45.33246,
+          "lon": 14.45535,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Jurja mučenika",
+          "lat": 45.3319,
+          "lon": 14.45531,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Romualda i Svih Svetih",
+          "lat": 45.33279,
+          "lon": 14.44404,
+          "kind": 2
+        },
+        {
+          "name": "Prirodoslovni muzej Rijeka",
+          "lat": 45.3296,
+          "lon": 14.44403,
+          "kind": 2
+        },
+        {
+          "name": "Muzej moderne i suvremene umjetnosti",
+          "lat": 45.33052,
+          "lon": 14.43183,
+          "kind": 2
+        },
+        {
+          "name": "Muzej Grada Rijeke",
+          "lat": 45.33066,
+          "lon": 14.43107,
+          "kind": 2
+        },
+        {
+          "name": "crkva Gospe Lurdske",
+          "lat": 45.32856,
+          "lon": 14.43721,
+          "kind": 2
+        },
+        {
+          "name": "Židovska sinagoga",
+          "lat": 45.3311,
+          "lon": 14.43418,
+          "kind": 2
+        },
+        {
+          "name": "crkva Marije Pomoćnice",
+          "lat": 45.3389,
+          "lon": 14.42367,
+          "kind": 2
+        }
       ]
     },
     {
@@ -483,6 +1695,248 @@
         [44.1178, 15.26939],
         [44.1114, 15.24932],
         [44.11939, 15.23132]
+      ],
+      "sights": [
+        {
+          "name": "Muzej moderne i suvremene umjetnosti",
+          "lat": 45.33052,
+          "lon": 14.43183,
+          "kind": 2
+        },
+        {
+          "name": "Muzej Grada Rijeke",
+          "lat": 45.33066,
+          "lon": 14.43107,
+          "kind": 2
+        },
+        {
+          "name": "crkva Gospe Lurdske",
+          "lat": 45.32856,
+          "lon": 14.43721,
+          "kind": 2
+        },
+        {
+          "name": "Islamski centar",
+          "lat": 45.34591,
+          "lon": 14.3976,
+          "kind": 2
+        },
+        {
+          "name": "Židovska sinagoga",
+          "lat": 45.3311,
+          "lon": 14.43418,
+          "kind": 2
+        },
+        {
+          "name": "Zavičajni muzej Drenove",
+          "lat": 45.35862,
+          "lon": 14.42742,
+          "kind": 2
+        },
+        {
+          "name": "Prirodoslovni muzej Rijeka",
+          "lat": 45.3296,
+          "lon": 14.44403,
+          "kind": 2
+        },
+        {
+          "name": "Crkva Gospe Trsatske",
+          "lat": 45.33113,
+          "lon": 14.45722,
+          "kind": 2
+        },
+        {
+          "name": "Kuća kostrenskih pomoraca",
+          "lat": 45.29098,
+          "lon": 14.53449,
+          "kind": 2
+        },
+        {
+          "name": "Turska kuća",
+          "lat": 45.30696,
+          "lon": 14.53389,
+          "kind": 2
+        },
+        {
+          "name": "Kaštel Hreljin",
+          "lat": 45.27428,
+          "lon": 14.60261,
+          "kind": 2
+        },
+        {
+          "name": "Utvrda Almis",
+          "lat": 45.24627,
+          "lon": 14.56582,
+          "kind": 2
+        },
+        {
+          "name": "Drivenik",
+          "lat": 45.23809,
+          "lon": 14.64674,
+          "kind": 2
+        },
+        {
+          "name": "Vrtare Male",
+          "lat": 45.19861,
+          "lon": 14.65865,
+          "kind": 1
+        },
+        {
+          "name": "Memorijalni atelje Zvonka Cara",
+          "lat": 45.17922,
+          "lon": 14.68423,
+          "kind": 2
+        },
+        {
+          "name": "Bribirska pećina",
+          "lat": 45.17354,
+          "lon": 14.75896,
+          "kind": 1
+        },
+        {
+          "name": "Gradina Ledenice",
+          "lat": 45.12991,
+          "lon": 14.83638,
+          "kind": 2
+        },
+        {
+          "name": "Vidikovac Sviba",
+          "lat": 45.11782,
+          "lon": 14.892,
+          "kind": 1
+        },
+        {
+          "name": "Spilja Pijavica",
+          "lat": 45.01101,
+          "lon": 14.89095,
+          "kind": 1
+        },
+        {
+          "name": "Tvrđava Nehaj",
+          "lat": 44.98655,
+          "lon": 14.90344,
+          "kind": 2
+        },
+        {
+          "name": "vidikovac Liskovac",
+          "lat": 44.93592,
+          "lon": 14.97339,
+          "kind": 1
+        },
+        {
+          "name": "Separovača",
+          "lat": 44.81961,
+          "lon": 14.89055,
+          "kind": 1
+        },
+        {
+          "name": "Belveder",
+          "lat": 44.70137,
+          "lon": 14.8954,
+          "kind": 1
+        },
+        {
+          "name": "Höhle K 355",
+          "lat": 44.49693,
+          "lon": 15.04194,
+          "kind": 1
+        },
+        {
+          "name": "Velika pećina",
+          "lat": 44.51494,
+          "lon": 15.10889,
+          "kind": 1
+        },
+        {
+          "name": "Miljkovića peć",
+          "lat": 44.46386,
+          "lon": 15.21249,
+          "kind": 1
+        },
+        {
+          "name": "Reljina špilja",
+          "lat": 44.37897,
+          "lon": 15.32638,
+          "kind": 1
+        },
+        {
+          "name": "Lukićeva pećina",
+          "lat": 44.35243,
+          "lon": 15.35951,
+          "kind": 1
+        },
+        {
+          "name": "Sklonište Pećina",
+          "lat": 44.34887,
+          "lon": 15.41411,
+          "kind": 1
+        },
+        {
+          "name": "Večka kula",
+          "lat": 44.27959,
+          "lon": 15.45351,
+          "kind": 2
+        },
+        {
+          "name": "Kapelica Gospe Velebitske",
+          "lat": 44.26054,
+          "lon": 15.53764,
+          "kind": 2
+        },
+        {
+          "name": "Stari Most Maslenica",
+          "lat": 44.22356,
+          "lon": 15.52986,
+          "kind": 2
+        },
+        {
+          "name": "Kula Jankovića",
+          "lat": 44.16993,
+          "lon": 15.4563,
+          "kind": 2
+        },
+        {
+          "name": "Gradina Poličnik",
+          "lat": 44.17927,
+          "lon": 15.37542,
+          "kind": 2
+        },
+        {
+          "name": "crkva Bezgrešnog Začeća Blažene Djevice Marije",
+          "lat": 44.14685,
+          "lon": 15.32463,
+          "kind": 2
+        },
+        {
+          "name": "Zlato i srebro Zadra",
+          "lat": 44.1153,
+          "lon": 15.22502,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Donata",
+          "lat": 44.11581,
+          "lon": 15.22444,
+          "kind": 2
+        },
+        {
+          "name": "katedrala svete Stošije",
+          "lat": 44.11613,
+          "lon": 15.22448,
+          "kind": 2
+        },
+        {
+          "name": "Samostan sv. Frane",
+          "lat": 44.11647,
+          "lon": 15.22197,
+          "kind": 2
+        },
+        {
+          "name": "Morske orgulje",
+          "lat": 44.11709,
+          "lon": 15.21994,
+          "kind": 2
+        }
       ]
     },
     {
@@ -559,6 +2013,248 @@
         [43.51934, 16.44881],
         [43.50766, 16.44975],
         [43.50741, 16.43982]
+      ],
+      "sights": [
+        {
+          "name": "Morske orgulje",
+          "lat": 44.11709,
+          "lon": 15.21994,
+          "kind": 2
+        },
+        {
+          "name": "Pozdrav suncu",
+          "lat": 44.11735,
+          "lon": 15.21997,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Donata",
+          "lat": 44.11581,
+          "lon": 15.22444,
+          "kind": 2
+        },
+        {
+          "name": "katedrala svete Stošije",
+          "lat": 44.11613,
+          "lon": 15.22448,
+          "kind": 2
+        },
+        {
+          "name": "Samostan sv. Frane",
+          "lat": 44.11647,
+          "lon": 15.22197,
+          "kind": 2
+        },
+        {
+          "name": "Zlato i srebro Zadra",
+          "lat": 44.1153,
+          "lon": 15.22502,
+          "kind": 2
+        },
+        {
+          "name": "don Marko Sikirić župnik i domoljub",
+          "lat": 44.06718,
+          "lon": 15.28085,
+          "kind": 2
+        },
+        {
+          "name": "Kosmatac",
+          "lat": 44.05289,
+          "lon": 15.32321,
+          "kind": 1
+        },
+        {
+          "name": "Kula Vrčevo",
+          "lat": 44.03208,
+          "lon": 15.39256,
+          "kind": 2
+        },
+        {
+          "name": "Buta",
+          "lat": 43.99446,
+          "lon": 15.39291,
+          "kind": 1
+        },
+        {
+          "name": "Dvorine",
+          "lat": 43.97196,
+          "lon": 15.43867,
+          "kind": 2
+        },
+        {
+          "name": "crkvica svete Katarine",
+          "lat": 43.9331,
+          "lon": 15.42933,
+          "kind": 2
+        },
+        {
+          "name": "Dalmaland Fun Park",
+          "lat": 43.93168,
+          "lon": 15.47911,
+          "kind": 2
+        },
+        {
+          "name": "crkva Uzašašća Gospodinova",
+          "lat": 43.90715,
+          "lon": 15.50876,
+          "kind": 2
+        },
+        {
+          "name": "Vidikovac",
+          "lat": 43.89298,
+          "lon": 15.53658,
+          "kind": 1
+        },
+        {
+          "name": "Kamenjak",
+          "lat": 43.8945,
+          "lon": 15.61108,
+          "kind": 2
+        },
+        {
+          "name": "Muzej Betinske drvene brodogradnje",
+          "lat": 43.82326,
+          "lon": 15.60448,
+          "kind": 2
+        },
+        {
+          "name": "crkva Gospe od Karavaja",
+          "lat": 43.79364,
+          "lon": 15.6411,
+          "kind": 2
+        },
+        {
+          "name": "Blažene djevice Marije",
+          "lat": 43.7568,
+          "lon": 15.7438,
+          "kind": 2
+        },
+        {
+          "name": "ex-ljetnikovac Fausta Vrančića",
+          "lat": 43.73528,
+          "lon": 15.78898,
+          "kind": 2
+        },
+        {
+          "name": "Tvrđava svetog Ivana",
+          "lat": 43.74012,
+          "lon": 15.894,
+          "kind": 2
+        },
+        {
+          "name": "Tvrđava svetog Mihovila",
+          "lat": 43.73763,
+          "lon": 15.88959,
+          "kind": 2
+        },
+        {
+          "name": "Crkva sv. Dominika",
+          "lat": 43.73652,
+          "lon": 15.88849,
+          "kind": 2
+        },
+        {
+          "name": "katedrala svetog Jakova",
+          "lat": 43.73561,
+          "lon": 15.88914,
+          "kind": 2
+        },
+        {
+          "name": "Tvrđava svetog Nikole",
+          "lat": 43.72153,
+          "lon": 15.85462,
+          "kind": 2
+        },
+        {
+          "name": "Muzej Grada Šibenika",
+          "lat": 43.73537,
+          "lon": 15.88913,
+          "kind": 2
+        },
+        {
+          "name": "Tvrđava Barone",
+          "lat": 43.73728,
+          "lon": 15.89649,
+          "kind": 2
+        },
+        {
+          "name": "Spomen soba Dražen Petrović",
+          "lat": 43.7304,
+          "lon": 15.90234,
+          "kind": 2
+        },
+        {
+          "name": "Sokolarski centar",
+          "lat": 43.72712,
+          "lon": 15.95622,
+          "kind": 2
+        },
+        {
+          "name": "Stražbenica",
+          "lat": 43.69748,
+          "lon": 16.02927,
+          "kind": 1
+        },
+        {
+          "name": "Mujina pećina",
+          "lat": 43.56155,
+          "lon": 16.24473,
+          "kind": 1
+        },
+        {
+          "name": "crkva svetog Nikole",
+          "lat": 43.51393,
+          "lon": 16.251,
+          "kind": 2
+        },
+        {
+          "name": "Crkva Gospe kraj mora",
+          "lat": 43.51606,
+          "lon": 16.25827,
+          "kind": 2
+        },
+        {
+          "name": "Samostan svetog Križa",
+          "lat": 43.51408,
+          "lon": 16.29302,
+          "kind": 2
+        },
+        {
+          "name": "Sv. Nofar",
+          "lat": 43.55547,
+          "lon": 16.29851,
+          "kind": 2
+        },
+        {
+          "name": "Sv. Jure",
+          "lat": 43.56909,
+          "lon": 16.34812,
+          "kind": 2
+        },
+        {
+          "name": "Kaštilac",
+          "lat": 43.54743,
+          "lon": 16.39548,
+          "kind": 2
+        },
+        {
+          "name": "Kaštel Kuparić",
+          "lat": 43.53612,
+          "lon": 16.44613,
+          "kind": 2
+        },
+        {
+          "name": "Rižinice",
+          "lat": 43.55481,
+          "lon": 16.49881,
+          "kind": 2
+        },
+        {
+          "name": "Ad basilicas pictas",
+          "lat": 43.51311,
+          "lon": 16.44205,
+          "kind": 2
+        }
       ]
     },
     {
@@ -645,6 +2341,248 @@
         [42.70227, 18.04526],
         [42.67845, 18.05663],
         [42.64226, 18.11015]
+      ],
+      "sights": [
+        {
+          "name": "Ad basilicas pictas",
+          "lat": 43.51311,
+          "lon": 16.44205,
+          "kind": 2
+        },
+        {
+          "name": "Labirint",
+          "lat": 43.51144,
+          "lon": 16.4127,
+          "kind": 2
+        },
+        {
+          "name": "Milenijski Križ",
+          "lat": 43.50853,
+          "lon": 16.41842,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Lovre",
+          "lat": 43.49946,
+          "lon": 16.52135,
+          "kind": 2
+        },
+        {
+          "name": "Crkva sv. Marka",
+          "lat": 43.454,
+          "lon": 16.64369,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Petra",
+          "lat": 43.44712,
+          "lon": 16.68879,
+          "kind": 2
+        },
+        {
+          "name": "Tvrđava Peovica",
+          "lat": 43.4449,
+          "lon": 16.69349,
+          "kind": 2
+        },
+        {
+          "name": "Visućgrad",
+          "lat": 43.43626,
+          "lon": 16.74294,
+          "kind": 1
+        },
+        {
+          "name": "Crkva sv. Kozme i Damjana",
+          "lat": 43.41574,
+          "lon": 16.76539,
+          "kind": 2
+        },
+        {
+          "name": "Lisičja pećina",
+          "lat": 43.40607,
+          "lon": 16.84078,
+          "kind": 1
+        },
+        {
+          "name": "Kamen Brela",
+          "lat": 43.37232,
+          "lon": 16.92236,
+          "kind": 2
+        },
+        {
+          "name": "Stare Soline",
+          "lat": 43.36751,
+          "lon": 16.93375,
+          "kind": 2
+        },
+        {
+          "name": "Svetište Majke Božje Lurdske",
+          "lat": 43.31554,
+          "lon": 17.00439,
+          "kind": 2
+        },
+        {
+          "name": "Spomenik revolucije",
+          "lat": 43.29597,
+          "lon": 17.01629,
+          "kind": 2
+        },
+        {
+          "name": "Crkva sv. Martina",
+          "lat": 43.29251,
+          "lon": 17.03848,
+          "kind": 2
+        },
+        {
+          "name": "Galebova krila",
+          "lat": 43.24574,
+          "lon": 17.07063,
+          "kind": 2
+        },
+        {
+          "name": "Góra Kline",
+          "lat": 43.22747,
+          "lon": 17.11503,
+          "kind": 1
+        },
+        {
+          "name": "Zalina Kula",
+          "lat": 43.19741,
+          "lon": 17.13762,
+          "kind": 2
+        },
+        {
+          "name": "Kolovrat",
+          "lat": 43.18207,
+          "lon": 17.1956,
+          "kind": 2
+        },
+        {
+          "name": "Kremenik",
+          "lat": 43.15971,
+          "lon": 17.24538,
+          "kind": 1
+        },
+        {
+          "name": "Makarska Riviera",
+          "lat": 43.08204,
+          "lon": 17.36619,
+          "kind": 1
+        },
+        {
+          "name": "Spilja Ričevica",
+          "lat": 43.10011,
+          "lon": 17.39076,
+          "kind": 1
+        },
+        {
+          "name": "crkva Kraljice Neba i Zemlje",
+          "lat": 43.0549,
+          "lon": 17.43331,
+          "kind": 2
+        },
+        {
+          "name": "Vjetroorgulje",
+          "lat": 43.04377,
+          "lon": 17.46925,
+          "kind": 2
+        },
+        {
+          "name": "Gnječi",
+          "lat": 43.04196,
+          "lon": 17.58038,
+          "kind": 2
+        },
+        {
+          "name": "Fortica",
+          "lat": 43.00936,
+          "lon": 17.56596,
+          "kind": 2
+        },
+        {
+          "name": "Deja Duba Raba",
+          "lat": 42.97674,
+          "lon": 17.49184,
+          "kind": 1
+        },
+        {
+          "name": "Greblje u Proviću",
+          "lat": 42.95554,
+          "lon": 17.55742,
+          "kind": 2
+        },
+        {
+          "name": "Chapel of Cemetery",
+          "lat": 42.90366,
+          "lon": 17.53298,
+          "kind": 2
+        },
+        {
+          "name": "Gudnja",
+          "lat": 42.84327,
+          "lon": 17.64808,
+          "kind": 1
+        },
+        {
+          "name": "Arcimun",
+          "lat": 42.83852,
+          "lon": 17.69348,
+          "kind": 2
+        },
+        {
+          "name": "Domaglina",
+          "lat": 42.80939,
+          "lon": 17.75442,
+          "kind": 1
+        },
+        {
+          "name": "Knežev dvor Slano",
+          "lat": 42.78591,
+          "lon": 17.89326,
+          "kind": 2
+        },
+        {
+          "name": "Lapidarium",
+          "lat": 42.78551,
+          "lon": 17.88972,
+          "kind": 2
+        },
+        {
+          "name": "Ljetnikovac Vice Stjepovića-Skočibuhe",
+          "lat": 42.7108,
+          "lon": 17.90874,
+          "kind": 2
+        },
+        {
+          "name": "Gromačka špilja",
+          "lat": 42.7342,
+          "lon": 18.01514,
+          "kind": 1
+        },
+        {
+          "name": "Crkva sv. Spas (ostaci)",
+          "lat": 42.67376,
+          "lon": 18.00652,
+          "kind": 2
+        },
+        {
+          "name": "Močiljska špilja",
+          "lat": 42.68904,
+          "lon": 18.07193,
+          "kind": 1
+        },
+        {
+          "name": "Utvrda Strinčjera",
+          "lat": 42.65986,
+          "lon": 18.1042,
+          "kind": 2
+        },
+        {
+          "name": "Monastery",
+          "lat": 42.62486,
+          "lon": 18.12106,
+          "kind": 2
+        }
       ]
     },
     {
@@ -726,6 +2664,247 @@
         [44.26851, 15.81116],
         [44.292, 15.8329],
         [44.29786, 15.84999]
+      ],
+      "sights": [
+        {
+          "name": "Stari grad Bilaj",
+          "lat": 44.51968,
+          "lon": 15.4332,
+          "kind": 2
+        },
+        {
+          "name": "Kravlja špilja",
+          "lat": 44.43298,
+          "lon": 15.60641,
+          "kind": 1
+        },
+        {
+          "name": "Jametina",
+          "lat": 44.31591,
+          "lon": 15.67269,
+          "kind": 1
+        },
+        {
+          "name": "Ljiljkuša",
+          "lat": 44.31684,
+          "lon": 15.67782,
+          "kind": 1
+        },
+        {
+          "name": "Mali Alan",
+          "lat": 44.29011,
+          "lon": 15.6525,
+          "kind": 4,
+          "ele": 1048
+        },
+        {
+          "name": "Kraljičina vrata",
+          "lat": 44.27501,
+          "lon": 15.64343,
+          "kind": 4,
+          "ele": 971
+        },
+        {
+          "name": "Baćin Stolac",
+          "lat": 44.2684,
+          "lon": 15.63975,
+          "kind": 4,
+          "ele": 912
+        },
+        {
+          "name": "Winnetou \"grob\"",
+          "lat": 44.26674,
+          "lon": 15.64689,
+          "kind": 2
+        },
+        {
+          "name": "Vrhprag",
+          "lat": 44.26365,
+          "lon": 15.6477,
+          "kind": 4,
+          "ele": 856
+        },
+        {
+          "name": "Winnetou Lager Pueblo",
+          "lat": 44.22269,
+          "lon": 15.61393,
+          "kind": 2
+        },
+        {
+          "name": "Vidikovac Pariževačka glavica",
+          "lat": 44.22256,
+          "lon": 15.61364,
+          "kind": 1
+        },
+        {
+          "name": "Odmorište Marune",
+          "lat": 44.24949,
+          "lon": 15.63703,
+          "kind": 1
+        },
+        {
+          "name": "Lipovača",
+          "lat": 44.24787,
+          "lon": 15.68195,
+          "kind": 1
+        },
+        {
+          "name": "Rodna kuća Luke Modrića",
+          "lat": 44.23653,
+          "lon": 15.67588,
+          "kind": 2
+        },
+        {
+          "name": "Jasinovača",
+          "lat": 44.24025,
+          "lon": 15.70115,
+          "kind": 1
+        },
+        {
+          "name": "Josipovača",
+          "lat": 44.23869,
+          "lon": 15.69814,
+          "kind": 1
+        },
+        {
+          "name": "Ostaci željezničkog nasipa iz filma Winnetou",
+          "lat": 44.22407,
+          "lon": 15.66642,
+          "kind": 2
+        },
+        {
+          "name": "Benediktinski samostan sv. Jurja Koprivskoga",
+          "lat": 44.20502,
+          "lon": 15.66495,
+          "kind": 2
+        },
+        {
+          "name": "Ansium",
+          "lat": 44.17903,
+          "lon": 15.66542,
+          "kind": 2
+        },
+        {
+          "name": "Cvijina gradina",
+          "lat": 44.17264,
+          "lon": 15.6718,
+          "kind": 2
+        },
+        {
+          "name": "Talijanka",
+          "lat": 44.19745,
+          "lon": 15.68459,
+          "kind": 1
+        },
+        {
+          "name": "Jankovića buk",
+          "lat": 44.20303,
+          "lon": 15.72152,
+          "kind": 1
+        },
+        {
+          "name": "Šupljača",
+          "lat": 44.23905,
+          "lon": 15.7036,
+          "kind": 1
+        },
+        {
+          "name": "Šarinka",
+          "lat": 44.2494,
+          "lon": 15.71404,
+          "kind": 1
+        },
+        {
+          "name": "Stari Obrovac",
+          "lat": 44.20523,
+          "lon": 15.7272,
+          "kind": 2
+        },
+        {
+          "name": "Mamed",
+          "lat": 44.24428,
+          "lon": 15.73253,
+          "kind": 1
+        },
+        {
+          "name": "Čavlinska pećina",
+          "lat": 44.21249,
+          "lon": 15.74167,
+          "kind": 1
+        },
+        {
+          "name": "Klisina",
+          "lat": 44.19876,
+          "lon": 15.76122,
+          "kind": 2
+        },
+        {
+          "name": "Berberov buk",
+          "lat": 44.19735,
+          "lon": 15.76776,
+          "kind": 1
+        },
+        {
+          "name": "Izvor Dabarnice",
+          "lat": 44.205,
+          "lon": 15.77522,
+          "kind": 1
+        },
+        {
+          "name": "Ogarov buk",
+          "lat": 44.19396,
+          "lon": 15.78676,
+          "kind": 1
+        },
+        {
+          "name": "Vranjača",
+          "lat": 44.23374,
+          "lon": 15.78135,
+          "kind": 1
+        },
+        {
+          "name": "Velika pećina",
+          "lat": 44.23007,
+          "lon": 15.85606,
+          "kind": 1
+        },
+        {
+          "name": "Kobileća jama",
+          "lat": 44.2317,
+          "lon": 15.84775,
+          "kind": 1
+        },
+        {
+          "name": "Prezid",
+          "lat": 44.24993,
+          "lon": 15.80785,
+          "kind": 4,
+          "ele": 766
+        },
+        {
+          "name": "Veselinovića stanovi",
+          "lat": 44.25043,
+          "lon": 15.82553,
+          "kind": 2
+        },
+        {
+          "name": "01 0108",
+          "lat": 44.26302,
+          "lon": 15.83994,
+          "kind": 1
+        },
+        {
+          "name": "Cerovačke špilje",
+          "lat": 44.2748,
+          "lon": 15.88272,
+          "kind": 1
+        },
+        {
+          "name": "Gornja špilja",
+          "lat": 44.27351,
+          "lon": 15.88419,
+          "kind": 1
+        }
       ]
     },
     {
@@ -812,6 +2991,250 @@
         [44.18847, 15.3988],
         [44.11795, 15.26982],
         [44.11939, 15.23132]
+      ],
+      "sights": [
+        {
+          "name": "Nacionalno Svetište Svetog Josipa",
+          "lat": 45.49537,
+          "lon": 15.53158,
+          "kind": 2
+        },
+        {
+          "name": "Muzej Domovinskog rata",
+          "lat": 45.46253,
+          "lon": 15.56681,
+          "kind": 2
+        },
+        {
+          "name": "Šaule",
+          "lat": 45.35139,
+          "lon": 15.58431,
+          "kind": 1
+        },
+        {
+          "name": "Jopića pećina",
+          "lat": 45.30047,
+          "lon": 15.59578,
+          "kind": 1
+        },
+        {
+          "name": "Slap Vilina kosa",
+          "lat": 45.12049,
+          "lon": 15.58445,
+          "kind": 1
+        },
+        {
+          "name": "Stari grad Slovin",
+          "lat": 45.11741,
+          "lon": 15.58798,
+          "kind": 2
+        },
+        {
+          "name": "Pećina",
+          "lat": 45.07299,
+          "lon": 15.6155,
+          "kind": 1
+        },
+        {
+          "name": "Medina jama",
+          "lat": 45.01474,
+          "lon": 15.62337,
+          "kind": 1
+        },
+        {
+          "name": "crkva svete Jelene Križarice",
+          "lat": 44.99546,
+          "lon": 15.64504,
+          "kind": 2
+        },
+        {
+          "name": "Stari grad Drežnik",
+          "lat": 44.94317,
+          "lon": 15.66902,
+          "kind": 2
+        },
+        {
+          "name": "Pećina Golubnjača",
+          "lat": 44.90968,
+          "lon": 15.60852,
+          "kind": 1
+        },
+        {
+          "name": "Veliki slap",
+          "lat": 44.90254,
+          "lon": 15.6079,
+          "kind": 1
+        },
+        {
+          "name": "Špilja Šupljara",
+          "lat": 44.89995,
+          "lon": 15.61179,
+          "kind": 1
+        },
+        {
+          "name": "Nacionalni park Plitvička jezera",
+          "lat": 44.88348,
+          "lon": 15.61376,
+          "kind": 2
+        },
+        {
+          "name": "Krčingrad",
+          "lat": 44.87713,
+          "lon": 15.61442,
+          "kind": 2
+        },
+        {
+          "name": "Galovački buk",
+          "lat": 44.876,
+          "lon": 15.60855,
+          "kind": 1
+        },
+        {
+          "name": "Crkva Svetih Petra i Pavla (ostaci)",
+          "lat": 44.84355,
+          "lon": 15.67536,
+          "kind": 2
+        },
+        {
+          "name": "Mrsinjgrad",
+          "lat": 44.75109,
+          "lon": 15.67883,
+          "kind": 2
+        },
+        {
+          "name": "Hram Sv. Arhanđela Mihaila i Gavrila",
+          "lat": 44.73555,
+          "lon": 15.72075,
+          "kind": 2
+        },
+        {
+          "name": "Gorica",
+          "lat": 44.66692,
+          "lon": 15.7223,
+          "kind": 4,
+          "ele": 710
+        },
+        {
+          "name": "Crkva svetog Marka Groba",
+          "lat": 44.54157,
+          "lon": 15.77153,
+          "kind": 2
+        },
+        {
+          "name": "Utvrda Udbina",
+          "lat": 44.53451,
+          "lon": 15.76738,
+          "kind": 2
+        },
+        {
+          "name": "crkva hrvatskih mučenika",
+          "lat": 44.53426,
+          "lon": 15.76595,
+          "kind": 2
+        },
+        {
+          "name": "Cerovačke špilje",
+          "lat": 44.2748,
+          "lon": 15.88272,
+          "kind": 1
+        },
+        {
+          "name": "01 0108",
+          "lat": 44.26302,
+          "lon": 15.83994,
+          "kind": 1
+        },
+        {
+          "name": "Prezid",
+          "lat": 44.24993,
+          "lon": 15.80785,
+          "kind": 4,
+          "ele": 766
+        },
+        {
+          "name": "Velika pećina",
+          "lat": 44.23007,
+          "lon": 15.85606,
+          "kind": 1
+        },
+        {
+          "name": "Berberov buk",
+          "lat": 44.19735,
+          "lon": 15.76776,
+          "kind": 1
+        },
+        {
+          "name": "Tvrđava Kurjaković",
+          "lat": 44.20007,
+          "lon": 15.68288,
+          "kind": 2
+        },
+        {
+          "name": "Winnetou Lager Pueblo",
+          "lat": 44.22269,
+          "lon": 15.61393,
+          "kind": 2
+        },
+        {
+          "name": "Kapelica Gospe Velebitske",
+          "lat": 44.26054,
+          "lon": 15.53764,
+          "kind": 2
+        },
+        {
+          "name": "Kula Jankovića",
+          "lat": 44.16993,
+          "lon": 15.4563,
+          "kind": 2
+        },
+        {
+          "name": "Gradina Poličnik",
+          "lat": 44.17927,
+          "lon": 15.37542,
+          "kind": 2
+        },
+        {
+          "name": "crkva Bezgrešnog Začeća Blažene Djevice Marije",
+          "lat": 44.14685,
+          "lon": 15.32463,
+          "kind": 2
+        },
+        {
+          "name": "Zlato i srebro Zadra",
+          "lat": 44.1153,
+          "lon": 15.22502,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Donata",
+          "lat": 44.11581,
+          "lon": 15.22444,
+          "kind": 2
+        },
+        {
+          "name": "katedrala svete Stošije",
+          "lat": 44.11613,
+          "lon": 15.22448,
+          "kind": 2
+        },
+        {
+          "name": "Samostan sv. Frane",
+          "lat": 44.11647,
+          "lon": 15.22197,
+          "kind": 2
+        },
+        {
+          "name": "Morske orgulje",
+          "lat": 44.11709,
+          "lon": 15.21994,
+          "kind": 2
+        },
+        {
+          "name": "Pozdrav suncu",
+          "lat": 44.11735,
+          "lon": 15.21997,
+          "kind": 2
+        }
       ]
     },
     {
@@ -888,6 +3311,248 @@
         [43.44671, 17.22172],
         [43.44836, 17.22249],
         [43.44981, 17.21695]
+      ],
+      "sights": [
+        {
+          "name": "Crkva sv. Marka",
+          "lat": 43.454,
+          "lon": 16.64369,
+          "kind": 2
+        },
+        {
+          "name": "Vidilica",
+          "lat": 43.45662,
+          "lon": 16.7081,
+          "kind": 1
+        },
+        {
+          "name": "Tvrđava Peovica",
+          "lat": 43.4449,
+          "lon": 16.69349,
+          "kind": 2
+        },
+        {
+          "name": "Mirabella fort",
+          "lat": 43.44489,
+          "lon": 16.69346,
+          "kind": 1
+        },
+        {
+          "name": "Istočna gradska vrata",
+          "lat": 43.44358,
+          "lon": 16.69399,
+          "kind": 2
+        },
+        {
+          "name": "Gradski muzej Omiš",
+          "lat": 43.44363,
+          "lon": 16.69379,
+          "kind": 2
+        },
+        {
+          "name": "Tvrđava \"Stari grad\"",
+          "lat": 43.44475,
+          "lon": 16.6995,
+          "kind": 2
+        },
+        {
+          "name": "Pajzatva",
+          "lat": 43.45271,
+          "lon": 16.72326,
+          "kind": 1
+        },
+        {
+          "name": "Crkva sv. Eufemije",
+          "lat": 43.43493,
+          "lon": 16.7035,
+          "kind": 2
+        },
+        {
+          "name": "Peovo",
+          "lat": 43.4473,
+          "lon": 16.73856,
+          "kind": 1
+        },
+        {
+          "name": "vidikovac na moru",
+          "lat": 43.43433,
+          "lon": 16.71619,
+          "kind": 1
+        },
+        {
+          "name": "Visućgrad",
+          "lat": 43.43626,
+          "lon": 16.74294,
+          "kind": 1
+        },
+        {
+          "name": "Crkva sv. Kozme i Damjana",
+          "lat": 43.41574,
+          "lon": 16.76539,
+          "kind": 2
+        },
+        {
+          "name": "vidikovac na Brač",
+          "lat": 43.40819,
+          "lon": 16.77565,
+          "kind": 1
+        },
+        {
+          "name": "Gospina Kapelica",
+          "lat": 43.41625,
+          "lon": 16.79134,
+          "kind": 1
+        },
+        {
+          "name": "Brstilova Jama",
+          "lat": 43.42404,
+          "lon": 16.79267,
+          "kind": 1
+        },
+        {
+          "name": "Lisičja pećina",
+          "lat": 43.40607,
+          "lon": 16.84078,
+          "kind": 1
+        },
+        {
+          "name": "Šatarice",
+          "lat": 43.40713,
+          "lon": 16.87297,
+          "kind": 1
+        },
+        {
+          "name": "crkva svetog Stjepana prvomučenika",
+          "lat": 43.38389,
+          "lon": 16.90785,
+          "kind": 2
+        },
+        {
+          "name": "Nevistina stina",
+          "lat": 43.38581,
+          "lon": 16.92652,
+          "kind": 2
+        },
+        {
+          "name": "Sveti Kajo",
+          "lat": 43.38397,
+          "lon": 16.92703,
+          "kind": 2
+        },
+        {
+          "name": "Napoleon Road",
+          "lat": 43.3813,
+          "lon": 16.93023,
+          "kind": 2
+        },
+        {
+          "name": "Podrače Beach",
+          "lat": 43.37429,
+          "lon": 16.92113,
+          "kind": 2
+        },
+        {
+          "name": "Kamen Brela",
+          "lat": 43.37232,
+          "lon": 16.92236,
+          "kind": 2
+        },
+        {
+          "name": "Sv. Juraj",
+          "lat": 43.37545,
+          "lon": 16.92961,
+          "kind": 2
+        },
+        {
+          "name": "Šupja stina",
+          "lat": 43.38113,
+          "lon": 16.93794,
+          "kind": 1
+        },
+        {
+          "name": "Gospa od Karmela",
+          "lat": 43.36827,
+          "lon": 16.92982,
+          "kind": 2
+        },
+        {
+          "name": "Pozjata",
+          "lat": 43.38798,
+          "lon": 16.96387,
+          "kind": 1
+        },
+        {
+          "name": "Stare Soline",
+          "lat": 43.36751,
+          "lon": 16.93375,
+          "kind": 2
+        },
+        {
+          "name": "Pomorski desant",
+          "lat": 43.34585,
+          "lon": 16.95644,
+          "kind": 2
+        },
+        {
+          "name": "Stara tvrdava",
+          "lat": 43.33359,
+          "lon": 16.98598,
+          "kind": 2
+        },
+        {
+          "name": "paragliding take off site, Miletin Bor, 650 m",
+          "lat": 43.33225,
+          "lon": 17.00724,
+          "kind": 2
+        },
+        {
+          "name": "Skaline",
+          "lat": 43.3368,
+          "lon": 17.01362,
+          "kind": 1
+        },
+        {
+          "name": "Mandlova Ploča",
+          "lat": 43.3673,
+          "lon": 16.97317,
+          "kind": 1
+        },
+        {
+          "name": "Topića staje",
+          "lat": 43.37251,
+          "lon": 16.96998,
+          "kind": 2
+        },
+        {
+          "name": "Pasji Manastiri",
+          "lat": 43.3673,
+          "lon": 16.98198,
+          "kind": 1
+        },
+        {
+          "name": "Старий дім",
+          "lat": 43.35531,
+          "lon": 16.99072,
+          "kind": 2
+        },
+        {
+          "name": "Razmilova špilja",
+          "lat": 43.37226,
+          "lon": 17.05361,
+          "kind": 1
+        },
+        {
+          "name": "Ilirska gomila (Illyrian stone pile)",
+          "lat": 43.4529,
+          "lon": 17.20089,
+          "kind": 2
+        },
+        {
+          "name": "Zavičajni muzej Imotski",
+          "lat": 43.44404,
+          "lon": 17.22032,
+          "kind": 2
+        }
       ]
     },
     {
@@ -969,6 +3634,248 @@
         [44.04261, 16.19762],
         [44.03181, 16.19336],
         [44.03557, 16.18321]
+      ],
+      "sights": [
+        {
+          "name": "Ad basilicas pictas",
+          "lat": 43.51311,
+          "lon": 16.44205,
+          "kind": 2
+        },
+        {
+          "name": "Muzej Iluzija",
+          "lat": 43.51091,
+          "lon": 16.43927,
+          "kind": 2
+        },
+        {
+          "name": "Arheološki muzej",
+          "lat": 43.51586,
+          "lon": 16.43484,
+          "kind": 2
+        },
+        {
+          "name": "Muzej vode u Splitu",
+          "lat": 43.51317,
+          "lon": 16.44249,
+          "kind": 2
+        },
+        {
+          "name": "crkva Gospe od Zdravlja",
+          "lat": 43.5113,
+          "lon": 16.43784,
+          "kind": 2
+        },
+        {
+          "name": "Sv. Mikule",
+          "lat": 43.50922,
+          "lon": 16.43433,
+          "kind": 2
+        },
+        {
+          "name": "Labirint",
+          "lat": 43.51144,
+          "lon": 16.4127,
+          "kind": 2
+        },
+        {
+          "name": "Milenijski Križ",
+          "lat": 43.50853,
+          "lon": 16.41842,
+          "kind": 2
+        },
+        {
+          "name": "Gospe Od Betlema",
+          "lat": 43.50904,
+          "lon": 16.4045,
+          "kind": 2
+        },
+        {
+          "name": "Crkva Sv. Nikole Putnika",
+          "lat": 43.50737,
+          "lon": 16.42712,
+          "kind": 2
+        },
+        {
+          "name": "Galerija Meštrović",
+          "lat": 43.50488,
+          "lon": 16.41798,
+          "kind": 2
+        },
+        {
+          "name": "Crkva Gospe od Sedam žalosti",
+          "lat": 43.50775,
+          "lon": 16.40263,
+          "kind": 2
+        },
+        {
+          "name": "Crkva svetog Stjepana",
+          "lat": 43.50109,
+          "lon": 16.42522,
+          "kind": 2
+        },
+        {
+          "name": "Tvrđava Gripe",
+          "lat": 43.5087,
+          "lon": 16.44718,
+          "kind": 2
+        },
+        {
+          "name": "crkva Svete Trojice",
+          "lat": 43.52091,
+          "lon": 16.43579,
+          "kind": 2
+        },
+        {
+          "name": "Kaštel Kuparić",
+          "lat": 43.53612,
+          "lon": 16.44613,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Lovre od Pazdigrada",
+          "lat": 43.5085,
+          "lon": 16.48795,
+          "kind": 2
+        },
+        {
+          "name": "Sv. Dujam",
+          "lat": 43.52631,
+          "lon": 16.48066,
+          "kind": 2
+        },
+        {
+          "name": "Amfiteatar",
+          "lat": 43.53849,
+          "lon": 16.47434,
+          "kind": 2
+        },
+        {
+          "name": "crkva Gospe od Otoka",
+          "lat": 43.53523,
+          "lon": 16.49053,
+          "kind": 2
+        },
+        {
+          "name": "Crkva sv. Petra i Mojsija",
+          "lat": 43.54022,
+          "lon": 16.4969,
+          "kind": 2
+        },
+        {
+          "name": "Kliško polje",
+          "lat": 43.5475,
+          "lon": 16.51985,
+          "kind": 2
+        },
+        {
+          "name": "Tvrđava Klis",
+          "lat": 43.55999,
+          "lon": 16.52408,
+          "kind": 2
+        },
+        {
+          "name": "Stella Croatica",
+          "lat": 43.57166,
+          "lon": 16.53722,
+          "kind": 2
+        },
+        {
+          "name": "Kraljeva peć",
+          "lat": 43.57279,
+          "lon": 16.57015,
+          "kind": 1
+        },
+        {
+          "name": "Kuljkovača",
+          "lat": 43.63642,
+          "lon": 16.60367,
+          "kind": 1
+        },
+        {
+          "name": "Sinjska tvrđava",
+          "lat": 43.70262,
+          "lon": 16.63246,
+          "kind": 2
+        },
+        {
+          "name": "Gučnica",
+          "lat": 43.72072,
+          "lon": 16.68623,
+          "kind": 1
+        },
+        {
+          "name": "Colonia Claudia Aequum",
+          "lat": 43.74041,
+          "lon": 16.65456,
+          "kind": 2
+        },
+        {
+          "name": "Potravnik",
+          "lat": 43.77918,
+          "lon": 16.55454,
+          "kind": 2
+        },
+        {
+          "name": "Ruševine crkve Sv. Jovana Krstitelja",
+          "lat": 43.83108,
+          "lon": 16.55359,
+          "kind": 2
+        },
+        {
+          "name": "Manastir Dragović",
+          "lat": 43.86376,
+          "lon": 16.51159,
+          "kind": 2
+        },
+        {
+          "name": "Prozor",
+          "lat": 43.91384,
+          "lon": 16.39518,
+          "kind": 2
+        },
+        {
+          "name": "Pećina",
+          "lat": 43.94905,
+          "lon": 16.3989,
+          "kind": 1
+        },
+        {
+          "name": "Crkva svetog Spasa",
+          "lat": 43.97322,
+          "lon": 16.42718,
+          "kind": 2
+        },
+        {
+          "name": "Kriznice",
+          "lat": 43.96432,
+          "lon": 16.34662,
+          "kind": 2
+        },
+        {
+          "name": "Kitešića kolibe",
+          "lat": 44.04609,
+          "lon": 16.27356,
+          "kind": 2
+        },
+        {
+          "name": "Crkva svete Cecilije na Stupovima",
+          "lat": 43.9982,
+          "lon": 16.22327,
+          "kind": 2
+        },
+        {
+          "name": "Slap Krčić",
+          "lat": 44.04187,
+          "lon": 16.23506,
+          "kind": 1
+        },
+        {
+          "name": "Kninska katedrala",
+          "lat": 44.02881,
+          "lon": 16.20745,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1048,6 +3955,248 @@
         [46.28277, 16.21247],
         [46.29036, 16.2989],
         [46.30828, 16.33926]
+      ],
+      "sights": [
+        {
+          "name": "Hrvatski prirodoslovni muzej",
+          "lat": 45.81716,
+          "lon": 15.97225,
+          "kind": 2
+        },
+        {
+          "name": "kapela Gospe Fatimske",
+          "lat": 45.77221,
+          "lon": 15.97764,
+          "kind": 2
+        },
+        {
+          "name": "Muzej suvremene umjetnosti",
+          "lat": 45.77878,
+          "lon": 15.98184,
+          "kind": 2
+        },
+        {
+          "name": "crkva Svetog Križa",
+          "lat": 45.77211,
+          "lon": 15.97713,
+          "kind": 2
+        },
+        {
+          "name": "kapela Corpus Domini",
+          "lat": 45.79465,
+          "lon": 15.94327,
+          "kind": 2
+        },
+        {
+          "name": "crkva Tijela Kristova",
+          "lat": 45.77211,
+          "lon": 15.98497,
+          "kind": 2
+        },
+        {
+          "name": "crkva Blažene Djevice Marije Pomoćnice",
+          "lat": 45.79307,
+          "lon": 15.95244,
+          "kind": 2
+        },
+        {
+          "name": "crkva Porođenja Kristova",
+          "lat": 45.78098,
+          "lon": 15.96254,
+          "kind": 2
+        },
+        {
+          "name": "crkva Krista Kralja",
+          "lat": 45.79727,
+          "lon": 15.98519,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Ivana apostola i evanđelista",
+          "lat": 45.77741,
+          "lon": 15.99405,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Luke evanđelista",
+          "lat": 45.77118,
+          "lon": 15.99602,
+          "kind": 2
+        },
+        {
+          "name": "Pastoralni centar",
+          "lat": 45.79086,
+          "lon": 15.99603,
+          "kind": 2
+        },
+        {
+          "name": "crkva svete Barbare",
+          "lat": 45.82467,
+          "lon": 16.00537,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Mihaela arkanđela",
+          "lat": 45.82304,
+          "lon": 16.04967,
+          "kind": 2
+        },
+        {
+          "name": "crkva svete Marije Anđeoske",
+          "lat": 45.81995,
+          "lon": 16.09157,
+          "kind": 2
+        },
+        {
+          "name": "kapela Presvetog Srca Isusova",
+          "lat": 45.84959,
+          "lon": 16.13876,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Mihalja",
+          "lat": 45.88201,
+          "lon": 16.10424,
+          "kind": 2
+        },
+        {
+          "name": "kapela svetog Benedikta",
+          "lat": 45.90117,
+          "lon": 16.1102,
+          "kind": 2
+        },
+        {
+          "name": "kapelica Krista Kralja",
+          "lat": 45.93086,
+          "lon": 16.14311,
+          "kind": 2
+        },
+        {
+          "name": "Velika Peć",
+          "lat": 45.9378,
+          "lon": 16.0624,
+          "kind": 1
+        },
+        {
+          "name": "Kuzelin",
+          "lat": 45.96021,
+          "lon": 16.13302,
+          "kind": 2
+        },
+        {
+          "name": "Dvorac Hellenbach",
+          "lat": 46.01516,
+          "lon": 16.10717,
+          "kind": 2
+        },
+        {
+          "name": "Lobor-grad",
+          "lat": 46.12101,
+          "lon": 16.06749,
+          "kind": 2
+        },
+        {
+          "name": "Neolitičko naselje Strugača",
+          "lat": 46.11558,
+          "lon": 15.9894,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetog Vida",
+          "lat": 46.10945,
+          "lon": 15.93864,
+          "kind": 2
+        },
+        {
+          "name": "Radboa",
+          "lat": 46.16633,
+          "lon": 15.92074,
+          "kind": 2
+        },
+        {
+          "name": "Dedek i Babica",
+          "lat": 46.1796,
+          "lon": 15.90787,
+          "kind": 1
+        },
+        {
+          "name": "Muzej krapinskih neandertalaca",
+          "lat": 46.16467,
+          "lon": 15.86362,
+          "kind": 2
+        },
+        {
+          "name": "Kapela Sv. Tri Kralja",
+          "lat": 46.16722,
+          "lon": 15.85412,
+          "kind": 2
+        },
+        {
+          "name": "Vidikovac Paragliding take off",
+          "lat": 46.18536,
+          "lon": 15.89606,
+          "kind": 1
+        },
+        {
+          "name": "Trakošćan",
+          "lat": 46.25784,
+          "lon": 15.94519,
+          "kind": 2
+        },
+        {
+          "name": "Pusti Lobor",
+          "lat": 46.17882,
+          "lon": 16.06454,
+          "kind": 2
+        },
+        {
+          "name": "Masni kamen",
+          "lat": 46.20547,
+          "lon": 16.07737,
+          "kind": 1
+        },
+        {
+          "name": "Spomenik palim borcima NOR-a",
+          "lat": 46.22185,
+          "lon": 16.09132,
+          "kind": 2
+        },
+        {
+          "name": "crkva svete Marije Magdalene",
+          "lat": 46.22293,
+          "lon": 16.12511,
+          "kind": 2
+        },
+        {
+          "name": "Utvrda Gradišće",
+          "lat": 46.22121,
+          "lon": 16.20936,
+          "kind": 2
+        },
+        {
+          "name": "Dvorac Maruševec",
+          "lat": 46.27215,
+          "lon": 16.18857,
+          "kind": 2
+        },
+        {
+          "name": "Dvorac Šaulovec",
+          "lat": 46.25216,
+          "lon": 16.28063,
+          "kind": 2
+        },
+        {
+          "name": "Dvorac Leitner",
+          "lat": 46.28347,
+          "lon": 16.32326,
+          "kind": 2
+        },
+        {
+          "name": "Stari grad Varaždin",
+          "lat": 46.31017,
+          "lon": 16.33422,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1124,6 +4273,248 @@
         [45.23036, 19.32229],
         [45.22166, 19.34735],
         [45.22273, 19.37282]
+      ],
+      "sights": [
+        {
+          "name": "katedrala svetog Petra",
+          "lat": 45.30761,
+          "lon": 18.41089,
+          "kind": 2
+        },
+        {
+          "name": "Dvorac Adamović-Mihalović",
+          "lat": 45.51933,
+          "lon": 18.55166,
+          "kind": 2
+        },
+        {
+          "name": "Dvorac Pejačević",
+          "lat": 45.56301,
+          "lon": 18.66007,
+          "kind": 2
+        },
+        {
+          "name": "Zoo vrt Osijek",
+          "lat": 45.56938,
+          "lon": 18.66591,
+          "kind": 2
+        },
+        {
+          "name": "Kapela sv. Roka",
+          "lat": 45.56404,
+          "lon": 18.67023,
+          "kind": 2
+        },
+        {
+          "name": "Palača Normann",
+          "lat": 45.56096,
+          "lon": 18.67723,
+          "kind": 2
+        },
+        {
+          "name": "konkatedrala svetog Petra i Pavla",
+          "lat": 45.56082,
+          "lon": 18.6755,
+          "kind": 2
+        },
+        {
+          "name": "Županijska palača",
+          "lat": 45.55962,
+          "lon": 18.67597,
+          "kind": 2
+        },
+        {
+          "name": "Dvorac Mačkamama",
+          "lat": 45.5459,
+          "lon": 18.67936,
+          "kind": 2
+        },
+        {
+          "name": "Evangelička crkva",
+          "lat": 45.5598,
+          "lon": 18.68105,
+          "kind": 2
+        },
+        {
+          "name": "Muzej likovnih umjetnosti",
+          "lat": 45.56052,
+          "lon": 18.68381,
+          "kind": 2
+        },
+        {
+          "name": "Crkva svetog Mihaela arkanđela",
+          "lat": 45.56103,
+          "lon": 18.69397,
+          "kind": 2
+        },
+        {
+          "name": "Arheološki muzej Osijek",
+          "lat": 45.56085,
+          "lon": 18.6952,
+          "kind": 2
+        },
+        {
+          "name": "Zgrade Glavne straže",
+          "lat": 45.56072,
+          "lon": 18.69504,
+          "kind": 2
+        },
+        {
+          "name": "Tvrđa",
+          "lat": 45.56057,
+          "lon": 18.69553,
+          "kind": 2
+        },
+        {
+          "name": "Kužni pil Presvetog Trojstva",
+          "lat": 45.5605,
+          "lon": 18.69575,
+          "kind": 2
+        },
+        {
+          "name": "Zgrada glavnog zapovjedništva",
+          "lat": 45.56111,
+          "lon": 18.6959,
+          "kind": 2
+        },
+        {
+          "name": "Muzej Slavonije",
+          "lat": 45.56013,
+          "lon": 18.69641,
+          "kind": 2
+        },
+        {
+          "name": "Fićo gazi tenka!",
+          "lat": 45.5546,
+          "lon": 18.6956,
+          "kind": 2
+        },
+        {
+          "name": "Crkva sv. Križa",
+          "lat": 45.56123,
+          "lon": 18.69731,
+          "kind": 2
+        },
+        {
+          "name": "Mursa",
+          "lat": 45.55685,
+          "lon": 18.71381,
+          "kind": 2
+        },
+        {
+          "name": "Crkva uspenja presvete Bogorodice",
+          "lat": 45.55931,
+          "lon": 18.71861,
+          "kind": 2
+        },
+        {
+          "name": "Crkva svetog Nikole",
+          "lat": 45.52028,
+          "lon": 18.87416,
+          "kind": 2
+        },
+        {
+          "name": "svetište Gospe od Utočišta",
+          "lat": 45.53012,
+          "lon": 18.94989,
+          "kind": 2
+        },
+        {
+          "name": "Kraljevo Brdo",
+          "lat": 45.52907,
+          "lon": 19.00885,
+          "kind": 1
+        },
+        {
+          "name": "Kulturni i znanstveni centar \"Milutin Milanković\"",
+          "lat": 45.48569,
+          "lon": 18.98937,
+          "kind": 2
+        },
+        {
+          "name": "Crkva svetog Dimitrija",
+          "lat": 45.48428,
+          "lon": 18.98648,
+          "kind": 2
+        },
+        {
+          "name": "Crkva svetog Stefana",
+          "lat": 45.4032,
+          "lon": 18.9813,
+          "kind": 2
+        },
+        {
+          "name": "Spomen dom hrvatskih branitelja",
+          "lat": 45.3772,
+          "lon": 18.94215,
+          "kind": 2
+        },
+        {
+          "name": "Dvorac Eltz",
+          "lat": 45.35532,
+          "lon": 19.00051,
+          "kind": 2
+        },
+        {
+          "name": "Gradski muzej Vukovar",
+          "lat": 45.35476,
+          "lon": 19.00016,
+          "kind": 2
+        },
+        {
+          "name": "crkva svetih Filipa i Jakova",
+          "lat": 45.34721,
+          "lon": 19.00726,
+          "kind": 2
+        },
+        {
+          "name": "Vukovarski vodotoranj",
+          "lat": 45.34401,
+          "lon": 19.01227,
+          "kind": 2
+        },
+        {
+          "name": "Muzej vučedolske kulture",
+          "lat": 45.33613,
+          "lon": 19.05875,
+          "kind": 2
+        },
+        {
+          "name": "Vučedol",
+          "lat": 45.33606,
+          "lon": 19.05938,
+          "kind": 2
+        },
+        {
+          "name": "Spomen dom Ovčara",
+          "lat": 45.29695,
+          "lon": 19.04598,
+          "kind": 2
+        },
+        {
+          "name": "Црква Свете Ане",
+          "lat": 45.29376,
+          "lon": 19.14032,
+          "kind": 2
+        },
+        {
+          "name": "Srednjovjekovna utvrda Šarengrad",
+          "lat": 45.23483,
+          "lon": 19.28003,
+          "kind": 2
+        },
+        {
+          "name": "Ladanjsko imanje Principovac",
+          "lat": 45.19999,
+          "lon": 19.35901,
+          "kind": 2
+        },
+        {
+          "name": "Vukovo",
+          "lat": 45.1996,
+          "lon": 19.3822,
+          "kind": 1
+        }
       ]
     },
     {
@@ -1205,6 +4596,249 @@
         [45.56588, 18.61978],
         [45.56389, 18.66987],
         [45.56023, 18.67066]
+      ],
+      "sights": [
+        {
+          "name": "Domovinski križ",
+          "lat": 45.32284,
+          "lon": 17.66525,
+          "kind": 2
+        },
+        {
+          "name": "Dijecezanski muzej",
+          "lat": 45.33346,
+          "lon": 17.67787,
+          "kind": 2
+        },
+        {
+          "name": "JŽ 51-016 MÁV 375.966",
+          "lat": 45.33741,
+          "lon": 17.6829,
+          "kind": 2
+        },
+        {
+          "name": "Dvorac Kutjevo",
+          "lat": 45.42883,
+          "lon": 17.88501,
+          "kind": 2
+        },
+        {
+          "name": "Rogin Kamen",
+          "lat": 45.4543,
+          "lon": 17.82862,
+          "kind": 1
+        },
+        {
+          "name": "Vrletina",
+          "lat": 45.47579,
+          "lon": 17.91244,
+          "kind": 1
+        },
+        {
+          "name": "Međa",
+          "lat": 45.48257,
+          "lon": 17.873,
+          "kind": 4,
+          "ele": 617
+        },
+        {
+          "name": "Stari grad Orahovica",
+          "lat": 45.49424,
+          "lon": 17.85077,
+          "kind": 2
+        },
+        {
+          "name": "Ružica grad",
+          "lat": 45.51117,
+          "lon": 17.85822,
+          "kind": 2
+        },
+        {
+          "name": "Mali dvorac",
+          "lat": 45.49187,
+          "lon": 18.0906,
+          "kind": 2
+        },
+        {
+          "name": "Dvorac Pejačević",
+          "lat": 45.49174,
+          "lon": 18.09293,
+          "kind": 2
+        },
+        {
+          "name": "Zavičajni muzej Našice",
+          "lat": 45.49181,
+          "lon": 18.09304,
+          "kind": 2
+        },
+        {
+          "name": "Vila Greger",
+          "lat": 45.49018,
+          "lon": 18.0962,
+          "kind": 2
+        },
+        {
+          "name": "Poučni park Bizik",
+          "lat": 45.49428,
+          "lon": 18.128,
+          "kind": 2
+        },
+        {
+          "name": "Kurija Normann-Prandau",
+          "lat": 45.59202,
+          "lon": 18.45914,
+          "kind": 2
+        },
+        {
+          "name": "Zoo vrt Osijek",
+          "lat": 45.56938,
+          "lon": 18.66591,
+          "kind": 2
+        },
+        {
+          "name": "Zgrada Solarskog ureda",
+          "lat": 45.56519,
+          "lon": 18.66975,
+          "kind": 2
+        },
+        {
+          "name": "Kapela sv. Roka",
+          "lat": 45.56404,
+          "lon": 18.67023,
+          "kind": 2
+        },
+        {
+          "name": "Arheološki muzej Osijek",
+          "lat": 45.56085,
+          "lon": 18.6952,
+          "kind": 2
+        },
+        {
+          "name": "Muzej likovnih umjetnosti",
+          "lat": 45.56052,
+          "lon": 18.68381,
+          "kind": 2
+        },
+        {
+          "name": "Zgrade Glavne straže",
+          "lat": 45.56072,
+          "lon": 18.69504,
+          "kind": 2
+        },
+        {
+          "name": "Tvrđa",
+          "lat": 45.56057,
+          "lon": 18.69553,
+          "kind": 2
+        },
+        {
+          "name": "Kužni pil Presvetog Trojstva",
+          "lat": 45.5605,
+          "lon": 18.69575,
+          "kind": 2
+        },
+        {
+          "name": "Zgrada glavnog zapovjedništva",
+          "lat": 45.56111,
+          "lon": 18.6959,
+          "kind": 2
+        },
+        {
+          "name": "Muzej Slavonije",
+          "lat": 45.56013,
+          "lon": 18.69641,
+          "kind": 2
+        },
+        {
+          "name": "Crkva svetog Mihaela arkanđela",
+          "lat": 45.56103,
+          "lon": 18.69397,
+          "kind": 2
+        },
+        {
+          "name": "Mursa",
+          "lat": 45.55685,
+          "lon": 18.71381,
+          "kind": 2
+        },
+        {
+          "name": "Crkva uspenja presvete Bogorodice",
+          "lat": 45.55931,
+          "lon": 18.71861,
+          "kind": 2
+        },
+        {
+          "name": "Crkva sv. Križa",
+          "lat": 45.56123,
+          "lon": 18.69731,
+          "kind": 2
+        },
+        {
+          "name": "Vodena vrata",
+          "lat": 45.56156,
+          "lon": 18.69801,
+          "kind": 2
+        },
+        {
+          "name": "Muzej školjaka i vodenog svijeta Osijek",
+          "lat": 45.56113,
+          "lon": 18.69787,
+          "kind": 2
+        },
+        {
+          "name": "Galerija Kazamat",
+          "lat": 45.56013,
+          "lon": 18.69818,
+          "kind": 2
+        },
+        {
+          "name": "Palača Normann",
+          "lat": 45.56096,
+          "lon": 18.67723,
+          "kind": 2
+        },
+        {
+          "name": "konkatedrala svetog Petra i Pavla",
+          "lat": 45.56082,
+          "lon": 18.6755,
+          "kind": 2
+        },
+        {
+          "name": "Crkva sv. Jakova",
+          "lat": 45.56079,
+          "lon": 18.67777,
+          "kind": 2
+        },
+        {
+          "name": "Evangelička crkva",
+          "lat": 45.5598,
+          "lon": 18.68105,
+          "kind": 2
+        },
+        {
+          "name": "Fićo gazi tenka!",
+          "lat": 45.5546,
+          "lon": 18.6956,
+          "kind": 2
+        },
+        {
+          "name": "Županijska palača",
+          "lat": 45.55962,
+          "lon": 18.67597,
+          "kind": 2
+        },
+        {
+          "name": "Dvorac Mačkamama",
+          "lat": 45.5459,
+          "lon": 18.67936,
+          "kind": 2
+        },
+        {
+          "name": "Galerija Knifer",
+          "lat": 45.5557,
+          "lon": 18.69374,
+          "kind": 2
+        }
       ]
     }
   ]

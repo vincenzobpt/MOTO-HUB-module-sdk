@@ -12,6 +12,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
 import kotlin.math.sqrt
+import io.motohub.android.module.ModuleSightKind
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -185,6 +186,17 @@ object CatalogJson {
             return reject("\"from\" and \"to\" are the same place and no via says how it loops")
         }
 
+        // Optional, and never a reason to drop the ride: a bad sight is left out, the rest kept.
+        val sights = ArrayList<Sight>()
+        val sightArray = o.opt("sights") as? JSONArray
+        if (sightArray != null) {
+            for (i in 0 until sightArray.length()) {
+                if (sights.size >= MAX_SIGHTS) break
+                val sight = sightFrom(sightArray.opt(i))
+                if (sight == null) problems += "$label: sight #$i dropped" else sights += sight
+            }
+        }
+
         return Experience(
             id = id,
             name = name,
@@ -200,7 +212,21 @@ object CatalogJson {
             gravel = gravel,
             maxElevationM = elevation,
             shape = shape,
+            sights = sights,
         )
+    }
+
+    private fun sightFrom(value: Any?): Sight? {
+        val o = value as? JSONObject ?: return null
+        val name = (o.opt("name") as? String)?.trim().orEmpty()
+        val lat = doubleOf(o.opt("lat")) ?: return null
+        val lon = doubleOf(o.opt("lon")) ?: return null
+        val kind = intOf(o.opt("kind"))
+        // Plain comparisons: a range on a smart-cast Double compiles to RangesKt.rangeTo, which R8
+        // removes from the app (the module borrows the app's stdlib), and the module would crash.
+        if (name.isEmpty() || lat < -90.0 || lat > 90.0 || lon < -180.0 || lon > 180.0) return null
+        if (kind != ModuleSightKind.VIEWPOINT && kind != ModuleSightKind.HERITAGE && kind != ModuleSightKind.PASS) return null
+        return Sight(name, lat, lon, kind, doubleOf(o.opt("ele")) ?: Double.NaN)
     }
 
     private fun percent(value: Any?): Int? = intOf(value)?.takeIf { it in 0..100 }
@@ -220,6 +246,14 @@ object CatalogJson {
         .put("gravel", e.gravel)
         .put("maxElevationM", e.maxElevationM)
         .put("shape", JSONArray().apply { e.shape.forEach { put(JSONArray().put(it.first).put(it.second)) } })
+        .apply { if (e.sights.isNotEmpty()) put("sights", JSONArray().apply { e.sights.forEach { put(sightToJson(it)) } }) }
+
+    private fun sightToJson(s: Sight): JSONObject = JSONObject()
+        .put("name", s.name)
+        .put("lat", s.latitude)
+        .put("lon", s.longitude)
+        .put("kind", s.kind)
+        .apply { if (!s.elevationM.isNaN()) put("ele", Math.round(s.elevationM)) }
 
     private fun placeToJson(p: ExperiencePlace): JSONObject =
         JSONObject().put("name", p.name).put("lat", p.latitude).put("lon", p.longitude)
@@ -240,6 +274,8 @@ object CatalogJson {
     const val MIN_MINUTES = 10.0
     const val MAX_MINUTES = 900.0
     const val MAX_VIA = 4
+    /** What the catalogue tool writes at most per ride; more is cut, not an error. */
+    const val MAX_SIGHTS = 40
     const val MIN_SHAPE_POINTS = 2
     private const val MIN_ELEVATION_M = -500
     private const val MAX_ELEVATION_M = 9000

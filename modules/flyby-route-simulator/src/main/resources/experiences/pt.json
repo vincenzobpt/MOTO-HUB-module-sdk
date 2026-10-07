@@ -2,7 +2,7 @@
   "schema": 1,
   "country": "PT",
   "name": "Portugal",
-  "version": 1,
+  "version": 2,
   "experiences": [
     {
       "id": "pt-douro-regua-foz-coa",
@@ -78,6 +78,248 @@
         [41.05259, -7.17292],
         [41.07952, -7.1471],
         [41.07888, -7.14045]
+      ],
+      "sights": [
+        {
+          "name": "Museu do Douro",
+          "lat": 41.1615,
+          "lon": -7.78978,
+          "kind": 2
+        },
+        {
+          "name": "Douro Património Mundial",
+          "lat": 41.15624,
+          "lon": -7.77984,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro da Presegueda",
+          "lat": 41.16779,
+          "lon": -7.74874,
+          "kind": 1
+        },
+        {
+          "name": "Fonte antiga",
+          "lat": 41.12255,
+          "lon": -7.7321,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de Armamar",
+          "lat": 41.1094,
+          "lon": -7.69275,
+          "kind": 2
+        },
+        {
+          "name": "Estação Arqueológica do Alto da Fonte do Milho",
+          "lat": 41.16793,
+          "lon": -7.70152,
+          "kind": 2
+        },
+        {
+          "name": "Adega das Giestas Negras",
+          "lat": 41.18428,
+          "lon": -7.68781,
+          "kind": 2
+        },
+        {
+          "name": "Vista sobre a ponte Romana",
+          "lat": 41.12879,
+          "lon": -7.63351,
+          "kind": 1
+        },
+        {
+          "name": "Pelourinho de Barcos",
+          "lat": 41.12239,
+          "lon": -7.59902,
+          "kind": 2
+        },
+        {
+          "name": "Casa do Visconde de Chanceleiros",
+          "lat": 41.17294,
+          "lon": -7.57783,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Valença do Douro",
+          "lat": 41.15931,
+          "lon": -7.55856,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro de Casal de Loivos",
+          "lat": 41.19853,
+          "lon": -7.53214,
+          "kind": 1
+        },
+        {
+          "name": "Pelourinho de Provesende",
+          "lat": 41.21794,
+          "lon": -7.56738,
+          "kind": 2
+        },
+        {
+          "name": "Casa dos Beleza",
+          "lat": 41.2178,
+          "lon": -7.56647,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Gouvães do Douro",
+          "lat": 41.1967,
+          "lon": -7.57347,
+          "kind": 2
+        },
+        {
+          "name": "Vale do río Torto",
+          "lat": 41.1688,
+          "lon": -7.5453,
+          "kind": 1
+        },
+        {
+          "name": "Dólmen de S. Domingos",
+          "lat": 41.13845,
+          "lon": -7.52457,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro de Frei Estevão",
+          "lat": 41.17258,
+          "lon": -7.49018,
+          "kind": 1
+        },
+        {
+          "name": "Pelourinho de Soutelo do Douro",
+          "lat": 41.18707,
+          "lon": -7.43336,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro de Nossa Senhora das Neves",
+          "lat": 41.1828,
+          "lon": -7.42842,
+          "kind": 1
+        },
+        {
+          "name": "Museu Eduardo Tavares",
+          "lat": 41.14768,
+          "lon": -7.40433,
+          "kind": 2
+        },
+        {
+          "name": "Museu do Vinho de São João da Pesqueira",
+          "lat": 41.14756,
+          "lon": -7.40868,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro de São Salvador do Mundo",
+          "lat": 41.15129,
+          "lon": -7.36567,
+          "kind": 1
+        },
+        {
+          "name": "Casa do Adro",
+          "lat": 41.09938,
+          "lon": -7.36666,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro de Santa Luzia",
+          "lat": 41.07246,
+          "lon": -7.37106,
+          "kind": 1
+        },
+        {
+          "name": "Miradouro da Senhora do Viso",
+          "lat": 41.09309,
+          "lon": -7.32777,
+          "kind": 1
+        },
+        {
+          "name": "Povoado de Castanheiro do Vento",
+          "lat": 41.0623,
+          "lon": -7.32422,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Paroquial de Horta",
+          "lat": 41.06526,
+          "lon": -7.31288,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Cedovim",
+          "lat": 41.02731,
+          "lon": -7.31031,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Horta",
+          "lat": 41.06527,
+          "lon": -7.31076,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Sebadelhe",
+          "lat": 41.05263,
+          "lon": -7.26721,
+          "kind": 2
+        },
+        {
+          "name": "Estação Arqueológica do Prazo",
+          "lat": 41.06859,
+          "lon": -7.24291,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Touça",
+          "lat": 41.04721,
+          "lon": -7.23387,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Freixo de Numão",
+          "lat": 41.0674,
+          "lon": -7.22224,
+          "kind": 2
+        },
+        {
+          "name": "Museu da Casa Grande",
+          "lat": 41.06735,
+          "lon": -7.22034,
+          "kind": 2
+        },
+        {
+          "name": "Castelo Velho de Freixo de Numão",
+          "lat": 41.07257,
+          "lon": -7.1925,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Muxagata",
+          "lat": 41.03672,
+          "lon": -7.16759,
+          "kind": 2
+        },
+        {
+          "name": "Ninho d’Água",
+          "lat": 41.03996,
+          "lon": -7.14484,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Foz Côa",
+          "lat": 41.08322,
+          "lon": -7.13635,
+          "kind": 2
+        },
+        {
+          "name": "Museu do Côa",
+          "lat": 41.07984,
+          "lon": -7.11248,
+          "kind": 2
+        }
       ]
     },
     {
@@ -164,6 +406,248 @@
         [41.38374, -6.43638],
         [41.46933, -6.3692],
         [41.49357, -6.27509]
+      ],
+      "sights": [
+        {
+          "name": "Museu Aurélia e Sofia de Souza",
+          "lat": 41.15943,
+          "lon": -8.62551,
+          "kind": 2
+        },
+        {
+          "name": "Zoo Santo Inácio",
+          "lat": 41.09835,
+          "lon": -8.53637,
+          "kind": 2
+        },
+        {
+          "name": "Baloiço dos Moínhos de Jancido",
+          "lat": 41.0971,
+          "lon": -8.48461,
+          "kind": 2
+        },
+        {
+          "name": "Casa de Melres",
+          "lat": 41.0748,
+          "lon": -8.4064,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Raiva / Pelourinho Santo Ildefonso",
+          "lat": 41.03767,
+          "lon": -8.34247,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Românica de São Miguel de Eja",
+          "lat": 41.08331,
+          "lon": -8.29903,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Românica de Santa Maria Maior de Tarouquela",
+          "lat": 41.06977,
+          "lon": -8.1877,
+          "kind": 2
+        },
+        {
+          "name": "Baloiço do Alto de Montedeiras",
+          "lat": 41.12864,
+          "lon": -8.17419,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Cinfães",
+          "lat": 41.07465,
+          "lon": -8.095,
+          "kind": 2
+        },
+        {
+          "name": "Mosteiro de Santo André de Ancede",
+          "lat": 41.10206,
+          "lon": -8.05681,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de São Bartolomeu de Campelo",
+          "lat": 41.1615,
+          "lon": -8.03244,
+          "kind": 2
+        },
+        {
+          "name": "Museu Municipal de Resende",
+          "lat": 41.10444,
+          "lon": -7.95916,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Santa Cristina",
+          "lat": 41.15864,
+          "lon": -7.89141,
+          "kind": 2
+        },
+        {
+          "name": "Museu do Douro",
+          "lat": 41.1615,
+          "lon": -7.78978,
+          "kind": 2
+        },
+        {
+          "name": "Casa da Quinta do Bairro",
+          "lat": 41.19765,
+          "lon": -7.77319,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de Armamar",
+          "lat": 41.1094,
+          "lon": -7.69275,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Valença do Douro",
+          "lat": 41.15931,
+          "lon": -7.55856,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Provesende",
+          "lat": 41.21794,
+          "lon": -7.56738,
+          "kind": 2
+        },
+        {
+          "name": "Dólmen de S. Domingos",
+          "lat": 41.13845,
+          "lon": -7.52457,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Soutelo do Douro",
+          "lat": 41.18707,
+          "lon": -7.43336,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Nossa Senhora da Penha",
+          "lat": 41.15322,
+          "lon": -7.36671,
+          "kind": 1
+        },
+        {
+          "name": "Miradouro de Santa Luzia",
+          "lat": 41.07246,
+          "lon": -7.37106,
+          "kind": 1
+        },
+        {
+          "name": "Povoado de Castanheiro do Vento",
+          "lat": 41.0623,
+          "lon": -7.32422,
+          "kind": 2
+        },
+        {
+          "name": "Estação Arqueológica do Prazo",
+          "lat": 41.06859,
+          "lon": -7.24291,
+          "kind": 2
+        },
+        {
+          "name": "Castelo Velho de Freixo de Numão",
+          "lat": 41.07257,
+          "lon": -7.1925,
+          "kind": 2
+        },
+        {
+          "name": "N. Sr. Da Veiga",
+          "lat": 41.08481,
+          "lon": -7.14273,
+          "kind": 2
+        },
+        {
+          "name": "Ermida de Nossa Senhora da Teixeira",
+          "lat": 41.14827,
+          "lon": -7.0858,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Torre de Moncorvo",
+          "lat": 41.1752,
+          "lon": -7.052,
+          "kind": 2
+        },
+        {
+          "name": "Santa Barbara",
+          "lat": 41.21266,
+          "lon": -6.95963,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz",
+          "lat": 41.16073,
+          "lon": -6.90824,
+          "kind": 2
+        },
+        {
+          "name": "Capela do Senhor da Rua Nova",
+          "lat": 41.18667,
+          "lon": -6.75494,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de la Peña del Aguila",
+          "lat": 41.15936,
+          "lon": -6.71953,
+          "kind": 1
+        },
+        {
+          "name": "Palácio dos Pimentéis",
+          "lat": 41.27677,
+          "lon": -6.75462,
+          "kind": 2
+        },
+        {
+          "name": "Serra de Figueira",
+          "lat": 41.31766,
+          "lon": -6.73104,
+          "kind": 1
+        },
+        {
+          "name": "Castelo de Mogadouro",
+          "lat": 41.33828,
+          "lon": -6.72037,
+          "kind": 2
+        },
+        {
+          "name": "Castro de Santiago",
+          "lat": 41.35096,
+          "lon": -6.62462,
+          "kind": 2
+        },
+        {
+          "name": "Capela de São Fagundo",
+          "lat": 41.34596,
+          "lon": -6.45445,
+          "kind": 2
+        },
+        {
+          "name": "Eremitério Os Santos",
+          "lat": 41.38891,
+          "lon": -6.39512,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Santa Eufémia",
+          "lat": 41.47365,
+          "lon": -6.35649,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Miranda do Douro",
+          "lat": 41.49654,
+          "lon": -6.2751,
+          "kind": 2
+        }
       ]
     },
     {
@@ -244,6 +728,248 @@
         [40.49892, -7.31547],
         [40.50567, -7.27999],
         [40.53725, -7.26753]
+      ],
+      "sights": [
+        {
+          "name": "Convento de São Francisco",
+          "lat": 40.48832,
+          "lon": -7.60344,
+          "kind": 2
+        },
+        {
+          "name": "Cadeiral da Nespereira",
+          "lat": 40.51723,
+          "lon": -7.60802,
+          "kind": 2
+        },
+        {
+          "name": "Anta da Pedra da Orca",
+          "lat": 40.50033,
+          "lon": -7.65485,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de Pinhanços",
+          "lat": 40.46846,
+          "lon": -7.68609,
+          "kind": 2
+        },
+        {
+          "name": "Santo Amaro",
+          "lat": 40.4238,
+          "lon": -7.72765,
+          "kind": 1
+        },
+        {
+          "name": "Centro de Interpretação da República Afonso Costa",
+          "lat": 40.42207,
+          "lon": -7.70527,
+          "kind": 2
+        },
+        {
+          "name": "Museu Nacional do Pão",
+          "lat": 40.41778,
+          "lon": -7.69447,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de São Romão",
+          "lat": 40.39939,
+          "lon": -7.71128,
+          "kind": 2
+        },
+        {
+          "name": "Capela de São Romão",
+          "lat": 40.39879,
+          "lon": -7.71412,
+          "kind": 2
+        },
+        {
+          "name": "Cabeça da Velha",
+          "lat": 40.39799,
+          "lon": -7.69888,
+          "kind": 2
+        },
+        {
+          "name": "Quedas da Caniça",
+          "lat": 40.38506,
+          "lon": -7.69867,
+          "kind": 1
+        },
+        {
+          "name": "Cascatas da Caniça",
+          "lat": 40.3853,
+          "lon": -7.69675,
+          "kind": 1
+        },
+        {
+          "name": "Baloiço Senhora do Desterro",
+          "lat": 40.39868,
+          "lon": -7.68671,
+          "kind": 2
+        },
+        {
+          "name": "Nossa Senhora do Espinheiro",
+          "lat": 40.41324,
+          "lon": -7.67261,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Paroquial do Sabugueiro",
+          "lat": 40.40222,
+          "lon": -7.63986,
+          "kind": 2
+        },
+        {
+          "name": "Cascata da Fervença",
+          "lat": 40.39999,
+          "lon": -7.62897,
+          "kind": 1
+        },
+        {
+          "name": "Cabeça do Velho",
+          "lat": 40.38803,
+          "lon": -7.66988,
+          "kind": 2
+        },
+        {
+          "name": "Buraco do Sumo",
+          "lat": 40.37806,
+          "lon": -7.6875,
+          "kind": 2
+        },
+        {
+          "name": "Vale da Nave Travessa (Albufeira da Barragema do Covão do Curral",
+          "lat": 40.37232,
+          "lon": -7.6401,
+          "kind": 1
+        },
+        {
+          "name": "Miradouro da Rocha",
+          "lat": 40.35678,
+          "lon": -7.67434,
+          "kind": 1
+        },
+        {
+          "name": "Caixão da Moura",
+          "lat": 40.32957,
+          "lon": -7.70243,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Paroquial de Loriga",
+          "lat": 40.32323,
+          "lon": -7.69256,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro do Vale de Loriga",
+          "lat": 40.33425,
+          "lon": -7.61771,
+          "kind": 1
+        },
+        {
+          "name": "Miradouro do Covão",
+          "lat": 40.32006,
+          "lon": -7.59065,
+          "kind": 1
+        },
+        {
+          "name": "Miradouro dos Cântaros",
+          "lat": 40.32353,
+          "lon": -7.59632,
+          "kind": 1
+        },
+        {
+          "name": "Vale Glaciário de Alforfa",
+          "lat": 40.28969,
+          "lon": -7.60104,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro da Varanda dos Pastores",
+          "lat": 40.28896,
+          "lon": -7.57964,
+          "kind": 1
+        },
+        {
+          "name": "Poço do Meio Quartilho",
+          "lat": 40.29421,
+          "lon": -7.54059,
+          "kind": 2
+        },
+        {
+          "name": "Covão d'Ametade",
+          "lat": 40.32868,
+          "lon": -7.58838,
+          "kind": 2
+        },
+        {
+          "name": "Cascata Saltar da Água",
+          "lat": 40.3416,
+          "lon": -7.52504,
+          "kind": 1
+        },
+        {
+          "name": "Aguilhão",
+          "lat": 40.343,
+          "lon": -7.51636,
+          "kind": 2
+        },
+        {
+          "name": "Poço do Inferno",
+          "lat": 40.37254,
+          "lon": -7.51653,
+          "kind": 1
+        },
+        {
+          "name": "Miradouro do Fragão do Corvo",
+          "lat": 40.40586,
+          "lon": -7.56164,
+          "kind": 1
+        },
+        {
+          "name": "Miradouro de São Lourenço",
+          "lat": 40.41445,
+          "lon": -7.50937,
+          "kind": 1
+        },
+        {
+          "name": "Ski Parque",
+          "lat": 40.41036,
+          "lon": -7.46913,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Valhelhas",
+          "lat": 40.40681,
+          "lon": -7.40203,
+          "kind": 2
+        },
+        {
+          "name": "Sepulturas antropomórficas de la Ermida de Nossa Senhora de Soito",
+          "lat": 40.47642,
+          "lon": -7.36546,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro do Alto Mondego",
+          "lat": 40.52622,
+          "lon": -7.34536,
+          "kind": 1
+        },
+        {
+          "name": "Museu Etnográfico da Castanha",
+          "lat": 40.48811,
+          "lon": -7.27738,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de São Vicente",
+          "lat": 40.54002,
+          "lon": -7.26825,
+          "kind": 2
+        }
       ]
     },
     {
@@ -320,6 +1046,248 @@
         [41.71267, -7.51127],
         [41.7241, -7.47938],
         [41.73998, -7.46811]
+      ],
+      "sights": [
+        {
+          "name": "Igreja da Lapa",
+          "lat": 41.55143,
+          "lon": -8.42352,
+          "kind": 2
+        },
+        {
+          "name": "Arco da Porta Nova",
+          "lat": 41.55024,
+          "lon": -8.42934,
+          "kind": 2
+        },
+        {
+          "name": "Museu da Imagem",
+          "lat": 41.5503,
+          "lon": -8.42942,
+          "kind": 2
+        },
+        {
+          "name": "Ruínas Romanas do Edifício das Frigideiras do Cantinho",
+          "lat": 41.55011,
+          "lon": -8.42517,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Braga",
+          "lat": 41.55029,
+          "lon": -8.4268,
+          "kind": 2
+        },
+        {
+          "name": "Domus Escola Velha da Sé",
+          "lat": 41.54867,
+          "lon": -8.42869,
+          "kind": 2
+        },
+        {
+          "name": "Balneário Pré-Romano de Bracara",
+          "lat": 41.54881,
+          "lon": -8.43424,
+          "kind": 2
+        },
+        {
+          "name": "Capela Árvore da Vida",
+          "lat": 41.54852,
+          "lon": -8.42627,
+          "kind": 2
+        },
+        {
+          "name": "Sé Catedral de Santa Maria Maior",
+          "lat": 41.55004,
+          "lon": -8.427,
+          "kind": 2
+        },
+        {
+          "name": "Museu de Arqueologia Dom Diogo de Sousa",
+          "lat": 41.54601,
+          "lon": -8.42721,
+          "kind": 2
+        },
+        {
+          "name": "Estátua de São Longuinho",
+          "lat": 41.55483,
+          "lon": -8.37795,
+          "kind": 2
+        },
+        {
+          "name": "Torre de Vasconcelos",
+          "lat": 41.62377,
+          "lon": -8.3555,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Pedralva",
+          "lat": 41.56002,
+          "lon": -8.32096,
+          "kind": 2
+        },
+        {
+          "name": "Santuário de Nossa Senhora do Pilar",
+          "lat": 41.58651,
+          "lon": -8.28132,
+          "kind": 2
+        },
+        {
+          "name": "Baloiço Penêdo-Giesta",
+          "lat": 41.62043,
+          "lon": -8.26874,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Parada de Bouro / Cruzeiro de Parada de Bouro",
+          "lat": 41.64799,
+          "lon": -8.24612,
+          "kind": 2
+        },
+        {
+          "name": "Baloiço de Anissó",
+          "lat": 41.60997,
+          "lon": -8.16393,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Caniçada",
+          "lat": 41.65896,
+          "lon": -8.18131,
+          "kind": 2
+        },
+        {
+          "name": "Basílica de São Bento da Porta Aberta",
+          "lat": 41.69024,
+          "lon": -8.20319,
+          "kind": 2
+        },
+        {
+          "name": "Povoado da Calcedónia",
+          "lat": 41.72677,
+          "lon": -8.20251,
+          "kind": 2
+        },
+        {
+          "name": "Cascata de Leonte",
+          "lat": 41.76074,
+          "lon": -8.14939,
+          "kind": 1
+        },
+        {
+          "name": "Povoado do Chelo",
+          "lat": 41.7319,
+          "lon": -8.15166,
+          "kind": 2
+        },
+        {
+          "name": "Cascata do Arado",
+          "lat": 41.72379,
+          "lon": -8.12987,
+          "kind": 1
+        },
+        {
+          "name": "Cascatas de Fecha de Barjas",
+          "lat": 41.7039,
+          "lon": -8.10957,
+          "kind": 1
+        },
+        {
+          "name": "Miradouro de Fafião",
+          "lat": 41.70589,
+          "lon": -8.09072,
+          "kind": 1
+        },
+        {
+          "name": "Pelourinho de Ruivães",
+          "lat": 41.67925,
+          "lon": -8.04863,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro Fojo do Lobo de Xertelo",
+          "lat": 41.73518,
+          "lon": -8.01531,
+          "kind": 1
+        },
+        {
+          "name": "Cascata Cela Cavalos",
+          "lat": 41.76095,
+          "lon": -7.98692,
+          "kind": 1
+        },
+        {
+          "name": "Casa do Loureiro",
+          "lat": 41.76334,
+          "lon": -7.94525,
+          "kind": 2
+        },
+        {
+          "name": "Solar do Outão",
+          "lat": 41.83681,
+          "lon": -7.84359,
+          "kind": 2
+        },
+        {
+          "name": "Sepulturas antropomórficas de Santo Adrião",
+          "lat": 41.84162,
+          "lon": -7.78837,
+          "kind": 2
+        },
+        {
+          "name": "Fojo do Lobo de Avelar",
+          "lat": 41.80365,
+          "lon": -7.8064,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de São Vicente da Chã",
+          "lat": 41.78456,
+          "lon": -7.78515,
+          "kind": 2
+        },
+        {
+          "name": "Achães 1",
+          "lat": 41.80935,
+          "lon": -7.728,
+          "kind": 2
+        },
+        {
+          "name": "Cruz de Cepos",
+          "lat": 41.74986,
+          "lon": -7.67442,
+          "kind": 2
+        },
+        {
+          "name": "Castro do Cabeço",
+          "lat": 41.70578,
+          "lon": -7.65583,
+          "kind": 2
+        },
+        {
+          "name": "Castro de Sapelos",
+          "lat": 41.71432,
+          "lon": -7.60439,
+          "kind": 2
+        },
+        {
+          "name": "Poço de Freitas",
+          "lat": 41.73792,
+          "lon": -7.59815,
+          "kind": 2
+        },
+        {
+          "name": "Castro da Curalha",
+          "lat": 41.70935,
+          "lon": -7.52812,
+          "kind": 2
+        },
+        {
+          "name": "Capela da Granjinha",
+          "lat": 41.72905,
+          "lon": -7.49113,
+          "kind": 2
+        }
       ]
     },
     {
@@ -396,6 +1364,248 @@
         [41.85355, -8.41219],
         [41.85209, -8.42263],
         [41.84766, -8.42262]
+      ],
+      "sights": [
+        {
+          "name": "Pelourinho de Ponte da Barca",
+          "lat": 41.80866,
+          "lon": -8.42052,
+          "kind": 2
+        },
+        {
+          "name": "Mercado Municipal",
+          "lat": 41.80873,
+          "lon": -8.42044,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Monserrate",
+          "lat": 41.81454,
+          "lon": -8.44285,
+          "kind": 1
+        },
+        {
+          "name": "Igreja de Bravães",
+          "lat": 41.79786,
+          "lon": -8.45288,
+          "kind": 2
+        },
+        {
+          "name": "Mosteiro de Crasto",
+          "lat": 41.77497,
+          "lon": -8.43022,
+          "kind": 2
+        },
+        {
+          "name": "Castelo da Nóbrega",
+          "lat": 41.77083,
+          "lon": -8.37444,
+          "kind": 1
+        },
+        {
+          "name": "Igreja do Imaculado Coração de Maria",
+          "lat": 41.79659,
+          "lon": -8.34856,
+          "kind": 2
+        },
+        {
+          "name": "Santuário de Nossa Senhora da Paz",
+          "lat": 41.79721,
+          "lon": -8.34354,
+          "kind": 2
+        },
+        {
+          "name": "Capelinha de Nossa Senhora da Paz",
+          "lat": 41.79699,
+          "lon": -8.34397,
+          "kind": 2
+        },
+        {
+          "name": "Museu do Quartzo",
+          "lat": 41.7976,
+          "lon": -8.34407,
+          "kind": 2
+        },
+        {
+          "name": "Baloiço de Paradela",
+          "lat": 41.79076,
+          "lon": -8.29379,
+          "kind": 2
+        },
+        {
+          "name": "Poço do Froufe",
+          "lat": 41.82202,
+          "lon": -8.30122,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro da Ermida",
+          "lat": 41.81796,
+          "lon": -8.26172,
+          "kind": 1
+        },
+        {
+          "name": "Dólmen Chã dos Cabanos 1",
+          "lat": 41.83699,
+          "lon": -8.26986,
+          "kind": 2
+        },
+        {
+          "name": "Necrópole Megalítica da Serra Amarela",
+          "lat": 41.83247,
+          "lon": -8.25697,
+          "kind": 2
+        },
+        {
+          "name": "Gravuras do Penedo do Encanto",
+          "lat": 41.85347,
+          "lon": -8.21703,
+          "kind": 2
+        },
+        {
+          "name": "Espigueiros de Parada do Lindoso",
+          "lat": 41.86375,
+          "lon": -8.21808,
+          "kind": 2
+        },
+        {
+          "name": "Espigueiros do Lindoso",
+          "lat": 41.86621,
+          "lon": -8.20003,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Lindoso",
+          "lat": 41.86708,
+          "lon": -8.19924,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de Lindoso",
+          "lat": 41.86574,
+          "lon": -8.19848,
+          "kind": 2
+        },
+        {
+          "name": "Capela de San Pedro de Ludeiros",
+          "lat": 41.877,
+          "lon": -8.14068,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Santo Isidro de Quintela",
+          "lat": 41.89431,
+          "lon": -8.15427,
+          "kind": 2
+        },
+        {
+          "name": "Cascata do Poço das Canejas",
+          "lat": 41.88316,
+          "lon": -8.25056,
+          "kind": 1
+        },
+        {
+          "name": "Espigueiros e Eira Comunitária do Soajo",
+          "lat": 41.87231,
+          "lon": -8.26221,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Soajo",
+          "lat": 41.87385,
+          "lon": -8.26432,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Paroquial do Soajo",
+          "lat": 41.87422,
+          "lon": -8.26366,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro do Coto Velho",
+          "lat": 41.88036,
+          "lon": -8.27748,
+          "kind": 1
+        },
+        {
+          "name": "Anta do Mezio",
+          "lat": 41.88425,
+          "lon": -8.31347,
+          "kind": 2
+        },
+        {
+          "name": "Mamoa do Mezio 5",
+          "lat": 41.88009,
+          "lon": -8.31296,
+          "kind": 2
+        },
+        {
+          "name": "Gravuras Rupestres do Gião",
+          "lat": 41.86827,
+          "lon": -8.32696,
+          "kind": 2
+        },
+        {
+          "name": "Torre de Grade",
+          "lat": 41.87087,
+          "lon": -8.37369,
+          "kind": 2
+        },
+        {
+          "name": "Castro de Ázere",
+          "lat": 41.86868,
+          "lon": -8.38927,
+          "kind": 2
+        },
+        {
+          "name": "Portal de Gondoriz",
+          "lat": 41.89138,
+          "lon": -8.41965,
+          "kind": 2
+        },
+        {
+          "name": "Paço de Giela",
+          "lat": 41.84978,
+          "lon": -8.40817,
+          "kind": 2
+        },
+        {
+          "name": "Igreja da Misericórdia",
+          "lat": 41.84779,
+          "lon": -8.41754,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de Arcos de Valdevez",
+          "lat": 41.84689,
+          "lon": -8.41802,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Arcos de Valdevez",
+          "lat": 41.84628,
+          "lon": -8.41813,
+          "kind": 2
+        },
+        {
+          "name": "Igreja da Lapa",
+          "lat": 41.84604,
+          "lon": -8.41901,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Nossa Senhora da Conceição",
+          "lat": 41.84616,
+          "lon": -8.4186,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de São Bento",
+          "lat": 41.84429,
+          "lon": -8.42506,
+          "kind": 2
+        }
       ]
     },
     {
@@ -477,6 +1687,248 @@
         [37.31165, -8.756],
         [37.30926, -8.77451],
         [37.31685, -8.80504]
+      ],
+      "sights": [
+        {
+          "name": "Palácio Fonte da Pipa",
+          "lat": 37.1291,
+          "lon": -8.02004,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de Loulé",
+          "lat": 37.13743,
+          "lon": -8.02353,
+          "kind": 2
+        },
+        {
+          "name": "In The Pink - Galeria Fotografia",
+          "lat": 37.13967,
+          "lon": -8.02321,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Nossa Senhora da Conceição",
+          "lat": 37.13962,
+          "lon": -8.02331,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Loulé",
+          "lat": 37.13962,
+          "lon": -8.02393,
+          "kind": 2
+        },
+        {
+          "name": "Bicas Velhas",
+          "lat": 37.13924,
+          "lon": -8.02412,
+          "kind": 2
+        },
+        {
+          "name": "Ataíde Oliveira",
+          "lat": 37.14051,
+          "lon": -8.02569,
+          "kind": 2
+        },
+        {
+          "name": "Convento de Santo António",
+          "lat": 37.1415,
+          "lon": -8.0316,
+          "kind": 2
+        },
+        {
+          "name": "Santuário de Nossa Senhora da Piedade",
+          "lat": 37.14023,
+          "lon": -8.03639,
+          "kind": 2
+        },
+        {
+          "name": "Quadro Moldura",
+          "lat": 37.12654,
+          "lon": -8.04403,
+          "kind": 2
+        },
+        {
+          "name": "Campos de Lapiás da Varejota e Barrocal da Tôr",
+          "lat": 37.1636,
+          "lon": -8.07842,
+          "kind": 2
+        },
+        {
+          "name": "Penedo Amarelo",
+          "lat": 37.17182,
+          "lon": -8.07095,
+          "kind": 2
+        },
+        {
+          "name": "Paisagem Protegida Local da Rocha da Pena",
+          "lat": 37.25348,
+          "lon": -8.09726,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Nossa Senhora da Assunção",
+          "lat": 37.23631,
+          "lon": -8.1768,
+          "kind": 2
+        },
+        {
+          "name": "Baloiço Panorâmico de Messines de Cima",
+          "lat": 37.24806,
+          "lon": -8.24488,
+          "kind": 2
+        },
+        {
+          "name": "Casa-Museu João de Deus",
+          "lat": 37.25722,
+          "lon": -8.28649,
+          "kind": 2
+        },
+        {
+          "name": "Pedreirinha 1",
+          "lat": 37.25292,
+          "lon": -8.33099,
+          "kind": 2
+        },
+        {
+          "name": "Menir dos Gregórios",
+          "lat": 37.24067,
+          "lon": -8.3509,
+          "kind": 2
+        },
+        {
+          "name": "Centro Nacional de Reprodução de Lince Ibérico",
+          "lat": 37.25453,
+          "lon": -8.36898,
+          "kind": 2
+        },
+        {
+          "name": "Cruz de Portugal",
+          "lat": 37.19445,
+          "lon": -8.43234,
+          "kind": 2
+        },
+        {
+          "name": "Torre de Menagem",
+          "lat": 37.19164,
+          "lon": -8.43756,
+          "kind": 2
+        },
+        {
+          "name": "Museu da Cortiça",
+          "lat": 37.19089,
+          "lon": -8.43559,
+          "kind": 2
+        },
+        {
+          "name": "Baloiço da Ponte Romana",
+          "lat": 37.18646,
+          "lon": -8.4388,
+          "kind": 2
+        },
+        {
+          "name": "Ermida de Nossa Senhora dos Mártires",
+          "lat": 37.1895,
+          "lon": -8.44373,
+          "kind": 2
+        },
+        {
+          "name": "Fissul",
+          "lat": 37.18598,
+          "lon": -8.44648,
+          "kind": 2
+        },
+        {
+          "name": "Casa da Cultura Islâmica e Mediterrânica",
+          "lat": 37.18975,
+          "lon": -8.44729,
+          "kind": 2
+        },
+        {
+          "name": "Moinho de Maré de Estombar",
+          "lat": 37.16204,
+          "lon": -8.48631,
+          "kind": 2
+        },
+        {
+          "name": "Gruta de Ibne Ammar",
+          "lat": 37.1567,
+          "lon": -8.49983,
+          "kind": 1
+        },
+        {
+          "name": "Antigo Porto de Vau",
+          "lat": 37.17138,
+          "lon": -8.53233,
+          "kind": 2
+        },
+        {
+          "name": "Reguengo",
+          "lat": 37.20302,
+          "lon": -8.5543,
+          "kind": 2
+        },
+        {
+          "name": "Parque da Mina",
+          "lat": 37.2566,
+          "lon": -8.53918,
+          "kind": 2
+        },
+        {
+          "name": "Capela das Caldas de Monchique",
+          "lat": 37.28636,
+          "lon": -8.5525,
+          "kind": 2
+        },
+        {
+          "name": "Caldas de Monchique",
+          "lat": 37.28638,
+          "lon": -8.55411,
+          "kind": 2
+        },
+        {
+          "name": "Castelo da Nave",
+          "lat": 37.28323,
+          "lon": -8.57723,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Monchique",
+          "lat": 37.3205,
+          "lon": -8.55567,
+          "kind": 2
+        },
+        {
+          "name": "Convento de Nossa Senhora do Desterro",
+          "lat": 37.31976,
+          "lon": -8.55987,
+          "kind": 2
+        },
+        {
+          "name": "Fóia",
+          "lat": 37.31525,
+          "lon": -8.59258,
+          "kind": 1
+        },
+        {
+          "name": "Cascata do Barbelote",
+          "lat": 37.31623,
+          "lon": -8.61321,
+          "kind": 1
+        },
+        {
+          "name": "Casa das Artes e Ofícios da Freguesia de Marmelete",
+          "lat": 37.30945,
+          "lon": -8.6658,
+          "kind": 2
+        },
+        {
+          "name": "Espaço +",
+          "lat": 37.31628,
+          "lon": -8.79679,
+          "kind": 2
+        }
       ]
     },
     {
@@ -562,6 +2014,248 @@
         [38.43883, -8.83291],
         [38.46377, -8.867],
         [38.52427, -8.88824]
+      ],
+      "sights": [
+        {
+          "name": "Forte da Bandeira",
+          "lat": 37.09908,
+          "lon": -8.66827,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Santo António",
+          "lat": 37.09959,
+          "lon": -8.67133,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Lagos",
+          "lat": 37.09952,
+          "lon": -8.67111,
+          "kind": 2
+        },
+        {
+          "name": "Carso Litoral da Ponta da Piedade",
+          "lat": 37.08247,
+          "lon": -8.66918,
+          "kind": 2
+        },
+        {
+          "name": "Forte da Meia Praia",
+          "lat": 37.11751,
+          "lon": -8.6474,
+          "kind": 2
+        },
+        {
+          "name": "Estação Arqueológica de Monte Molião",
+          "lat": 37.11463,
+          "lon": -8.67513,
+          "kind": 2
+        },
+        {
+          "name": "Capela de São João Baptista",
+          "lat": 37.11166,
+          "lon": -8.6808,
+          "kind": 2
+        },
+        {
+          "name": "Estação Arqueológica Romana da Praia da Luz",
+          "lat": 37.08611,
+          "lon": -8.72888,
+          "kind": 2
+        },
+        {
+          "name": "Forte de Almádena",
+          "lat": 37.0667,
+          "lon": -8.80441,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de Budens",
+          "lat": 37.08644,
+          "lon": -8.82953,
+          "kind": 2
+        },
+        {
+          "name": "Ruínas Lusitano-Romanas da Boca do Rio",
+          "lat": 37.06643,
+          "lon": -8.81054,
+          "kind": 2
+        },
+        {
+          "name": "Forte de Vera Cruz da Figueira",
+          "lat": 37.06112,
+          "lon": -8.83872,
+          "kind": 2
+        },
+        {
+          "name": "Forte do Zavial",
+          "lat": 37.04467,
+          "lon": -8.87584,
+          "kind": 2
+        },
+        {
+          "name": "Menir de Aspradantes",
+          "lat": 37.07252,
+          "lon": -8.86531,
+          "kind": 2
+        },
+        {
+          "name": "Menires do Padrão",
+          "lat": 37.06267,
+          "lon": -8.88835,
+          "kind": 2
+        },
+        {
+          "name": "Menir da Casa do Francês",
+          "lat": 37.06937,
+          "lon": -8.91795,
+          "kind": 2
+        },
+        {
+          "name": "Ermida de Santo António",
+          "lat": 37.05985,
+          "lon": -8.93794,
+          "kind": 2
+        },
+        {
+          "name": "Povoado Islâmico de Pescadores",
+          "lat": 37.17313,
+          "lon": -8.90797,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Nossa Senhora da Conceição",
+          "lat": 37.18452,
+          "lon": -8.8952,
+          "kind": 2
+        },
+        {
+          "name": "Espaço +",
+          "lat": 37.31628,
+          "lon": -8.79679,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro da Maravilha",
+          "lat": 37.44079,
+          "lon": -8.79831,
+          "kind": 1
+        },
+        {
+          "name": "Estação arqueológica da Foz dos Ouriços",
+          "lat": 37.65915,
+          "lon": -8.79904,
+          "kind": 2
+        },
+        {
+          "name": "Cascata do Zambujeiro",
+          "lat": 37.68273,
+          "lon": -8.74641,
+          "kind": 1
+        },
+        {
+          "name": "Praia do Porto das Barcas",
+          "lat": 37.73376,
+          "lon": -8.7965,
+          "kind": 1
+        },
+        {
+          "name": "Rocha de Água de Alto",
+          "lat": 37.75334,
+          "lon": -8.71722,
+          "kind": 1
+        },
+        {
+          "name": "Forte da Ilha do Pessegueiro",
+          "lat": 37.83346,
+          "lon": -8.7977,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Nossa Senhora da Soledade",
+          "lat": 37.85141,
+          "lon": -8.79164,
+          "kind": 2
+        },
+        {
+          "name": "Palmeirinha",
+          "lat": 37.94679,
+          "lon": -8.82686,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Sines",
+          "lat": 37.95526,
+          "lon": -8.86655,
+          "kind": 2
+        },
+        {
+          "name": "Forte de Nossa Senhora das Salvas",
+          "lat": 37.9513,
+          "lon": -8.87638,
+          "kind": 2
+        },
+        {
+          "name": "Dólmen da Pedra Branca",
+          "lat": 38.11301,
+          "lon": -8.72424,
+          "kind": 2
+        },
+        {
+          "name": "Necrópole de Cistas das Casas Velhas",
+          "lat": 38.11529,
+          "lon": -8.72035,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro da Praia da Galé",
+          "lat": 38.20427,
+          "lon": -8.77542,
+          "kind": 1
+        },
+        {
+          "name": "Museu do Arroz",
+          "lat": 38.38154,
+          "lon": -8.79214,
+          "kind": 2
+        },
+        {
+          "name": "Recordação",
+          "lat": 38.49282,
+          "lon": -8.82982,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Nossa Senhora do Rosário da Tróia",
+          "lat": 38.48686,
+          "lon": -8.8858,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Nossa Senhora de Tróia",
+          "lat": 38.48685,
+          "lon": -8.8858,
+          "kind": 2
+        },
+        {
+          "name": "Ruínas romanas de Tróia",
+          "lat": 38.48624,
+          "lon": -8.88508,
+          "kind": 2
+        },
+        {
+          "name": "Forte de Albarquel",
+          "lat": 38.51111,
+          "lon": -8.91358,
+          "kind": 2
+        },
+        {
+          "name": "Convento de Brancanes",
+          "lat": 38.53291,
+          "lon": -8.90118,
+          "kind": 2
+        }
       ]
     },
     {
@@ -633,6 +2327,248 @@
         [37.6324, -7.67917],
         [37.6438, -7.66056],
         [37.64015, -7.66015]
+      ],
+      "sights": [
+        {
+          "name": "Ermida de São Sebastião",
+          "lat": 37.12237,
+          "lon": -7.64707,
+          "kind": 2
+        },
+        {
+          "name": "Convento das Bernardas",
+          "lat": 37.12155,
+          "lon": -7.64597,
+          "kind": 2
+        },
+        {
+          "name": "Ermida de Nossa Senhora do Livramento",
+          "lat": 37.12835,
+          "lon": -7.64431,
+          "kind": 2
+        },
+        {
+          "name": "Igreja do Antigo Convento dos Eremitas de São Paulo",
+          "lat": 37.12888,
+          "lon": -7.64976,
+          "kind": 2
+        },
+        {
+          "name": "Igreja do Hospital do Espírito Santo",
+          "lat": 37.12348,
+          "lon": -7.65057,
+          "kind": 2
+        },
+        {
+          "name": "Igreja do antigo convento de São Francisco",
+          "lat": 37.12287,
+          "lon": -7.65086,
+          "kind": 2
+        },
+        {
+          "name": "Oliveira Bimilenária de Pedras de El-Rei",
+          "lat": 37.09577,
+          "lon": -7.67802,
+          "kind": 2
+        },
+        {
+          "name": "Ermida de Nossa Senhora das Angústias",
+          "lat": 37.1187,
+          "lon": -7.66049,
+          "kind": 2
+        },
+        {
+          "name": "Ermida de São Roque",
+          "lat": 37.12534,
+          "lon": -7.65432,
+          "kind": 2
+        },
+        {
+          "name": "Igreja da Ordem Terceira do Carmo",
+          "lat": 37.12943,
+          "lon": -7.64634,
+          "kind": 2
+        },
+        {
+          "name": "Forte do Rato",
+          "lat": 37.12146,
+          "lon": -7.62136,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Nossa Senhora da Conceição",
+          "lat": 37.14675,
+          "lon": -7.60451,
+          "kind": 2
+        },
+        {
+          "name": "Forte de São João da Barra",
+          "lat": 37.13894,
+          "lon": -7.5924,
+          "kind": 2
+        },
+        {
+          "name": "Ermida de Nossa Senhora de Santa Rita",
+          "lat": 37.17993,
+          "lon": -7.57155,
+          "kind": 2
+        },
+        {
+          "name": "Túmulo Megalítico Santa Rita 2",
+          "lat": 37.17989,
+          "lon": -7.56578,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Paroquial de Cacela Velha",
+          "lat": 37.15704,
+          "lon": -7.54604,
+          "kind": 2
+        },
+        {
+          "name": "Forte de Cacela",
+          "lat": 37.15715,
+          "lon": -7.54559,
+          "kind": 2
+        },
+        {
+          "name": "Forte de São Sebastião",
+          "lat": 37.21629,
+          "lon": -7.44335,
+          "kind": 2
+        },
+        {
+          "name": "Ermida de Santo António - Paróquia Ortodoxa Romena de Castro Marim",
+          "lat": 37.21611,
+          "lon": -7.43908,
+          "kind": 2
+        },
+        {
+          "name": "Igreja da Misericórdia",
+          "lat": 37.21794,
+          "lon": -7.4465,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Castro Marim",
+          "lat": 37.21876,
+          "lon": -7.44169,
+          "kind": 2
+        },
+        {
+          "name": "Mirador del Guadiana",
+          "lat": 37.22543,
+          "lon": -7.40822,
+          "kind": 1
+        },
+        {
+          "name": "Queijaria Artesanal",
+          "lat": 37.28173,
+          "lon": -7.46863,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Paroquial de Odeleite",
+          "lat": 37.33459,
+          "lon": -7.48627,
+          "kind": 2
+        },
+        {
+          "name": "Yacimiento megalítico de La Torre-La Janera",
+          "lat": 37.3346,
+          "lon": -7.4062,
+          "kind": 2
+        },
+        {
+          "name": "Barragem Romana de Álamo",
+          "lat": 37.38789,
+          "lon": -7.44415,
+          "kind": 2
+        },
+        {
+          "name": "Museu do Rio",
+          "lat": 37.39753,
+          "lon": -7.44758,
+          "kind": 2
+        },
+        {
+          "name": "Villa Romana do Montinho das Laranjeiras",
+          "lat": 37.40466,
+          "lon": -7.46059,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de San Marcos",
+          "lat": 37.47577,
+          "lon": -7.46306,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Nuestra Señora de las Flores",
+          "lat": 37.47255,
+          "lon": -7.46675,
+          "kind": 2
+        },
+        {
+          "name": "Castelo Velho de Alcoutim",
+          "lat": 37.48081,
+          "lon": -7.47209,
+          "kind": 2
+        },
+        {
+          "name": "Necrópole das Soalheironas",
+          "lat": 37.5094,
+          "lon": -7.50003,
+          "kind": 2
+        },
+        {
+          "name": "Menires do Lavajo",
+          "lat": 37.50143,
+          "lon": -7.53505,
+          "kind": 2
+        },
+        {
+          "name": "Anta do Malhão",
+          "lat": 37.4851,
+          "lon": -7.54275,
+          "kind": 2
+        },
+        {
+          "name": "Núcleo Museológico de Alcaria dos Javazes",
+          "lat": 37.51751,
+          "lon": -7.63828,
+          "kind": 2
+        },
+        {
+          "name": "Monte da Bombeira Velha",
+          "lat": 37.58823,
+          "lon": -7.66238,
+          "kind": 2
+        },
+        {
+          "name": "Campo Arqueológico de Mértola",
+          "lat": 37.63563,
+          "lon": -7.66517,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Mértola",
+          "lat": 37.63815,
+          "lon": -7.66443,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Nossa Senhora da Anunciação",
+          "lat": 37.63846,
+          "lon": -7.66356,
+          "kind": 2
+        },
+        {
+          "name": "Ermida de São Brás",
+          "lat": 37.66421,
+          "lon": -7.66793,
+          "kind": 2
+        }
       ]
     },
     {
@@ -714,6 +2650,248 @@
         [39.40033, -7.39149],
         [39.40283, -7.38235],
         [39.39404, -7.37692]
+      ],
+      "sights": [
+        {
+          "name": "Palácio de Dom Manuel",
+          "lat": 38.56778,
+          "lon": -7.90927,
+          "kind": 2
+        },
+        {
+          "name": "Forte de Santo António da Piedade",
+          "lat": 38.57843,
+          "lon": -7.91568,
+          "kind": 2
+        },
+        {
+          "name": "Convento da Cartuxa",
+          "lat": 38.58148,
+          "lon": -7.9194,
+          "kind": 2
+        },
+        {
+          "name": "Porta de Aviz",
+          "lat": 38.5767,
+          "lon": -7.91034,
+          "kind": 2
+        },
+        {
+          "name": "São João Evangelista",
+          "lat": 38.57301,
+          "lon": -7.9069,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Nossa Senhora do Espinheiro",
+          "lat": 38.60117,
+          "lon": -7.88804,
+          "kind": 2
+        },
+        {
+          "name": "Anta da Herdade da Galvoeira",
+          "lat": 38.62685,
+          "lon": -7.82512,
+          "kind": 2
+        },
+        {
+          "name": "Palácio do Conde de Azarujinha",
+          "lat": 38.70056,
+          "lon": -7.78363,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de São Bento do Mato",
+          "lat": 38.72159,
+          "lon": -7.77701,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Evoramonte",
+          "lat": 38.77185,
+          "lon": -7.71583,
+          "kind": 2
+        },
+        {
+          "name": "Plutão",
+          "lat": 38.77224,
+          "lon": -7.71363,
+          "kind": 2
+        },
+        {
+          "name": "Anta da Herdade das Entre Águas",
+          "lat": 38.78533,
+          "lon": -7.63116,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Santa Maria",
+          "lat": 38.8416,
+          "lon": -7.5919,
+          "kind": 2
+        },
+        {
+          "name": "Palácio dos Henriques",
+          "lat": 38.84499,
+          "lon": -7.58811,
+          "kind": 2
+        },
+        {
+          "name": "Júpiter (Centro Ciência Viva de Estremoz)",
+          "lat": 38.84328,
+          "lon": -7.56649,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de São Bartolomeu",
+          "lat": 38.80555,
+          "lon": -7.45956,
+          "kind": 2
+        },
+        {
+          "name": "Capela do Senhor Jesus dos Aflitos",
+          "lat": 38.80742,
+          "lon": -7.45927,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Borba",
+          "lat": 38.80524,
+          "lon": -7.45619,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de Borba",
+          "lat": 38.80541,
+          "lon": -7.45341,
+          "kind": 2
+        },
+        {
+          "name": "Chafariz de Borba",
+          "lat": 38.80626,
+          "lon": -7.45346,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Santa Bárbara",
+          "lat": 38.81047,
+          "lon": -7.41243,
+          "kind": 2
+        },
+        {
+          "name": "Anta 1 da Herdade do Pombal",
+          "lat": 38.85778,
+          "lon": -7.40137,
+          "kind": 2
+        },
+        {
+          "name": "Museu do Ferrador",
+          "lat": 38.84474,
+          "lon": -7.34801,
+          "kind": 2
+        },
+        {
+          "name": "Praça de Touros",
+          "lat": 38.85876,
+          "lon": -7.28598,
+          "kind": 2
+        },
+        {
+          "name": "Anta 1 de Torre das Arcas",
+          "lat": 38.86385,
+          "lon": -7.21783,
+          "kind": 2
+        },
+        {
+          "name": "Aqueduto da Amoreira",
+          "lat": 38.87918,
+          "lon": -7.18694,
+          "kind": 2
+        },
+        {
+          "name": "Forte de Santa Luzia",
+          "lat": 38.87296,
+          "lon": -7.15847,
+          "kind": 2
+        },
+        {
+          "name": "Muralha Fernandina",
+          "lat": 38.8792,
+          "lon": -7.15941,
+          "kind": 2
+        },
+        {
+          "name": "Povoado Celta Serra de Segóvia",
+          "lat": 38.97007,
+          "lon": -7.11238,
+          "kind": 2
+        },
+        {
+          "name": "Povoado de Santa Vitória",
+          "lat": 39.00422,
+          "lon": -7.09184,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Campo Maior",
+          "lat": 39.0111,
+          "lon": -7.07181,
+          "kind": 2
+        },
+        {
+          "name": "Centro de Ciência do Café",
+          "lat": 39.04336,
+          "lon": -7.09623,
+          "kind": 2
+        },
+        {
+          "name": "Minas da Tinoca",
+          "lat": 39.07776,
+          "lon": -7.14468,
+          "kind": 2
+        },
+        {
+          "name": "Baldio",
+          "lat": 39.07195,
+          "lon": -7.25885,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de Nossa Senhora da Assunção de Arronches",
+          "lat": 39.12208,
+          "lon": -7.28475,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Santana",
+          "lat": 39.28689,
+          "lon": -7.43241,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Torrejão",
+          "lat": 39.29309,
+          "lon": -7.42333,
+          "kind": 2
+        },
+        {
+          "name": "Fonte dos Carvoeiros",
+          "lat": 39.38602,
+          "lon": -7.43647,
+          "kind": 1
+        },
+        {
+          "name": "Museu Monográfico da Cidade Romana de Ammaia",
+          "lat": 39.37015,
+          "lon": -7.38595,
+          "kind": 2
+        },
+        {
+          "name": "Convento de Nossa Senhora da Estrela",
+          "lat": 39.39396,
+          "lon": -7.37286,
+          "kind": 2
+        }
       ]
     },
     {
@@ -790,6 +2968,248 @@
         [38.80705, -9.39027],
         [38.80259, -9.37771],
         [38.79791, -9.38709]
+      ],
+      "sights": [
+        {
+          "name": "Capela de São Jerónimo",
+          "lat": 38.70135,
+          "lon": -9.21368,
+          "kind": 2
+        },
+        {
+          "name": "Primeira Travessia Aérea do Atlântico Sul",
+          "lat": 38.69221,
+          "lon": -9.21394,
+          "kind": 2
+        },
+        {
+          "name": "Torre VTS de Algés",
+          "lat": 38.69406,
+          "lon": -9.23433,
+          "kind": 2
+        },
+        {
+          "name": "Santuário de Nossa Senhora da Conceição da Rocha",
+          "lat": 38.72161,
+          "lon": -9.24962,
+          "kind": 2
+        },
+        {
+          "name": "Forte de São Bruno",
+          "lat": 38.69794,
+          "lon": -9.27481,
+          "kind": 2
+        },
+        {
+          "name": "Forte da Giribita",
+          "lat": 38.69738,
+          "lon": -9.28253,
+          "kind": 2
+        },
+        {
+          "name": "Vila Romana de Freiria",
+          "lat": 38.72101,
+          "lon": -9.32294,
+          "kind": 2
+        },
+        {
+          "name": "Villa romana de Outeiro de Polima",
+          "lat": 38.71621,
+          "lon": -9.32824,
+          "kind": 2
+        },
+        {
+          "name": "Casal dos Arcos",
+          "lat": 38.69139,
+          "lon": -9.33414,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Paroquial da Parede",
+          "lat": 38.68769,
+          "lon": -9.35198,
+          "kind": 2
+        },
+        {
+          "name": "Grutas Artificiais de São Pedro do Estoril",
+          "lat": 38.69367,
+          "lon": -9.37168,
+          "kind": 2
+        },
+        {
+          "name": "Forte de Santo António da Barra",
+          "lat": 38.69828,
+          "lon": -9.38409,
+          "kind": 2
+        },
+        {
+          "name": "Forte de São Teodósio da Cadaveira",
+          "lat": 38.70195,
+          "lon": -9.39097,
+          "kind": 2
+        },
+        {
+          "name": "Museu da Música Portuguesa - Casa Verdades Faria",
+          "lat": 38.71008,
+          "lon": -9.40526,
+          "kind": 2
+        },
+        {
+          "name": "Grutas do Poço Velho",
+          "lat": 38.70042,
+          "lon": -9.42132,
+          "kind": 1
+        },
+        {
+          "name": "Fortaleza de Nossa Senhora da Luz",
+          "lat": 38.69371,
+          "lon": -9.41928,
+          "kind": 2
+        },
+        {
+          "name": "Casa de Santa Maria",
+          "lat": 38.69109,
+          "lon": -9.42133,
+          "kind": 2
+        },
+        {
+          "name": "Museu Condes de Castro Guimarães",
+          "lat": 38.69213,
+          "lon": -9.42162,
+          "kind": 2
+        },
+        {
+          "name": "Centro Cultural de Cascais",
+          "lat": 38.69392,
+          "lon": -9.42159,
+          "kind": 2
+        },
+        {
+          "name": "Forte de Nossa Senhora da Guia",
+          "lat": 38.69531,
+          "lon": -9.45227,
+          "kind": 2
+        },
+        {
+          "name": "Forte de São Jorge de Oitavos",
+          "lat": 38.69968,
+          "lon": -9.46817,
+          "kind": 2
+        },
+        {
+          "name": "Forte de São Brás de Sanxete",
+          "lat": 38.70941,
+          "lon": -9.48573,
+          "kind": 2
+        },
+        {
+          "name": "Forte de Crismina",
+          "lat": 38.72276,
+          "lon": -9.47841,
+          "kind": 2
+        },
+        {
+          "name": "Hotel Forte do Guincho",
+          "lat": 38.72829,
+          "lon": -9.47611,
+          "kind": 2
+        },
+        {
+          "name": "Parque Ribeira das Vinhas",
+          "lat": 38.73069,
+          "lon": -9.43373,
+          "kind": 2
+        },
+        {
+          "name": "Villa Romana de Miroiços",
+          "lat": 38.7464,
+          "lon": -9.45439,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Nossa Senhora da Penha",
+          "lat": 38.76856,
+          "lon": -9.46064,
+          "kind": 2
+        },
+        {
+          "name": "Espigão das Ruivas",
+          "lat": 38.7581,
+          "lon": -9.483,
+          "kind": 2
+        },
+        {
+          "name": "Igreja da Azóia",
+          "lat": 38.7743,
+          "lon": -9.47878,
+          "kind": 2
+        },
+        {
+          "name": "Grutas da Ursa",
+          "lat": 38.79183,
+          "lon": -9.49176,
+          "kind": 1
+        },
+        {
+          "name": "Anta de Adrenunes",
+          "lat": 38.77798,
+          "lon": -9.46437,
+          "kind": 2
+        },
+        {
+          "name": "Tholos do Monge",
+          "lat": 38.77422,
+          "lon": -9.44136,
+          "kind": 2
+        },
+        {
+          "name": "Fojo da Adraga",
+          "lat": 38.80064,
+          "lon": -9.48793,
+          "kind": 1
+        },
+        {
+          "name": "Quinta Mazziotti",
+          "lat": 38.79861,
+          "lon": -9.45073,
+          "kind": 2
+        },
+        {
+          "name": "Convento dos Capuchos",
+          "lat": 38.78434,
+          "lon": -9.43816,
+          "kind": 2
+        },
+        {
+          "name": "Capela de São Mamede de Janas",
+          "lat": 38.83312,
+          "lon": -9.43648,
+          "kind": 2
+        },
+        {
+          "name": "Quinta da Penha Verde",
+          "lat": 38.79331,
+          "lon": -9.40345,
+          "kind": 2
+        },
+        {
+          "name": "Jardins de Seteais",
+          "lat": 38.79637,
+          "lon": -9.39912,
+          "kind": 2
+        },
+        {
+          "name": "Quinta da Ribafria",
+          "lat": 38.81391,
+          "lon": -9.37803,
+          "kind": 2
+        },
+        {
+          "name": "Palácio Nacional de Sintra",
+          "lat": 38.79774,
+          "lon": -9.3908,
+          "kind": 2
+        }
       ]
     },
     {
@@ -861,6 +3281,248 @@
         [38.53352, -8.90064],
         [38.52514, -8.89859],
         [38.52427, -8.88824]
+      ],
+      "sights": [
+        {
+          "name": "Museu de Arte Contemporânea MAC/CCB",
+          "lat": 38.69565,
+          "lon": -9.20931,
+          "kind": 2
+        },
+        {
+          "name": "Museu Nacional de Arqueologia",
+          "lat": 38.69737,
+          "lon": -9.20708,
+          "kind": 2
+        },
+        {
+          "name": "Réplica da Pedra de Dighton",
+          "lat": 38.6975,
+          "lon": -9.20836,
+          "kind": 2
+        },
+        {
+          "name": "Museu de Marinha",
+          "lat": 38.69712,
+          "lon": -9.20803,
+          "kind": 2
+        },
+        {
+          "name": "Padrão dos Descobrimentos",
+          "lat": 38.69365,
+          "lon": -9.20572,
+          "kind": 2
+        },
+        {
+          "name": "Centro Cultural de Belém",
+          "lat": 38.69521,
+          "lon": -9.20868,
+          "kind": 2
+        },
+        {
+          "name": "Solar dos Zagallos",
+          "lat": 38.65011,
+          "lon": -9.19019,
+          "kind": 2
+        },
+        {
+          "name": "Palácio do Alfeite",
+          "lat": 38.66518,
+          "lon": -9.14737,
+          "kind": 2
+        },
+        {
+          "name": "Olaria Romana da Quinta do Rouxinol",
+          "lat": 38.64541,
+          "lon": -9.14483,
+          "kind": 2
+        },
+        {
+          "name": "Moinho do Galvão",
+          "lat": 38.64568,
+          "lon": -9.11759,
+          "kind": 2
+        },
+        {
+          "name": "Fábrica de Seca de Bacalhau da Companhia Atlântica",
+          "lat": 38.64585,
+          "lon": -9.11296,
+          "kind": 2
+        },
+        {
+          "name": "Quinta da Fidalga",
+          "lat": 38.63369,
+          "lon": -9.10443,
+          "kind": 2
+        },
+        {
+          "name": "Quinta do Alcantara",
+          "lat": 38.59652,
+          "lon": -9.08637,
+          "kind": 2
+        },
+        {
+          "name": "Monte do Vale",
+          "lat": 38.59061,
+          "lon": -9.08539,
+          "kind": 1
+        },
+        {
+          "name": "Monumento Natural da Pedreira do Avelino",
+          "lat": 38.45401,
+          "lon": -9.12326,
+          "kind": 2
+        },
+        {
+          "name": "Povoado Calcolítico Fortificado do Outeiro Redondo",
+          "lat": 38.45599,
+          "lon": -9.1028,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Sesimbra",
+          "lat": 38.4527,
+          "lon": -9.10694,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Nossa Senhora do Castelo",
+          "lat": 38.45149,
+          "lon": -9.10771,
+          "kind": 2
+        },
+        {
+          "name": "Forte do Cavalo",
+          "lat": 38.43483,
+          "lon": -9.11674,
+          "kind": 2
+        },
+        {
+          "name": "Moagem de Sampaio",
+          "lat": 38.46556,
+          "lon": -9.09682,
+          "kind": 2
+        },
+        {
+          "name": "Monumento Megalítico da Roça do Casal do Meio",
+          "lat": 38.46286,
+          "lon": -9.03695,
+          "kind": 2
+        },
+        {
+          "name": "Convento de El Carmen",
+          "lat": 38.46801,
+          "lon": -9.02386,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Vila Nogueira de Azeitão",
+          "lat": 38.51867,
+          "lon": -9.01372,
+          "kind": 2
+        },
+        {
+          "name": "Palácio dos Duques de Aveiro",
+          "lat": 38.51858,
+          "lon": -9.0128,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de São Simão",
+          "lat": 38.52526,
+          "lon": -8.9948,
+          "kind": 2
+        },
+        {
+          "name": "Palácio e Quinta da Bacalhoa",
+          "lat": 38.52565,
+          "lon": -8.99224,
+          "kind": 2
+        },
+        {
+          "name": "Fábrica de Salga de Peixe do Creiro",
+          "lat": 38.48149,
+          "lon": -8.97689,
+          "kind": 2
+        },
+        {
+          "name": "Capela de São Pedro de Alcube",
+          "lat": 38.51676,
+          "lon": -8.96131,
+          "kind": 2
+        },
+        {
+          "name": "Palácio da Comenda",
+          "lat": 38.50712,
+          "lon": -8.9249,
+          "kind": 2
+        },
+        {
+          "name": "Castro de Chibanes",
+          "lat": 38.56407,
+          "lon": -8.91844,
+          "kind": 2
+        },
+        {
+          "name": "Convento de Brancanes",
+          "lat": 38.53291,
+          "lon": -8.90118,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Santa Maria",
+          "lat": 38.56604,
+          "lon": -8.90042,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Santiago",
+          "lat": 38.56567,
+          "lon": -8.90108,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Palmela",
+          "lat": 38.5678,
+          "lon": -8.89962,
+          "kind": 2
+        },
+        {
+          "name": "Forte de Albarquel",
+          "lat": 38.51111,
+          "lon": -8.91358,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Setúbal",
+          "lat": 38.52362,
+          "lon": -8.89845,
+          "kind": 2
+        },
+        {
+          "name": "Chafariz da Praça Teófilo Braga",
+          "lat": 38.52389,
+          "lon": -8.89677,
+          "kind": 2
+        },
+        {
+          "name": "Igreja do Mosteiro de Jesus",
+          "lat": 38.52595,
+          "lon": -8.89471,
+          "kind": 2
+        },
+        {
+          "name": "Mosteiro de Jesus",
+          "lat": 38.52616,
+          "lon": -8.89475,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de São Julião",
+          "lat": 38.52386,
+          "lon": -8.89228,
+          "kind": 2
+        }
       ]
     },
     {
@@ -931,6 +3593,248 @@
         [32.84495, -17.16153],
         [32.85396, -17.15303],
         [32.86801, -17.17003]
+      ],
+      "sights": [
+        {
+          "name": "Terreiro da Luta",
+          "lat": 32.68418,
+          "lon": -16.8988,
+          "kind": 1
+        },
+        {
+          "name": "Casa Museu Frederico de Freitas",
+          "lat": 32.64989,
+          "lon": -16.91234,
+          "kind": 2
+        },
+        {
+          "name": "Convento de Santa Clara",
+          "lat": 32.65055,
+          "lon": -16.91311,
+          "kind": 2
+        },
+        {
+          "name": "Museu da Quinta das Cruzes",
+          "lat": 32.65105,
+          "lon": -16.91387,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Santo António",
+          "lat": 32.66356,
+          "lon": -16.93887,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de São Martinho",
+          "lat": 32.64918,
+          "lon": -16.94395,
+          "kind": 2
+        },
+        {
+          "name": "Poças do Governador",
+          "lat": 32.63328,
+          "lon": -16.94367,
+          "kind": 1
+        },
+        {
+          "name": "Museu da Imprensa da Madeira",
+          "lat": 32.64938,
+          "lon": -16.9794,
+          "kind": 2
+        },
+        {
+          "name": "Nossa Senhora da Graça",
+          "lat": 32.67137,
+          "lon": -16.98002,
+          "kind": 2
+        },
+        {
+          "name": "Quinta da Serra",
+          "lat": 32.69397,
+          "lon": -16.99483,
+          "kind": 2
+        },
+        {
+          "name": "Teleferico Fajã dos Padres",
+          "lat": 32.65682,
+          "lon": -17.02156,
+          "kind": 1
+        },
+        {
+          "name": "Vera Cruz",
+          "lat": 32.66592,
+          "lon": -17.02408,
+          "kind": 1
+        },
+        {
+          "name": "Capela Nossa Senhora da Glória",
+          "lat": 32.66491,
+          "lon": -17.04405,
+          "kind": 1
+        },
+        {
+          "name": "Furna",
+          "lat": 32.7027,
+          "lon": -17.04262,
+          "kind": 1
+        },
+        {
+          "name": "Museu Etnográfico da Madeira",
+          "lat": 32.67294,
+          "lon": -17.06336,
+          "kind": 2
+        },
+        {
+          "name": "Forte de São Bento da Ribeira Brava",
+          "lat": 32.6699,
+          "lon": -17.06488,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de São Bento",
+          "lat": 32.67113,
+          "lon": -17.06453,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Nossa Senhora da Luz",
+          "lat": 32.68009,
+          "lon": -17.1046,
+          "kind": 2
+        },
+        {
+          "name": "Capela de São Sebastião",
+          "lat": 32.68092,
+          "lon": -17.10358,
+          "kind": 2
+        },
+        {
+          "name": "Caminho Real",
+          "lat": 32.6812,
+          "lon": -17.10776,
+          "kind": 1
+        },
+        {
+          "name": "Anjos",
+          "lat": 32.68667,
+          "lon": -17.11381,
+          "kind": 1
+        },
+        {
+          "name": "Igreja dos Canhas",
+          "lat": 32.69431,
+          "lon": -17.11067,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Santa Maria Madalena",
+          "lat": 32.70163,
+          "lon": -17.13389,
+          "kind": 2
+        },
+        {
+          "name": "Nossa Senhora da Conceição",
+          "lat": 32.71571,
+          "lon": -17.14627,
+          "kind": 2
+        },
+        {
+          "name": "Cristo Rei",
+          "lat": 32.74108,
+          "lon": -17.10093,
+          "kind": 2
+        },
+        {
+          "name": "Bica da cana",
+          "lat": 32.75632,
+          "lon": -17.0546,
+          "kind": 1
+        },
+        {
+          "name": "Ovil",
+          "lat": 32.75742,
+          "lon": -17.10517,
+          "kind": 1
+        },
+        {
+          "name": "Pico da Urze",
+          "lat": 32.75141,
+          "lon": -17.11804,
+          "kind": 1
+        },
+        {
+          "name": "Estanquinhos Fontes Ruivas",
+          "lat": 32.77296,
+          "lon": -17.08392,
+          "kind": 2
+        },
+        {
+          "name": "Risco",
+          "lat": 32.76057,
+          "lon": -17.12442,
+          "kind": 1
+        },
+        {
+          "name": "25 Fontes",
+          "lat": 32.76564,
+          "lon": -17.12513,
+          "kind": 1
+        },
+        {
+          "name": "Miradouro",
+          "lat": 32.78003,
+          "lon": -17.1365,
+          "kind": 1
+        },
+        {
+          "name": "Pico dos Bodes",
+          "lat": 32.77693,
+          "lon": -17.16284,
+          "kind": 1
+        },
+        {
+          "name": "Frente Mar Seixal",
+          "lat": 32.8271,
+          "lon": -17.11116,
+          "kind": 2
+        },
+        {
+          "name": "Lagoa do Fanal",
+          "lat": 32.81369,
+          "lon": -17.14936,
+          "kind": 2
+        },
+        {
+          "name": "Curral Falso",
+          "lat": 32.82735,
+          "lon": -17.1606,
+          "kind": 1
+        },
+        {
+          "name": "Eira da Achada",
+          "lat": 32.84803,
+          "lon": -17.15265,
+          "kind": 1
+        },
+        {
+          "name": "Lamaçeiros",
+          "lat": 32.85152,
+          "lon": -17.16604,
+          "kind": 1
+        },
+        {
+          "name": "Ilhéu da Ribeira da Janela",
+          "lat": 32.85697,
+          "lon": -17.15065,
+          "kind": 2
+        },
+        {
+          "name": "Forte de São João Baptista",
+          "lat": 32.86727,
+          "lon": -17.16546,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1002,6 +3906,248 @@
         [37.7341, -25.33089],
         [37.75844, -25.32473],
         [37.77087, -25.31571]
+      ],
+      "sights": [
+        {
+          "name": "Igreja de São Nicolau",
+          "lat": 37.86277,
+          "lon": -25.79814,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro da Boca do Inferno",
+          "lat": 37.84293,
+          "lon": -25.76361,
+          "kind": 1
+        },
+        {
+          "name": "Miradouro Do Pico Do Paul",
+          "lat": 37.82659,
+          "lon": -25.74655,
+          "kind": 1
+        },
+        {
+          "name": "Merendário das Feteiras",
+          "lat": 37.80408,
+          "lon": -25.78614,
+          "kind": 1
+        },
+        {
+          "name": "Miradouro da Vigia",
+          "lat": 37.78837,
+          "lon": -25.7711,
+          "kind": 1
+        },
+        {
+          "name": "Merendário do Charquinho das Moças",
+          "lat": 37.79506,
+          "lon": -25.73447,
+          "kind": 1
+        },
+        {
+          "name": "Miradouro do Caminho Novo",
+          "lat": 37.7589,
+          "lon": -25.72744,
+          "kind": 1
+        },
+        {
+          "name": "Igreja de Nossa Senhora das Neves",
+          "lat": 37.7534,
+          "lon": -25.72122,
+          "kind": 2
+        },
+        {
+          "name": "Gruta do Carvão",
+          "lat": 37.74816,
+          "lon": -25.68707,
+          "kind": 1
+        },
+        {
+          "name": "Jardim José do Canto",
+          "lat": 37.74908,
+          "lon": -25.66953,
+          "kind": 2
+        },
+        {
+          "name": "Ermida De Sant'Ana",
+          "lat": 37.74678,
+          "lon": -25.6703,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de São José",
+          "lat": 37.73743,
+          "lon": -25.674,
+          "kind": 2
+        },
+        {
+          "name": "Forte de São Brás",
+          "lat": 37.73635,
+          "lon": -25.67264,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Nossa Senhora da Esperança",
+          "lat": 37.73815,
+          "lon": -25.67322,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de São Sebastião",
+          "lat": 37.74008,
+          "lon": -25.66823,
+          "kind": 2
+        },
+        {
+          "name": "Igreja do Colégio dos Jesuítas",
+          "lat": 37.74374,
+          "lon": -25.66994,
+          "kind": 2
+        },
+        {
+          "name": "Museu Carlos Machado - Núcleo de Santo André",
+          "lat": 37.74322,
+          "lon": -25.66762,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Nossa Senhora da Graça",
+          "lat": 37.74138,
+          "lon": -25.66463,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de São Pedro",
+          "lat": 37.7405,
+          "lon": -25.66271,
+          "kind": 2
+        },
+        {
+          "name": "Plantação de Ananás dos Açores",
+          "lat": 37.74891,
+          "lon": -25.65509,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro do Ilhéu de Rosto de Cão",
+          "lat": 37.74571,
+          "lon": -25.63698,
+          "kind": 1
+        },
+        {
+          "name": "Ponta dos Caetanos",
+          "lat": 37.74551,
+          "lon": -25.60929,
+          "kind": 1
+        },
+        {
+          "name": "Observatório Vulcanológico e Geotérmico dos Açores",
+          "lat": 37.74279,
+          "lon": -25.5883,
+          "kind": 2
+        },
+        {
+          "name": "Cerâmica Vieira",
+          "lat": 37.74524,
+          "lon": -25.58285,
+          "kind": 2
+        },
+        {
+          "name": "Ermida de Nossa Senhora do Cabo",
+          "lat": 37.74678,
+          "lon": -25.56911,
+          "kind": 2
+        },
+        {
+          "name": "Ermida de Nossa Senhora dos Remédios",
+          "lat": 37.7496,
+          "lon": -25.53881,
+          "kind": 2
+        },
+        {
+          "name": "Janela do Inferno",
+          "lat": 37.74893,
+          "lon": -25.51097,
+          "kind": 1
+        },
+        {
+          "name": "Ermida de Nossa Senhora do Monte Santo",
+          "lat": 37.71977,
+          "lon": -25.50952,
+          "kind": 2
+        },
+        {
+          "name": "Convento da Caloura",
+          "lat": 37.71228,
+          "lon": -25.49689,
+          "kind": 2
+        },
+        {
+          "name": "Núcleo Museológico da Eletricidade",
+          "lat": 37.71897,
+          "lon": -25.46693,
+          "kind": 2
+        },
+        {
+          "name": "Cascata da Fábrica da Vila",
+          "lat": 37.72766,
+          "lon": -25.46797,
+          "kind": 1
+        },
+        {
+          "name": "Igreja do Senhor Bom Jesus da Pedra",
+          "lat": 37.71539,
+          "lon": -25.43701,
+          "kind": 2
+        },
+        {
+          "name": "Ermida de Nossa Senhora da Paz",
+          "lat": 37.72857,
+          "lon": -25.43143,
+          "kind": 2
+        },
+        {
+          "name": "Ribeira das Teinhas",
+          "lat": 37.72032,
+          "lon": -25.40198,
+          "kind": 2
+        },
+        {
+          "name": "Castelo Branco",
+          "lat": 37.75432,
+          "lon": -25.35549,
+          "kind": 1
+        },
+        {
+          "name": "Salto do Rosal",
+          "lat": 37.74301,
+          "lon": -25.33796,
+          "kind": 1
+        },
+        {
+          "name": "Ponta do Garajau",
+          "lat": 37.73542,
+          "lon": -25.29022,
+          "kind": 1
+        },
+        {
+          "name": "Capela de Nossa Senhora das Vitórias",
+          "lat": 37.75027,
+          "lon": -25.3307,
+          "kind": 2
+        },
+        {
+          "name": "Casa da Grená",
+          "lat": 37.76638,
+          "lon": -25.33573,
+          "kind": 2
+        },
+        {
+          "name": "Salto do Cavalo",
+          "lat": 37.78735,
+          "lon": -25.28371,
+          "kind": 1
+        }
       ]
     },
     {
@@ -1078,6 +4224,248 @@
         [41.68029, -8.80593],
         [41.69673, -8.82381],
         [41.69347, -8.8327]
+      ],
+      "sights": [
+        {
+          "name": "Museu Aurélia e Sofia de Souza",
+          "lat": 41.15943,
+          "lon": -8.62551,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Santo António das Antas",
+          "lat": 41.16431,
+          "lon": -8.58994,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Nossa Senhora do Ó de Águas Santas",
+          "lat": 41.21041,
+          "lon": -8.57718,
+          "kind": 2
+        },
+        {
+          "name": "Igreja do Bom Pastor",
+          "lat": 41.20782,
+          "lon": -8.55298,
+          "kind": 2
+        },
+        {
+          "name": "Rua de São Lázaro",
+          "lat": 41.23984,
+          "lon": -8.52257,
+          "kind": 2
+        },
+        {
+          "name": "Monumento à Primeira Aterragem no Aeródromo da Maia",
+          "lat": 41.28098,
+          "lon": -8.51996,
+          "kind": 2
+        },
+        {
+          "name": "Baloiço de Lordelo",
+          "lat": 41.24447,
+          "lon": -8.43971,
+          "kind": 1
+        },
+        {
+          "name": "Monte do pilar",
+          "lat": 41.28994,
+          "lon": -8.42658,
+          "kind": 1
+        },
+        {
+          "name": "Castro de Monte Padrão",
+          "lat": 41.31271,
+          "lon": -8.44935,
+          "kind": 2
+        },
+        {
+          "name": "Mosteiro de São Bento",
+          "lat": 41.34489,
+          "lon": -8.4714,
+          "kind": 2
+        },
+        {
+          "name": "Casa da Bouça",
+          "lat": 41.37521,
+          "lon": -8.42676,
+          "kind": 2
+        },
+        {
+          "name": "Citânia de Sanfins",
+          "lat": 41.32277,
+          "lon": -8.38689,
+          "kind": 2
+        },
+        {
+          "name": "Ponte Romana de Negrelos",
+          "lat": 41.3665,
+          "lon": -8.35507,
+          "kind": 2
+        },
+        {
+          "name": "Ponte Velha de Vizela",
+          "lat": 41.37312,
+          "lon": -8.31164,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de São Martinho de Candoso",
+          "lat": 41.42621,
+          "lon": -8.33539,
+          "kind": 2
+        },
+        {
+          "name": "Capela da Senhora da Luz",
+          "lat": 41.43852,
+          "lon": -8.31604,
+          "kind": 2
+        },
+        {
+          "name": "Padrão de Dom João I",
+          "lat": 41.4415,
+          "lon": -8.30104,
+          "kind": 2
+        },
+        {
+          "name": "Casa de Caneiros",
+          "lat": 41.45522,
+          "lon": -8.31005,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Santa Eufémia",
+          "lat": 41.48769,
+          "lon": -8.3167,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Santa Helena",
+          "lat": 41.45255,
+          "lon": -8.36574,
+          "kind": 2
+        },
+        {
+          "name": "Santuário de Santa Maria Madalena da Falperra",
+          "lat": 41.52202,
+          "lon": -8.38774,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Nossa Senhora do Rosário",
+          "lat": 41.47842,
+          "lon": -8.42745,
+          "kind": 2
+        },
+        {
+          "name": "Casa de São Brás da Torre",
+          "lat": 41.50782,
+          "lon": -8.43932,
+          "kind": 2
+        },
+        {
+          "name": "Santuário de Nossa Senhora da Conceição do Sameiro",
+          "lat": 41.5418,
+          "lon": -8.36955,
+          "kind": 2
+        },
+        {
+          "name": "Domus Escola Velha da Sé",
+          "lat": 41.54867,
+          "lon": -8.42869,
+          "kind": 2
+        },
+        {
+          "name": "Mosteiro de São Martinho de Tibães",
+          "lat": 41.55538,
+          "lon": -8.47881,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Tadim",
+          "lat": 41.50734,
+          "lon": -8.4894,
+          "kind": 2
+        },
+        {
+          "name": "Baloiço da Penide",
+          "lat": 41.54477,
+          "lon": -8.53541,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de São Pedro de Adães",
+          "lat": 41.52453,
+          "lon": -8.56219,
+          "kind": 2
+        },
+        {
+          "name": "Capela de São Brás",
+          "lat": 41.52081,
+          "lon": -8.61634,
+          "kind": 2
+        },
+        {
+          "name": "Ruínas do Castelo de Faria e da estação arqueológica subjacente",
+          "lat": 41.49659,
+          "lon": -8.64823,
+          "kind": 2
+        },
+        {
+          "name": "Castro do Alto da Torre",
+          "lat": 41.54505,
+          "lon": -8.64565,
+          "kind": 2
+        },
+        {
+          "name": "Baloiço dos Reis",
+          "lat": 41.55396,
+          "lon": -8.68359,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Paroquial de Palmeira de Faro",
+          "lat": 41.54597,
+          "lon": -8.74367,
+          "kind": 2
+        },
+        {
+          "name": "Mamoa do Rápido 3",
+          "lat": 41.57841,
+          "lon": -8.76229,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Nossa Senhora dos Remédios",
+          "lat": 41.60465,
+          "lon": -8.78017,
+          "kind": 2
+        },
+        {
+          "name": "Lagar Rupestre do Penedo das Chaves",
+          "lat": 41.61713,
+          "lon": -8.78585,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Portuzelo",
+          "lat": 41.70202,
+          "lon": -8.78524,
+          "kind": 2
+        },
+        {
+          "name": "Praça de Touros de Viana do Castelo",
+          "lat": 41.69683,
+          "lon": -8.81624,
+          "kind": 2
+        },
+        {
+          "name": "Forte de Santiago da Barra",
+          "lat": 41.689,
+          "lon": -8.83826,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1154,6 +4542,248 @@
         [39.39788, -9.1339],
         [39.38435, -9.1329],
         [39.36009, -9.15717]
+      ],
+      "sights": [
+        {
+          "name": "Portugal dos Pequenitos",
+          "lat": 40.2023,
+          "lon": -8.43437,
+          "kind": 2
+        },
+        {
+          "name": "Penedo da Saudade",
+          "lat": 40.20512,
+          "lon": -8.41466,
+          "kind": 2
+        },
+        {
+          "name": "Miradouro de Pereiros",
+          "lat": 40.16614,
+          "lon": -8.41606,
+          "kind": 1
+        },
+        {
+          "name": "Capela de São Pedro",
+          "lat": 40.12989,
+          "lon": -8.38928,
+          "kind": 2
+        },
+        {
+          "name": "Invibora",
+          "lat": 40.12841,
+          "lon": -8.43345,
+          "kind": 2
+        },
+        {
+          "name": "Templo Ecuménico Universalista",
+          "lat": 40.08165,
+          "lon": -8.34388,
+          "kind": 2
+        },
+        {
+          "name": "Solar Quinta da Boiça",
+          "lat": 40.04005,
+          "lon": -8.37097,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Penela",
+          "lat": 40.0312,
+          "lon": -8.3903,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Germanelo",
+          "lat": 40.0261,
+          "lon": -8.4303,
+          "kind": 2
+        },
+        {
+          "name": "Capela de São Martinho de Tours",
+          "lat": 39.98682,
+          "lon": -8.41102,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Paroquial da Lagarteira",
+          "lat": 39.95451,
+          "lon": -8.40496,
+          "kind": 2
+        },
+        {
+          "name": "Pelourinho de Avelar",
+          "lat": 39.92179,
+          "lon": -8.3604,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de Pousaflores",
+          "lat": 39.86757,
+          "lon": -8.39476,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de Maçãs de Caminho",
+          "lat": 39.84753,
+          "lon": -8.3853,
+          "kind": 2
+        },
+        {
+          "name": "Madroeira (CNS 24814)",
+          "lat": 39.7865,
+          "lon": -8.30359,
+          "kind": 2
+        },
+        {
+          "name": "Gruta de Avecasta",
+          "lat": 39.74584,
+          "lon": -8.40304,
+          "kind": 1
+        },
+        {
+          "name": "Pelourinho de Pias",
+          "lat": 39.71655,
+          "lon": -8.33204,
+          "kind": 2
+        },
+        {
+          "name": "Sítio arqueológico do Cabeço da Pena",
+          "lat": 39.6789,
+          "lon": -8.3825,
+          "kind": 2
+        },
+        {
+          "name": "Quinta da Granja",
+          "lat": 39.62803,
+          "lon": -8.40393,
+          "kind": 2
+        },
+        {
+          "name": "Capela de São Lourenço",
+          "lat": 39.59215,
+          "lon": -8.40572,
+          "kind": 2
+        },
+        {
+          "name": "Gruta do Caldeirão",
+          "lat": 39.64701,
+          "lon": -8.41621,
+          "kind": 1
+        },
+        {
+          "name": "Azenha do Sobral",
+          "lat": 39.66001,
+          "lon": -8.44818,
+          "kind": 2
+        },
+        {
+          "name": "Gruta das Fontainhas",
+          "lat": 39.66887,
+          "lon": -8.51155,
+          "kind": 1
+        },
+        {
+          "name": "Padrão",
+          "lat": 39.67372,
+          "lon": -8.52838,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Ourém",
+          "lat": 39.64143,
+          "lon": -8.59216,
+          "kind": 2
+        },
+        {
+          "name": "Gruta de Alvega",
+          "lat": 39.64388,
+          "lon": -8.64861,
+          "kind": 1
+        },
+        {
+          "name": "Basílica de Nossa Senhora do Rosário de Fátima",
+          "lat": 39.6323,
+          "lon": -8.67174,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz de São Mamede",
+          "lat": 39.6226,
+          "lon": -8.71788,
+          "kind": 2
+        },
+        {
+          "name": "Estrada Romana do Alqueidão da Serra",
+          "lat": 39.61014,
+          "lon": -8.76835,
+          "kind": 2
+        },
+        {
+          "name": "Colipo",
+          "lat": 39.67382,
+          "lon": -8.79746,
+          "kind": 2
+        },
+        {
+          "name": "Estrada da Boutaca",
+          "lat": 39.6578,
+          "lon": -8.83101,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Porto de Mós",
+          "lat": 39.60343,
+          "lon": -8.81869,
+          "kind": 2
+        },
+        {
+          "name": "Igreja Matriz das Pedreiras",
+          "lat": 39.58949,
+          "lon": -8.86257,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de São Vicente",
+          "lat": 39.56763,
+          "lon": -8.92611,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Nossa Senhora do Desterro",
+          "lat": 39.54781,
+          "lon": -8.97855,
+          "kind": 2
+        },
+        {
+          "name": "Estação Experimental do Sobreiro",
+          "lat": 39.48924,
+          "lon": -9.03019,
+          "kind": 2
+        },
+        {
+          "name": "Igreja da Cela Nova",
+          "lat": 39.5371,
+          "lon": -9.0383,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Alfeizerão",
+          "lat": 39.50014,
+          "lon": -9.11081,
+          "kind": 2
+        },
+        {
+          "name": "Igreja de Nossa Senhora do Pópulo",
+          "lat": 39.40335,
+          "lon": -9.13195,
+          "kind": 2
+        },
+        {
+          "name": "Cidade Romana de Eburobrittium",
+          "lat": 39.36321,
+          "lon": -9.13981,
+          "kind": 2
+        }
       ]
     }
   ]

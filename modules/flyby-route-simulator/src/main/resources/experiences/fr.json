@@ -2,7 +2,7 @@
   "schema": 1,
   "country": "FR",
   "name": "France",
-  "version": 1,
+  "version": 2,
   "experiences": [
     {
       "id": "fr-rga-north",
@@ -87,6 +87,252 @@
         [45.65337, 6.78695],
         [45.62899, 6.78526],
         [45.61523, 6.76652]
+      ],
+      "sights": [
+        {
+          "name": "Maison forte de Marclaz",
+          "lat": 46.35633,
+          "lon": 6.44715,
+          "kind": 2
+        },
+        {
+          "name": "Ancienne platrière d'Armoy",
+          "lat": 46.35496,
+          "lon": 6.52564,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Georges",
+          "lat": 46.30435,
+          "lon": 6.54368,
+          "kind": 2
+        },
+        {
+          "name": "Les Gorges du Pont du Diable",
+          "lat": 46.30438,
+          "lon": 6.61589,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame-des-Neiges",
+          "lat": 46.25887,
+          "lon": 6.5721,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Jean-Baptiste de La Moussière",
+          "lat": 46.22981,
+          "lon": 6.65403,
+          "kind": 2
+        },
+        {
+          "name": "Église de la Visitation de Marie",
+          "lat": 46.19661,
+          "lon": 6.69483,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de Moudon",
+          "lat": 46.14309,
+          "lon": 6.64108,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de Jacquicourt",
+          "lat": 46.11707,
+          "lon": 6.66629,
+          "kind": 2
+        },
+        {
+          "name": "Saint-Pierre",
+          "lat": 46.09243,
+          "lon": 6.63738,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Jean-Baptiste",
+          "lat": 46.10733,
+          "lon": 6.59164,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de Flérier",
+          "lat": 46.10612,
+          "lon": 6.57888,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle du Mont-Provent",
+          "lat": 46.08814,
+          "lon": 6.58374,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Maurice",
+          "lat": 46.09103,
+          "lon": 6.50009,
+          "kind": 2
+        },
+        {
+          "name": "Musée de l'horlogerie et du décolletage",
+          "lat": 46.05596,
+          "lon": 6.57998,
+          "kind": 2
+        },
+        {
+          "name": "Couvent de Carmélites",
+          "lat": 46.00503,
+          "lon": 6.53755,
+          "kind": 2
+        },
+        {
+          "name": "Altipik",
+          "lat": 46.02977,
+          "lon": 6.48801,
+          "kind": 2
+        },
+        {
+          "name": "Col de la Colombière",
+          "lat": 45.99223,
+          "lon": 6.47569,
+          "kind": 4,
+          "ele": 1613
+        },
+        {
+          "name": "Chapelle de la Duche",
+          "lat": 45.96336,
+          "lon": 6.50561,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame-de-la-Pitié-et-Saint-Claude",
+          "lat": 45.97429,
+          "lon": 6.38644,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-de-Tous-les-Saints",
+          "lat": 45.95618,
+          "lon": 6.3861,
+          "kind": 2
+        },
+        {
+          "name": "Col de St Jean de Sixt",
+          "lat": 45.92387,
+          "lon": 6.40986,
+          "kind": 4,
+          "ele": 956
+        },
+        {
+          "name": "Église Sainte-Foy",
+          "lat": 45.90488,
+          "lon": 6.42389,
+          "kind": 2
+        },
+        {
+          "name": "Grotte de l'Église des Fées",
+          "lat": 45.8855,
+          "lon": 6.47158,
+          "kind": 1
+        },
+        {
+          "name": "Cascade du Dard",
+          "lat": 45.85468,
+          "lon": 6.50223,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-François-de-Sales",
+          "lat": 45.82773,
+          "lon": 6.48359,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sainte-Marie",
+          "lat": 45.79177,
+          "lon": 6.50063,
+          "kind": 2
+        },
+        {
+          "name": "Belvédère du Mont Lachat",
+          "lat": 45.78993,
+          "lon": 6.52485,
+          "kind": 1
+        },
+        {
+          "name": "Chapelle Saint-Aubin et Saint-François-de-Sales",
+          "lat": 45.78349,
+          "lon": 6.49852,
+          "kind": 2
+        },
+        {
+          "name": "Col des Saisies",
+          "lat": 45.76156,
+          "lon": 6.53336,
+          "kind": 4,
+          "ele": 1650
+        },
+        {
+          "name": "Vue sur le Mont-Blanc",
+          "lat": 45.76077,
+          "lon": 6.55182,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Jacques d’Assyrie",
+          "lat": 45.75053,
+          "lon": 6.5852,
+          "kind": 2
+        },
+        {
+          "name": "Château de Beaufort",
+          "lat": 45.72721,
+          "lon": 6.56271,
+          "kind": 2
+        },
+        {
+          "name": "Musée du Beaufort",
+          "lat": 45.71958,
+          "lon": 6.57335,
+          "kind": 2
+        },
+        {
+          "name": "Col du Méraillet",
+          "lat": 45.69491,
+          "lon": 6.63364,
+          "kind": 4,
+          "ele": 1605
+        },
+        {
+          "name": "Chapelle de Roselend",
+          "lat": 45.69963,
+          "lon": 6.64588,
+          "kind": 2
+        },
+        {
+          "name": "La Grande Berge",
+          "lat": 45.6777,
+          "lon": 6.64241,
+          "kind": 1
+        },
+        {
+          "name": "Chapelle Saint-Jacques-le-Majeur",
+          "lat": 45.69715,
+          "lon": 6.73406,
+          "kind": 2
+        },
+        {
+          "name": "Cascade de Beaupré",
+          "lat": 45.66962,
+          "lon": 6.81531,
+          "kind": 1
+        },
+        {
+          "name": "Fort du Truc",
+          "lat": 45.63127,
+          "lon": 6.75666,
+          "kind": 2
+        }
       ]
     },
     {
@@ -168,6 +414,252 @@
         [44.97913, 6.50023],
         [44.92188, 6.61536],
         [44.89629, 6.63555]
+      ],
+      "sights": [
+        {
+          "name": "Fort du Truc",
+          "lat": 45.63127,
+          "lon": 6.75666,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame de Fourvières",
+          "lat": 45.61409,
+          "lon": 6.83759,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Foy",
+          "lat": 45.59071,
+          "lon": 6.88328,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Clair",
+          "lat": 45.5547,
+          "lon": 6.92182,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre aux Liens",
+          "lat": 45.50779,
+          "lon": 6.92014,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de la Transfiguration",
+          "lat": 45.46906,
+          "lon": 6.90947,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Bernard de Menthon",
+          "lat": 45.44777,
+          "lon": 6.98158,
+          "kind": 2
+        },
+        {
+          "name": "Petite cascade",
+          "lat": 45.44649,
+          "lon": 7.01704,
+          "kind": 1
+        },
+        {
+          "name": "Col des Lessieres",
+          "lat": 45.42154,
+          "lon": 7.0188,
+          "kind": 4,
+          "ele": 2964
+        },
+        {
+          "name": "Chapelle Saint-Barthélémy",
+          "lat": 45.38432,
+          "lon": 7.0438,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-de-l'Assomption",
+          "lat": 45.3717,
+          "lon": 7.04553,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Antoine",
+          "lat": 45.31995,
+          "lon": 6.99515,
+          "kind": 2
+        },
+        {
+          "name": "Pierre de Chantelouve",
+          "lat": 45.292,
+          "lon": 6.95763,
+          "kind": 2
+        },
+        {
+          "name": "Col de la Madeleine",
+          "lat": 45.30006,
+          "lon": 6.94951,
+          "kind": 4,
+          "ele": 1746
+        },
+        {
+          "name": "Rocher aux Pieds",
+          "lat": 45.31602,
+          "lon": 6.90611,
+          "kind": 2
+        },
+        {
+          "name": "Espace Baroque",
+          "lat": 45.28571,
+          "lon": 6.87528,
+          "kind": 2
+        },
+        {
+          "name": "Grotte des Balmes",
+          "lat": 45.26492,
+          "lon": 6.81571,
+          "kind": 1
+        },
+        {
+          "name": "Monolithe de Sardières",
+          "lat": 45.24775,
+          "lon": 6.76827,
+          "kind": 2
+        },
+        {
+          "name": "Fort Charles-Albert",
+          "lat": 45.2229,
+          "lon": 6.74266,
+          "kind": 2
+        },
+        {
+          "name": "Fort Marie-Christine",
+          "lat": 45.22138,
+          "lon": 6.73481,
+          "kind": 2
+        },
+        {
+          "name": "Fort Charles-Félix",
+          "lat": 45.21618,
+          "lon": 6.73627,
+          "kind": 2
+        },
+        {
+          "name": "Fort Victor-Emmanuel",
+          "lat": 45.21198,
+          "lon": 6.73591,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre-aux-Liens",
+          "lat": 45.2137,
+          "lon": 6.69719,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Blaise",
+          "lat": 45.20652,
+          "lon": 6.63408,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Maurice",
+          "lat": 45.21025,
+          "lon": 6.53366,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen du Thyl",
+          "lat": 45.22486,
+          "lon": 6.49549,
+          "kind": 2
+        },
+        {
+          "name": "Fort du Télégraphe",
+          "lat": 45.21068,
+          "lon": 6.44601,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle",
+          "lat": 45.18558,
+          "lon": 6.48229,
+          "kind": 2
+        },
+        {
+          "name": "Col du Télégraphe",
+          "lat": 45.2027,
+          "lon": 6.44461,
+          "kind": 4,
+          "ele": 1566
+        },
+        {
+          "name": "Chapelle Saint-Pierre",
+          "lat": 45.15797,
+          "lon": 6.42401,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sainte-Agathe",
+          "lat": 45.13701,
+          "lon": 6.41804,
+          "kind": 2
+        },
+        {
+          "name": "Ouvrage des Rochilles",
+          "lat": 45.08538,
+          "lon": 6.48702,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle des Fusillés",
+          "lat": 45.03626,
+          "lon": 6.40479,
+          "kind": 2
+        },
+        {
+          "name": "Col du Lautaret",
+          "lat": 45.03523,
+          "lon": 6.40511,
+          "kind": 4,
+          "ele": 2058
+        },
+        {
+          "name": "Chapelle Sainte-Madeleine",
+          "lat": 45.03473,
+          "lon": 6.43552,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame du Mont-Carmel",
+          "lat": 45.02448,
+          "lon": 6.47261,
+          "kind": 2
+        },
+        {
+          "name": "Le Grand Aréa",
+          "lat": 44.98006,
+          "lon": 6.57299,
+          "kind": 1
+        },
+        {
+          "name": "Église Sainte Luce",
+          "lat": 44.94475,
+          "lon": 6.5651,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame, Saint-Nicolas (Ancienne Collégiale)",
+          "lat": 44.90019,
+          "lon": 6.6427,
+          "kind": 2
+        },
+        {
+          "name": "Fort de la Croix-de-Bretagne",
+          "lat": 44.87348,
+          "lon": 6.65419,
+          "kind": 2
+        }
       ]
     },
     {
@@ -254,6 +746,255 @@
         [43.70266, 7.22189],
         [43.69058, 7.24545],
         [43.69555, 7.27084]
+      ],
+      "sights": [
+        {
+          "name": "Église Notre-Dame, Saint-Nicolas (Ancienne Collégiale)",
+          "lat": 44.90019,
+          "lon": 6.6427,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sainte-Marie-Madeleine",
+          "lat": 44.87622,
+          "lon": 6.71347,
+          "kind": 2
+        },
+        {
+          "name": "Col des Ayes",
+          "lat": 44.81235,
+          "lon": 6.6879,
+          "kind": 1
+        },
+        {
+          "name": "Col Perdu",
+          "lat": 44.82353,
+          "lon": 6.7418,
+          "kind": 4,
+          "ele": 2490
+        },
+        {
+          "name": "Col de la Platrière",
+          "lat": 44.80757,
+          "lon": 6.73618,
+          "kind": 4,
+          "ele": 2215
+        },
+        {
+          "name": "Chapelle Saint-Pierre-et-Saint-Paul",
+          "lat": 44.79206,
+          "lon": 6.7317,
+          "kind": 2
+        },
+        {
+          "name": "Fort de Château-Queyras",
+          "lat": 44.75567,
+          "lon": 6.78967,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Jean",
+          "lat": 44.71911,
+          "lon": 6.76217,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Barthélémy",
+          "lat": 44.67559,
+          "lon": 6.67005,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Lucie",
+          "lat": 44.64928,
+          "lon": 6.63963,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Jean-Baptiste",
+          "lat": 44.62286,
+          "lon": 6.71935,
+          "kind": 2
+        },
+        {
+          "name": "Ruine",
+          "lat": 44.57488,
+          "lon": 6.66133,
+          "kind": 2
+        },
+        {
+          "name": "Cheminées de Fées",
+          "lat": 44.52523,
+          "lon": 6.73357,
+          "kind": 2
+        },
+        {
+          "name": "Pont du Châtelet",
+          "lat": 44.53634,
+          "lon": 6.7857,
+          "kind": 2
+        },
+        {
+          "name": "Fort de Tournoux",
+          "lat": 44.46932,
+          "lon": 6.75361,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Nicolas-de-Myre",
+          "lat": 44.41989,
+          "lon": 6.73391,
+          "kind": 2
+        },
+        {
+          "name": "Cascade du Pissoun",
+          "lat": 44.38292,
+          "lon": 6.76415,
+          "kind": 1
+        },
+        {
+          "name": "Caserne de Restefond",
+          "lat": 44.3443,
+          "lon": 6.79695,
+          "kind": 2
+        },
+        {
+          "name": "Faux col de Restefond",
+          "lat": 44.33682,
+          "lon": 6.80129,
+          "kind": 4,
+          "ele": 2656
+        },
+        {
+          "name": "Col de Restefond",
+          "lat": 44.33631,
+          "lon": 6.80842,
+          "kind": 4,
+          "ele": 2680
+        },
+        {
+          "name": "Ouvrage de Restefond",
+          "lat": 44.32992,
+          "lon": 6.80917,
+          "kind": 2
+        },
+        {
+          "name": "Col de Raspaillon",
+          "lat": 44.34054,
+          "lon": 6.83216,
+          "kind": 4,
+          "ele": 2513
+        },
+        {
+          "name": "Col de Pelouse",
+          "lat": 44.34587,
+          "lon": 6.84958,
+          "kind": 4,
+          "ele": 2553
+        },
+        {
+          "name": "Camp des Fourches",
+          "lat": 44.33365,
+          "lon": 6.86527,
+          "kind": 2
+        },
+        {
+          "name": "Col des Fourches",
+          "lat": 44.33384,
+          "lon": 6.87113,
+          "kind": 4,
+          "ele": 2262
+        },
+        {
+          "name": "Chapelle Sainte-Marie Madeleine",
+          "lat": 44.3225,
+          "lon": 6.88445,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Dalmas",
+          "lat": 44.28339,
+          "lon": 6.86691,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Maur",
+          "lat": 44.24315,
+          "lon": 6.93663,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre-ès-Liens",
+          "lat": 44.18653,
+          "lon": 7.05234,
+          "kind": 2
+        },
+        {
+          "name": "Arboretum Marcel Kroenlein",
+          "lat": 44.0962,
+          "lon": 7.08853,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Honorat",
+          "lat": 44.06387,
+          "lon": 7.13132,
+          "kind": 2
+        },
+        {
+          "name": "Collégiale Sainte-Marie",
+          "lat": 43.99611,
+          "lon": 7.14951,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Marguerite",
+          "lat": 43.98259,
+          "lon": 7.1272,
+          "kind": 2
+        },
+        {
+          "name": "Sanctuaire Notre-Dame-des-Miracles",
+          "lat": 43.91141,
+          "lon": 7.23129,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Antonin",
+          "lat": 43.86034,
+          "lon": 7.22555,
+          "kind": 2
+        },
+        {
+          "name": "Centre international d'art contemporain",
+          "lat": 43.79258,
+          "lon": 7.18698,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Nicolas",
+          "lat": 43.76048,
+          "lon": 7.1779,
+          "kind": 2
+        },
+        {
+          "name": "Pyramide de Falicon",
+          "lat": 43.74992,
+          "lon": 7.26038,
+          "kind": 2
+        },
+        {
+          "name": "Église arménienne Sainte-Marie",
+          "lat": 43.71474,
+          "lon": 7.22444,
+          "kind": 2
+        },
+        {
+          "name": "Palais Lascaris",
+          "lat": 43.69764,
+          "lon": 7.27726,
+          "kind": 2
+        }
       ]
     },
     {
@@ -330,6 +1071,248 @@
         [43.95435, 6.85386],
         [43.95192, 6.88101],
         [43.95689, 6.89424]
+      ],
+      "sights": [
+        {
+          "name": "Église Saint-Pons",
+          "lat": 44.39236,
+          "lon": 6.62851,
+          "kind": 2
+        },
+        {
+          "name": "Praloops",
+          "lat": 44.36871,
+          "lon": 6.60041,
+          "kind": 2
+        },
+        {
+          "name": "Cascade de Badieux",
+          "lat": 44.35008,
+          "lon": 6.63114,
+          "kind": 1
+        },
+        {
+          "name": "Saint-Jean des Agneliers",
+          "lat": 44.33325,
+          "lon": 6.58411,
+          "kind": 2
+        },
+        {
+          "name": "Cascade du Cimet",
+          "lat": 44.28759,
+          "lon": 6.68333,
+          "kind": 1
+        },
+        {
+          "name": "Font de La Baume",
+          "lat": 44.32747,
+          "lon": 6.70961,
+          "kind": 1
+        },
+        {
+          "name": "Grotte de la Couosto",
+          "lat": 44.2436,
+          "lon": 6.75251,
+          "kind": 1
+        },
+        {
+          "name": "Notre-Dame des Monts",
+          "lat": 44.2382,
+          "lon": 6.70639,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Sauveur",
+          "lat": 44.22382,
+          "lon": 6.74884,
+          "kind": 2
+        },
+        {
+          "name": "Cascade d'Aiglière",
+          "lat": 44.2119,
+          "lon": 6.74371,
+          "kind": 1
+        },
+        {
+          "name": "Chapelle Saint-Sébastien et Saint-Roch",
+          "lat": 44.18929,
+          "lon": 6.74843,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame de la Nativité",
+          "lat": 44.18872,
+          "lon": 6.74915,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame-du-Rosaire",
+          "lat": 44.1878,
+          "lon": 6.74915,
+          "kind": 2
+        },
+        {
+          "name": "Cabane du Drouit",
+          "lat": 44.17452,
+          "lon": 6.71675,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Jacques",
+          "lat": 44.15495,
+          "lon": 6.76814,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Barnabé",
+          "lat": 44.15216,
+          "lon": 6.74562,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Jean",
+          "lat": 44.14276,
+          "lon": 6.74775,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Martin",
+          "lat": 44.14244,
+          "lon": 6.76166,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Michel",
+          "lat": 44.14244,
+          "lon": 6.76231,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame-des-Grâces",
+          "lat": 44.12039,
+          "lon": 6.79645,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre",
+          "lat": 44.12129,
+          "lon": 6.79758,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Joseph",
+          "lat": 44.12884,
+          "lon": 6.83175,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Roch",
+          "lat": 44.11977,
+          "lon": 6.865,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sainte-Trinité",
+          "lat": 44.10037,
+          "lon": 6.88306,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Laurent",
+          "lat": 44.08773,
+          "lon": 6.83547,
+          "kind": 2
+        },
+        {
+          "name": "Notre-Dame de Buyei",
+          "lat": 44.08131,
+          "lon": 6.85961,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Brice",
+          "lat": 44.08684,
+          "lon": 6.89864,
+          "kind": 2
+        },
+        {
+          "name": "Pont de la Mariée",
+          "lat": 44.06086,
+          "lon": 6.85522,
+          "kind": 2
+        },
+        {
+          "name": "Gorges de Daluis",
+          "lat": 44.04592,
+          "lon": 6.84439,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Célestin",
+          "lat": 44.02469,
+          "lon": 6.80943,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre-et-Saint-Pons",
+          "lat": 44.00855,
+          "lon": 6.78231,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre et Saint-Paul",
+          "lat": 43.99432,
+          "lon": 6.7638,
+          "kind": 2
+        },
+        {
+          "name": "Grotte de la Lare",
+          "lat": 43.95911,
+          "lon": 6.73353,
+          "kind": 1
+        },
+        {
+          "name": "Pont de la Reine Jeanne",
+          "lat": 43.9584,
+          "lon": 6.73395,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Delphine",
+          "lat": 43.91406,
+          "lon": 6.80792,
+          "kind": 2
+        },
+        {
+          "name": "Cathédrale Notre-Dame-de-l'Assomption",
+          "lat": 43.95055,
+          "lon": 6.81241,
+          "kind": 2
+        },
+        {
+          "name": "Citadelle d'Entrevaux",
+          "lat": 43.9524,
+          "lon": 6.81356,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Estève",
+          "lat": 43.98498,
+          "lon": 6.85592,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Saturnin",
+          "lat": 43.92227,
+          "lon": 6.86945,
+          "kind": 2
+        },
+        {
+          "name": "Écomusée du pays de la Roudoule",
+          "lat": 43.97414,
+          "lon": 6.91891,
+          "kind": 2
+        }
       ]
     },
     {
@@ -406,6 +1389,248 @@
         [44.38546, 6.6068],
         [44.38488, 6.6487],
         [44.3867, 6.65312]
+      ],
+      "sights": [
+        {
+          "name": "Église Saint-André de Saint-André-d'Embrun",
+          "lat": 44.5868,
+          "lon": 6.5342,
+          "kind": 2
+        },
+        {
+          "name": "Tour Brune",
+          "lat": 44.56292,
+          "lon": 6.49543,
+          "kind": 1
+        },
+        {
+          "name": "Cathédrale Notre-Dame-du-Réal",
+          "lat": 44.56233,
+          "lon": 6.49505,
+          "kind": 2
+        },
+        {
+          "name": "Église de la Transfiguration",
+          "lat": 44.54104,
+          "lon": 6.51972,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Chaffrey",
+          "lat": 44.53993,
+          "lon": 6.49554,
+          "kind": 2
+        },
+        {
+          "name": "Château de Picomtal",
+          "lat": 44.53181,
+          "lon": 6.47258,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Laurent",
+          "lat": 44.53353,
+          "lon": 6.46989,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint Firmin",
+          "lat": 44.50069,
+          "lon": 6.45559,
+          "kind": 2
+        },
+        {
+          "name": "Église de Puy Saint-Eusèbe",
+          "lat": 44.56353,
+          "lon": 6.41905,
+          "kind": 2
+        },
+        {
+          "name": "Les Combettes",
+          "lat": 44.52864,
+          "lon": 6.40575,
+          "kind": 1
+        },
+        {
+          "name": "Belvédère de Pierre-Arnoux",
+          "lat": 44.51328,
+          "lon": 6.39879,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Jérôme",
+          "lat": 44.50434,
+          "lon": 6.35745,
+          "kind": 2
+        },
+        {
+          "name": "Belvédère des Curattes",
+          "lat": 44.52181,
+          "lon": 6.31163,
+          "kind": 1
+        },
+        {
+          "name": "Les Demoiselles Coiffées",
+          "lat": 44.49286,
+          "lon": 6.34418,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Jacques",
+          "lat": 44.51585,
+          "lon": 6.30369,
+          "kind": 2
+        },
+        {
+          "name": "Le Saut de Rolland",
+          "lat": 44.48931,
+          "lon": 6.27014,
+          "kind": 1
+        },
+        {
+          "name": "Église Notre-Dame de la Colle",
+          "lat": 44.4772,
+          "lon": 6.31388,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre",
+          "lat": 44.45735,
+          "lon": 6.29487,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Claude",
+          "lat": 44.48126,
+          "lon": 6.35638,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen de Villard",
+          "lat": 44.47669,
+          "lon": 6.3691,
+          "kind": 2
+        },
+        {
+          "name": "Fort Saint-Vincent",
+          "lat": 44.44648,
+          "lon": 6.37322,
+          "kind": 2
+        },
+        {
+          "name": "Roche Rousse",
+          "lat": 44.45208,
+          "lon": 6.39821,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sainte-Anne",
+          "lat": 44.44647,
+          "lon": 6.41968,
+          "kind": 2
+        },
+        {
+          "name": "Sommet de Dormillouse",
+          "lat": 44.4095,
+          "lon": 6.38649,
+          "kind": 1
+        },
+        {
+          "name": "Pont Romain du Lauzet",
+          "lat": 44.43145,
+          "lon": 6.43428,
+          "kind": 2
+        },
+        {
+          "name": "Roche L ' Abeille",
+          "lat": 44.42209,
+          "lon": 6.45787,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Julien",
+          "lat": 44.37431,
+          "lon": 6.46272,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame de la Salette",
+          "lat": 44.40103,
+          "lon": 6.48739,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Jaques-le-Majeur",
+          "lat": 44.40193,
+          "lon": 6.50466,
+          "kind": 2
+        },
+        {
+          "name": "Maison du Bois",
+          "lat": 44.40101,
+          "lon": 6.51262,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame de Lumière",
+          "lat": 44.41024,
+          "lon": 6.52746,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Jean",
+          "lat": 44.40685,
+          "lon": 6.5504,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Martin de Tours",
+          "lat": 44.39419,
+          "lon": 6.56652,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Joseph",
+          "lat": 44.40037,
+          "lon": 6.57382,
+          "kind": 2
+        },
+        {
+          "name": "Praloops",
+          "lat": 44.36871,
+          "lon": 6.60041,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pons",
+          "lat": 44.39236,
+          "lon": 6.62851,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Jacques et Saint-Philippe",
+          "lat": 44.39781,
+          "lon": 6.6436,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-des-Neiges",
+          "lat": 44.37948,
+          "lon": 6.69521,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre-et-Saint-Paul",
+          "lat": 44.36939,
+          "lon": 6.69126,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Étienne",
+          "lat": 44.3939,
+          "lon": 6.67834,
+          "kind": 2
+        }
       ]
     },
     {
@@ -492,6 +1717,254 @@
         [43.58413, 6.92317],
         [43.54151, 6.96104],
         [43.55133, 7.01277]
+      ],
+      "sights": [
+        {
+          "name": "Centre d'art Bastille",
+          "lat": 45.19872,
+          "lon": 5.72432,
+          "kind": 2
+        },
+        {
+          "name": "Château d'Uriage",
+          "lat": 45.14467,
+          "lon": 5.83232,
+          "kind": 2
+        },
+        {
+          "name": "Musée de la Révolution française",
+          "lat": 45.07569,
+          "lon": 5.77361,
+          "kind": 2
+        },
+        {
+          "name": "Pierre Percée",
+          "lat": 44.96508,
+          "lon": 5.75926,
+          "kind": 1
+        },
+        {
+          "name": "Chapelle Saint-Jean-Baptiste et Sainte-Catherine",
+          "lat": 44.92289,
+          "lon": 5.7691,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre",
+          "lat": 44.87556,
+          "lon": 5.8225,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Michel",
+          "lat": 44.81267,
+          "lon": 5.88184,
+          "kind": 2
+        },
+        {
+          "name": "Château de Lesdiguières",
+          "lat": 44.76695,
+          "lon": 5.97619,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre-aux-Liens",
+          "lat": 44.72614,
+          "lon": 6.02908,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Bonnet",
+          "lat": 44.68264,
+          "lon": 6.07357,
+          "kind": 2
+        },
+        {
+          "name": "Col Bayard",
+          "lat": 44.61382,
+          "lon": 6.08114,
+          "kind": 4,
+          "ele": 1246
+        },
+        {
+          "name": "Chapelle de Charance",
+          "lat": 44.57075,
+          "lon": 6.05764,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Roch",
+          "lat": 44.54718,
+          "lon": 6.06429,
+          "kind": 2
+        },
+        {
+          "name": "Château de Tallard",
+          "lat": 44.45986,
+          "lon": 6.05614,
+          "kind": 2
+        },
+        {
+          "name": "Pic de Crigne",
+          "lat": 44.40838,
+          "lon": 5.93748,
+          "kind": 1
+        },
+        {
+          "name": "Église Paroissiale",
+          "lat": 44.31723,
+          "lon": 5.87461,
+          "kind": 2
+        },
+        {
+          "name": "Grotte du Château de Saint-Didier n° 1",
+          "lat": 44.23093,
+          "lon": 5.93345,
+          "kind": 1
+        },
+        {
+          "name": "Chapelle Saint-Joseph",
+          "lat": 44.15795,
+          "lon": 5.98922,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Martin (Ruines)",
+          "lat": 44.11514,
+          "lon": 6.01496,
+          "kind": 2
+        },
+        {
+          "name": "Château de Fontenelle",
+          "lat": 44.03821,
+          "lon": 6.08387,
+          "kind": 2
+        },
+        {
+          "name": "Samten Dzong",
+          "lat": 44.08157,
+          "lon": 6.22402,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Vincent et Saint-Domnin",
+          "lat": 44.0845,
+          "lon": 6.21604,
+          "kind": 2
+        },
+        {
+          "name": "Col de L'Orme",
+          "lat": 44.03274,
+          "lon": 6.206,
+          "kind": 4,
+          "ele": 734
+        },
+        {
+          "name": "Creisset",
+          "lat": 43.9861,
+          "lon": 6.28709,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Antoine",
+          "lat": 43.98021,
+          "lon": 6.3122,
+          "kind": 2
+        },
+        {
+          "name": "Cathédrale Notre-Dame-de-l'Assomption",
+          "lat": 43.91317,
+          "lon": 6.40683,
+          "kind": 2
+        },
+        {
+          "name": "Col des Lèques",
+          "lat": 43.86546,
+          "lon": 6.464,
+          "kind": 4,
+          "ele": 1148
+        },
+        {
+          "name": "Dolmen des Pierres Blanches",
+          "lat": 43.89512,
+          "lon": 6.50637,
+          "kind": 2
+        },
+        {
+          "name": "Pont du Roc",
+          "lat": 43.84549,
+          "lon": 6.51656,
+          "kind": 2
+        },
+        {
+          "name": "Col de Luens",
+          "lat": 43.81861,
+          "lon": 6.587,
+          "kind": 4,
+          "ele": 1054
+        },
+        {
+          "name": "Chapelle Saint-Sauveur",
+          "lat": 43.81298,
+          "lon": 6.60018,
+          "kind": 2
+        },
+        {
+          "name": "Église de la Purification",
+          "lat": 43.77138,
+          "lon": 6.59962,
+          "kind": 2
+        },
+        {
+          "name": "Col de Valferrière",
+          "lat": 43.75104,
+          "lon": 6.72986,
+          "kind": 4,
+          "ele": 1169
+        },
+        {
+          "name": "Dolmen des Claps",
+          "lat": 43.72567,
+          "lon": 6.78597,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sainte-Hélène",
+          "lat": 43.75281,
+          "lon": 6.8618,
+          "kind": 2
+        },
+        {
+          "name": "Pas de la Faye",
+          "lat": 43.7111,
+          "lon": 6.83669,
+          "kind": 4,
+          "ele": 981
+        },
+        {
+          "name": "Dolmen et tombe en blocs de Mauvans Sud",
+          "lat": 43.67324,
+          "lon": 6.80778,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de l'Oratoire",
+          "lat": 43.65967,
+          "lon": 6.92368,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-de-Valcluse",
+          "lat": 43.61464,
+          "lon": 6.922,
+          "kind": 2
+        },
+        {
+          "name": "Château de la Napoule",
+          "lat": 43.52341,
+          "lon": 6.94286,
+          "kind": 2
+        }
       ]
     },
     {
@@ -578,6 +2051,253 @@
         [44.1418, 5.31848],
         [44.11349, 5.23981],
         [44.12435, 5.18061]
+      ],
+      "sights": [
+        {
+          "name": "Musée de l'OSUG",
+          "lat": 45.19283,
+          "lon": 5.76112,
+          "kind": 2
+        },
+        {
+          "name": "Château de Sassenage",
+          "lat": 45.21074,
+          "lon": 5.65936,
+          "kind": 2
+        },
+        {
+          "name": "Gouffre Berger",
+          "lat": 45.21917,
+          "lon": 5.60477,
+          "kind": 1
+        },
+        {
+          "name": "Grotte Vallier",
+          "lat": 45.1481,
+          "lon": 5.64386,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Pierre et Saint-Paul",
+          "lat": 45.12624,
+          "lon": 5.52682,
+          "kind": 2
+        },
+        {
+          "name": "Scialet de Malaterre",
+          "lat": 45.04301,
+          "lon": 5.49306,
+          "kind": 1
+        },
+        {
+          "name": "Porte du Diable",
+          "lat": 45.06243,
+          "lon": 5.43944,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Martin",
+          "lat": 45.02144,
+          "lon": 5.44312,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-de-l'Assomption",
+          "lat": 44.96805,
+          "lon": 5.4155,
+          "kind": 2
+        },
+        {
+          "name": "Grotte de la Draye Blanche",
+          "lat": 44.9396,
+          "lon": 5.38493,
+          "kind": 1
+        },
+        {
+          "name": "Église Notre-Dame",
+          "lat": 44.86935,
+          "lon": 5.41592,
+          "kind": 2
+        },
+        {
+          "name": "Col saint alexis",
+          "lat": 44.87258,
+          "lon": 5.40694,
+          "kind": 4
+        },
+        {
+          "name": "Trou de l'Aygue (entrée supérieure artificielle)",
+          "lat": 44.8437,
+          "lon": 5.44878,
+          "kind": 1
+        },
+        {
+          "name": "Col naturel du Col de Rousset",
+          "lat": 44.83752,
+          "lon": 5.40202,
+          "kind": 4
+        },
+        {
+          "name": "Grotte du Fernet",
+          "lat": 44.8269,
+          "lon": 5.40238,
+          "kind": 1
+        },
+        {
+          "name": "Musée Archéologique de Die du Diois",
+          "lat": 44.75501,
+          "lon": 5.36982,
+          "kind": 2
+        },
+        {
+          "name": "Ruines du château de Pontaix",
+          "lat": 44.75077,
+          "lon": 5.2631,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Anne",
+          "lat": 44.7319,
+          "lon": 5.28972,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Moirans",
+          "lat": 44.65767,
+          "lon": 5.22465,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle des Sadous",
+          "lat": 44.63034,
+          "lon": 5.25262,
+          "kind": 2
+        },
+        {
+          "name": "Col de Tavard",
+          "lat": 44.61882,
+          "lon": 5.29647,
+          "kind": 4,
+          "ele": 557
+        },
+        {
+          "name": "Église Saint-Nazaire et Saint-Celse",
+          "lat": 44.56955,
+          "lon": 5.27514,
+          "kind": 2
+        },
+        {
+          "name": "La Glacière",
+          "lat": 44.56237,
+          "lon": 5.22727,
+          "kind": 1
+        },
+        {
+          "name": "Col de Muse",
+          "lat": 44.53181,
+          "lon": 5.24589,
+          "kind": 4,
+          "ele": 932
+        },
+        {
+          "name": "Col de Lescou",
+          "lat": 44.50788,
+          "lon": 5.24876,
+          "kind": 4,
+          "ele": 829
+        },
+        {
+          "name": "Église Saint-Antoine",
+          "lat": 44.51619,
+          "lon": 5.21498,
+          "kind": 2
+        },
+        {
+          "name": "Col de la Sausse",
+          "lat": 44.48926,
+          "lon": 5.216,
+          "kind": 4,
+          "ele": 790
+        },
+        {
+          "name": "Église Saint-Pierre-et-Saint-Paul",
+          "lat": 44.47801,
+          "lon": 5.22147,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Ferréol",
+          "lat": 44.42798,
+          "lon": 5.21796,
+          "kind": 2
+        },
+        {
+          "name": "Pont Roman de Nyons",
+          "lat": 44.35991,
+          "lon": 5.14408,
+          "kind": 2
+        },
+        {
+          "name": "Grotte des Huguenots",
+          "lat": 44.36342,
+          "lon": 5.1067,
+          "kind": 1
+        },
+        {
+          "name": "Église Notre-Dame de Porporières",
+          "lat": 44.27212,
+          "lon": 5.15725,
+          "kind": 2
+        },
+        {
+          "name": "Église paroissiale Saint-Sauveur et Saint-Sixte",
+          "lat": 44.21668,
+          "lon": 5.08418,
+          "kind": 2
+        },
+        {
+          "name": "Église paroissiale Saint-Michel",
+          "lat": 44.17221,
+          "lon": 5.13239,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Roch",
+          "lat": 44.18236,
+          "lon": 5.16518,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Basile",
+          "lat": 44.19937,
+          "lon": 5.30133,
+          "kind": 2
+        },
+        {
+          "name": "Col des Tempêtes",
+          "lat": 44.17416,
+          "lon": 5.28375,
+          "kind": 4,
+          "ele": 1829
+        },
+        {
+          "name": "Chapelle Saint-Jean-Baptiste",
+          "lat": 44.19107,
+          "lon": 5.33338,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Jean",
+          "lat": 44.11549,
+          "lon": 5.30541,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Colombe",
+          "lat": 44.12,
+          "lon": 5.2232,
+          "kind": 2
+        }
       ]
     },
     {
@@ -659,6 +2379,249 @@
         [43.82677, 5.78717],
         [43.83065, 5.79142],
         [43.83417, 5.78394]
+      ],
+      "sights": [
+        {
+          "name": "Pont du Roc",
+          "lat": 43.84549,
+          "lon": 6.51656,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Thyrse",
+          "lat": 43.81174,
+          "lon": 6.50881,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Trophime",
+          "lat": 43.8136,
+          "lon": 6.48377,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Jean",
+          "lat": 43.83451,
+          "lon": 6.44765,
+          "kind": 2
+        },
+        {
+          "name": "Le Menhir",
+          "lat": 43.84782,
+          "lon": 6.44445,
+          "kind": 1
+        },
+        {
+          "name": "Pont de Soleils",
+          "lat": 43.80559,
+          "lon": 6.44143,
+          "kind": 2
+        },
+        {
+          "name": "Château de Valcros",
+          "lat": 43.79422,
+          "lon": 6.46245,
+          "kind": 2
+        },
+        {
+          "name": "Belvédère des Vautours",
+          "lat": 43.79089,
+          "lon": 6.41963,
+          "kind": 2
+        },
+        {
+          "name": "Point Sublime",
+          "lat": 43.79134,
+          "lon": 6.39927,
+          "kind": 1
+        },
+        {
+          "name": "Baume aux Pigeons",
+          "lat": 43.78416,
+          "lon": 6.39276,
+          "kind": 1
+        },
+        {
+          "name": "Belvédère de la Gorge de Guègues",
+          "lat": 43.75027,
+          "lon": 6.36373,
+          "kind": 1
+        },
+        {
+          "name": "Belvédère d'Eycharme",
+          "lat": 43.749,
+          "lon": 6.35419,
+          "kind": 1
+        },
+        {
+          "name": "Gorges du Verdon",
+          "lat": 43.74966,
+          "lon": 6.32856,
+          "kind": 2
+        },
+        {
+          "name": "Col d'Ayen",
+          "lat": 43.76899,
+          "lon": 6.31546,
+          "kind": 4,
+          "ele": 1031
+        },
+        {
+          "name": "Aven de l'Espérance",
+          "lat": 43.79059,
+          "lon": 6.29109,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Jean",
+          "lat": 43.77327,
+          "lon": 6.24168,
+          "kind": 2
+        },
+        {
+          "name": "Château d'Aiguines",
+          "lat": 43.77356,
+          "lon": 6.24135,
+          "kind": 2
+        },
+        {
+          "name": "Grottes de Saint-Maurin",
+          "lat": 43.79875,
+          "lon": 6.26319,
+          "kind": 1
+        },
+        {
+          "name": "Grotte-émergence de Saint-Maurin",
+          "lat": 43.79939,
+          "lon": 6.26434,
+          "kind": 1
+        },
+        {
+          "name": "Saint-Martin Prieure Ruines",
+          "lat": 43.82655,
+          "lon": 6.25685,
+          "kind": 2
+        },
+        {
+          "name": "Tréguier",
+          "lat": 43.83382,
+          "lon": 6.23467,
+          "kind": 1
+        },
+        {
+          "name": "Chapelle Sainte-Anne",
+          "lat": 43.84513,
+          "lon": 6.22238,
+          "kind": 2
+        },
+        {
+          "name": "Le Castillon ( Oppidum Ligure)",
+          "lat": 43.87598,
+          "lon": 6.20465,
+          "kind": 2
+        },
+        {
+          "name": "Monastère de segries",
+          "lat": 43.85629,
+          "lon": 6.17486,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Michel",
+          "lat": 43.86261,
+          "lon": 6.12729,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre",
+          "lat": 43.82546,
+          "lon": 6.12751,
+          "kind": 2
+        },
+        {
+          "name": "Château de Campagne",
+          "lat": 43.8203,
+          "lon": 6.1121,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Maxime",
+          "lat": 43.8208,
+          "lon": 6.09705,
+          "kind": 2
+        },
+        {
+          "name": "Colonnes romaines",
+          "lat": 43.81703,
+          "lon": 6.08827,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Marc",
+          "lat": 43.7819,
+          "lon": 6.01802,
+          "kind": 2
+        },
+        {
+          "name": "Château d'Allemagne-en-Provence",
+          "lat": 43.78327,
+          "lon": 6.00786,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Martin",
+          "lat": 43.77061,
+          "lon": 5.9454,
+          "kind": 2
+        },
+        {
+          "name": "Grottes de Saint-Sébastien",
+          "lat": 43.75524,
+          "lon": 5.88213,
+          "kind": 1
+        },
+        {
+          "name": "Église Notre-Dame des Ormeaux",
+          "lat": 43.75807,
+          "lon": 5.88388,
+          "kind": 2
+        },
+        {
+          "name": "Château des Templiers",
+          "lat": 43.7601,
+          "lon": 5.88374,
+          "kind": 2
+        },
+        {
+          "name": "Château Rousset",
+          "lat": 43.78667,
+          "lon": 5.82843,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sainte-Marie-Madeleine",
+          "lat": 43.82677,
+          "lon": 5.85825,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Joseph",
+          "lat": 43.82304,
+          "lon": 5.79696,
+          "kind": 2
+        },
+        {
+          "name": "Porte Saint-Joseph",
+          "lat": 43.81229,
+          "lon": 5.7496,
+          "kind": 2
+        },
+        {
+          "name": "Lou Paraïs - Maison Jean Giono",
+          "lat": 43.83346,
+          "lon": 5.7894,
+          "kind": 2
+        }
       ]
     },
     {
@@ -745,6 +2708,251 @@
         [44.05096, 5.16232],
         [44.06221, 5.09452],
         [44.05573, 5.0489]
+      ],
+      "sights": [
+        {
+          "name": "Pont Romain",
+          "lat": 44.23892,
+          "lon": 5.07467,
+          "kind": 2
+        },
+        {
+          "name": "Cathédrale Sainte-Marie-de-l'Assomption",
+          "lat": 44.23829,
+          "lon": 5.07467,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de Saint-Quenin",
+          "lat": 44.24445,
+          "lon": 5.06931,
+          "kind": 2
+        },
+        {
+          "name": "Église paroissiale Saint-Sauveur et Saint-Sixte",
+          "lat": 44.21668,
+          "lon": 5.08418,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Laurent",
+          "lat": 44.21844,
+          "lon": 5.12688,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Roch",
+          "lat": 44.19124,
+          "lon": 5.15899,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame-du-Groseau",
+          "lat": 44.16835,
+          "lon": 5.14336,
+          "kind": 2
+        },
+        {
+          "name": "Abbatiale Sainte-Madeleine",
+          "lat": 44.15182,
+          "lon": 5.0986,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame du Paty",
+          "lat": 44.13326,
+          "lon": 5.12122,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Roch",
+          "lat": 44.18236,
+          "lon": 5.16518,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sainte-Sidoine",
+          "lat": 44.17566,
+          "lon": 5.20136,
+          "kind": 2
+        },
+        {
+          "name": "Beaume de Bourtoumieou (incertain)",
+          "lat": 44.15173,
+          "lon": 5.23686,
+          "kind": 1
+        },
+        {
+          "name": "Jas de Gerbaud (incertain)",
+          "lat": 44.15092,
+          "lon": 5.24685,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Basile",
+          "lat": 44.19937,
+          "lon": 5.30133,
+          "kind": 2
+        },
+        {
+          "name": "Col des Tempêtes",
+          "lat": 44.17416,
+          "lon": 5.28375,
+          "kind": 4,
+          "ele": 1829
+        },
+        {
+          "name": "Ancienne antenne Vestale T2 du SSBS",
+          "lat": 44.1722,
+          "lon": 5.2887,
+          "kind": 2
+        },
+        {
+          "name": "Ancienne antenne Vestale T1 du SSBS",
+          "lat": 44.15789,
+          "lon": 5.33318,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Jean-Baptiste",
+          "lat": 44.19107,
+          "lon": 5.33338,
+          "kind": 2
+        },
+        {
+          "name": "Col de La Frache",
+          "lat": 44.16017,
+          "lon": 5.34829,
+          "kind": 4,
+          "ele": 1319
+        },
+        {
+          "name": "Borie de Pié Gu",
+          "lat": 44.16594,
+          "lon": 5.37658,
+          "kind": 2
+        },
+        {
+          "name": "Notre-Dame des Anges",
+          "lat": 44.13541,
+          "lon": 5.37446,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Aurèle",
+          "lat": 44.13015,
+          "lon": 5.42812,
+          "kind": 2
+        },
+        {
+          "name": "Aven d'Aurel",
+          "lat": 44.11699,
+          "lon": 5.42189,
+          "kind": 1
+        },
+        {
+          "name": "Aven Arnaudy",
+          "lat": 44.08692,
+          "lon": 5.41833,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Jean-Baptiste",
+          "lat": 44.04084,
+          "lon": 5.39374,
+          "kind": 2
+        },
+        {
+          "name": "Belvédère de la Nesque",
+          "lat": 44.07113,
+          "lon": 5.35625,
+          "kind": 1
+        },
+        {
+          "name": "Col de Notre-Dame des Abeilles",
+          "lat": 44.09312,
+          "lon": 5.32982,
+          "kind": 4,
+          "ele": 997
+        },
+        {
+          "name": "Chapelle Notre-Dame",
+          "lat": 44.09359,
+          "lon": 5.3248,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Jean",
+          "lat": 44.11549,
+          "lon": 5.30541,
+          "kind": 2
+        },
+        {
+          "name": "Gorges de la Nesque",
+          "lat": 44.0674,
+          "lon": 5.313,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame",
+          "lat": 44.09904,
+          "lon": 5.24262,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-André",
+          "lat": 44.05886,
+          "lon": 5.23521,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre et Saint-Paul",
+          "lat": 44.01672,
+          "lon": 5.22754,
+          "kind": 2
+        },
+        {
+          "name": "Ventoux Aventure",
+          "lat": 44.0682,
+          "lon": 5.19813,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-du-Calvias",
+          "lat": 44.02086,
+          "lon": 5.1598,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Nazaire et Saint-Celse",
+          "lat": 44.05663,
+          "lon": 5.1287,
+          "kind": 2
+        },
+        {
+          "name": "Château du Martinet",
+          "lat": 44.06477,
+          "lon": 5.07904,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Martin-de-Serres",
+          "lat": 44.08788,
+          "lon": 5.05362,
+          "kind": 2
+        },
+        {
+          "name": "Ancien hôtel-dieu",
+          "lat": 44.05153,
+          "lon": 5.04854,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle du Collège",
+          "lat": 44.05355,
+          "lon": 5.04648,
+          "kind": 2
+        }
       ]
     },
     {
@@ -831,6 +3039,248 @@
         [43.60957, 5.49572],
         [43.58126, 5.47145],
         [43.53125, 5.45389]
+      ],
+      "sights": [
+        {
+          "name": "Synagogue",
+          "lat": 43.94837,
+          "lon": 4.80899,
+          "kind": 2
+        },
+        {
+          "name": "Musée Pierre-de-Luxembourg",
+          "lat": 43.96373,
+          "lon": 4.79683,
+          "kind": 2
+        },
+        {
+          "name": "Chartreuse Notre-Dame-du-Val-de-Bénédiction",
+          "lat": 43.96651,
+          "lon": 4.79758,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle des Pénitents Gris",
+          "lat": 43.96552,
+          "lon": 4.79569,
+          "kind": 2
+        },
+        {
+          "name": "Tour Philippe le Bel",
+          "lat": 43.9586,
+          "lon": 4.79757,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame de la Paix",
+          "lat": 43.94608,
+          "lon": 4.84519,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame de Bon Repos",
+          "lat": 43.93582,
+          "lon": 4.87113,
+          "kind": 2
+        },
+        {
+          "name": "Château de Châteaurenard",
+          "lat": 43.88264,
+          "lon": 4.85694,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Baudile",
+          "lat": 43.87827,
+          "lon": 4.90217,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Symphorien",
+          "lat": 43.89463,
+          "lon": 4.94211,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame des Vignères",
+          "lat": 43.88044,
+          "lon": 5.00644,
+          "kind": 2
+        },
+        {
+          "name": "Château de Lagnes",
+          "lat": 43.89435,
+          "lon": 5.11497,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame-des-Anges",
+          "lat": 43.84618,
+          "lon": 5.11576,
+          "kind": 2
+        },
+        {
+          "name": "Musée de la Lavande",
+          "lat": 43.86985,
+          "lon": 5.14627,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pantaléon",
+          "lat": 43.88226,
+          "lon": 5.21427,
+          "kind": 2
+        },
+        {
+          "name": "Village des Bories",
+          "lat": 43.90714,
+          "lon": 5.18036,
+          "kind": 2
+        },
+        {
+          "name": "Moulin Jean de Marre",
+          "lat": 43.93341,
+          "lon": 5.22143,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint Jean-Baptiste",
+          "lat": 43.92566,
+          "lon": 5.2511,
+          "kind": 2
+        },
+        {
+          "name": "Sentier des Ocres",
+          "lat": 43.89978,
+          "lon": 5.29822,
+          "kind": 2
+        },
+        {
+          "name": "Fondation Blachère",
+          "lat": 43.85368,
+          "lon": 5.27291,
+          "kind": 2
+        },
+        {
+          "name": "Château du Marquis de Sade",
+          "lat": 43.83238,
+          "lon": 5.27209,
+          "kind": 2
+        },
+        {
+          "name": "Temple",
+          "lat": 43.83061,
+          "lon": 5.27188,
+          "kind": 2
+        },
+        {
+          "name": "Mur a escalader sur 3m",
+          "lat": 43.79398,
+          "lon": 5.28161,
+          "kind": 1
+        },
+        {
+          "name": "Prieuré de Saint-Symphorien",
+          "lat": 43.82272,
+          "lon": 5.35775,
+          "kind": 2
+        },
+        {
+          "name": "Le Fort de la Roche",
+          "lat": 43.80421,
+          "lon": 5.3555,
+          "kind": 2
+        },
+        {
+          "name": "Les Lauzières",
+          "lat": 43.77675,
+          "lon": 5.35296,
+          "kind": 2
+        },
+        {
+          "name": "Château de Lourmarin",
+          "lat": 43.76445,
+          "lon": 5.3591,
+          "kind": 2
+        },
+        {
+          "name": "Le Château de Cadenet",
+          "lat": 43.73747,
+          "lon": 5.37045,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-de-Purification",
+          "lat": 43.74655,
+          "lon": 5.31234,
+          "kind": 2
+        },
+        {
+          "name": "Oppidum du Castellar",
+          "lat": 43.73569,
+          "lon": 5.3977,
+          "kind": 2
+        },
+        {
+          "name": "Grotte dite de L'Escale",
+          "lat": 43.68273,
+          "lon": 5.392,
+          "kind": 1
+        },
+        {
+          "name": "Château de la Reine Laure",
+          "lat": 43.70406,
+          "lon": 5.4514,
+          "kind": 2
+        },
+        {
+          "name": "Henri Silvy",
+          "lat": 43.69361,
+          "lon": 5.50383,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Roch",
+          "lat": 43.68694,
+          "lon": 5.50627,
+          "kind": 2
+        },
+        {
+          "name": "Château de Meyrargues",
+          "lat": 43.63422,
+          "lon": 5.53003,
+          "kind": 2
+        },
+        {
+          "name": "Château de Fonscolombe",
+          "lat": 43.63924,
+          "lon": 5.46829,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Hippolyte",
+          "lat": 43.5975,
+          "lon": 5.48511,
+          "kind": 2
+        },
+        {
+          "name": "Église de l'Immaculée-Conception",
+          "lat": 43.59955,
+          "lon": 5.44504,
+          "kind": 2
+        },
+        {
+          "name": "Château de la Gaude",
+          "lat": 43.56884,
+          "lon": 5.4785,
+          "kind": 2
+        },
+        {
+          "name": "Bastide de Repentance",
+          "lat": 43.53935,
+          "lon": 5.47852,
+          "kind": 2
+        }
       ]
     },
     {
@@ -907,6 +3357,253 @@
         [43.72303, 7.28843],
         [43.7079, 7.28401],
         [43.69555, 7.27084]
+      ],
+      "sights": [
+        {
+          "name": "Grotta del Caviglione",
+          "lat": 43.78403,
+          "lon": 7.53494,
+          "kind": 1
+        },
+        {
+          "name": "Barma Grande",
+          "lat": 43.7837,
+          "lon": 7.53543,
+          "kind": 1
+        },
+        {
+          "name": "Musée Jean Cocteau - Collection Severin Wunderman",
+          "lat": 43.77474,
+          "lon": 7.50579,
+          "kind": 2
+        },
+        {
+          "name": "Église russe",
+          "lat": 43.76675,
+          "lon": 7.48491,
+          "kind": 2
+        },
+        {
+          "name": "Palais Carnolès",
+          "lat": 43.76663,
+          "lon": 7.48797,
+          "kind": 2
+        },
+        {
+          "name": "Olivier Millénaire de Roquebrune-Cap-Martin",
+          "lat": 43.76433,
+          "lon": 7.4633,
+          "kind": 2
+        },
+        {
+          "name": "Villa E-1027",
+          "lat": 43.7599,
+          "lon": 7.46318,
+          "kind": 2
+        },
+        {
+          "name": "Château des Grimaldi",
+          "lat": 43.76527,
+          "lon": 7.4596,
+          "kind": 2
+        },
+        {
+          "name": "Hôtel Winter Palace",
+          "lat": 43.7774,
+          "lon": 7.49132,
+          "kind": 2
+        },
+        {
+          "name": "Riviera Palace",
+          "lat": 43.77757,
+          "lon": 7.49006,
+          "kind": 2
+        },
+        {
+          "name": "Domaine des Colombières",
+          "lat": 43.78763,
+          "lon": 7.51691,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Sébastien",
+          "lat": 43.80675,
+          "lon": 7.49875,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Bernard",
+          "lat": 43.82633,
+          "lon": 7.49797,
+          "kind": 2
+        },
+        {
+          "name": "Pointe Siricocca",
+          "lat": 43.81646,
+          "lon": 7.45924,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Julien",
+          "lat": 43.83296,
+          "lon": 7.47185,
+          "kind": 2
+        },
+        {
+          "name": "Col de Castillon",
+          "lat": 43.83946,
+          "lon": 7.46018,
+          "kind": 4,
+          "ele": 728
+        },
+        {
+          "name": "Grotte de l’Albarea",
+          "lat": 43.85593,
+          "lon": 7.47711,
+          "kind": 1
+        },
+        {
+          "name": "Fort Suchet",
+          "lat": 43.86266,
+          "lon": 7.43392,
+          "kind": 2
+        },
+        {
+          "name": "Grotte de Suez",
+          "lat": 43.87796,
+          "lon": 7.4746,
+          "kind": 1
+        },
+        {
+          "name": "Cascade du Piaon",
+          "lat": 43.89937,
+          "lon": 7.4154,
+          "kind": 1
+        },
+        {
+          "name": "Notre-Dame de la Ménour",
+          "lat": 43.92187,
+          "lon": 7.41194,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Bernard",
+          "lat": 43.94152,
+          "lon": 7.41303,
+          "kind": 2
+        },
+        {
+          "name": "Fort de la Forca",
+          "lat": 43.99561,
+          "lon": 7.42975,
+          "kind": 2
+        },
+        {
+          "name": "Marmite de la Bollene",
+          "lat": 43.98245,
+          "lon": 7.34384,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Étienne de Saint-Colomban",
+          "lat": 43.95338,
+          "lon": 7.32413,
+          "kind": 2
+        },
+        {
+          "name": "La Pierre Plate",
+          "lat": 43.93127,
+          "lon": 7.35598,
+          "kind": 1
+        },
+        {
+          "name": "Pas de L'Escous",
+          "lat": 43.9057,
+          "lon": 7.36157,
+          "kind": 4,
+          "ele": 1008
+        },
+        {
+          "name": "Col de l'Orme",
+          "lat": 43.90052,
+          "lon": 7.36237,
+          "kind": 4,
+          "ele": 1005
+        },
+        {
+          "name": "Chapelle Notre-Dame-de-Bon-Coeur",
+          "lat": 43.88766,
+          "lon": 7.35295,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Honorat",
+          "lat": 43.84765,
+          "lon": 7.36388,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre-ès-Liens",
+          "lat": 43.83432,
+          "lon": 7.35501,
+          "kind": 2
+        },
+        {
+          "name": "Col de Nice",
+          "lat": 43.8269,
+          "lon": 7.35052,
+          "kind": 4,
+          "ele": 414
+        },
+        {
+          "name": "Col de Calaïson",
+          "lat": 43.81874,
+          "lon": 7.34531,
+          "kind": 4,
+          "ele": 450
+        },
+        {
+          "name": "Église Sainte-Marie-de-l'Assomption",
+          "lat": 43.80503,
+          "lon": 7.40413,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Maurice",
+          "lat": 43.78303,
+          "lon": 7.3382,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Augustin",
+          "lat": 43.76674,
+          "lon": 7.34407,
+          "kind": 2
+        },
+        {
+          "name": "Oppidum du Castellar",
+          "lat": 43.7303,
+          "lon": 7.34982,
+          "kind": 2
+        },
+        {
+          "name": "Château de Saint-André",
+          "lat": 43.74561,
+          "lon": 7.28857,
+          "kind": 2
+        },
+        {
+          "name": "Villa Schmitz",
+          "lat": 43.72174,
+          "lon": 7.2972,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-Auxiliatrice",
+          "lat": 43.70917,
+          "lon": 7.281,
+          "kind": 2
+        }
       ]
     },
     {
@@ -987,6 +3684,248 @@
         [43.76379, 7.48038],
         [43.77291, 7.49851],
         [43.77491, 7.4976]
+      ],
+      "sights": [
+        {
+          "name": "Musée Masséna",
+          "lat": 43.69513,
+          "lon": 7.25903,
+          "kind": 2
+        },
+        {
+          "name": "Palais Lascaris",
+          "lat": 43.69764,
+          "lon": 7.27726,
+          "kind": 2
+        },
+        {
+          "name": "Tour Saint-François",
+          "lat": 43.69946,
+          "lon": 7.27851,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de la Dormition-de-la-Vierge",
+          "lat": 43.69937,
+          "lon": 7.28446,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame du Port",
+          "lat": 43.69889,
+          "lon": 7.28519,
+          "kind": 2
+        },
+        {
+          "name": "Musée Terra Amata",
+          "lat": 43.6978,
+          "lon": 7.28929,
+          "kind": 2
+        },
+        {
+          "name": "Notre-Dame de Bon Conseil",
+          "lat": 43.70643,
+          "lon": 7.29459,
+          "kind": 2
+        },
+        {
+          "name": "Grotte préhistorique du Lazaret",
+          "lat": 43.69073,
+          "lon": 7.29481,
+          "kind": 1
+        },
+        {
+          "name": "Fort du Mont-Alban",
+          "lat": 43.70132,
+          "lon": 7.30013,
+          "kind": 2
+        },
+        {
+          "name": "Col de Villefranche",
+          "lat": 43.70594,
+          "lon": 7.30099,
+          "kind": 4
+        },
+        {
+          "name": "Citadelle Saint-Elme",
+          "lat": 43.70136,
+          "lon": 7.31054,
+          "kind": 2
+        },
+        {
+          "name": "Villa Schmitz",
+          "lat": 43.72174,
+          "lon": 7.2972,
+          "kind": 2
+        },
+        {
+          "name": "Villa Ephrussi de Rothschild",
+          "lat": 43.69659,
+          "lon": 7.32835,
+          "kind": 2
+        },
+        {
+          "name": "Villa Kérylos",
+          "lat": 43.70329,
+          "lon": 7.33386,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Grat",
+          "lat": 43.71605,
+          "lon": 7.33429,
+          "kind": 2
+        },
+        {
+          "name": "Église de la Très Sainte-Trinité",
+          "lat": 43.74348,
+          "lon": 7.31447,
+          "kind": 2
+        },
+        {
+          "name": "Oppidum du Castellar",
+          "lat": 43.7303,
+          "lon": 7.34982,
+          "kind": 2
+        },
+        {
+          "name": "Château de Drap",
+          "lat": 43.75857,
+          "lon": 7.34778,
+          "kind": 2
+        },
+        {
+          "name": "Fort de la Revère",
+          "lat": 43.73907,
+          "lon": 7.36679,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Laurent",
+          "lat": 43.72643,
+          "lon": 7.38294,
+          "kind": 2
+        },
+        {
+          "name": "Villa Les Camélias",
+          "lat": 43.72064,
+          "lon": 7.39785,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre Dame du Cap Fleuri",
+          "lat": 43.72174,
+          "lon": 7.40477,
+          "kind": 2
+        },
+        {
+          "name": "chapelle principale",
+          "lat": 43.75293,
+          "lon": 7.38201,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Nicolas",
+          "lat": 43.72802,
+          "lon": 7.41831,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle des Pénitents blancs",
+          "lat": 43.77884,
+          "lon": 7.38139,
+          "kind": 2
+        },
+        {
+          "name": "Palais princier de Monaco",
+          "lat": 43.73137,
+          "lon": 7.42021,
+          "kind": 2
+        },
+        {
+          "name": "Synagogue de Monaco",
+          "lat": 43.73797,
+          "lon": 7.42342,
+          "kind": 2
+        },
+        {
+          "name": "Jardin Japonais",
+          "lat": 43.74237,
+          "lon": 7.43101,
+          "kind": 2
+        },
+        {
+          "name": "Église des Carmes",
+          "lat": 43.74877,
+          "lon": 7.4348,
+          "kind": 2
+        },
+        {
+          "name": "Le Méridien • Beach",
+          "lat": 43.74756,
+          "lon": 7.43628,
+          "kind": 2
+        },
+        {
+          "name": "La Vigie",
+          "lat": 43.75129,
+          "lon": 7.44514,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Lazare",
+          "lat": 43.78998,
+          "lon": 7.44504,
+          "kind": 2
+        },
+        {
+          "name": "Château des Grimaldi",
+          "lat": 43.76527,
+          "lon": 7.4596,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Marguerite",
+          "lat": 43.76483,
+          "lon": 7.46014,
+          "kind": 2
+        },
+        {
+          "name": "Villa E-1027",
+          "lat": 43.7599,
+          "lon": 7.46318,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Martin du Cap",
+          "lat": 43.75861,
+          "lon": 7.47418,
+          "kind": 2
+        },
+        {
+          "name": "Église russe",
+          "lat": 43.76675,
+          "lon": 7.48491,
+          "kind": 2
+        },
+        {
+          "name": "Palais Carnolès",
+          "lat": 43.76663,
+          "lon": 7.48797,
+          "kind": 2
+        },
+        {
+          "name": "Musée Jean Cocteau - Collection Severin Wunderman",
+          "lat": 43.77474,
+          "lon": 7.50579,
+          "kind": 2
+        },
+        {
+          "name": "Grotta del Caviglione",
+          "lat": 43.78403,
+          "lon": 7.53494,
+          "kind": 1
+        }
       ]
     },
     {
@@ -1071,6 +4010,252 @@
         [43.00864, 1.41688],
         [43.01013, 1.51735],
         [42.96643, 1.60776]
+      ],
+      "sights": [
+        {
+          "name": "Domaine du sanctuaire de Lourdes",
+          "lat": 43.09738,
+          "lon": -0.05875,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Hippolyte",
+          "lat": 43.03796,
+          "lon": -0.07276,
+          "kind": 2
+        },
+        {
+          "name": "Château de Beaucens",
+          "lat": 42.97177,
+          "lon": -0.05952,
+          "kind": 2
+        },
+        {
+          "name": "Abbaye de Saint-Orens",
+          "lat": 42.95137,
+          "lon": -0.0348,
+          "kind": 2
+        },
+        {
+          "name": "Église fortifiée Saint-André",
+          "lat": 42.87153,
+          "lon": -0.00328,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Marie-Madeleine",
+          "lat": 42.89672,
+          "lon": 0.0643,
+          "kind": 2
+        },
+        {
+          "name": "Ourdégon",
+          "lat": 42.91757,
+          "lon": 0.09362,
+          "kind": 1
+        },
+        {
+          "name": "Chapelle Notre-Dame des Neiges",
+          "lat": 42.91027,
+          "lon": 0.17716,
+          "kind": 2
+        },
+        {
+          "name": "Cascade du Pich",
+          "lat": 42.92093,
+          "lon": 0.24703,
+          "kind": 1
+        },
+        {
+          "name": "Gouffre d'Arris",
+          "lat": 43.01856,
+          "lon": 0.22126,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Vincent-de-Paul",
+          "lat": 42.96298,
+          "lon": 0.24972,
+          "kind": 2
+        },
+        {
+          "name": "Col d'Aspin",
+          "lat": 42.94233,
+          "lon": 0.32738,
+          "kind": 4,
+          "ele": 1489
+        },
+        {
+          "name": "Tour de la Prison",
+          "lat": 42.96555,
+          "lon": 0.37808,
+          "kind": 2
+        },
+        {
+          "name": "Grotte du Noisetier",
+          "lat": 42.92759,
+          "lon": 0.37136,
+          "kind": 1
+        },
+        {
+          "name": "Église Sainte-Eulalie",
+          "lat": 42.88476,
+          "lon": 0.36744,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Mercurial",
+          "lat": 42.83404,
+          "lon": 0.40311,
+          "kind": 2
+        },
+        {
+          "name": "Tour de Moulor",
+          "lat": 42.80678,
+          "lon": 0.41728,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Pé de la Moraine",
+          "lat": 42.80709,
+          "lon": 0.51084,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Aventin-de-Larboust",
+          "lat": 42.8068,
+          "lon": 0.54807,
+          "kind": 2
+        },
+        {
+          "name": "Château Lafont",
+          "lat": 42.78932,
+          "lon": 0.59175,
+          "kind": 2
+        },
+        {
+          "name": "Église de la Nativité-de-Marie",
+          "lat": 42.85888,
+          "lon": 0.60118,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Marie",
+          "lat": 42.91259,
+          "lon": 0.65777,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Georges",
+          "lat": 42.91785,
+          "lon": 0.71661,
+          "kind": 2
+        },
+        {
+          "name": "Gouffre de Cagire",
+          "lat": 42.94612,
+          "lon": 0.76522,
+          "kind": 1
+        },
+        {
+          "name": "Col de Lagues",
+          "lat": 42.91395,
+          "lon": 0.76694,
+          "kind": 4,
+          "ele": 1415
+        },
+        {
+          "name": "Col de la Clin",
+          "lat": 42.91915,
+          "lon": 0.77588,
+          "kind": 4,
+          "ele": 1245
+        },
+        {
+          "name": "Laverie",
+          "lat": 42.89627,
+          "lon": 0.8134,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de Coué",
+          "lat": 42.96114,
+          "lon": 0.79467,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de Speregas",
+          "lat": 42.94432,
+          "lon": 0.86424,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Germier",
+          "lat": 42.93679,
+          "lon": 0.96663,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-de-Tramesaygues",
+          "lat": 42.93006,
+          "lon": 1.02389,
+          "kind": 2
+        },
+        {
+          "name": "Pile Romaine de Luzenac",
+          "lat": 42.95572,
+          "lon": 1.0836,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Jean",
+          "lat": 42.96598,
+          "lon": 1.15912,
+          "kind": 2
+        },
+        {
+          "name": "Grotte des Trois Frères",
+          "lat": 43.03222,
+          "lon": 1.21161,
+          "kind": 1
+        },
+        {
+          "name": "Abbaye Saint-Laurent de Combelongue",
+          "lat": 42.98809,
+          "lon": 1.27649,
+          "kind": 2
+        },
+        {
+          "name": "Sabart",
+          "lat": 42.97499,
+          "lon": 1.35108,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Luc",
+          "lat": 42.9936,
+          "lon": 1.44191,
+          "kind": 2
+        },
+        {
+          "name": "Grotte du Portel",
+          "lat": 43.03137,
+          "lon": 1.5404,
+          "kind": 1
+        },
+        {
+          "name": "Col del Bouich",
+          "lat": 42.9933,
+          "lon": 1.54787,
+          "kind": 4,
+          "ele": 599
+        },
+        {
+          "name": "Rivière souterraine de Labouïche",
+          "lat": 43.00302,
+          "lon": 1.57445,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1142,6 +4327,248 @@
         [43.18867, -1.25232],
         [43.17828, -1.25906],
         [43.16316, -1.23818]
+      ],
+      "sights": [
+        {
+          "name": "Château Boulard",
+          "lat": 43.47498,
+          "lon": -1.55899,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Eugénie",
+          "lat": 43.48282,
+          "lon": -1.56448,
+          "kind": 2
+        },
+        {
+          "name": "Église orthodoxe russe",
+          "lat": 43.48615,
+          "lon": -1.55503,
+          "kind": 2
+        },
+        {
+          "name": "Phare de la Pointe Saint-Martin",
+          "lat": 43.49376,
+          "lon": -1.55388,
+          "kind": 1
+        },
+        {
+          "name": "Grotte de la Chambre d'Amour",
+          "lat": 43.4982,
+          "lon": -1.54312,
+          "kind": 1
+        },
+        {
+          "name": "Église Sainte-Marie d'Anglet",
+          "lat": 43.49475,
+          "lon": -1.53529,
+          "kind": 2
+        },
+        {
+          "name": "Lavoir du Houndaro",
+          "lat": 43.47111,
+          "lon": -1.52452,
+          "kind": 2
+        },
+        {
+          "name": "Château d'Ilbarritz",
+          "lat": 43.45872,
+          "lon": -1.57644,
+          "kind": 2
+        },
+        {
+          "name": "Moulin",
+          "lat": 43.46225,
+          "lon": -1.51782,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Barthélemy",
+          "lat": 43.4465,
+          "lon": -1.51013,
+          "kind": 2
+        },
+        {
+          "name": "Musée du Château d'Arcangues",
+          "lat": 43.43599,
+          "lon": -1.51705,
+          "kind": 2
+        },
+        {
+          "name": "Croix des Anglais",
+          "lat": 43.38753,
+          "lon": -1.49256,
+          "kind": 1
+        },
+        {
+          "name": "Redoute de Souhamendi",
+          "lat": 43.33114,
+          "lon": -1.58672,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sainte-Catherine",
+          "lat": 43.31679,
+          "lon": -1.56079,
+          "kind": 2
+        },
+        {
+          "name": "Adventure Côte-Basque-Paramoteur",
+          "lat": 43.33971,
+          "lon": -1.53099,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame de l'Assomption",
+          "lat": 43.30685,
+          "lon": -1.49911,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame de l'Aubépine",
+          "lat": 43.30335,
+          "lon": -1.48236,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Jacques",
+          "lat": 43.34115,
+          "lon": -1.47327,
+          "kind": 2
+        },
+        {
+          "name": "Pont Romain",
+          "lat": 43.34053,
+          "lon": -1.45377,
+          "kind": 2
+        },
+        {
+          "name": "Gallerie Cortez",
+          "lat": 43.34169,
+          "lon": -1.442,
+          "kind": 2
+        },
+        {
+          "name": "Villa Arnaga",
+          "lat": 43.36768,
+          "lon": -1.42259,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame-des-Sources",
+          "lat": 43.35421,
+          "lon": -1.38578,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Fructueux",
+          "lat": 43.32577,
+          "lon": -1.40455,
+          "kind": 2
+        },
+        {
+          "name": "Pas de Roland",
+          "lat": 43.31414,
+          "lon": -1.40039,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Étienne",
+          "lat": 43.33323,
+          "lon": -1.31674,
+          "kind": 2
+        },
+        {
+          "name": "Harluxeeta",
+          "lat": 43.2901,
+          "lon": -1.39783,
+          "kind": 2
+        },
+        {
+          "name": "Harpeko Saindua",
+          "lat": 43.26501,
+          "lon": -1.38923,
+          "kind": 1
+        },
+        {
+          "name": "Église de l'Assomption",
+          "lat": 43.26551,
+          "lon": -1.34787,
+          "kind": 2
+        },
+        {
+          "name": "Baigura",
+          "lat": 43.2905,
+          "lon": -1.29289,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Martin",
+          "lat": 43.23658,
+          "lon": -1.31393,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Julien-d'Antioche",
+          "lat": 43.24182,
+          "lon": -1.28361,
+          "kind": 2
+        },
+        {
+          "name": "Don Quichosse Espadrilles",
+          "lat": 43.2327,
+          "lon": -1.29923,
+          "kind": 2
+        },
+        {
+          "name": "Jara",
+          "lat": 43.20007,
+          "lon": -1.29291,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen Artxuita",
+          "lat": 43.18942,
+          "lon": -1.27197,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Vincent",
+          "lat": 43.17848,
+          "lon": -1.29985,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-André",
+          "lat": 43.17676,
+          "lon": -1.27846,
+          "kind": 2
+        },
+        {
+          "name": "Porte d'Espagne",
+          "lat": 43.1605,
+          "lon": -1.2383,
+          "kind": 2
+        },
+        {
+          "name": "Porte St Jacques",
+          "lat": 43.16367,
+          "lon": -1.23438,
+          "kind": 2
+        },
+        {
+          "name": "Citadelle de Saint Jean Pied de Port",
+          "lat": 43.16241,
+          "lon": -1.23405,
+          "kind": 2
+        },
+        {
+          "name": "Château Larrea",
+          "lat": 43.17063,
+          "lon": -1.22687,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1228,6 +4655,255 @@
         [44.18256, 3.02842],
         [44.15754, 3.09754],
         [44.09883, 3.07847]
+      ],
+      "sights": [
+        {
+          "name": "Église Notre-Dame de la Rivière",
+          "lat": 45.74931,
+          "lon": 3.08527,
+          "kind": 2
+        },
+        {
+          "name": "Temple de Mercure",
+          "lat": 45.77172,
+          "lon": 2.96458,
+          "kind": 2
+        },
+        {
+          "name": "Église de la Visitation",
+          "lat": 45.72772,
+          "lon": 2.99192,
+          "kind": 2
+        },
+        {
+          "name": "Col de la Moréno",
+          "lat": 45.74155,
+          "lon": 2.94885,
+          "kind": 4,
+          "ele": 1102
+        },
+        {
+          "name": "Château de Cordès",
+          "lat": 45.70242,
+          "lon": 2.83943,
+          "kind": 2
+        },
+        {
+          "name": "Roche Sanadoire",
+          "lat": 45.63304,
+          "lon": 2.8214,
+          "kind": 2
+        },
+        {
+          "name": "Col de Guéry",
+          "lat": 45.62111,
+          "lon": 2.82067,
+          "kind": 4,
+          "ele": 1268
+        },
+        {
+          "name": "Puy de Cliergue",
+          "lat": 45.54367,
+          "lon": 2.80177,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Étienne",
+          "lat": 45.60618,
+          "lon": 2.6876,
+          "kind": 2
+        },
+        {
+          "name": "Église de la Translation-de-Saint-Martin",
+          "lat": 45.52542,
+          "lon": 2.55016,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Jacques-le-Majeur",
+          "lat": 45.4366,
+          "lon": 2.53427,
+          "kind": 2
+        },
+        {
+          "name": "Château de Pierrefitte",
+          "lat": 45.41028,
+          "lon": 2.46539,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Ferréol",
+          "lat": 45.33951,
+          "lon": 2.56558,
+          "kind": 2
+        },
+        {
+          "name": "Château fort d'Apchon",
+          "lat": 45.25001,
+          "lon": 2.69456,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Hippolyte",
+          "lat": 45.22324,
+          "lon": 2.70455,
+          "kind": 2
+        },
+        {
+          "name": "Zone nordique du Haut Cantal Puy Mary - Lascourt",
+          "lat": 45.14533,
+          "lon": 2.68753,
+          "kind": 2
+        },
+        {
+          "name": "Col de Serre",
+          "lat": 45.13057,
+          "lon": 2.70179,
+          "kind": 4,
+          "ele": 1364
+        },
+        {
+          "name": "Col d'Eylac",
+          "lat": 45.11085,
+          "lon": 2.68495,
+          "kind": 4,
+          "ele": 1460
+        },
+        {
+          "name": "Le Puy Mary",
+          "lat": 45.10932,
+          "lon": 2.6761,
+          "kind": 1
+        },
+        {
+          "name": "Cascade de Liadouze",
+          "lat": 45.07849,
+          "lon": 2.66887,
+          "kind": 1
+        },
+        {
+          "name": "Col du Pertus",
+          "lat": 45.05809,
+          "lon": 2.67363,
+          "kind": 4,
+          "ele": 1309
+        },
+        {
+          "name": "Église Saint-Jacques",
+          "lat": 45.05252,
+          "lon": 2.71179,
+          "kind": 2
+        },
+        {
+          "name": "Col de Cère",
+          "lat": 45.0808,
+          "lon": 2.73916,
+          "kind": 4,
+          "ele": 1294
+        },
+        {
+          "name": "Col de Font de Cère",
+          "lat": 45.0852,
+          "lon": 2.73309,
+          "kind": 4,
+          "ele": 1289
+        },
+        {
+          "name": "Château d'Anterroches",
+          "lat": 45.10611,
+          "lon": 2.85221,
+          "kind": 2
+        },
+        {
+          "name": "Commanderie des Templiers",
+          "lat": 45.12043,
+          "lon": 2.9596,
+          "kind": 2
+        },
+        {
+          "name": "Château du Sailhant",
+          "lat": 45.06902,
+          "lon": 3.0418,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-de-la-Nativité",
+          "lat": 45.00079,
+          "lon": 3.06384,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de Lanau",
+          "lat": 44.89159,
+          "lon": 2.99848,
+          "kind": 2
+        },
+        {
+          "name": "Tour du Couffour",
+          "lat": 44.8443,
+          "lon": 3.00222,
+          "kind": 2
+        },
+        {
+          "name": "Micro-Musée du Clairon Rolland",
+          "lat": 44.77273,
+          "lon": 2.88533,
+          "kind": 2
+        },
+        {
+          "name": "Château d'Oustrac",
+          "lat": 44.6841,
+          "lon": 2.83618,
+          "kind": 2
+        },
+        {
+          "name": "Château de Masse",
+          "lat": 44.53958,
+          "lon": 2.78621,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Védard",
+          "lat": 44.55319,
+          "lon": 2.73175,
+          "kind": 2
+        },
+        {
+          "name": "Site archéologique du dolmen de la Fontaine-aux-Chiens",
+          "lat": 44.47345,
+          "lon": 2.75562,
+          "kind": 2
+        },
+        {
+          "name": "Château de Bertholène",
+          "lat": 44.39554,
+          "lon": 2.77921,
+          "kind": 2
+        },
+        {
+          "name": "Château de Lugans",
+          "lat": 44.36764,
+          "lon": 2.88992,
+          "kind": 2
+        },
+        {
+          "name": "Château de Vézins-de-Lévézou",
+          "lat": 44.27963,
+          "lon": 2.95305,
+          "kind": 2
+        },
+        {
+          "name": "Micropolis",
+          "lat": 44.21458,
+          "lon": 2.9889,
+          "kind": 2
+        },
+        {
+          "name": "Site archéologique de la Graufesenque",
+          "lat": 44.09631,
+          "lon": 3.09263,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1314,6 +4990,249 @@
         [44.15685, 3.84059],
         [44.12548, 3.88856],
         [44.10568, 3.88682]
+      ],
+      "sights": [
+        {
+          "name": "Site archéologique de la Graufesenque",
+          "lat": 44.09631,
+          "lon": 3.09263,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Pierre",
+          "lat": 44.13936,
+          "lon": 3.10561,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Vincent",
+          "lat": 44.16091,
+          "lon": 3.10188,
+          "kind": 2
+        },
+        {
+          "name": "Ancienne église Saint-Martin",
+          "lat": 44.18965,
+          "lon": 3.1438,
+          "kind": 2
+        },
+        {
+          "name": "Château de Peyrelade",
+          "lat": 44.19493,
+          "lon": 3.14797,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame des Champs",
+          "lat": 44.19882,
+          "lon": 3.17971,
+          "kind": 2
+        },
+        {
+          "name": "Château de Mostuéjouls",
+          "lat": 44.20373,
+          "lon": 3.18371,
+          "kind": 2
+        },
+        {
+          "name": "Château de Triadou",
+          "lat": 44.18804,
+          "lon": 3.2061,
+          "kind": 2
+        },
+        {
+          "name": "Prieuré de Saint-Jean-de-Balmes",
+          "lat": 44.17273,
+          "lon": 3.24697,
+          "kind": 2
+        },
+        {
+          "name": "Église Paroissiale Saint-Pierre",
+          "lat": 44.22617,
+          "lon": 3.27308,
+          "kind": 2
+        },
+        {
+          "name": "Aven de Baume Fromagère",
+          "lat": 44.2345,
+          "lon": 3.26529,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Romain",
+          "lat": 44.27315,
+          "lon": 3.21591,
+          "kind": 2
+        },
+        {
+          "name": "Grotte des Baumes Chaudes",
+          "lat": 44.31114,
+          "lon": 3.24302,
+          "kind": 1
+        },
+        {
+          "name": "Les Détroits",
+          "lat": 44.29969,
+          "lon": 3.27739,
+          "kind": 1
+        },
+        {
+          "name": "Église Notre-Dame-de-l'Assomption",
+          "lat": 44.29036,
+          "lon": 3.3301,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Côme",
+          "lat": 44.30266,
+          "lon": 3.38181,
+          "kind": 2
+        },
+        {
+          "name": "Château de la Caze",
+          "lat": 44.33551,
+          "lon": 3.35898,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame-de-Cénaret",
+          "lat": 44.335,
+          "lon": 3.38387,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen du Buisson",
+          "lat": 44.33043,
+          "lon": 3.42679,
+          "kind": 2
+        },
+        {
+          "name": "Ermitage de Sainte-Énimie",
+          "lat": 44.36418,
+          "lon": 3.40762,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen de Peyrelevade",
+          "lat": 44.39638,
+          "lon": 3.446,
+          "kind": 2
+        },
+        {
+          "name": "Château de Prades",
+          "lat": 44.35044,
+          "lon": 3.45921,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre-et-Saint-Paul",
+          "lat": 44.33651,
+          "lon": 3.50454,
+          "kind": 2
+        },
+        {
+          "name": "Collégiale Notre-Dame",
+          "lat": 44.36873,
+          "lon": 3.52447,
+          "kind": 2
+        },
+        {
+          "name": "Pont de Quézac",
+          "lat": 44.37385,
+          "lon": 3.52523,
+          "kind": 2
+        },
+        {
+          "name": "Menhirs de la Can d'Issanges",
+          "lat": 44.3721,
+          "lon": 3.5848,
+          "kind": 2
+        },
+        {
+          "name": "Collégiale Notre-Dame-de-l'Assomption",
+          "lat": 44.34331,
+          "lon": 3.60612,
+          "kind": 2
+        },
+        {
+          "name": "Maison de la Congrégation de la Présentation",
+          "lat": 44.32433,
+          "lon": 3.59336,
+          "kind": 2
+        },
+        {
+          "name": "Baume Giral",
+          "lat": 44.29592,
+          "lon": 3.62822,
+          "kind": 1
+        },
+        {
+          "name": "Château de Saint-Julien-d'Arpaon",
+          "lat": 44.29839,
+          "lon": 3.66785,
+          "kind": 2
+        },
+        {
+          "name": "Temple",
+          "lat": 44.27054,
+          "lon": 3.74253,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-de-la-Salette",
+          "lat": 44.28,
+          "lon": 3.83979,
+          "kind": 2
+        },
+        {
+          "name": "Temple de Saint-Hilaire-de-Lavit",
+          "lat": 44.25396,
+          "lon": 3.86464,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Germain",
+          "lat": 44.21838,
+          "lon": 3.80919,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen du Plo de Cabanelle (B)",
+          "lat": 44.21017,
+          "lon": 3.87459,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Étienne",
+          "lat": 44.16771,
+          "lon": 3.84164,
+          "kind": 2
+        },
+        {
+          "name": "Les trines",
+          "lat": 44.1675,
+          "lon": 3.88954,
+          "kind": 2
+        },
+        {
+          "name": "Les Serclières",
+          "lat": 44.14382,
+          "lon": 3.8683,
+          "kind": 2
+        },
+        {
+          "name": "Col de Lamira",
+          "lat": 44.11898,
+          "lon": 3.88962,
+          "kind": 4,
+          "ele": 280
+        },
+        {
+          "name": "Pont Vieux",
+          "lat": 44.10447,
+          "lon": 3.88045,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1390,6 +5309,250 @@
         [44.15706, 3.54549],
         [44.14509, 3.5627],
         [44.12161, 3.575]
+      ],
+      "sights": [
+        {
+          "name": "Cathédrale Notre-Dame et Saint-Privat",
+          "lat": 44.51733,
+          "lon": 3.49874,
+          "kind": 2
+        },
+        {
+          "name": "Jean-Antoine Chaptal",
+          "lat": 44.51699,
+          "lon": 3.49898,
+          "kind": 2
+        },
+        {
+          "name": "Statue d'Urbain V",
+          "lat": 44.51714,
+          "lon": 3.49811,
+          "kind": 2
+        },
+        {
+          "name": "Roussel Théophile",
+          "lat": 44.51955,
+          "lon": 3.49732,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-François-de-Sales du grand Séminaire",
+          "lat": 44.52191,
+          "lon": 3.49541,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Christophe",
+          "lat": 44.53585,
+          "lon": 3.54982,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame de la Rouvière",
+          "lat": 44.54433,
+          "lon": 3.58882,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre",
+          "lat": 44.50056,
+          "lon": 3.5736,
+          "kind": 2
+        },
+        {
+          "name": "Le Tombeau romain",
+          "lat": 44.50003,
+          "lon": 3.57139,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Énimie",
+          "lat": 44.50557,
+          "lon": 3.66423,
+          "kind": 2
+        },
+        {
+          "name": "La Tour du Villaret",
+          "lat": 44.52822,
+          "lon": 3.6881,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Julien",
+          "lat": 44.50125,
+          "lon": 3.68486,
+          "kind": 2
+        },
+        {
+          "name": "Château du Tournel",
+          "lat": 44.50119,
+          "lon": 3.70415,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Privat",
+          "lat": 44.48172,
+          "lon": 3.70526,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Étienne",
+          "lat": 44.47381,
+          "lon": 3.77288,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-de-la-Nativité",
+          "lat": 44.45953,
+          "lon": 3.78702,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de la Trinité du Chalet",
+          "lat": 44.44964,
+          "lon": 3.74671,
+          "kind": 2
+        },
+        {
+          "name": "Col de Finiels",
+          "lat": 44.4241,
+          "lon": 3.76853,
+          "kind": 4,
+          "ele": 1541
+        },
+        {
+          "name": "Menhir dit la Pierre Plantée",
+          "lat": 44.34452,
+          "lon": 3.71344,
+          "kind": 2
+        },
+        {
+          "name": "Église de l'Immaculée-Conception",
+          "lat": 44.3738,
+          "lon": 3.70012,
+          "kind": 2
+        },
+        {
+          "name": "Cascade de Runes",
+          "lat": 44.37889,
+          "lon": 3.67434,
+          "kind": 1
+        },
+        {
+          "name": "Château de Grizac",
+          "lat": 44.34213,
+          "lon": 3.69765,
+          "kind": 2
+        },
+        {
+          "name": "Menhir du Col du Sapet",
+          "lat": 44.3252,
+          "lon": 3.68443,
+          "kind": 2
+        },
+        {
+          "name": "Château du Miral",
+          "lat": 44.3559,
+          "lon": 3.64107,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Jean-Baptiste",
+          "lat": 44.34822,
+          "lon": 3.6196,
+          "kind": 2
+        },
+        {
+          "name": "Collégiale Notre-Dame-de-l'Assomption",
+          "lat": 44.34331,
+          "lon": 3.60612,
+          "kind": 2
+        },
+        {
+          "name": "Menhirs de la Can d'Issanges",
+          "lat": 44.3721,
+          "lon": 3.5848,
+          "kind": 2
+        },
+        {
+          "name": "Maison de la Congrégation de la Présentation",
+          "lat": 44.32433,
+          "lon": 3.59336,
+          "kind": 2
+        },
+        {
+          "name": "Château de Florac",
+          "lat": 44.32326,
+          "lon": 3.59339,
+          "kind": 2
+        },
+        {
+          "name": "Valpilloux",
+          "lat": 44.30421,
+          "lon": 3.56065,
+          "kind": 2
+        },
+        {
+          "name": "Château de Salgas",
+          "lat": 44.25646,
+          "lon": 3.58399,
+          "kind": 2
+        },
+        {
+          "name": "Temple",
+          "lat": 44.24014,
+          "lon": 3.57813,
+          "kind": 2
+        },
+        {
+          "name": "Baume Dolente",
+          "lat": 44.22104,
+          "lon": 3.60725,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Pierre et Saint-Paul",
+          "lat": 44.21453,
+          "lon": 3.53862,
+          "kind": 2
+        },
+        {
+          "name": "Nimes le Vieux",
+          "lat": 44.22923,
+          "lon": 3.51599,
+          "kind": 2
+        },
+        {
+          "name": "Col de Perjuret",
+          "lat": 44.20443,
+          "lon": 3.51464,
+          "kind": 4,
+          "ele": 1031
+        },
+        {
+          "name": "Église Notre-Dame-de-l'Assomption",
+          "lat": 44.1983,
+          "lon": 3.48927,
+          "kind": 2
+        },
+        {
+          "name": "Col de Fourques 1043m",
+          "lat": 44.19333,
+          "lon": 3.52016,
+          "kind": 4
+        },
+        {
+          "name": "Église Notre-Dame-de-Bonheur",
+          "lat": 44.09321,
+          "lon": 3.54628,
+          "kind": 2
+        },
+        {
+          "name": "L’Hort de Dieu",
+          "lat": 44.11408,
+          "lon": 3.58412,
+          "kind": 1
+        }
       ]
     },
     {
@@ -1454,6 +5617,254 @@
         [43.89124, 3.49561],
         [43.89554, 3.50525],
         [43.89304, 3.50909]
+      ],
+      "sights": [
+        {
+          "name": "L’Hort de Dieu",
+          "lat": 44.11408,
+          "lon": 3.58412,
+          "kind": 1
+        },
+        {
+          "name": "Col de Prat Peirot",
+          "lat": 44.11656,
+          "lon": 3.55145,
+          "kind": 4,
+          "ele": 1415
+        },
+        {
+          "name": "Les cascades de l'Hérault",
+          "lat": 44.1061,
+          "lon": 3.54997,
+          "kind": 1
+        },
+        {
+          "name": "Abbaye Notre-Dame de Bonheur",
+          "lat": 44.10688,
+          "lon": 3.52807,
+          "kind": 2
+        },
+        {
+          "name": "Col de la Serreyrède",
+          "lat": 44.10299,
+          "lon": 3.54134,
+          "kind": 4,
+          "ele": 1299
+        },
+        {
+          "name": "Col de l'Espérou",
+          "lat": 44.09757,
+          "lon": 3.54016,
+          "kind": 4,
+          "ele": 1329
+        },
+        {
+          "name": "Église Notre-Dame-de-Bonheur",
+          "lat": 44.09321,
+          "lon": 3.54628,
+          "kind": 2
+        },
+        {
+          "name": "Col du Minier",
+          "lat": 44.05408,
+          "lon": 3.54744,
+          "kind": 4,
+          "ele": 1264
+        },
+        {
+          "name": "Col de la Broue",
+          "lat": 44.03874,
+          "lon": 3.56826,
+          "kind": 4,
+          "ele": 1102
+        },
+        {
+          "name": "Col de la Sablière",
+          "lat": 44.02641,
+          "lon": 3.57438,
+          "kind": 4,
+          "ele": 1043
+        },
+        {
+          "name": "Menhir du Col de Mouzoules B",
+          "lat": 43.99854,
+          "lon": 3.53695,
+          "kind": 2
+        },
+        {
+          "name": "Cascades d'Orgon",
+          "lat": 44.05476,
+          "lon": 3.57985,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Grégoire-et-Notre-Dame",
+          "lat": 44.02138,
+          "lon": 3.62684,
+          "kind": 2
+        },
+        {
+          "name": "Château du Fesq",
+          "lat": 44.01034,
+          "lon": 3.59352,
+          "kind": 2
+        },
+        {
+          "name": "Temple Église Réformée de France",
+          "lat": 43.99148,
+          "lon": 3.60784,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre",
+          "lat": 43.99078,
+          "lon": 3.60537,
+          "kind": 2
+        },
+        {
+          "name": "Château d'Assas",
+          "lat": 43.99007,
+          "lon": 3.60522,
+          "kind": 2
+        },
+        {
+          "name": "Temple",
+          "lat": 43.98914,
+          "lon": 3.57286,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Marie-Madeleine",
+          "lat": 43.98949,
+          "lon": 3.57191,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sainte-Philomène",
+          "lat": 43.97559,
+          "lon": 3.54632,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Jean-Baptiste",
+          "lat": 43.97547,
+          "lon": 3.57567,
+          "kind": 2
+        },
+        {
+          "name": "Temple de l'Eglise protestante Unie",
+          "lat": 43.97543,
+          "lon": 3.575,
+          "kind": 2
+        },
+        {
+          "name": "Event de Rognès",
+          "lat": 43.96257,
+          "lon": 3.56609,
+          "kind": 1
+        },
+        {
+          "name": "Temple de l’Église Protestante Unie de France",
+          "lat": 43.9724,
+          "lon": 3.59883,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-André",
+          "lat": 43.9511,
+          "lon": 3.60807,
+          "kind": 2
+        },
+        {
+          "name": "Menhir dit la Pierre plantée",
+          "lat": 43.94412,
+          "lon": 3.62039,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Martin",
+          "lat": 43.92863,
+          "lon": 3.58946,
+          "kind": 2
+        },
+        {
+          "name": "Château de Montdardier",
+          "lat": 43.9281,
+          "lon": 3.59283,
+          "kind": 2
+        },
+        {
+          "name": "Aven de Carteyral",
+          "lat": 43.90745,
+          "lon": 3.6273,
+          "kind": 1
+        },
+        {
+          "name": "Dolmen de Flouirac",
+          "lat": 43.91286,
+          "lon": 3.57088,
+          "kind": 2
+        },
+        {
+          "name": "Cromlech de Lacam de Peyrarines",
+          "lat": 43.9261,
+          "lon": 3.53063,
+          "kind": 2
+        },
+        {
+          "name": "Peyre Cabucelade",
+          "lat": 43.95544,
+          "lon": 3.50438,
+          "kind": 2
+        },
+        {
+          "name": "Cromlech de Lacam de la Rigalderie B",
+          "lat": 43.92545,
+          "lon": 3.48941,
+          "kind": 2
+        },
+        {
+          "name": "Cromlech de Lacam de la Rigalderie",
+          "lat": 43.92715,
+          "lon": 3.49137,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Baudile",
+          "lat": 43.91215,
+          "lon": 3.51207,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen du Travers des Noyers",
+          "lat": 43.9006,
+          "lon": 3.5206,
+          "kind": 2
+        },
+        {
+          "name": "Château de Vissec",
+          "lat": 43.89992,
+          "lon": 3.45988,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-de-la-Purification",
+          "lat": 43.89945,
+          "lon": 3.45959,
+          "kind": 2
+        },
+        {
+          "name": "Menhir du Pioch Marty",
+          "lat": 43.88161,
+          "lon": 3.47829,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen de la Prunarède",
+          "lat": 43.87033,
+          "lon": 3.51072,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1530,6 +5941,248 @@
         [44.30117, 4.61332],
         [44.28402, 4.61458],
         [44.25746, 4.64936]
+      ],
+      "sights": [
+        {
+          "name": "Oppidum de Jastres-Nord",
+          "lat": 44.6121,
+          "lon": 4.4322,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Didier",
+          "lat": 44.6068,
+          "lon": 4.41656,
+          "kind": 2
+        },
+        {
+          "name": "Oppidum de Jastres-Sud",
+          "lat": 44.60194,
+          "lon": 4.42694,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Saturnin",
+          "lat": 44.57173,
+          "lon": 4.39216,
+          "kind": 2
+        },
+        {
+          "name": "Tracker 07",
+          "lat": 44.53966,
+          "lon": 4.36717,
+          "kind": 2
+        },
+        {
+          "name": "Château de Vogüé",
+          "lat": 44.55019,
+          "lon": 4.41602,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre",
+          "lat": 44.53516,
+          "lon": 4.43509,
+          "kind": 2
+        },
+        {
+          "name": "Château de Balazuc",
+          "lat": 44.50996,
+          "lon": 4.3718,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame",
+          "lat": 44.5086,
+          "lon": 4.37323,
+          "kind": 2
+        },
+        {
+          "name": "Melvita",
+          "lat": 44.48647,
+          "lon": 4.41424,
+          "kind": 2
+        },
+        {
+          "name": "Gour de la Sompe",
+          "lat": 44.47542,
+          "lon": 4.42871,
+          "kind": 1
+        },
+        {
+          "name": "Chapelle Notre-Dame-de-Bon-Secours",
+          "lat": 44.44986,
+          "lon": 4.42558,
+          "kind": 2
+        },
+        {
+          "name": "Poterie des Riailles",
+          "lat": 44.44751,
+          "lon": 4.39503,
+          "kind": 2
+        },
+        {
+          "name": "Ruchers de l'Ibie - La Ferme des Abeilles",
+          "lat": 44.42368,
+          "lon": 4.4212,
+          "kind": 2
+        },
+        {
+          "name": "Site médiéval",
+          "lat": 44.3942,
+          "lon": 4.37604,
+          "kind": 2
+        },
+        {
+          "name": "Grotte de Mézelet",
+          "lat": 44.39148,
+          "lon": 4.40266,
+          "kind": 1
+        },
+        {
+          "name": "Le Pont d'Arc",
+          "lat": 44.38201,
+          "lon": 4.4162,
+          "kind": 1
+        },
+        {
+          "name": "Grotte de Louoï",
+          "lat": 44.39601,
+          "lon": 4.41866,
+          "kind": 1
+        },
+        {
+          "name": "Aven de Chazot",
+          "lat": 44.40923,
+          "lon": 4.42368,
+          "kind": 1
+        },
+        {
+          "name": "Grotte Chauvet 2 Ardèche",
+          "lat": 44.40605,
+          "lon": 4.42957,
+          "kind": 2
+        },
+        {
+          "name": "Grotte Renault",
+          "lat": 44.37657,
+          "lon": 4.43624,
+          "kind": 1
+        },
+        {
+          "name": "Grotte de la Pécoulette",
+          "lat": 44.39908,
+          "lon": 4.47637,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Rémy",
+          "lat": 44.39256,
+          "lon": 4.50183,
+          "kind": 2
+        },
+        {
+          "name": "Aven",
+          "lat": 44.41635,
+          "lon": 4.51982,
+          "kind": 1
+        },
+        {
+          "name": "Aven Marzal",
+          "lat": 44.36959,
+          "lon": 4.51057,
+          "kind": 1
+        },
+        {
+          "name": "Aven de Centura",
+          "lat": 44.36663,
+          "lon": 4.51059,
+          "kind": 1
+        },
+        {
+          "name": "Dolmen de Champvermeil",
+          "lat": 44.36256,
+          "lon": 4.5544,
+          "kind": 2
+        },
+        {
+          "name": "Ruines de la Magdeleine",
+          "lat": 44.34032,
+          "lon": 4.50468,
+          "kind": 2
+        },
+        {
+          "name": "Grotte de la Madeleine",
+          "lat": 44.33973,
+          "lon": 4.48502,
+          "kind": 1
+        },
+        {
+          "name": "Grotte de Saint-Marcel",
+          "lat": 44.33243,
+          "lon": 4.54142,
+          "kind": 1
+        },
+        {
+          "name": "Grotte de la Tête du Lion",
+          "lat": 44.32755,
+          "lon": 4.5484,
+          "kind": 1
+        },
+        {
+          "name": "Grotte Chabot",
+          "lat": 44.32183,
+          "lon": 4.54394,
+          "kind": 1
+        },
+        {
+          "name": "Grotte du Figuier",
+          "lat": 44.31958,
+          "lon": 4.54732,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Roch",
+          "lat": 44.30282,
+          "lon": 4.55686,
+          "kind": 2
+        },
+        {
+          "name": "Château du Bosquet",
+          "lat": 44.29849,
+          "lon": 4.58328,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Just",
+          "lat": 44.3032,
+          "lon": 4.61251,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sainte-Agnès",
+          "lat": 44.2686,
+          "lon": 4.58938,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Paulet",
+          "lat": 44.26333,
+          "lon": 4.59799,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle sanctuaire Notre-Dame-de-la-Blache",
+          "lat": 44.24789,
+          "lon": 4.61247,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de l'hopital",
+          "lat": 44.25369,
+          "lon": 4.65015,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1606,6 +6259,250 @@
         [42.80779, 9.33461],
         [42.79997, 9.34942],
         [42.78507, 9.34505]
+      ],
+      "sights": [
+        {
+          "name": "Vieux-Port de Bastia",
+          "lat": 42.69622,
+          "lon": 9.45,
+          "kind": 2
+        },
+        {
+          "name": "Musée d'ethnographie de Bastia",
+          "lat": 42.69368,
+          "lon": 9.45103,
+          "kind": 2
+        },
+        {
+          "name": "Pro-cathédrale Sainte-Marie de Bastia",
+          "lat": 42.6924,
+          "lon": 9.45194,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Croix",
+          "lat": 42.69236,
+          "lon": 9.4521,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Jean-Baptiste",
+          "lat": 42.69698,
+          "lon": 9.45032,
+          "kind": 2
+        },
+        {
+          "name": "Palais des Gouverneurs",
+          "lat": 42.69363,
+          "lon": 9.45112,
+          "kind": 2
+        },
+        {
+          "name": "Église de la Conception",
+          "lat": 42.69745,
+          "lon": 9.45014,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame de Monserato",
+          "lat": 42.69066,
+          "lon": 9.43811,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Joseph",
+          "lat": 42.69076,
+          "lon": 9.44593,
+          "kind": 2
+        },
+        {
+          "name": "Centre paroissial Notre-Dame des Victoires",
+          "lat": 42.6808,
+          "lon": 9.44127,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Charles",
+          "lat": 42.69533,
+          "lon": 9.44757,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sant'Antone",
+          "lat": 42.71692,
+          "lon": 9.43005,
+          "kind": 2
+        },
+        {
+          "name": "Château Cagninacci",
+          "lat": 42.73818,
+          "lon": 9.4326,
+          "kind": 2
+        },
+        {
+          "name": "Église de l'Annonciation",
+          "lat": 42.76456,
+          "lon": 9.45858,
+          "kind": 2
+        },
+        {
+          "name": "Tour d'Erbalunga",
+          "lat": 42.7736,
+          "lon": 9.477,
+          "kind": 2
+        },
+        {
+          "name": "Tour de Capo Sagro",
+          "lat": 42.79474,
+          "lon": 9.49105,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Jean",
+          "lat": 42.81027,
+          "lon": 9.47849,
+          "kind": 2
+        },
+        {
+          "name": "Abris de Torre d'Aquila 2",
+          "lat": 42.8321,
+          "lon": 9.48229,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Clément",
+          "lat": 42.84823,
+          "lon": 9.43514,
+          "kind": 2
+        },
+        {
+          "name": "Tour de Losso",
+          "lat": 42.86112,
+          "lon": 9.48091,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Fructueux",
+          "lat": 42.87504,
+          "lon": 9.43064,
+          "kind": 2
+        },
+        {
+          "name": "Village abandonné de Mata",
+          "lat": 42.89795,
+          "lon": 9.45519,
+          "kind": 2
+        },
+        {
+          "name": "Tour Génoise de Meria",
+          "lat": 42.93464,
+          "lon": 9.46713,
+          "kind": 2
+        },
+        {
+          "name": "Tour Génoise",
+          "lat": 42.94642,
+          "lon": 9.44391,
+          "kind": 2
+        },
+        {
+          "name": "Tour de Santa-Maria-della-Chiappella",
+          "lat": 42.99082,
+          "lon": 9.45182,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Marie de la Chapelle",
+          "lat": 42.98661,
+          "lon": 9.4539,
+          "kind": 2
+        },
+        {
+          "name": "Église San Nicolao",
+          "lat": 42.94629,
+          "lon": 9.43982,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle San Roccu",
+          "lat": 42.95771,
+          "lon": 9.41619,
+          "kind": 2
+        },
+        {
+          "name": "Col Saint-Nicolas",
+          "lat": 42.9697,
+          "lon": 9.39041,
+          "kind": 4,
+          "ele": 318
+        },
+        {
+          "name": "Église Saint-André",
+          "lat": 42.97928,
+          "lon": 9.38877,
+          "kind": 2
+        },
+        {
+          "name": "Col de la Serra",
+          "lat": 42.9735,
+          "lon": 9.36712,
+          "kind": 4,
+          "ele": 361
+        },
+        {
+          "name": "Moulin Mattei",
+          "lat": 42.97459,
+          "lon": 9.3648,
+          "kind": 2
+        },
+        {
+          "name": "Château Fantauzzi",
+          "lat": 42.94777,
+          "lon": 9.36617,
+          "kind": 2
+        },
+        {
+          "name": "Tour de Sénèque",
+          "lat": 42.90513,
+          "lon": 9.37256,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de confrérie Santa Croce",
+          "lat": 42.91,
+          "lon": 9.3512,
+          "kind": 2
+        },
+        {
+          "name": "Tour de Giottani",
+          "lat": 42.86763,
+          "lon": 9.33965,
+          "kind": 2
+        },
+        {
+          "name": "Église San Pantaleone",
+          "lat": 42.87663,
+          "lon": 9.35544,
+          "kind": 2
+        },
+        {
+          "name": "Église Santa Maria Assunta",
+          "lat": 42.84489,
+          "lon": 9.3307,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Roch",
+          "lat": 42.80977,
+          "lon": 9.33614,
+          "kind": 2
+        },
+        {
+          "name": "Site archéologique de la Grotta Scritta",
+          "lat": 42.77161,
+          "lon": 9.35269,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1692,6 +6589,251 @@
         [41.98711, 8.7729],
         [41.95354, 8.78397],
         [41.92655, 8.73687]
+      ],
+      "sights": [
+        {
+          "name": "Cathédrale Saint-Jean-Baptiste",
+          "lat": 42.56829,
+          "lon": 8.7607,
+          "kind": 2
+        },
+        {
+          "name": "Tour de Caldanu",
+          "lat": 42.58272,
+          "lon": 8.79962,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Roch",
+          "lat": 42.50979,
+          "lon": 8.83676,
+          "kind": 2
+        },
+        {
+          "name": "Domaine A RONCA",
+          "lat": 42.5041,
+          "lon": 8.76386,
+          "kind": 2
+        },
+        {
+          "name": "Col de Marsolino",
+          "lat": 42.4759,
+          "lon": 8.75673,
+          "kind": 4,
+          "ele": 443
+        },
+        {
+          "name": "Église Sainte-Lucie",
+          "lat": 42.42408,
+          "lon": 8.7549,
+          "kind": 2
+        },
+        {
+          "name": "Tour de Galeria",
+          "lat": 42.41875,
+          "lon": 8.65737,
+          "kind": 2
+        },
+        {
+          "name": "L´Ambiu",
+          "lat": 42.40215,
+          "lon": 8.64804,
+          "kind": 2
+        },
+        {
+          "name": "Bocca di Palmarella",
+          "lat": 42.36388,
+          "lon": 8.64833,
+          "kind": 4,
+          "ele": 408
+        },
+        {
+          "name": "Fortin de Girolata",
+          "lat": 42.3476,
+          "lon": 8.61259,
+          "kind": 2
+        },
+        {
+          "name": "Monte Senino",
+          "lat": 42.31641,
+          "lon": 8.61077,
+          "kind": 1
+        },
+        {
+          "name": "Église Saint-Jean-Baptiste",
+          "lat": 42.31861,
+          "lon": 8.67331,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Antoine-de-Padoue",
+          "lat": 42.31142,
+          "lon": 8.68283,
+          "kind": 2
+        },
+        {
+          "name": "Église Santa-Maria",
+          "lat": 42.30137,
+          "lon": 8.70947,
+          "kind": 2
+        },
+        {
+          "name": "Ruines de la chapelle San Petru",
+          "lat": 42.27725,
+          "lon": 8.71861,
+          "kind": 2
+        },
+        {
+          "name": "Tour Génoise de Porto",
+          "lat": 42.26774,
+          "lon": 8.69152,
+          "kind": 2
+        },
+        {
+          "name": "Tête de Chien",
+          "lat": 42.25281,
+          "lon": 8.6572,
+          "kind": 2
+        },
+        {
+          "name": "Calanques de Piana",
+          "lat": 42.25259,
+          "lon": 8.63321,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Siméon",
+          "lat": 42.18788,
+          "lon": 8.65782,
+          "kind": 2
+        },
+        {
+          "name": "Tour d'Orchinu",
+          "lat": 42.17558,
+          "lon": 8.57666,
+          "kind": 2
+        },
+        {
+          "name": "Tour d'Omigna",
+          "lat": 42.14652,
+          "lon": 8.55993,
+          "kind": 2
+        },
+        {
+          "name": "Grotte de Molendinu",
+          "lat": 42.1254,
+          "lon": 8.62411,
+          "kind": 1
+        },
+        {
+          "name": "Tour Génoise de Sagone",
+          "lat": 42.11059,
+          "lon": 8.68655,
+          "kind": 2
+        },
+        {
+          "name": "Cathédrale de Sagone",
+          "lat": 42.11841,
+          "lon": 8.69006,
+          "kind": 2
+        },
+        {
+          "name": "Tour de Capigliolo",
+          "lat": 42.06545,
+          "lon": 8.72287,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen de Tremeca",
+          "lat": 42.0737,
+          "lon": 8.78112,
+          "kind": 2
+        },
+        {
+          "name": "Tour d'Ancone",
+          "lat": 42.04232,
+          "lon": 8.72637,
+          "kind": 2
+        },
+        {
+          "name": "Église Santa-Maria-Annunziata",
+          "lat": 42.02835,
+          "lon": 8.76638,
+          "kind": 2
+        },
+        {
+          "name": "Bocca San Bastiano",
+          "lat": 42.02211,
+          "lon": 8.73438,
+          "kind": 4,
+          "ele": 411
+        },
+        {
+          "name": "Chapelle San Sebastiano",
+          "lat": 42.02233,
+          "lon": 8.73428,
+          "kind": 2
+        },
+        {
+          "name": "Église Paroissiale Notre-Dame-de-l'Assomption",
+          "lat": 42.01338,
+          "lon": 8.76607,
+          "kind": 2
+        },
+        {
+          "name": "Bocca di U Listincu",
+          "lat": 42.00078,
+          "lon": 8.75633,
+          "kind": 4
+        },
+        {
+          "name": "Canal de la Gravona Pont de Mezzavia",
+          "lat": 41.95363,
+          "lon": 8.78389,
+          "kind": 2
+        },
+        {
+          "name": "Château de la Punta",
+          "lat": 41.95694,
+          "lon": 8.7083,
+          "kind": 2
+        },
+        {
+          "name": "Citadelle d'Ajaccio",
+          "lat": 41.9169,
+          "lon": 8.73994,
+          "kind": 2
+        },
+        {
+          "name": "Cathédrale Santa-Maria-Assunta",
+          "lat": 41.91737,
+          "lon": 8.73782,
+          "kind": 2
+        },
+        {
+          "name": "Maison de Napoléon Bonaparte",
+          "lat": 41.91797,
+          "lon": 8.73868,
+          "kind": 2
+        },
+        {
+          "name": "Palais Fesch",
+          "lat": 41.92155,
+          "lon": 8.73834,
+          "kind": 2
+        },
+        {
+          "name": "Palais Lantivy",
+          "lat": 41.9195,
+          "lon": 8.73623,
+          "kind": 2
+        },
+        {
+          "name": "Monument commémoratif de Napoléon Ier",
+          "lat": 41.91647,
+          "lon": 8.72371,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1778,6 +6920,254 @@
         [48.05219, 7.00046],
         [48.08323, 6.9462],
         [48.07351, 6.87904]
+      ],
+      "sights": [
+        {
+          "name": "Musée Alsacien",
+          "lat": 48.57913,
+          "lon": 7.7506,
+          "kind": 2
+        },
+        {
+          "name": "Fort Kléber",
+          "lat": 48.58948,
+          "lon": 7.66319,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Brice",
+          "lat": 48.5572,
+          "lon": 7.6124,
+          "kind": 2
+        },
+        {
+          "name": "Abbatiale Saint-Cyriaque",
+          "lat": 48.52296,
+          "lon": 7.53074,
+          "kind": 2
+        },
+        {
+          "name": "Église Saints-Pierre-et-Paul",
+          "lat": 48.49682,
+          "lon": 7.47076,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Médard",
+          "lat": 48.47792,
+          "lon": 7.44014,
+          "kind": 2
+        },
+        {
+          "name": "Château de Landsberg",
+          "lat": 48.45037,
+          "lon": 7.51739,
+          "kind": 2
+        },
+        {
+          "name": "Château du Landsberg",
+          "lat": 48.42041,
+          "lon": 7.42262,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Remi",
+          "lat": 48.36425,
+          "lon": 7.42718,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Sébastien",
+          "lat": 48.32711,
+          "lon": 7.41988,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Foy",
+          "lat": 48.25934,
+          "lon": 7.45618,
+          "kind": 2
+        },
+        {
+          "name": "Château d'eau de Sélestat",
+          "lat": 48.25899,
+          "lon": 7.44561,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Hippolyte",
+          "lat": 48.23377,
+          "lon": 7.36792,
+          "kind": 2
+        },
+        {
+          "name": "Château du Haut-Ribeaupierre",
+          "lat": 48.2063,
+          "lon": 7.30537,
+          "kind": 2
+        },
+        {
+          "name": "Château de Bilstein-Aubure (Ruine)",
+          "lat": 48.19545,
+          "lon": 7.26962,
+          "kind": 2
+        },
+        {
+          "name": "Château des Ifs",
+          "lat": 48.13558,
+          "lon": 7.28754,
+          "kind": 2
+        },
+        {
+          "name": "Château du Wineck",
+          "lat": 48.10921,
+          "lon": 7.27806,
+          "kind": 2
+        },
+        {
+          "name": "Château du Hohlandsbourg",
+          "lat": 48.05992,
+          "lon": 7.26919,
+          "kind": 2
+        },
+        {
+          "name": "Église Saints-Philippe-et-Jacques",
+          "lat": 48.01854,
+          "lon": 7.29516,
+          "kind": 2
+        },
+        {
+          "name": "Table des Druides",
+          "lat": 47.99283,
+          "lon": 7.26705,
+          "kind": 2
+        },
+        {
+          "name": "Château Wagenbourg",
+          "lat": 47.9592,
+          "lon": 7.24202,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame-du-Saering",
+          "lat": 47.90494,
+          "lon": 7.22542,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Benoit",
+          "lat": 47.93088,
+          "lon": 7.2318,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sainte-Marie",
+          "lat": 47.95181,
+          "lon": 7.21661,
+          "kind": 2
+        },
+        {
+          "name": "Cascade du Kletterbach",
+          "lat": 47.91939,
+          "lon": 7.1151,
+          "kind": 1
+        },
+        {
+          "name": "Cascade du Bruscher",
+          "lat": 47.90951,
+          "lon": 7.03324,
+          "kind": 1
+        },
+        {
+          "name": "Breitfirst",
+          "lat": 47.9476,
+          "lon": 7.02698,
+          "kind": 2
+        },
+        {
+          "name": "Col d'Hahnenbrunnen",
+          "lat": 47.95157,
+          "lon": 7.01951,
+          "kind": 4,
+          "ele": 1186
+        },
+        {
+          "name": "Château de Wildenstein",
+          "lat": 47.94894,
+          "lon": 6.95891,
+          "kind": 2
+        },
+        {
+          "name": "Col du Herrenberg",
+          "lat": 47.97978,
+          "lon": 6.9849,
+          "kind": 4,
+          "ele": 1191
+        },
+        {
+          "name": "Col du Neurod",
+          "lat": 47.9841,
+          "lon": 6.98205,
+          "kind": 4,
+          "ele": 1223
+        },
+        {
+          "name": "Rainkopf",
+          "lat": 48.00975,
+          "lon": 6.98276,
+          "kind": 1
+        },
+        {
+          "name": "Téléphérique Retournemer - Wormsa 1914/1918",
+          "lat": 48.03386,
+          "lon": 7.01886,
+          "kind": 2
+        },
+        {
+          "name": "Col du Falimont",
+          "lat": 48.04137,
+          "lon": 7.01088,
+          "kind": 4,
+          "ele": 1297
+        },
+        {
+          "name": "Cascade du Rundstein",
+          "lat": 48.09007,
+          "lon": 7.02768,
+          "kind": 1
+        },
+        {
+          "name": "Cascade de Retournemer",
+          "lat": 48.05813,
+          "lon": 6.98194,
+          "kind": 1
+        },
+        {
+          "name": "Col de Malakoff",
+          "lat": 48.06836,
+          "lon": 6.98169,
+          "kind": 4,
+          "ele": 1072
+        },
+        {
+          "name": "Col des Harengs Marinés",
+          "lat": 48.06779,
+          "lon": 6.97495,
+          "kind": 4,
+          "ele": 1089
+        },
+        {
+          "name": "Église Sainte-Bernadette",
+          "lat": 48.08129,
+          "lon": 6.92644,
+          "kind": 2
+        },
+        {
+          "name": "Cascade de Mérelle",
+          "lat": 48.06157,
+          "lon": 6.83778,
+          "kind": 1
+        }
       ]
     },
     {
@@ -1864,6 +7254,248 @@
         [47.41202, -0.49249],
         [47.4094, -0.52482],
         [47.47348, -0.55413]
+      ],
+      "sights": [
+        {
+          "name": "Place du Martroi",
+          "lat": 47.90244,
+          "lon": 1.90404,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Mesmin",
+          "lat": 47.88703,
+          "lon": 1.84333,
+          "kind": 2
+        },
+        {
+          "name": "Basilique royale Notre-Dame-de-Cléry",
+          "lat": 47.8201,
+          "lon": 1.75529,
+          "kind": 2
+        },
+        {
+          "name": "Tour Saint-Firmin",
+          "lat": 47.77669,
+          "lon": 1.63225,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Jean-Baptiste",
+          "lat": 47.75689,
+          "lon": 1.61533,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Hilaire",
+          "lat": 47.70018,
+          "lon": 1.50802,
+          "kind": 2
+        },
+        {
+          "name": "Château du Marais",
+          "lat": 47.66669,
+          "lon": 1.52928,
+          "kind": 2
+        },
+        {
+          "name": "Château Saumery",
+          "lat": 47.60535,
+          "lon": 1.46887,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Étienne",
+          "lat": 47.59312,
+          "lon": 1.45452,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Nicolas",
+          "lat": 47.58424,
+          "lon": 1.33139,
+          "kind": 2
+        },
+        {
+          "name": "Château de Beauregard",
+          "lat": 47.53698,
+          "lon": 1.3842,
+          "kind": 2
+        },
+        {
+          "name": "Château de Madon",
+          "lat": 47.5174,
+          "lon": 1.29039,
+          "kind": 2
+        },
+        {
+          "name": "Château de Fougères-sur-Bièvre",
+          "lat": 47.44774,
+          "lon": 1.34357,
+          "kind": 2
+        },
+        {
+          "name": "Château des Bordes",
+          "lat": 47.41153,
+          "lon": 1.22622,
+          "kind": 2
+        },
+        {
+          "name": "Manoir des Roches",
+          "lat": 47.35078,
+          "lon": 1.22523,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Georges",
+          "lat": 47.32555,
+          "lon": 1.12491,
+          "kind": 2
+        },
+        {
+          "name": "Château de Civray-de-Touraine",
+          "lat": 47.33198,
+          "lon": 1.0504,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Quentin",
+          "lat": 47.3353,
+          "lon": 0.99033,
+          "kind": 2
+        },
+        {
+          "name": "Château de Reignac",
+          "lat": 47.23288,
+          "lon": 0.91665,
+          "kind": 2
+        },
+        {
+          "name": "Château de la Folaine",
+          "lat": 47.21244,
+          "lon": 0.95331,
+          "kind": 2
+        },
+        {
+          "name": "Manoir du Puy",
+          "lat": 47.16277,
+          "lon": 0.86849,
+          "kind": 2
+        },
+        {
+          "name": "Château des Etangs",
+          "lat": 47.08984,
+          "lon": 0.72449,
+          "kind": 2
+        },
+        {
+          "name": "Château",
+          "lat": 47.06713,
+          "lon": 0.67478,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Blaise",
+          "lat": 47.11101,
+          "lon": 0.61964,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Épain",
+          "lat": 47.14396,
+          "lon": 0.53613,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Gilles",
+          "lat": 47.12394,
+          "lon": 0.42723,
+          "kind": 2
+        },
+        {
+          "name": "Château du Pressoir",
+          "lat": 47.15213,
+          "lon": 0.38506,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sainte-Radegonde",
+          "lat": 47.16845,
+          "lon": 0.25373,
+          "kind": 2
+        },
+        {
+          "name": "Musée Rabelais, Maison La Devinière",
+          "lat": 47.14051,
+          "lon": 0.17848,
+          "kind": 2
+        },
+        {
+          "name": "Abbaye de Seuilly",
+          "lat": 47.13541,
+          "lon": 0.17147,
+          "kind": 2
+        },
+        {
+          "name": "Collégiale Saint-Martin",
+          "lat": 47.21124,
+          "lon": 0.07387,
+          "kind": 2
+        },
+        {
+          "name": "Le Château de Montsoreau - Musée d’art contemporain",
+          "lat": 47.21568,
+          "lon": 0.06245,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Mainbœuf",
+          "lat": 47.25305,
+          "lon": -0.03017,
+          "kind": 2
+        },
+        {
+          "name": "Château de Pocé",
+          "lat": 47.23529,
+          "lon": -0.1223,
+          "kind": 2
+        },
+        {
+          "name": "Manoir de Grissay",
+          "lat": 47.30708,
+          "lon": -0.15503,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen de la Madeleine",
+          "lat": 47.33168,
+          "lon": -0.23501,
+          "kind": 2
+        },
+        {
+          "name": "Château de Montsabert",
+          "lat": 47.37589,
+          "lon": -0.34362,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre de Charcé",
+          "lat": 47.35624,
+          "lon": -0.41178,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Maurille",
+          "lat": 47.41577,
+          "lon": -0.52457,
+          "kind": 2
+        },
+        {
+          "name": "Château des Ponts de Cé",
+          "lat": 47.42518,
+          "lon": -0.52568,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1945,6 +7577,248 @@
         [44.79286, 1.60824],
         [44.80251, 1.62269],
         [44.80035, 1.61844]
+      ],
+      "sights": [
+        {
+          "name": "Couvent de Sainte-Claire",
+          "lat": 44.88905,
+          "lon": 1.21521,
+          "kind": 2
+        },
+        {
+          "name": "Château de la Boëtie",
+          "lat": 44.86844,
+          "lon": 1.21036,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Jean-Baptiste de La Canéda",
+          "lat": 44.85797,
+          "lon": 1.23719,
+          "kind": 2
+        },
+        {
+          "name": "Manoir des Vayssières",
+          "lat": 44.83853,
+          "lon": 1.20056,
+          "kind": 2
+        },
+        {
+          "name": "Manoir de Rochecourbe",
+          "lat": 44.83845,
+          "lon": 1.17089,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Urbain",
+          "lat": 44.83517,
+          "lon": 1.16539,
+          "kind": 2
+        },
+        {
+          "name": "Château des Milandes",
+          "lat": 44.82356,
+          "lon": 1.11346,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Martial de Cazenac",
+          "lat": 44.85961,
+          "lon": 1.12424,
+          "kind": 2
+        },
+        {
+          "name": "Ruines et sol de l'ancien couvent d'Abrillac",
+          "lat": 44.85397,
+          "lon": 1.13856,
+          "kind": 2
+        },
+        {
+          "name": "Château de Fayrac",
+          "lat": 44.8304,
+          "lon": 1.14477,
+          "kind": 2
+        },
+        {
+          "name": "Château de Castelnaud-la-Chapelle",
+          "lat": 44.81587,
+          "lon": 1.14825,
+          "kind": 2
+        },
+        {
+          "name": "Château de Lacoste",
+          "lat": 44.79834,
+          "lon": 1.15606,
+          "kind": 2
+        },
+        {
+          "name": "Château de la Malartrie",
+          "lat": 44.82741,
+          "lon": 1.17799,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame de la Nativité de Cenac",
+          "lat": 44.80049,
+          "lon": 1.19717,
+          "kind": 2
+        },
+        {
+          "name": "Ruines du château médiéval du Roy",
+          "lat": 44.80129,
+          "lon": 1.20651,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Martin",
+          "lat": 44.8304,
+          "lon": 1.22668,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen de Giverzac",
+          "lat": 44.81083,
+          "lon": 1.24498,
+          "kind": 2
+        },
+        {
+          "name": "Château de Montfort",
+          "lat": 44.83779,
+          "lon": 1.2493,
+          "kind": 2
+        },
+        {
+          "name": "Manoir de La Gazaille",
+          "lat": 44.83548,
+          "lon": 1.27541,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Léger",
+          "lat": 44.82442,
+          "lon": 1.2895,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame de l'Assomption d'Aillac",
+          "lat": 44.8424,
+          "lon": 1.30148,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Georges",
+          "lat": 44.79168,
+          "lon": 1.31338,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-de-la-Nativité",
+          "lat": 44.7538,
+          "lon": 1.29831,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Agapit",
+          "lat": 44.75589,
+          "lon": 1.3507,
+          "kind": 2
+        },
+        {
+          "name": "Grottes de Cougnac",
+          "lat": 44.75712,
+          "lon": 1.37593,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame des Cordeliers",
+          "lat": 44.7355,
+          "lon": 1.38232,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre",
+          "lat": 44.73703,
+          "lon": 1.38249,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame-des-Neiges",
+          "lat": 44.73272,
+          "lon": 1.39231,
+          "kind": 2
+        },
+        {
+          "name": "Église Collégiale Notre-Dame-de-l'Assomption",
+          "lat": 44.74099,
+          "lon": 1.43903,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre-ès-Liens",
+          "lat": 44.70764,
+          "lon": 1.45815,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Projet",
+          "lat": 44.74493,
+          "lon": 1.49099,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-de-l'Assomption",
+          "lat": 44.77034,
+          "lon": 1.50474,
+          "kind": 2
+        },
+        {
+          "name": "Le Lieu Dit",
+          "lat": 44.79475,
+          "lon": 1.55513,
+          "kind": 2
+        },
+        {
+          "name": "Grotte du Courpou (ou de Graules)",
+          "lat": 44.75781,
+          "lon": 1.55223,
+          "kind": 1
+        },
+        {
+          "name": "Pech Désert",
+          "lat": 44.79106,
+          "lon": 1.56487,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Cirq",
+          "lat": 44.76478,
+          "lon": 1.61582,
+          "kind": 2
+        },
+        {
+          "name": "Château de la Pannonie",
+          "lat": 44.7773,
+          "lon": 1.65497,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen de Magès",
+          "lat": 44.78679,
+          "lon": 1.6133,
+          "kind": 2
+        },
+        {
+          "name": "Moulin du Saut",
+          "lat": 44.7903,
+          "lon": 1.6692,
+          "kind": 2
+        },
+        {
+          "name": "Le Rocher des aigles",
+          "lat": 44.80205,
+          "lon": 1.61203,
+          "kind": 2
+        }
       ]
     },
     {
@@ -2031,6 +7905,248 @@
         [49.63976, 0.22185],
         [49.6669, 0.19519],
         [49.70699, 0.20753]
+      ],
+      "sights": [
+        {
+          "name": "Chapelle Saint-Aubert",
+          "lat": 48.6365,
+          "lon": -1.51323,
+          "kind": 2
+        },
+        {
+          "name": "Prieuré d'Ardevon",
+          "lat": 48.60254,
+          "lon": -1.47512,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Cyr et Sainte-Julitte",
+          "lat": 48.63166,
+          "lon": -1.38782,
+          "kind": 2
+        },
+        {
+          "name": "Basilique Saint-Gervais et Saint-Protais",
+          "lat": 48.68649,
+          "lon": -1.35831,
+          "kind": 2
+        },
+        {
+          "name": "Château de Chantore",
+          "lat": 48.72313,
+          "lon": -1.44079,
+          "kind": 2
+        },
+        {
+          "name": "Église abbatiale de la Lucerne",
+          "lat": 48.79173,
+          "lon": -1.46557,
+          "kind": 2
+        },
+        {
+          "name": "Château de Grainville",
+          "lat": 48.82983,
+          "lon": -1.56583,
+          "kind": 2
+        },
+        {
+          "name": "Château de Chanteloup",
+          "lat": 48.89351,
+          "lon": -1.48525,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame-et-Sainte-Agathe",
+          "lat": 48.96859,
+          "lon": -1.46602,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Hélène",
+          "lat": 49.01342,
+          "lon": -1.47025,
+          "kind": 2
+        },
+        {
+          "name": "Manoir des Réaux",
+          "lat": 49.09781,
+          "lon": -1.3912,
+          "kind": 2
+        },
+        {
+          "name": "Maison de la Brique",
+          "lat": 49.17889,
+          "lon": -1.38208,
+          "kind": 2
+        },
+        {
+          "name": "Manoir de la Cour",
+          "lat": 49.23991,
+          "lon": -1.39281,
+          "kind": 2
+        },
+        {
+          "name": "Château de Sainte-Suzanne",
+          "lat": 49.30829,
+          "lon": -1.43585,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Candide",
+          "lat": 49.37926,
+          "lon": -1.40056,
+          "kind": 2
+        },
+        {
+          "name": "Château de Grandval",
+          "lat": 49.43004,
+          "lon": -1.33036,
+          "kind": 2
+        },
+        {
+          "name": "Tumulus dit La Butte",
+          "lat": 49.35796,
+          "lon": -1.24967,
+          "kind": 2
+        },
+        {
+          "name": "Manoir de Donville",
+          "lat": 49.29684,
+          "lon": -1.28226,
+          "kind": 2
+        },
+        {
+          "name": "Manoir de Cantepie",
+          "lat": 49.30706,
+          "lon": -1.162,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Clément",
+          "lat": 49.33803,
+          "lon": -1.09918,
+          "kind": 2
+        },
+        {
+          "name": "Manoir de Saint-Pierre",
+          "lat": 49.38835,
+          "lon": -0.98351,
+          "kind": 2
+        },
+        {
+          "name": "Manoir de Vaumicel",
+          "lat": 49.36837,
+          "lon": -0.90952,
+          "kind": 2
+        },
+        {
+          "name": "Église Sainte-Honorine",
+          "lat": 49.34862,
+          "lon": -0.8052,
+          "kind": 2
+        },
+        {
+          "name": "Manoir d'Argouges",
+          "lat": 49.32161,
+          "lon": -0.7202,
+          "kind": 2
+        },
+        {
+          "name": "Château de la Noë",
+          "lat": 49.32634,
+          "lon": -0.64626,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Médard-Saint-Gildard",
+          "lat": 49.31654,
+          "lon": -0.5499,
+          "kind": 2
+        },
+        {
+          "name": "Château de Courseulles",
+          "lat": 49.32986,
+          "lon": -0.45954,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame de l'Assomption",
+          "lat": 49.25414,
+          "lon": -0.36937,
+          "kind": 2
+        },
+        {
+          "name": "Ferme de la Vallée",
+          "lat": 49.23747,
+          "lon": -0.32311,
+          "kind": 2
+        },
+        {
+          "name": "Église de la Purification-de-Notre-Dame",
+          "lat": 49.24238,
+          "lon": -0.1756,
+          "kind": 2
+        },
+        {
+          "name": "Villa du Temps retrouvé",
+          "lat": 49.29187,
+          "lon": -0.11276,
+          "kind": 2
+        },
+        {
+          "name": "Casino de Villers",
+          "lat": 49.32483,
+          "lon": -0.00152,
+          "kind": 2
+        },
+        {
+          "name": "Villa Strassburger",
+          "lat": 49.35103,
+          "lon": 0.07443,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Gatien",
+          "lat": 49.34837,
+          "lon": 0.18539,
+          "kind": 2
+        },
+        {
+          "name": "Manoir du Désert",
+          "lat": 49.40647,
+          "lon": 0.23684,
+          "kind": 2
+        },
+        {
+          "name": "Maison de la Réserve",
+          "lat": 49.44984,
+          "lon": 0.27079,
+          "kind": 1
+        },
+        {
+          "name": "Château d'Orcher",
+          "lat": 49.49679,
+          "lon": 0.2467,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Germain l'Auxerrois",
+          "lat": 49.56749,
+          "lon": 0.25523,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Sainte-Clothilde",
+          "lat": 49.58179,
+          "lon": 0.213,
+          "kind": 2
+        },
+        {
+          "name": "Château de Fréfossé",
+          "lat": 49.69323,
+          "lon": 0.20676,
+          "kind": 2
+        }
       ]
     },
     {
@@ -2112,6 +8228,248 @@
         [48.64564, -3.95637],
         [48.68305, -3.98698],
         [48.72711, -3.98629]
+      ],
+      "sights": [
+        {
+          "name": "Hôtel de la Bertaudière",
+          "lat": 48.65039,
+          "lon": -2.02736,
+          "kind": 2
+        },
+        {
+          "name": "Villa Ker Arlette",
+          "lat": 48.62444,
+          "lon": -2.04903,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Briac",
+          "lat": 48.61885,
+          "lon": -2.13358,
+          "kind": 2
+        },
+        {
+          "name": "Château du Guildo",
+          "lat": 48.57462,
+          "lon": -2.20651,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Cast",
+          "lat": 48.62409,
+          "lon": -2.26122,
+          "kind": 2
+        },
+        {
+          "name": "Église Notre-Dame",
+          "lat": 48.59598,
+          "lon": -2.29346,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Sébastien de Pléhérel",
+          "lat": 48.60686,
+          "lon": -2.36209,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen de la Ville-Hamon",
+          "lat": 48.63154,
+          "lon": -2.44461,
+          "kind": 2
+        },
+        {
+          "name": "Château de Bienassis",
+          "lat": 48.58824,
+          "lon": -2.48694,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Pierre-et-Saint-Paul",
+          "lat": 48.58425,
+          "lon": -2.53602,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Gobrien",
+          "lat": 48.52254,
+          "lon": -2.60959,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Saint-Maurice",
+          "lat": 48.52978,
+          "lon": -2.63338,
+          "kind": 2
+        },
+        {
+          "name": "Château des Aubiers",
+          "lat": 48.49898,
+          "lon": -2.66669,
+          "kind": 2
+        },
+        {
+          "name": "Viaduc de Douvenant",
+          "lat": 48.51663,
+          "lon": -2.71901,
+          "kind": 1
+        },
+        {
+          "name": "Chapelle Saint-Eloy",
+          "lat": 48.55937,
+          "lon": -2.77465,
+          "kind": 2
+        },
+        {
+          "name": "Château Goëlo",
+          "lat": 48.53671,
+          "lon": -2.88012,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Gildas",
+          "lat": 48.56621,
+          "lon": -2.88281,
+          "kind": 2
+        },
+        {
+          "name": "Château de la Grand'Ville",
+          "lat": 48.58438,
+          "lon": -2.99115,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame de Liscorno",
+          "lat": 48.64829,
+          "lon": -3.01849,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de Kermaria-an-Isquit",
+          "lat": 48.68496,
+          "lon": -2.9757,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle du Calvaire",
+          "lat": 48.71854,
+          "lon": -3.05489,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle de la Trinité",
+          "lat": 48.80328,
+          "lon": -3.0036,
+          "kind": 2
+        },
+        {
+          "name": "Chapelle Notre-Dame de Kergrist",
+          "lat": 48.77911,
+          "lon": -3.0923,
+          "kind": 2
+        },
+        {
+          "name": "Jardin du Kestellic",
+          "lat": 48.79948,
+          "lon": -3.22618,
+          "kind": 2
+        },
+        {
+          "name": "Manoir de Mézaubran",
+          "lat": 48.76224,
+          "lon": -3.24038,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Trémeur",
+          "lat": 48.77638,
+          "lon": -3.3048,
+          "kind": 2
+        },
+        {
+          "name": "Manoir du Cosquer",
+          "lat": 48.76835,
+          "lon": -3.40303,
+          "kind": 2
+        },
+        {
+          "name": "Manoir de Crec'h Guégan",
+          "lat": 48.80497,
+          "lon": -3.44731,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Quay",
+          "lat": 48.79315,
+          "lon": -3.44827,
+          "kind": 2
+        },
+        {
+          "name": "Église de la Trinité de Brélévenez",
+          "lat": 48.736,
+          "lon": -3.45857,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Milliau",
+          "lat": 48.67931,
+          "lon": -3.52384,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Théodore",
+          "lat": 48.65109,
+          "lon": -3.56396,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Efflam",
+          "lat": 48.65519,
+          "lon": -3.63091,
+          "kind": 2
+        },
+        {
+          "name": "Tumulus",
+          "lat": 48.61129,
+          "lon": -3.66862,
+          "kind": 2
+        },
+        {
+          "name": "Manoir de Kervézec",
+          "lat": 48.60472,
+          "lon": -3.77067,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Mathieu",
+          "lat": 48.5754,
+          "lon": -3.82377,
+          "kind": 2
+        },
+        {
+          "name": "Église Saint-Guénolé",
+          "lat": 48.62507,
+          "lon": -3.86055,
+          "kind": 2
+        },
+        {
+          "name": "Château du Taureau",
+          "lat": 48.67575,
+          "lon": -3.88434,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen de Boutouiller",
+          "lat": 48.65662,
+          "lon": -3.9597,
+          "kind": 2
+        },
+        {
+          "name": "Cathédrale Saint-Paul-Aurélien",
+          "lat": 48.68494,
+          "lon": -3.98622,
+          "kind": 2
+        }
       ]
     }
   ]

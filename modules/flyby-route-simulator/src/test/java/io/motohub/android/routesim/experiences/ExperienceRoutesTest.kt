@@ -113,6 +113,16 @@ class ExperienceRoutesTest {
         assertEquals(r.km / 40.0 * 60.0, r.minutes, 0.5)
     }
 
+    @Test fun catalogueSightsAreUsedWithoutAskingTheHost() {
+        sights.result = sightFailure()   // the host would fail: it must not be asked at all
+        val e = experience().copy(sights = threeSights())
+        val r = routes.build(e, ExperienceFilters(detours = 3), alt = 0)
+        assertEquals(0, sights.calls)
+        assertNull(r.note)
+        assertTrue(r.complete)
+        assertEquals(listOf("Alpha", "Bravo", "Charlie"), r.detours.map { it.name })
+    }
+
     @Test fun theSearchAsksForAllKindsWithTheDefaultRadius() {
         offer(threeSights())
         routes.build(experience(), ExperienceFilters(), 0)

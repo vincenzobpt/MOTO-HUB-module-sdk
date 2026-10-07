@@ -2,7 +2,7 @@
   "schema": 1,
   "country": "ES",
   "name": "Spain",
-  "version": 1,
+  "version": 2,
   "experiences": [
     {
       "id": "es-ordesa-cotefablo-ainsa",
@@ -78,6 +78,249 @@
         [42.46337, 0.13629],
         [42.44128, 0.1303],
         [42.41675, 0.13903]
+      ],
+      "sights": [
+        {
+          "name": "Dolmen de Santa Elena",
+          "lat": 42.65933,
+          "lon": -0.31836,
+          "kind": 2
+        },
+        {
+          "name": "Fuerte Santa Elena",
+          "lat": 42.66146,
+          "lon": -0.32098,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de Santa Elena (Siglo XIII)",
+          "lat": 42.66296,
+          "lon": -0.32088,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Santa Eulalia",
+          "lat": 42.5923,
+          "lon": -0.31159,
+          "kind": 2
+        },
+        {
+          "name": "Monasterio de San Pelay",
+          "lat": 42.61142,
+          "lon": -0.30238,
+          "kind": 2
+        },
+        {
+          "name": "Cascada d'os Lucars",
+          "lat": 42.59181,
+          "lon": -0.30398,
+          "kind": 1
+        },
+        {
+          "name": "Iglesia de San Bartolomé",
+          "lat": 42.62806,
+          "lon": -0.27263,
+          "kind": 2
+        },
+        {
+          "name": "Centro de Interpretación Casa de la Pez",
+          "lat": 42.61884,
+          "lon": -0.25094,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Miguel",
+          "lat": 42.58817,
+          "lon": -0.21179,
+          "kind": 2
+        },
+        {
+          "name": "Centro de Visitantes de Torla-Ordesa",
+          "lat": 42.62632,
+          "lon": -0.1112,
+          "kind": 2
+        },
+        {
+          "name": "Cascada de Sorrosal",
+          "lat": 42.60543,
+          "lon": -0.12856,
+          "kind": 1
+        },
+        {
+          "name": "Torre de Don Jorge",
+          "lat": 42.59826,
+          "lon": -0.12858,
+          "kind": 2
+        },
+        {
+          "name": "Lavadero de San Cristóbal",
+          "lat": 42.57905,
+          "lon": -0.11343,
+          "kind": 2
+        },
+        {
+          "name": "Mirador del bosque de los colores",
+          "lat": 42.57767,
+          "lon": -0.03387,
+          "kind": 1
+        },
+        {
+          "name": "Col de Fanlo",
+          "lat": 42.59072,
+          "lon": -0.02291,
+          "kind": 4,
+          "ele": 1383
+        },
+        {
+          "name": "Espluca del Valle",
+          "lat": 42.60957,
+          "lon": -0.01006,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de Punta de la Rayuala",
+          "lat": 42.55729,
+          "lon": -0.00934,
+          "kind": 1
+        },
+        {
+          "name": "Ermita de Santa María",
+          "lat": 42.57707,
+          "lon": 0.01817,
+          "kind": 2
+        },
+        {
+          "name": "Selva Plana",
+          "lat": 42.59622,
+          "lon": 0.056,
+          "kind": 1
+        },
+        {
+          "name": "Cueva de los Moros",
+          "lat": 42.56292,
+          "lon": 0.03933,
+          "kind": 1
+        },
+        {
+          "name": "Los Sestrales / La Tella",
+          "lat": 42.56265,
+          "lon": 0.04274,
+          "kind": 1
+        },
+        {
+          "name": "Cumaz",
+          "lat": 42.58136,
+          "lon": 0.0551,
+          "kind": 1
+        },
+        {
+          "name": "Cascada de Aso",
+          "lat": 42.56163,
+          "lon": 0.04752,
+          "kind": 1
+        },
+        {
+          "name": "Cueva de Moros",
+          "lat": 42.56129,
+          "lon": 0.0467,
+          "kind": 1
+        },
+        {
+          "name": "Ermita de San Úrbez",
+          "lat": 42.5602,
+          "lon": 0.05136,
+          "kind": 2
+        },
+        {
+          "name": "Puente románico de San Úrbez",
+          "lat": 42.55825,
+          "lon": 0.05239,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de Vió",
+          "lat": 42.55507,
+          "lon": 0.05119,
+          "kind": 1
+        },
+        {
+          "name": "Cañón de Añisclo",
+          "lat": 42.55524,
+          "lon": 0.07162,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Miguel (sXVII)",
+          "lat": 42.53791,
+          "lon": 0.05035,
+          "kind": 2
+        },
+        {
+          "name": "Manatuero",
+          "lat": 42.53194,
+          "lon": 0.04442,
+          "kind": 1
+        },
+        {
+          "name": "Malapreciata",
+          "lat": 42.53194,
+          "lon": 0.04428,
+          "kind": 1
+        },
+        {
+          "name": "Antiguo Molino de la Artica",
+          "lat": 42.52969,
+          "lon": 0.04103,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de San Pelay",
+          "lat": 42.51157,
+          "lon": 0.17694,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de la Fuensanta",
+          "lat": 42.48392,
+          "lon": 0.17159,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de San Visorio",
+          "lat": 42.47067,
+          "lon": 0.09702,
+          "kind": 2
+        },
+        {
+          "name": "Esconjuradero de San Vicente de Labuerda",
+          "lat": 42.46835,
+          "lon": 0.1061,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de San Miguel",
+          "lat": 42.46469,
+          "lon": 0.10113,
+          "kind": 2
+        },
+        {
+          "name": "Cruz Cubierta",
+          "lat": 42.42814,
+          "lon": 0.12964,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Salvador",
+          "lat": 42.41653,
+          "lon": 0.09877,
+          "kind": 2
+        },
+        {
+          "name": "Esconjuradero de Guaso",
+          "lat": 42.41682,
+          "lon": 0.099,
+          "kind": 2
+        }
       ]
     },
     {
@@ -153,6 +396,274 @@
         [39.84531, 2.8042],
         [39.84028, 2.7955],
         [39.8503, 2.79922]
+      ],
+      "sights": [
+        {
+          "name": "pas d'en Viguet",
+          "lat": 39.58536,
+          "lon": 2.44416,
+          "kind": 4,
+          "ele": 365
+        },
+        {
+          "name": "Coll de sa Coma",
+          "lat": 39.58891,
+          "lon": 2.44091,
+          "kind": 4,
+          "ele": 226
+        },
+        {
+          "name": "Rafal Blanc",
+          "lat": 39.59107,
+          "lon": 2.4432,
+          "kind": 4,
+          "ele": 226
+        },
+        {
+          "name": "Caseta de n'Aragó",
+          "lat": 39.6246,
+          "lon": 2.44618,
+          "kind": 2
+        },
+        {
+          "name": "pas de s'Arna (final)",
+          "lat": 39.58507,
+          "lon": 2.45938,
+          "kind": 4,
+          "ele": 281
+        },
+        {
+          "name": "Coll de n'Esteve",
+          "lat": 39.5799,
+          "lon": 2.45594,
+          "kind": 4,
+          "ele": 238
+        },
+        {
+          "name": "pas de s'Arna (inici)",
+          "lat": 39.5849,
+          "lon": 2.45955,
+          "kind": 4,
+          "ele": 287
+        },
+        {
+          "name": "Coll des Molí",
+          "lat": 39.57436,
+          "lon": 2.46811,
+          "kind": 4
+        },
+        {
+          "name": "Galilea",
+          "lat": 39.60798,
+          "lon": 2.5043,
+          "kind": 4,
+          "ele": 410
+        },
+        {
+          "name": "coll des Molí de Vent",
+          "lat": 39.6087,
+          "lon": 2.51301,
+          "kind": 4
+        },
+        {
+          "name": "Es Coll Riat",
+          "lat": 39.61603,
+          "lon": 2.51754,
+          "kind": 4
+        },
+        {
+          "name": "Coll des Grau",
+          "lat": 39.64326,
+          "lon": 2.53222,
+          "kind": 4,
+          "ele": 468
+        },
+        {
+          "name": "Coll des Cards",
+          "lat": 39.64102,
+          "lon": 2.54205,
+          "kind": 4
+        },
+        {
+          "name": "pas de sa Granja",
+          "lat": 39.66214,
+          "lon": 2.55691,
+          "kind": 4,
+          "ele": 428
+        },
+        {
+          "name": "Ermita de Maristel·la",
+          "lat": 39.66059,
+          "lon": 2.56213,
+          "kind": 2
+        },
+        {
+          "name": "pas des Refrescador",
+          "lat": 39.66572,
+          "lon": 2.56349,
+          "kind": 4,
+          "ele": 384
+        },
+        {
+          "name": "Coll d'en Claret",
+          "lat": 39.6908,
+          "lon": 2.57488,
+          "kind": 4,
+          "ele": 498
+        },
+        {
+          "name": "pas des Moro;pas des Rafal",
+          "lat": 39.71287,
+          "lon": 2.59893,
+          "kind": 4,
+          "ele": 274
+        },
+        {
+          "name": "pas des Ganxo",
+          "lat": 39.69075,
+          "lon": 2.62832,
+          "kind": 4,
+          "ele": 376
+        },
+        {
+          "name": "pas Morisc",
+          "lat": 39.72825,
+          "lon": 2.69384,
+          "kind": 4,
+          "ele": 740
+        },
+        {
+          "name": "pas d'en Topa",
+          "lat": 39.73148,
+          "lon": 2.69062,
+          "kind": 4,
+          "ele": 651
+        },
+        {
+          "name": "pas des Porcs",
+          "lat": 39.72891,
+          "lon": 2.68973,
+          "kind": 4,
+          "ele": 605
+        },
+        {
+          "name": "pas de sa Paret Circular",
+          "lat": 39.73647,
+          "lon": 2.69775,
+          "kind": 4,
+          "ele": 708
+        },
+        {
+          "name": "pas de n'Aina",
+          "lat": 39.73486,
+          "lon": 2.69628,
+          "kind": 4,
+          "ele": 762
+        },
+        {
+          "name": "pas de s'Ullastre",
+          "lat": 39.7513,
+          "lon": 2.6972,
+          "kind": 4,
+          "ele": 484
+        },
+        {
+          "name": "Museu Balear de Ciències Naturals",
+          "lat": 39.76417,
+          "lon": 2.70931,
+          "kind": 2
+        },
+        {
+          "name": "Coll d'en Pastor",
+          "lat": 39.79154,
+          "lon": 2.73066,
+          "kind": 4
+        },
+        {
+          "name": "Coll d'en Biel",
+          "lat": 39.79866,
+          "lon": 2.74863,
+          "kind": 4
+        },
+        {
+          "name": "Cases de Neu",
+          "lat": 39.79726,
+          "lon": 2.78211,
+          "kind": 2
+        },
+        {
+          "name": "Coll des Puig",
+          "lat": 39.79322,
+          "lon": 2.77802,
+          "kind": 4
+        },
+        {
+          "name": "Túnel de Monnàber",
+          "lat": 39.78828,
+          "lon": 2.77843,
+          "kind": 4,
+          "ele": 875
+        },
+        {
+          "name": "pas de na Perota",
+          "lat": 39.78232,
+          "lon": 2.79815,
+          "kind": 4,
+          "ele": 925
+        },
+        {
+          "name": "pas des Gorg Blau; estret de Massanella",
+          "lat": 39.81171,
+          "lon": 2.82473,
+          "kind": 4,
+          "ele": 609
+        },
+        {
+          "name": "Coll dels Reis",
+          "lat": 39.82754,
+          "lon": 2.81799,
+          "kind": 4,
+          "ele": 682
+        },
+        {
+          "name": "sa Bretxa",
+          "lat": 39.84452,
+          "lon": 2.7994,
+          "kind": 4
+        },
+        {
+          "name": "coll de sa Mola",
+          "lat": 39.84754,
+          "lon": 2.79,
+          "kind": 4
+        },
+        {
+          "name": "Coll de s' Obaga",
+          "lat": 39.84845,
+          "lon": 2.80301,
+          "kind": 4
+        },
+        {
+          "name": "pas des Carrer Nou",
+          "lat": 39.85203,
+          "lon": 2.80444,
+          "kind": 4,
+          "ele": 98
+        },
+        {
+          "name": "pas de sa Platja (situació aproximada)",
+          "lat": 39.85223,
+          "lon": 2.80607,
+          "kind": 4,
+          "ele": 28
+        },
+        {
+          "name": "pas de s'Aranya",
+          "lat": 39.85183,
+          "lon": 2.80418,
+          "kind": 4,
+          "ele": 106
+        }
       ]
     },
     {
@@ -224,6 +735,248 @@
         [42.47581, -2.44476],
         [42.46797, -2.44114],
         [42.46526, -2.44558]
+      ],
+      "sights": [
+        {
+          "name": "El Torreón",
+          "lat": 42.5774,
+          "lon": -2.84736,
+          "kind": 2
+        },
+        {
+          "name": "Palacio de Bendaña o Paternina",
+          "lat": 42.57732,
+          "lon": -2.8466,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Bilibio",
+          "lat": 42.61638,
+          "lon": -2.85292,
+          "kind": 2
+        },
+        {
+          "name": "Las Conchas de Haro",
+          "lat": 42.61677,
+          "lon": -2.84796,
+          "kind": 1
+        },
+        {
+          "name": "Buradón",
+          "lat": 42.61606,
+          "lon": -2.84592,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Nuestra Señora de la Asunción",
+          "lat": 42.60082,
+          "lon": -2.83191,
+          "kind": 2
+        },
+        {
+          "name": "Parque Temático del Ferrocarril",
+          "lat": 42.55134,
+          "lon": -2.82914,
+          "kind": 2
+        },
+        {
+          "name": "Cueva eremítica Mondiate C",
+          "lat": 42.60658,
+          "lon": -2.82253,
+          "kind": 1
+        },
+        {
+          "name": "Tabuérniga",
+          "lat": 42.62377,
+          "lon": -2.79211,
+          "kind": 2
+        },
+        {
+          "name": "Andre Mariaren Jasokundea",
+          "lat": 42.59043,
+          "lon": -2.79255,
+          "kind": 2
+        },
+        {
+          "name": "Lagar rupestre de Fonsagrada",
+          "lat": 42.58667,
+          "lon": -2.77993,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Briones",
+          "lat": 42.54563,
+          "lon": -2.78654,
+          "kind": 2
+        },
+        {
+          "name": "Museo Vivanco de la cultura del vino",
+          "lat": 42.53957,
+          "lon": -2.7775,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de Orzales",
+          "lat": 42.60378,
+          "lon": -2.73728,
+          "kind": 2
+        },
+        {
+          "name": "Parroquia Santa María La Mayor",
+          "lat": 42.55938,
+          "lon": -2.75758,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Davalillo (Ruinas)",
+          "lat": 42.53912,
+          "lon": -2.73262,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de Santa María de La Piscina",
+          "lat": 42.57813,
+          "lon": -2.72583,
+          "kind": 2
+        },
+        {
+          "name": "San Esteban",
+          "lat": 42.574,
+          "lon": -2.71114,
+          "kind": 2
+        },
+        {
+          "name": "Palacio de Samaniego",
+          "lat": 42.5685,
+          "lon": -2.67966,
+          "kind": 2
+        },
+        {
+          "name": "Montecillo",
+          "lat": 42.55415,
+          "lon": -2.66522,
+          "kind": 2
+        },
+        {
+          "name": "Cueva de Canario",
+          "lat": 42.58753,
+          "lon": -2.66945,
+          "kind": 1
+        },
+        {
+          "name": "Dolmen Layaza",
+          "lat": 42.57995,
+          "lon": -2.65295,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen El Sotillo",
+          "lat": 42.57373,
+          "lon": -2.6219,
+          "kind": 2
+        },
+        {
+          "name": "ruinas",
+          "lat": 42.53841,
+          "lon": -2.62545,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen San Martín",
+          "lat": 42.56186,
+          "lon": -2.59419,
+          "kind": 2
+        },
+        {
+          "name": "La Hoya",
+          "lat": 42.5649,
+          "lon": -2.58616,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen del Alto de la Huesera",
+          "lat": 42.56952,
+          "lon": -2.56608,
+          "kind": 2
+        },
+        {
+          "name": "Villa Lucía",
+          "lat": 42.54838,
+          "lon": -2.57819,
+          "kind": 2
+        },
+        {
+          "name": "Sorginaren Txabola",
+          "lat": 42.56761,
+          "lon": -2.55356,
+          "kind": 2
+        },
+        {
+          "name": "San Juan ante Portam Latinam",
+          "lat": 42.54613,
+          "lon": -2.55739,
+          "kind": 2
+        },
+        {
+          "name": "Mantibleko zubia",
+          "lat": 42.50979,
+          "lon": -2.50735,
+          "kind": 2
+        },
+        {
+          "name": "Guardaviñas",
+          "lat": 42.47204,
+          "lon": -2.50549,
+          "kind": 1
+        },
+        {
+          "name": "fuente vieja",
+          "lat": 42.50741,
+          "lon": -2.43879,
+          "kind": 2
+        },
+        {
+          "name": "Puerta de las Bolas",
+          "lat": 42.47638,
+          "lon": -2.4525,
+          "kind": 2
+        },
+        {
+          "name": "Foru Eraikina",
+          "lat": 42.50516,
+          "lon": -2.43291,
+          "kind": 2
+        },
+        {
+          "name": "Casa de las Ciencias",
+          "lat": 42.47112,
+          "lon": -2.44564,
+          "kind": 2
+        },
+        {
+          "name": "Puente de Hierro",
+          "lat": 42.4694,
+          "lon": -2.44688,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Santa María de Palacio",
+          "lat": 42.46818,
+          "lon": -2.44425,
+          "kind": 2
+        },
+        {
+          "name": "Monumento al IX centenario del Fuero de Logroño",
+          "lat": 42.46292,
+          "lon": -2.4286,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Santiago",
+          "lat": 42.46782,
+          "lon": -2.44766,
+          "kind": 2
+        }
       ]
     },
     {
@@ -310,6 +1063,250 @@
         [40.81153, -3.77558],
         [40.81301, -3.76828],
         [40.80827, -3.77332]
+      ],
+      "sights": [
+        {
+          "name": "Estación de Camorritos",
+          "lat": 40.75624,
+          "lon": -4.04727,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de Vicente Aleixandre",
+          "lat": 40.7646,
+          "lon": -4.0566,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de Luis Rosales",
+          "lat": 40.76329,
+          "lon": -4.05691,
+          "kind": 1
+        },
+        {
+          "name": "Reloj de sol de Cela",
+          "lat": 40.76792,
+          "lon": -4.05294,
+          "kind": 2
+        },
+        {
+          "name": "Puente de la Venta",
+          "lat": 40.75325,
+          "lon": -4.07043,
+          "kind": 2
+        },
+        {
+          "name": "Collado del Rey",
+          "lat": 40.74171,
+          "lon": -4.09091,
+          "kind": 1
+        },
+        {
+          "name": "Cercedilla Pueblo",
+          "lat": 40.74038,
+          "lon": -4.05869,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia Parroquial",
+          "lat": 40.71522,
+          "lon": -4.07229,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de la Pelona I",
+          "lat": 40.72461,
+          "lon": -4.04995,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de la Pelona II",
+          "lat": 40.72471,
+          "lon": -4.04986,
+          "kind": 1
+        },
+        {
+          "name": "Collado del Portazgo",
+          "lat": 40.73338,
+          "lon": -4.02243,
+          "kind": 4,
+          "ele": 1294
+        },
+        {
+          "name": "Museo Etnográfico",
+          "lat": 40.71593,
+          "lon": -3.99019,
+          "kind": 2
+        },
+        {
+          "name": "Antiguo Hospital La Barranca",
+          "lat": 40.74426,
+          "lon": -4.00086,
+          "kind": 2
+        },
+        {
+          "name": "Mirador II, Cuerda de las Cabrillas",
+          "lat": 40.75231,
+          "lon": -4.01038,
+          "kind": 1
+        },
+        {
+          "name": "Mirador I",
+          "lat": 40.75318,
+          "lon": -4.00977,
+          "kind": 1
+        },
+        {
+          "name": "Estación de Siete Picos",
+          "lat": 40.76395,
+          "lon": -4.03711,
+          "kind": 2
+        },
+        {
+          "name": "Cueva de una antigua mina",
+          "lat": 40.7621,
+          "lon": -4.02553,
+          "kind": 1
+        },
+        {
+          "name": "Apeadero de Collado Albo",
+          "lat": 40.76429,
+          "lon": -4.02652,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de la Barranca",
+          "lat": 40.7567,
+          "lon": -4.00322,
+          "kind": 1
+        },
+        {
+          "name": "Paso de la Ventana",
+          "lat": 40.76534,
+          "lon": -3.98421,
+          "kind": 2
+        },
+        {
+          "name": "Collado de los Emburriaderos",
+          "lat": 40.77098,
+          "lon": -4.00312,
+          "kind": 4,
+          "ele": 1847
+        },
+        {
+          "name": "Apeadero de Dos Castillas",
+          "lat": 40.7918,
+          "lon": -4.00115,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de las Maravillas",
+          "lat": 40.80168,
+          "lon": -4.01099,
+          "kind": 1
+        },
+        {
+          "name": "Apeadero de Vaquerizas",
+          "lat": 40.80301,
+          "lon": -3.98361,
+          "kind": 2
+        },
+        {
+          "name": "Casa de Postas",
+          "lat": 40.81657,
+          "lon": -4.01737,
+          "kind": 2
+        },
+        {
+          "name": "Mirador del Cancho",
+          "lat": 40.83774,
+          "lon": -3.99234,
+          "kind": 1
+        },
+        {
+          "name": "Caseta de vigilancia de Peña Citores",
+          "lat": 40.83576,
+          "lon": -3.97979,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de Vicus Albus",
+          "lat": 40.8382,
+          "lon": -3.95805,
+          "kind": 1
+        },
+        {
+          "name": "Pequeño refugio",
+          "lat": 40.86102,
+          "lon": -3.96046,
+          "kind": 2
+        },
+        {
+          "name": "Casa de la Horca",
+          "lat": 40.84878,
+          "lon": -3.88668,
+          "kind": 2
+        },
+        {
+          "name": "Puente",
+          "lat": 40.87315,
+          "lon": -3.8766,
+          "kind": 2
+        },
+        {
+          "name": "Monasterio de Santa María de El Paular",
+          "lat": 40.88868,
+          "lon": -3.8878,
+          "kind": 2
+        },
+        {
+          "name": "Bosque Finlandés",
+          "lat": 40.88991,
+          "lon": -3.88343,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Andrés Apóstol",
+          "lat": 40.9056,
+          "lon": -3.88078,
+          "kind": 2
+        },
+        {
+          "name": "Cascada del Purgatorio",
+          "lat": 40.84934,
+          "lon": -3.86028,
+          "kind": 1
+        },
+        {
+          "name": "Cascada pequeña",
+          "lat": 40.82348,
+          "lon": -3.81591,
+          "kind": 1
+        },
+        {
+          "name": "Chorrera de Mojonavalle",
+          "lat": 40.86559,
+          "lon": -3.78558,
+          "kind": 1
+        },
+        {
+          "name": "Chorrera",
+          "lat": 40.80002,
+          "lon": -3.80898,
+          "kind": 2
+        },
+        {
+          "name": "Piedra de Buda",
+          "lat": 40.82016,
+          "lon": -3.78189,
+          "kind": 1
+        },
+        {
+          "name": "Iglesia Parroquial de Nuestra Señora de la Asunción",
+          "lat": 40.81389,
+          "lon": -3.76522,
+          "kind": 2
+        }
       ]
     },
     {
@@ -391,6 +1388,250 @@
         [28.0788, -16.68251],
         [28.06952, -16.7121],
         [28.05121, -16.71618]
+      ],
+      "sights": [
+        {
+          "name": "Templo Parroquial Nuestra Señora de la Peñita",
+          "lat": 28.41664,
+          "lon": -16.55357,
+          "kind": 2
+        },
+        {
+          "name": "Elevador de agua de Gordejuela de Casa Hamilton",
+          "lat": 28.3989,
+          "lon": -16.58588,
+          "kind": 2
+        },
+        {
+          "name": "Alonso de Nava y Grimón",
+          "lat": 28.41104,
+          "lon": -16.53482,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Santa Úrsula",
+          "lat": 28.42582,
+          "lon": -16.49176,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Nuestra Señora de la Concepción",
+          "lat": 28.38997,
+          "lon": -16.5255,
+          "kind": 2
+        },
+        {
+          "name": "Casa de los Balcones",
+          "lat": 28.38836,
+          "lon": -16.52578,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia San Juan Bautista",
+          "lat": 28.38691,
+          "lon": -16.52327,
+          "kind": 2
+        },
+        {
+          "name": "Museo Etnográfico de Pinolere",
+          "lat": 28.37848,
+          "lon": -16.49916,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de Chimague",
+          "lat": 28.37315,
+          "lon": -16.45952,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de Mataznos",
+          "lat": 28.34973,
+          "lon": -16.52528,
+          "kind": 1
+        },
+        {
+          "name": "Margarita de Piedra",
+          "lat": 28.34053,
+          "lon": -16.52438,
+          "kind": 2
+        },
+        {
+          "name": "Mirador Izaña",
+          "lat": 28.29731,
+          "lon": -16.51134,
+          "kind": 1
+        },
+        {
+          "name": "Seldom picturesque bushes",
+          "lat": 28.3422,
+          "lon": -16.59749,
+          "kind": 2
+        },
+        {
+          "name": "Colmenar Arenas Negras",
+          "lat": 28.30314,
+          "lon": -16.55905,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de Arenas Negras",
+          "lat": 28.29471,
+          "lon": -16.56438,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de las Minas de San José",
+          "lat": 28.26352,
+          "lon": -16.58801,
+          "kind": 1
+        },
+        {
+          "name": "Montaña Blanca",
+          "lat": 28.25936,
+          "lon": -16.60316,
+          "kind": 1
+        },
+        {
+          "name": "Col del Teide",
+          "lat": 28.25366,
+          "lon": -16.62503,
+          "kind": 4,
+          "ele": 2294
+        },
+        {
+          "name": "Mirador de La Fortaleza",
+          "lat": 28.27422,
+          "lon": -16.63918,
+          "kind": 1
+        },
+        {
+          "name": "Roque Cinchado",
+          "lat": 28.2247,
+          "lon": -16.63181,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de Nuestra Señora de las Nieves",
+          "lat": 28.22382,
+          "lon": -16.62802,
+          "kind": 2
+        },
+        {
+          "name": "Los Azulejos",
+          "lat": 28.2177,
+          "lon": -16.6284,
+          "kind": 2
+        },
+        {
+          "name": "Zapatilla de la Reina",
+          "lat": 28.2097,
+          "lon": -16.65692,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de las Narices del Teide",
+          "lat": 28.2385,
+          "lon": -16.69828,
+          "kind": 1
+        },
+        {
+          "name": "Risco Gangarro",
+          "lat": 28.20116,
+          "lon": -16.69902,
+          "kind": 1
+        },
+        {
+          "name": "El Retamar",
+          "lat": 28.19891,
+          "lon": -16.67337,
+          "kind": 4,
+          "ele": 2199
+        },
+        {
+          "name": "Casas de Teresme",
+          "lat": 28.16567,
+          "lon": -16.69604,
+          "kind": 2
+        },
+        {
+          "name": "Horno de brea",
+          "lat": 28.1643,
+          "lon": -16.6534,
+          "kind": 2
+        },
+        {
+          "name": "Mondlandschaft 2",
+          "lat": 28.18631,
+          "lon": -16.61462,
+          "kind": 2
+        },
+        {
+          "name": "Pino Gordo",
+          "lat": 28.16519,
+          "lon": -16.63685,
+          "kind": 2
+        },
+        {
+          "name": "Lagar Antiguo",
+          "lat": 28.13983,
+          "lon": -16.63225,
+          "kind": 2
+        },
+        {
+          "name": "Corrales",
+          "lat": 28.15317,
+          "lon": -16.67827,
+          "kind": 2
+        },
+        {
+          "name": "Horno de Leña",
+          "lat": 28.11955,
+          "lon": -16.64498,
+          "kind": 2
+        },
+        {
+          "name": "Sitio Arqueologico",
+          "lat": 28.11025,
+          "lon": -16.65849,
+          "kind": 2
+        },
+        {
+          "name": "Agujero de Benítez",
+          "lat": 28.13719,
+          "lon": -16.69389,
+          "kind": 1
+        },
+        {
+          "name": "Zona Arqueológica de Morro Grueso",
+          "lat": 28.11169,
+          "lon": -16.72069,
+          "kind": 2
+        },
+        {
+          "name": "Las Águilas Jungle Park",
+          "lat": 28.07982,
+          "lon": -16.69561,
+          "kind": 2
+        },
+        {
+          "name": "Zona Arqueológica Roque de Vento",
+          "lat": 28.08546,
+          "lon": -16.67382,
+          "kind": 2
+        },
+        {
+          "name": "Monkey Park",
+          "lat": 28.06164,
+          "lon": -16.69209,
+          "kind": 2
+        },
+        {
+          "name": "Nuestra Señora de Guadalupe",
+          "lat": 28.05841,
+          "lon": -16.72835,
+          "kind": 2
+        }
       ]
     },
     {
@@ -467,6 +1708,248 @@
         [42.48199, -7.50202],
         [42.51017, -7.50456],
         [42.52177, -7.51411]
+      ],
+      "sights": [
+        {
+          "name": "Cemiterio de San Francisco",
+          "lat": 42.33628,
+          "lon": -7.85935,
+          "kind": 2
+        },
+        {
+          "name": "Ponte do Milenio",
+          "lat": 42.34564,
+          "lon": -7.87422,
+          "kind": 2
+        },
+        {
+          "name": "Pazo de Velle",
+          "lat": 42.36159,
+          "lon": -7.83904,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa do Bon Xesús de Ceboliño",
+          "lat": 42.33997,
+          "lon": -7.82595,
+          "kind": 2
+        },
+        {
+          "name": "Capela da Virxe das Caridades",
+          "lat": 42.34623,
+          "lon": -7.80027,
+          "kind": 2
+        },
+        {
+          "name": "Capela de San Benito da Veiga",
+          "lat": 42.36234,
+          "lon": -7.79072,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Santo Amaro de Levices",
+          "lat": 42.38934,
+          "lon": -7.81101,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de Santa María de Faramontaos",
+          "lat": 42.37403,
+          "lon": -7.74735,
+          "kind": 2
+        },
+        {
+          "name": "Capela da Nosa Señora das Dores de Eiradela",
+          "lat": 42.39002,
+          "lon": -7.74059,
+          "kind": 2
+        },
+        {
+          "name": "Capela da Virxe do Pilar de Mundín",
+          "lat": 42.40539,
+          "lon": -7.7218,
+          "kind": 2
+        },
+        {
+          "name": "Capela de San Lourenzo de Biduedo",
+          "lat": 42.41682,
+          "lon": -7.70852,
+          "kind": 2
+        },
+        {
+          "name": "Mosteiro de San Vicente de Pombeiro",
+          "lat": 42.44814,
+          "lon": -7.70287,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Santa Isabel da Barca",
+          "lat": 42.42428,
+          "lon": -7.66161,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de Santa Baia de Vilar de Cerreda",
+          "lat": 42.39964,
+          "lon": -7.65048,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Salvador de Loña do Monte",
+          "lat": 42.37044,
+          "lon": -7.69664,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Pedro dos Pensos",
+          "lat": 42.3478,
+          "lon": -7.66307,
+          "kind": 2
+        },
+        {
+          "name": "Miradoiro de Vilouxe",
+          "lat": 42.38162,
+          "lon": -7.62348,
+          "kind": 1
+        },
+        {
+          "name": "Miradoiro do Furado",
+          "lat": 42.37368,
+          "lon": -7.60474,
+          "kind": 1
+        },
+        {
+          "name": "Igrexa de Santa María de Caxide",
+          "lat": 42.37676,
+          "lon": -7.58685,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de Santa María de Chandrexa de Sil",
+          "lat": 42.37711,
+          "lon": -7.54736,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Santo Amaro dos Fiós",
+          "lat": 42.35929,
+          "lon": -7.5588,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de Santa María das Paradellas",
+          "lat": 42.34162,
+          "lon": -7.59133,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Xoán das Chás",
+          "lat": 42.31644,
+          "lon": -7.58663,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Xoán de Covas",
+          "lat": 42.29666,
+          "lon": -7.55419,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Xoán de Seoane Vello",
+          "lat": 42.32095,
+          "lon": -7.51821,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Mamede de Forcas",
+          "lat": 42.36061,
+          "lon": -7.51416,
+          "kind": 2
+        },
+        {
+          "name": "Capela da Nosa Señora das Neves",
+          "lat": 42.32947,
+          "lon": -7.44404,
+          "kind": 2
+        },
+        {
+          "name": "Castro de San Martiño",
+          "lat": 42.34981,
+          "lon": -7.41871,
+          "kind": 2
+        },
+        {
+          "name": "Castelo dos Condes de Lemos",
+          "lat": 42.37606,
+          "lon": -7.41583,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de Santa Isabel",
+          "lat": 42.37752,
+          "lon": -7.41591,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de Santa María de Boazo",
+          "lat": 42.37093,
+          "lon": -7.46305,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de Santa Tegra de Abeleda",
+          "lat": 42.38629,
+          "lon": -7.45082,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Salvador de Lumeares",
+          "lat": 42.39283,
+          "lon": -7.46142,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Vicenzo de Paradela",
+          "lat": 42.40611,
+          "lon": -7.43292,
+          "kind": 2
+        },
+        {
+          "name": "Capela de San Amaro",
+          "lat": 42.41251,
+          "lon": -7.46782,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Martiño de Doade",
+          "lat": 42.41587,
+          "lon": -7.48222,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Miguel de Marcelle",
+          "lat": 42.45219,
+          "lon": -7.48823,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de Santa María da Penela",
+          "lat": 42.48723,
+          "lon": -7.478,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de Santo Estevo das Nocedas",
+          "lat": 42.48893,
+          "lon": -7.4881,
+          "kind": 2
+        },
+        {
+          "name": "Mosteiro de San Vicente do Pino",
+          "lat": 42.5239,
+          "lon": -7.5105,
+          "kind": 2
+        }
       ]
     },
     {
@@ -548,6 +2031,253 @@
         [41.40142, 1.10534],
         [41.38665, 1.16233],
         [41.37646, 1.16139]
+      ],
+      "sights": [
+        {
+          "name": "Balcó del Mediterrani",
+          "lat": 41.11368,
+          "lon": 1.2565,
+          "kind": 1
+        },
+        {
+          "name": "Sant Sebastià",
+          "lat": 41.12342,
+          "lon": 1.17879,
+          "kind": 2
+        },
+        {
+          "name": "Mare de Déu de la Pineda",
+          "lat": 41.09613,
+          "lon": 1.17049,
+          "kind": 2
+        },
+        {
+          "name": "PortAventura Park",
+          "lat": 41.08671,
+          "lon": 1.15712,
+          "kind": 2
+        },
+        {
+          "name": "PortAventura Caribe Aquatic Park",
+          "lat": 41.08842,
+          "lon": 1.15376,
+          "kind": 2
+        },
+        {
+          "name": "Torre d'En Dolça",
+          "lat": 41.09892,
+          "lon": 1.15991,
+          "kind": 2
+        },
+        {
+          "name": "La Boella - El Forn",
+          "lat": 41.13481,
+          "lon": 1.17083,
+          "kind": 2
+        },
+        {
+          "name": "Sant Bernat Calvó",
+          "lat": 41.14308,
+          "lon": 1.11272,
+          "kind": 2
+        },
+        {
+          "name": "Sant Miquel",
+          "lat": 41.198,
+          "lon": 1.11379,
+          "kind": 2
+        },
+        {
+          "name": "Casa Gasull",
+          "lat": 41.1565,
+          "lon": 1.10399,
+          "kind": 2
+        },
+        {
+          "name": "La mascota i el jardí",
+          "lat": 41.14406,
+          "lon": 1.0803,
+          "kind": 2
+        },
+        {
+          "name": "Església de Sant Jaume",
+          "lat": 41.13908,
+          "lon": 1.0511,
+          "kind": 2
+        },
+        {
+          "name": "La Creueta",
+          "lat": 41.17069,
+          "lon": 1.02038,
+          "kind": 2
+        },
+        {
+          "name": "barraca de pedra seca 5541",
+          "lat": 41.19435,
+          "lon": 1.04092,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de les Muntanyes de Prades",
+          "lat": 41.19715,
+          "lon": 1.0184,
+          "kind": 1
+        },
+        {
+          "name": "Església de Sant Miquel",
+          "lat": 41.20992,
+          "lon": 0.97477,
+          "kind": 2
+        },
+        {
+          "name": "Sant Andreu",
+          "lat": 41.24249,
+          "lon": 0.94867,
+          "kind": 2
+        },
+        {
+          "name": "balma obrada",
+          "lat": 41.25096,
+          "lon": 0.94473,
+          "kind": 1
+        },
+        {
+          "name": "Coll d'Alforja",
+          "lat": 41.22144,
+          "lon": 0.93429,
+          "kind": 4,
+          "ele": 632
+        },
+        {
+          "name": "Molí",
+          "lat": 41.1998,
+          "lon": 0.90583,
+          "kind": 2
+        },
+        {
+          "name": "Sant Joan del Codolar",
+          "lat": 41.28118,
+          "lon": 0.88824,
+          "kind": 2
+        },
+        {
+          "name": "Cova del Tití (o de Donya Blanca)",
+          "lat": 41.26358,
+          "lon": 0.93058,
+          "kind": 1
+        },
+        {
+          "name": "Santa Maria de Montsant",
+          "lat": 41.2945,
+          "lon": 0.89184,
+          "kind": 2
+        },
+        {
+          "name": "Coll d'Albarca",
+          "lat": 41.3031,
+          "lon": 0.91512,
+          "kind": 4,
+          "ele": 775
+        },
+        {
+          "name": "Salt d'en Perers",
+          "lat": 41.30323,
+          "lon": 0.94859,
+          "kind": 1
+        },
+        {
+          "name": "Mas de la Verda",
+          "lat": 41.27591,
+          "lon": 0.98876,
+          "kind": 2
+        },
+        {
+          "name": "Santa Maria de Capafonts",
+          "lat": 41.29512,
+          "lon": 1.02741,
+          "kind": 2
+        },
+        {
+          "name": "Coll de l'Arena",
+          "lat": 41.3316,
+          "lon": 0.99326,
+          "kind": 4,
+          "ele": 1034
+        },
+        {
+          "name": "Sant Salvador",
+          "lat": 41.34825,
+          "lon": 0.95536,
+          "kind": 2
+        },
+        {
+          "name": "Coll de la Mola",
+          "lat": 41.3371,
+          "lon": 0.99228,
+          "kind": 4,
+          "ele": 1011
+        },
+        {
+          "name": "Balmes de Biosca",
+          "lat": 41.36363,
+          "lon": 0.97321,
+          "kind": 1
+        },
+        {
+          "name": "Coll de les Masies",
+          "lat": 41.34255,
+          "lon": 1.00427,
+          "kind": 4,
+          "ele": 981
+        },
+        {
+          "name": "Coves d'en Pere",
+          "lat": 41.32635,
+          "lon": 1.01331,
+          "kind": 1
+        },
+        {
+          "name": "Corral del Sales",
+          "lat": 41.36596,
+          "lon": 0.99509,
+          "kind": 2
+        },
+        {
+          "name": "Castell de Riudabella",
+          "lat": 41.37248,
+          "lon": 1.0422,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de la Santíssima Trinitat",
+          "lat": 41.37322,
+          "lon": 1.11098,
+          "kind": 2
+        },
+        {
+          "name": "Mare de Déu dels Torrents",
+          "lat": 41.39498,
+          "lon": 1.06163,
+          "kind": 2
+        },
+        {
+          "name": "Església Nova de Sant Miquel",
+          "lat": 41.39636,
+          "lon": 1.10273,
+          "kind": 2
+        },
+        {
+          "name": "Assentament Visigotic de Miravet",
+          "lat": 41.36974,
+          "lon": 1.12432,
+          "kind": 2
+        },
+        {
+          "name": "Sant Pere del Pinetell",
+          "lat": 41.39175,
+          "lon": 1.1918,
+          "kind": 2
+        }
       ]
     },
     {
@@ -619,6 +2349,250 @@
         [36.77649, -2.10669],
         [36.76685, -2.11068],
         [36.76179, -2.11009]
+      ],
+      "sights": [
+        {
+          "name": "Cueva de Paco Elena",
+          "lat": 36.97097,
+          "lon": -2.22872,
+          "kind": 1
+        },
+        {
+          "name": "Cueva Lara",
+          "lat": 36.97001,
+          "lon": -2.22648,
+          "kind": 1
+        },
+        {
+          "name": "Cueva de los Murciélagos",
+          "lat": 36.95138,
+          "lon": -2.2175,
+          "kind": 1
+        },
+        {
+          "name": "Museo Memoria del Agua",
+          "lat": 36.96661,
+          "lon": -2.20562,
+          "kind": 2
+        },
+        {
+          "name": "Cueva de los Pizorros",
+          "lat": 36.97155,
+          "lon": -2.20471,
+          "kind": 1
+        },
+        {
+          "name": "Atalaya",
+          "lat": 36.9686,
+          "lon": -2.20589,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia Santa María de la Anunciación",
+          "lat": 36.9659,
+          "lon": -2.20602,
+          "kind": 2
+        },
+        {
+          "name": "Cerrico Redondo",
+          "lat": 36.95841,
+          "lon": -2.20657,
+          "kind": 1
+        },
+        {
+          "name": "Mariposario de Níjar",
+          "lat": 36.95076,
+          "lon": -2.20296,
+          "kind": 2
+        },
+        {
+          "name": "Antena Local de Campohermoso",
+          "lat": 36.93575,
+          "lon": -2.13018,
+          "kind": 2
+        },
+        {
+          "name": "Cortijo de Montano",
+          "lat": 36.87821,
+          "lon": -2.06268,
+          "kind": 2
+        },
+        {
+          "name": "Cortijo del Fraile",
+          "lat": 36.86576,
+          "lon": -2.07489,
+          "kind": 2
+        },
+        {
+          "name": "Mirador del Cortijo del Fraile",
+          "lat": 36.86689,
+          "lon": -2.06019,
+          "kind": 1
+        },
+        {
+          "name": "Collado de las Cuevas Ortiz",
+          "lat": 36.87783,
+          "lon": -2.03954,
+          "kind": 4,
+          "ele": 299
+        },
+        {
+          "name": "Cortijo de Ricardillo",
+          "lat": 36.90007,
+          "lon": -1.99699,
+          "kind": 2
+        },
+        {
+          "name": "Collado de la Marranera",
+          "lat": 36.88009,
+          "lon": -2.03026,
+          "kind": 4
+        },
+        {
+          "name": "Molino Las Negras",
+          "lat": 36.87941,
+          "lon": -2.00661,
+          "kind": 2
+        },
+        {
+          "name": "Cueva de las Palomas",
+          "lat": 36.86755,
+          "lon": -2.00243,
+          "kind": 1
+        },
+        {
+          "name": "Castillo de San Ramón",
+          "lat": 36.86362,
+          "lon": -2.00422,
+          "kind": 2
+        },
+        {
+          "name": "Mirador del Castillo del Alemán",
+          "lat": 36.86334,
+          "lon": -2.00346,
+          "kind": 1
+        },
+        {
+          "name": "Cortijo de Juan Arias",
+          "lat": 36.85642,
+          "lon": -2.04286,
+          "kind": 2
+        },
+        {
+          "name": "Vista panorámica a Rodalquilar",
+          "lat": 36.85376,
+          "lon": -2.04687,
+          "kind": 1
+        },
+        {
+          "name": "Alto de Rodalquilar hacia el mar",
+          "lat": 36.85435,
+          "lon": -2.04579,
+          "kind": 1
+        },
+        {
+          "name": "Minas de Oro de Rodalquilar",
+          "lat": 36.85218,
+          "lon": -2.04587,
+          "kind": 2
+        },
+        {
+          "name": "Casa de los Volcanes",
+          "lat": 36.85226,
+          "lon": -2.04581,
+          "kind": 2
+        },
+        {
+          "name": "Cortijada del Madroñal",
+          "lat": 36.85636,
+          "lon": -2.08308,
+          "kind": 2
+        },
+        {
+          "name": "Poblado minero de San Diego",
+          "lat": 36.84807,
+          "lon": -2.06508,
+          "kind": 2
+        },
+        {
+          "name": "El poblado minero de San Diego",
+          "lat": 36.84866,
+          "lon": -2.06524,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de las Amatistas",
+          "lat": 36.82706,
+          "lon": -2.03901,
+          "kind": 1
+        },
+        {
+          "name": "Castillo de San Felipe",
+          "lat": 36.80224,
+          "lon": -2.06276,
+          "kind": 2
+        },
+        {
+          "name": "Abandoned house",
+          "lat": 36.77674,
+          "lon": -2.06501,
+          "kind": 2
+        },
+        {
+          "name": "Cortijada de los López",
+          "lat": 36.79762,
+          "lon": -2.13713,
+          "kind": 2
+        },
+        {
+          "name": "Cortijo de los Quintana",
+          "lat": 36.79076,
+          "lon": -2.13324,
+          "kind": 2
+        },
+        {
+          "name": "Collado de la Cruz",
+          "lat": 36.77696,
+          "lon": -2.10675,
+          "kind": 4,
+          "ele": 45
+        },
+        {
+          "name": "Casa del Tomate",
+          "lat": 36.77522,
+          "lon": -2.07232,
+          "kind": 2
+        },
+        {
+          "name": "Torre de Calahiguera",
+          "lat": 36.76768,
+          "lon": -2.08612,
+          "kind": 2
+        },
+        {
+          "name": "Chimenea Mina Santa Bárbara",
+          "lat": 36.77655,
+          "lon": -2.13978,
+          "kind": 2
+        },
+        {
+          "name": "Duna Fósil de los Genoveses",
+          "lat": 36.74176,
+          "lon": -2.1217,
+          "kind": 2
+        },
+        {
+          "name": "Mirador del Sollarete",
+          "lat": 36.75368,
+          "lon": -2.10991,
+          "kind": 1
+        },
+        {
+          "name": "Cueva del Tabaco",
+          "lat": 36.76402,
+          "lon": -2.09813,
+          "kind": 1
+        }
       ]
     },
     {
@@ -700,6 +2674,249 @@
         [43.31744, -5.12983],
         [43.32831, -5.14419],
         [43.35101, -5.12833]
+      ],
+      "sights": [
+        {
+          "name": "Horno tosta blenda",
+          "lat": 43.16051,
+          "lon": -4.61224,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de Cueva Santa",
+          "lat": 43.14522,
+          "lon": -4.65561,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de Nuestra Señora de las Nieves",
+          "lat": 43.12956,
+          "lon": -4.61548,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Santa María de Piasca",
+          "lat": 43.11938,
+          "lon": -4.58012,
+          "kind": 2
+        },
+        {
+          "name": "Torres de Bores",
+          "lat": 43.10347,
+          "lon": -4.66115,
+          "kind": 2
+        },
+        {
+          "name": "Casa de las Doñas",
+          "lat": 43.09751,
+          "lon": -4.67954,
+          "kind": 2
+        },
+        {
+          "name": "Castro de La Tejera",
+          "lat": 43.10546,
+          "lon": -4.70326,
+          "kind": 2
+        },
+        {
+          "name": "Mirador del Corzo",
+          "lat": 43.07677,
+          "lon": -4.73301,
+          "kind": 1
+        },
+        {
+          "name": "Collado de Llesba",
+          "lat": 43.07649,
+          "lon": -4.7497,
+          "kind": 4
+        },
+        {
+          "name": "Cueva de Orpiñas",
+          "lat": 43.05015,
+          "lon": -4.81816,
+          "kind": 1
+        },
+        {
+          "name": "Torreón de los Tovar",
+          "lat": 42.97418,
+          "lon": -4.9226,
+          "kind": 2
+        },
+        {
+          "name": "Pedrosa del Rey",
+          "lat": 42.96705,
+          "lon": -4.96671,
+          "kind": 2
+        },
+        {
+          "name": "Potro de herrar de Barniedo",
+          "lat": 42.97543,
+          "lon": -5.00545,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Nuestra Señora",
+          "lat": 42.9751,
+          "lon": -5.01232,
+          "kind": 2
+        },
+        {
+          "name": "El Silencio de las Campanas",
+          "lat": 42.97528,
+          "lon": -5.01204,
+          "kind": 2
+        },
+        {
+          "name": "Campana de concejo",
+          "lat": 42.97557,
+          "lon": -5.00622,
+          "kind": 2
+        },
+        {
+          "name": "Cueva de la Vieja del Monte",
+          "lat": 42.96631,
+          "lon": -5.03221,
+          "kind": 1
+        },
+        {
+          "name": "Riaño",
+          "lat": 42.97451,
+          "lon": -5.01301,
+          "kind": 2
+        },
+        {
+          "name": "El banco más bonito de León",
+          "lat": 42.97485,
+          "lon": -5.01262,
+          "kind": 2
+        },
+        {
+          "name": "Mirador Las Biescas",
+          "lat": 42.96545,
+          "lon": -5.03458,
+          "kind": 2
+        },
+        {
+          "name": "Museo Etnográfico",
+          "lat": 42.97521,
+          "lon": -5.0062,
+          "kind": 2
+        },
+        {
+          "name": "Hórreo de Salio",
+          "lat": 42.97539,
+          "lon": -5.01178,
+          "kind": 2
+        },
+        {
+          "name": "Chozo de los Pastores",
+          "lat": 42.97539,
+          "lon": -5.00558,
+          "kind": 2
+        },
+        {
+          "name": "Antiguo pueblo de Riaño",
+          "lat": 42.97243,
+          "lon": -5.01516,
+          "kind": 2
+        },
+        {
+          "name": "Éscaro",
+          "lat": 43.00696,
+          "lon": -5.00421,
+          "kind": 2
+        },
+        {
+          "name": "Burón",
+          "lat": 43.02265,
+          "lon": -5.05049,
+          "kind": 2
+        },
+        {
+          "name": "Puerto del Pontón",
+          "lat": 43.09993,
+          "lon": -5.01888,
+          "kind": 4,
+          "ele": 1296
+        },
+        {
+          "name": "Puerto de Panderrueda",
+          "lat": 43.12496,
+          "lon": -4.98194,
+          "kind": 1
+        },
+        {
+          "name": "Museo Escuela Félix de Martino",
+          "lat": 43.16323,
+          "lon": -5.03491,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de Vistalegre",
+          "lat": 43.14847,
+          "lon": -5.05113,
+          "kind": 1
+        },
+        {
+          "name": "Cantoloto",
+          "lat": 43.16025,
+          "lon": -5.06168,
+          "kind": 1
+        },
+        {
+          "name": "Cueva la Conia",
+          "lat": 43.18332,
+          "lon": -5.04878,
+          "kind": 1
+        },
+        {
+          "name": "Cascada de Aguasalio",
+          "lat": 43.20959,
+          "lon": -5.08837,
+          "kind": 1
+        },
+        {
+          "name": "Cueva del Agua",
+          "lat": 43.24175,
+          "lon": -5.0449,
+          "kind": 1
+        },
+        {
+          "name": "Iglesia de Santa María",
+          "lat": 43.26444,
+          "lon": -5.12367,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de Trexeru",
+          "lat": 43.2625,
+          "lon": -5.1352,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de Vis",
+          "lat": 43.29429,
+          "lon": -5.12461,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de Següencu",
+          "lat": 43.31966,
+          "lon": -5.1127,
+          "kind": 1
+        },
+        {
+          "name": "Monasterio de San Pedro de Villanueva",
+          "lat": 43.36697,
+          "lon": -5.15083,
+          "kind": 2
+        },
+        {
+          "name": "Puente Romano",
+          "lat": 43.35018,
+          "lon": -5.13215,
+          "kind": 2
+        }
       ]
     },
     {
@@ -781,6 +2998,252 @@
         [43.30353, -2.00398],
         [43.31106, -2.00946],
         [43.31814, -1.98164]
+      ],
+      "sights": [
+        {
+          "name": "Iglesia de Nuestra Señora del Carmen",
+          "lat": 43.26015,
+          "lon": -2.94107,
+          "kind": 2
+        },
+        {
+          "name": "Done Bikendi eliza / Iglesia de San Vicente Mártir",
+          "lat": 43.26358,
+          "lon": -2.92762,
+          "kind": 2
+        },
+        {
+          "name": "Bilboko Arte Eder museoa",
+          "lat": 43.2656,
+          "lon": -2.93818,
+          "kind": 2
+        },
+        {
+          "name": "Horno Alto N.º1 de Altos Hornos de Vizcaya",
+          "lat": 43.31159,
+          "lon": -3.00055,
+          "kind": 2
+        },
+        {
+          "name": "Butroeko gaztelua",
+          "lat": 43.37171,
+          "lon": -2.91425,
+          "kind": 2
+        },
+        {
+          "name": "Andra Maria eta Done Petri",
+          "lat": 43.35396,
+          "lon": -2.84774,
+          "kind": 2
+        },
+        {
+          "name": "Zumetzagako Done Mikel",
+          "lat": 43.39836,
+          "lon": -2.82339,
+          "kind": 2
+        },
+        {
+          "name": "Tribisburuko Aztarnategi Erromatarra",
+          "lat": 43.37911,
+          "lon": -2.74714,
+          "kind": 2
+        },
+        {
+          "name": "Sollube",
+          "lat": 43.40533,
+          "lon": -2.76053,
+          "kind": 4,
+          "ele": 430
+        },
+        {
+          "name": "San Pelaio baseliza",
+          "lat": 43.43738,
+          "lon": -2.78382,
+          "kind": 2
+        },
+        {
+          "name": "Doniene atea",
+          "lat": 43.42122,
+          "lon": -2.72297,
+          "kind": 2
+        },
+        {
+          "name": "San Andrés",
+          "lat": 43.39497,
+          "lon": -2.69606,
+          "kind": 2
+        },
+        {
+          "name": "Edurretako Andra Maria Baseliza",
+          "lat": 43.35803,
+          "lon": -2.73078,
+          "kind": 2
+        },
+        {
+          "name": "Gernikako Arbola",
+          "lat": 43.31336,
+          "lon": -2.68001,
+          "kind": 2
+        },
+        {
+          "name": "Urdaibai Bird Center",
+          "lat": 43.34718,
+          "lon": -2.65739,
+          "kind": 2
+        },
+        {
+          "name": "iglesia de San Miguel",
+          "lat": 43.35594,
+          "lon": -2.62321,
+          "kind": 2
+        },
+        {
+          "name": "Mutiobarrenengoa",
+          "lat": 43.33128,
+          "lon": -2.5911,
+          "kind": 2
+        },
+        {
+          "name": "Antzorizko Santa Katalina",
+          "lat": 43.37662,
+          "lon": -2.5098,
+          "kind": 2
+        },
+        {
+          "name": "Armintxe",
+          "lat": 43.36169,
+          "lon": -2.50794,
+          "kind": 1
+        },
+        {
+          "name": "Goikolau",
+          "lat": 43.32739,
+          "lon": -2.49263,
+          "kind": 1
+        },
+        {
+          "name": "Arretxinagako San Migel ermita",
+          "lat": 43.27147,
+          "lon": -2.49512,
+          "kind": 2
+        },
+        {
+          "name": "Likona Dorrea",
+          "lat": 43.32048,
+          "lon": -2.42385,
+          "kind": 2
+        },
+        {
+          "name": "Nautilus",
+          "lat": 43.30667,
+          "lon": -2.3895,
+          "kind": 2
+        },
+        {
+          "name": "Kalbarioa",
+          "lat": 43.29491,
+          "lon": -2.38312,
+          "kind": 4,
+          "ele": 233
+        },
+        {
+          "name": "Santa Maria",
+          "lat": 43.2948,
+          "lon": -2.35332,
+          "kind": 2
+        },
+        {
+          "name": "Eliza",
+          "lat": 43.27648,
+          "lon": -2.33166,
+          "kind": 2
+        },
+        {
+          "name": "Túmulo Marikutx I",
+          "lat": 43.20901,
+          "lon": -2.32957,
+          "kind": 2
+        },
+        {
+          "name": "Ekain",
+          "lat": 43.23613,
+          "lon": -2.27565,
+          "kind": 1
+        },
+        {
+          "name": "Lili Jauregia",
+          "lat": 43.23794,
+          "lon": -2.26058,
+          "kind": 2
+        },
+        {
+          "name": "San Sebastian ermita",
+          "lat": 43.28586,
+          "lon": -2.29217,
+          "kind": 2
+        },
+        {
+          "name": "Algorri interpretazio zentroa",
+          "lat": 43.29967,
+          "lon": -2.25513,
+          "kind": 2
+        },
+        {
+          "name": "San Prudentzio Ermita",
+          "lat": 43.30465,
+          "lon": -2.22001,
+          "kind": 2
+        },
+        {
+          "name": "Meaga",
+          "lat": 43.28124,
+          "lon": -2.2095,
+          "kind": 4,
+          "ele": 142
+        },
+        {
+          "name": "Garate",
+          "lat": 43.29049,
+          "lon": -2.20238,
+          "kind": 4,
+          "ele": 243
+        },
+        {
+          "name": "Joan Sebastian Elkanoren estatua",
+          "lat": 43.30308,
+          "lon": -2.20448,
+          "kind": 2
+        },
+        {
+          "name": "Santa Marina ermita",
+          "lat": 43.28571,
+          "lon": -2.17737,
+          "kind": 2
+        },
+        {
+          "name": "Altxerri",
+          "lat": 43.26891,
+          "lon": -2.13451,
+          "kind": 1
+        },
+        {
+          "name": "San Esteban ermita",
+          "lat": 43.26758,
+          "lon": -2.06023,
+          "kind": 2
+        },
+        {
+          "name": "Igeldo",
+          "lat": 43.3088,
+          "lon": -2.0364,
+          "kind": 2
+        },
+        {
+          "name": "Parque de Atracciones Monte Igueldo",
+          "lat": 43.32107,
+          "lon": -2.00985,
+          "kind": 2
+        }
       ]
     },
     {
@@ -862,6 +3325,250 @@
         [42.32569, 1.39918],
         [42.358, 1.44434],
         [42.35808, 1.46139]
+      ],
+      "sights": [
+        {
+          "name": "Mair de Diu de Montcorbau",
+          "lat": 42.73321,
+          "lon": 0.78979,
+          "kind": 2
+        },
+        {
+          "name": "Sant Julian de Garòs",
+          "lat": 42.70055,
+          "lon": 0.84338,
+          "kind": 2
+        },
+        {
+          "name": "Sant Pèir de Gessa",
+          "lat": 42.70538,
+          "lon": 0.88994,
+          "kind": 2
+        },
+        {
+          "name": "Sant Estève",
+          "lat": 42.70084,
+          "lon": 0.91389,
+          "kind": 2
+        },
+        {
+          "name": "Pèira deth Uelh de Garona",
+          "lat": 42.71123,
+          "lon": 0.94794,
+          "kind": 2
+        },
+        {
+          "name": "Guardar dera Val de Ruda",
+          "lat": 42.67073,
+          "lon": 0.96711,
+          "kind": 1
+        },
+        {
+          "name": "Mare de Déu de les Ares",
+          "lat": 42.64773,
+          "lon": 1.00734,
+          "kind": 2
+        },
+        {
+          "name": "Mare de Déu de les Neus",
+          "lat": 42.66315,
+          "lon": 1.06842,
+          "kind": 2
+        },
+        {
+          "name": "Sant Llorenç d'Isavarre",
+          "lat": 42.65091,
+          "lon": 1.10077,
+          "kind": 2
+        },
+        {
+          "name": "Castell de València d'Àneu",
+          "lat": 42.63244,
+          "lon": 1.11632,
+          "kind": 2
+        },
+        {
+          "name": "Santa Maria d'Àneu",
+          "lat": 42.61537,
+          "lon": 1.12925,
+          "kind": 2
+        },
+        {
+          "name": "Sant Bartomeu",
+          "lat": 42.59163,
+          "lon": 1.14923,
+          "kind": 2
+        },
+        {
+          "name": "Santa Llogaia",
+          "lat": 42.57675,
+          "lon": 1.08878,
+          "kind": 2
+        },
+        {
+          "name": "Santa Maria d'Espot",
+          "lat": 42.57055,
+          "lon": 1.09887,
+          "kind": 2
+        },
+        {
+          "name": "Castell d'Escart",
+          "lat": 42.54381,
+          "lon": 1.13371,
+          "kind": 2
+        },
+        {
+          "name": "Sant Serni de Baiasca",
+          "lat": 42.50968,
+          "lon": 1.14237,
+          "kind": 2
+        },
+        {
+          "name": "Sant Jaume d'Arestui",
+          "lat": 42.50207,
+          "lon": 1.17879,
+          "kind": 2
+        },
+        {
+          "name": "Sant Feliu de Tírvia",
+          "lat": 42.51493,
+          "lon": 1.2426,
+          "kind": 2
+        },
+        {
+          "name": "Santa Anna",
+          "lat": 42.49585,
+          "lon": 1.21117,
+          "kind": 2
+        },
+        {
+          "name": "Mare de Déu de Biuse",
+          "lat": 42.4756,
+          "lon": 1.21287,
+          "kind": 2
+        },
+        {
+          "name": "Sant Cristòfol",
+          "lat": 42.45783,
+          "lon": 1.18113,
+          "kind": 2
+        },
+        {
+          "name": "Sant Joan de Colinos",
+          "lat": 42.44276,
+          "lon": 1.156,
+          "kind": 2
+        },
+        {
+          "name": "Sant Quirze de Surp",
+          "lat": 42.4509,
+          "lon": 1.13351,
+          "kind": 2
+        },
+        {
+          "name": "Santa Cecília",
+          "lat": 42.39435,
+          "lon": 1.1047,
+          "kind": 2
+        },
+        {
+          "name": "Mare de Déu del Soler",
+          "lat": 42.39203,
+          "lon": 1.12465,
+          "kind": 2
+        },
+        {
+          "name": "Sant Miquel de Vilamur",
+          "lat": 42.38926,
+          "lon": 1.16478,
+          "kind": 2
+        },
+        {
+          "name": "Santa Coloma",
+          "lat": 42.36886,
+          "lon": 1.14023,
+          "kind": 2
+        },
+        {
+          "name": "Cabana de Freixa",
+          "lat": 42.35801,
+          "lon": 1.19262,
+          "kind": 2
+        },
+        {
+          "name": "Santa Creu de Llagunes",
+          "lat": 42.37419,
+          "lon": 1.2036,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen de Biscarbó",
+          "lat": 42.34433,
+          "lon": 1.22461,
+          "kind": 2
+        },
+        {
+          "name": "Port del Cantó",
+          "lat": 42.37036,
+          "lon": 1.23777,
+          "kind": 4,
+          "ele": 1718
+        },
+        {
+          "name": "Santa Eugina",
+          "lat": 42.32872,
+          "lon": 1.25056,
+          "kind": 2
+        },
+        {
+          "name": "Coll del Roc Picó",
+          "lat": 42.34064,
+          "lon": 1.29618,
+          "kind": 4,
+          "ele": 1559
+        },
+        {
+          "name": "Sant Lluc d'Anyús",
+          "lat": 42.31388,
+          "lon": 1.28676,
+          "kind": 2
+        },
+        {
+          "name": "Sant Iscle i Santa Victòria",
+          "lat": 42.38147,
+          "lon": 1.32273,
+          "kind": 2
+        },
+        {
+          "name": "Santa Cecília d'Elins",
+          "lat": 42.34893,
+          "lon": 1.31432,
+          "kind": 2
+        },
+        {
+          "name": "Santa Llogaia de Bellpui",
+          "lat": 42.29584,
+          "lon": 1.31575,
+          "kind": 2
+        },
+        {
+          "name": "Sant Serni",
+          "lat": 42.29392,
+          "lon": 1.34231,
+          "kind": 2
+        },
+        {
+          "name": "Pou de gel d'Arfa",
+          "lat": 42.33215,
+          "lon": 1.41473,
+          "kind": 2
+        },
+        {
+          "name": "Ciutadella de Castellciutat",
+          "lat": 42.35232,
+          "lon": 1.44176,
+          "kind": 2
+        }
       ]
     },
     {
@@ -943,6 +3650,251 @@
         [36.74334, -5.63588],
         [36.75499, -5.69504],
         [36.75181, -5.81036]
+      ],
+      "sights": [
+        {
+          "name": "Puerta de Almocábar",
+          "lat": 36.7346,
+          "lon": -5.16449,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Santa María la Mayor",
+          "lat": 36.73766,
+          "lon": -5.16552,
+          "kind": 2
+        },
+        {
+          "name": "Casa Museo Don Bosco",
+          "lat": 36.73915,
+          "lon": -5.16651,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia mozárabe de las Cuevas de San Antón",
+          "lat": 36.73781,
+          "lon": -5.18472,
+          "kind": 2
+        },
+        {
+          "name": "Casa del Gigante",
+          "lat": 36.73833,
+          "lon": -5.16556,
+          "kind": 2
+        },
+        {
+          "name": "Arco del Cristo",
+          "lat": 36.73936,
+          "lon": -5.16828,
+          "kind": 2
+        },
+        {
+          "name": "Torre alminar de la Iglesia de San Sebastián",
+          "lat": 36.73806,
+          "lon": -5.1646,
+          "kind": 2
+        },
+        {
+          "name": "Casa del Rey Moro",
+          "lat": 36.73985,
+          "lon": -5.16442,
+          "kind": 2
+        },
+        {
+          "name": "Palacio del Marqués de Salvatierra",
+          "lat": 36.73925,
+          "lon": -5.16369,
+          "kind": 2
+        },
+        {
+          "name": "Museo Lara",
+          "lat": 36.73936,
+          "lon": -5.16516,
+          "kind": 2
+        },
+        {
+          "name": "Baños Árabes",
+          "lat": 36.73894,
+          "lon": -5.16281,
+          "kind": 2
+        },
+        {
+          "name": "Fuente de los Ocho Caños",
+          "lat": 36.74028,
+          "lon": -5.1628,
+          "kind": 2
+        },
+        {
+          "name": "Ermita rupestre de la Oscuridad",
+          "lat": 36.74271,
+          "lon": -5.16205,
+          "kind": 2
+        },
+        {
+          "name": "Necrópolis megalítica de La Planilla",
+          "lat": 36.73167,
+          "lon": -5.14953,
+          "kind": 2
+        },
+        {
+          "name": "Loma de Espejo",
+          "lat": 36.77839,
+          "lon": -5.13202,
+          "kind": 2
+        },
+        {
+          "name": "Reservatauro Ronda",
+          "lat": 36.7997,
+          "lon": -5.10341,
+          "kind": 2
+        },
+        {
+          "name": "Puerto del Monte",
+          "lat": 36.83829,
+          "lon": -5.13769,
+          "kind": 4
+        },
+        {
+          "name": "Ermita de San Sebastián",
+          "lat": 36.86139,
+          "lon": -5.18308,
+          "kind": 2
+        },
+        {
+          "name": "Ciudad romana de Acinipo",
+          "lat": 36.83669,
+          "lon": -5.24023,
+          "kind": 2
+        },
+        {
+          "name": "Teatro romano",
+          "lat": 36.83186,
+          "lon": -5.24063,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen de La Giganta",
+          "lat": 36.78378,
+          "lon": -5.27126,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen El Charcón II",
+          "lat": 36.84643,
+          "lon": -5.32308,
+          "kind": 2
+        },
+        {
+          "name": "Fin de Sendero: La Bodega",
+          "lat": 36.83452,
+          "lon": -5.40505,
+          "kind": 1
+        },
+        {
+          "name": "Ermita de la Garganta Verde",
+          "lat": 36.81514,
+          "lon": -5.40472,
+          "kind": 1
+        },
+        {
+          "name": "Puerto del Acebuche",
+          "lat": 36.80511,
+          "lon": -5.3906,
+          "kind": 4,
+          "ele": 733
+        },
+        {
+          "name": "Puerto de las Palomas",
+          "lat": 36.79752,
+          "lon": -5.38259,
+          "kind": 4,
+          "ele": 914
+        },
+        {
+          "name": "Mirador de las Palomas",
+          "lat": 36.78706,
+          "lon": -5.37707,
+          "kind": 1
+        },
+        {
+          "name": "Mirador \"El Santo\"",
+          "lat": 36.7569,
+          "lon": -5.36395,
+          "kind": 1
+        },
+        {
+          "name": "Ermita del Calvario",
+          "lat": 36.75624,
+          "lon": -5.36634,
+          "kind": 2
+        },
+        {
+          "name": "Casa del Dornajo",
+          "lat": 36.72632,
+          "lon": -5.39617,
+          "kind": 2
+        },
+        {
+          "name": "Puerto del Boyar",
+          "lat": 36.75554,
+          "lon": -5.39463,
+          "kind": 4,
+          "ele": 1105
+        },
+        {
+          "name": "Tunel Coargazal",
+          "lat": 36.73655,
+          "lon": -5.40807,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Aznamara",
+          "lat": 36.72948,
+          "lon": -5.46631,
+          "kind": 2
+        },
+        {
+          "name": "Molino del susto",
+          "lat": 36.75735,
+          "lon": -5.46314,
+          "kind": 2
+        },
+        {
+          "name": "Las Constelaciones del Zodiaco",
+          "lat": 36.76075,
+          "lon": -5.4901,
+          "kind": 2
+        },
+        {
+          "name": "Museo Molino de Abajo",
+          "lat": 36.75629,
+          "lon": -5.51044,
+          "kind": 2
+        },
+        {
+          "name": "Salinas de Iptuci",
+          "lat": 36.74997,
+          "lon": -5.54646,
+          "kind": 2
+        },
+        {
+          "name": "Basílica Menor de Santa María de la Asunción",
+          "lat": 36.7483,
+          "lon": -5.80634,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Arcos de la Frontera",
+          "lat": 36.74822,
+          "lon": -5.8072,
+          "kind": 2
+        },
+        {
+          "name": "Mirador Pueblos Blancos",
+          "lat": 36.74593,
+          "lon": -5.823,
+          "kind": 1
+        }
       ]
     },
     {
@@ -1022,6 +3974,252 @@
         [40.54579, -4.71878],
         [40.58357, -4.72931],
         [40.65627, -4.70071]
+      ],
+      "sights": [
+        {
+          "name": "Iglesia de La Magdalena",
+          "lat": 40.02862,
+          "lon": -6.09534,
+          "kind": 2
+        },
+        {
+          "name": "Los Arcos de San Antón",
+          "lat": 40.03645,
+          "lon": -6.08586,
+          "kind": 2
+        },
+        {
+          "name": "Santuario Virgen del Puerto",
+          "lat": 40.06183,
+          "lon": -6.07984,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de la Memoria",
+          "lat": 40.12335,
+          "lon": -5.94766,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de la Cabra",
+          "lat": 40.11535,
+          "lon": -5.89379,
+          "kind": 1
+        },
+        {
+          "name": "Cascada Garganta Nogalera",
+          "lat": 40.1949,
+          "lon": -5.87007,
+          "kind": 2
+        },
+        {
+          "name": "Museo de la Cereza",
+          "lat": 40.19351,
+          "lon": -5.80841,
+          "kind": 2
+        },
+        {
+          "name": "Chorrero de la Virgen",
+          "lat": 40.19451,
+          "lon": -5.75443,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de la Cruz",
+          "lat": 40.25193,
+          "lon": -5.67883,
+          "kind": 1
+        },
+        {
+          "name": "Puerto de Tornavacas",
+          "lat": 40.27283,
+          "lon": -5.66238,
+          "kind": 4,
+          "ele": 1275
+        },
+        {
+          "name": "Mirador del Puerto de Tornavacas",
+          "lat": 40.27186,
+          "lon": -5.66341,
+          "kind": 1
+        },
+        {
+          "name": "Crucero",
+          "lat": 40.31439,
+          "lon": -5.61552,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de la Asunción de Nuestra Señora",
+          "lat": 40.3559,
+          "lon": -5.52675,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Valdecorneja",
+          "lat": 40.35894,
+          "lon": -5.52515,
+          "kind": 2
+        },
+        {
+          "name": "Puente Románico de Tormellas",
+          "lat": 40.30772,
+          "lon": -5.51262,
+          "kind": 2
+        },
+        {
+          "name": "Roca de los huevos de carnaval",
+          "lat": 40.31183,
+          "lon": -5.40803,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Santa Margarita",
+          "lat": 40.33048,
+          "lon": -5.39597,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de Zapardiel",
+          "lat": 40.35463,
+          "lon": -5.32755,
+          "kind": 1
+        },
+        {
+          "name": "Antigua casa del molinero",
+          "lat": 40.34995,
+          "lon": -5.28294,
+          "kind": 2
+        },
+        {
+          "name": "Campanario",
+          "lat": 40.36209,
+          "lon": -5.17901,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Benito Abad",
+          "lat": 40.36332,
+          "lon": -5.14203,
+          "kind": 2
+        },
+        {
+          "name": "Chorrera de San Martín del Pimpollar",
+          "lat": 40.35459,
+          "lon": -5.05474,
+          "kind": 1
+        },
+        {
+          "name": "Altar rupestre",
+          "lat": 40.39134,
+          "lon": -4.97219,
+          "kind": 2
+        },
+        {
+          "name": "Mirador astronómico",
+          "lat": 40.41093,
+          "lon": -4.97043,
+          "kind": 1
+        },
+        {
+          "name": "Colladito del Valle",
+          "lat": 40.39646,
+          "lon": -4.91525,
+          "kind": 4,
+          "ele": 1279
+        },
+        {
+          "name": "Colladillo",
+          "lat": 40.4248,
+          "lon": -4.83486,
+          "kind": 4,
+          "ele": 1105
+        },
+        {
+          "name": "Mirador Estelar de Navarredondilla",
+          "lat": 40.44571,
+          "lon": -4.84766,
+          "kind": 1
+        },
+        {
+          "name": "Mirador estelar Burgohondo",
+          "lat": 40.42914,
+          "lon": -4.77662,
+          "kind": 1
+        },
+        {
+          "name": "Puerto de Navalmoral",
+          "lat": 40.49774,
+          "lon": -4.73615,
+          "kind": 4,
+          "ele": 1514
+        },
+        {
+          "name": "Real Monasterio de Santo Tomás",
+          "lat": 40.65036,
+          "lon": -4.6886,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Nuestra Señora de las Vacas",
+          "lat": 40.65262,
+          "lon": -4.69346,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Pedro",
+          "lat": 40.6542,
+          "lon": -4.69511,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Nicolás",
+          "lat": 40.65179,
+          "lon": -4.7023,
+          "kind": 2
+        },
+        {
+          "name": "Basílica de San Vicente",
+          "lat": 40.65803,
+          "lon": -4.6958,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Andrés",
+          "lat": 40.6595,
+          "lon": -4.69526,
+          "kind": 2
+        },
+        {
+          "name": "Los Cuatro Postes",
+          "lat": 40.65994,
+          "lon": -4.71106,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Martín",
+          "lat": 40.66009,
+          "lon": -4.70079,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de Nuestra Señora de la Cabeza",
+          "lat": 40.6606,
+          "lon": -4.7022,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de San Segundo",
+          "lat": 40.65891,
+          "lon": -4.70769,
+          "kind": 2
+        },
+        {
+          "name": "Convento de la Encarnación",
+          "lat": 40.66281,
+          "lon": -4.69939,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1093,6 +4291,253 @@
         [40.97092, -4.22017],
         [40.9545, -4.20851],
         [40.94772, -4.1183]
+      ],
+      "sights": [
+        {
+          "name": "Capilla de San Blas",
+          "lat": 39.85789,
+          "lon": -4.02389,
+          "kind": 2
+        },
+        {
+          "name": "Capilla de los Reyes Nuevos",
+          "lat": 39.85734,
+          "lon": -4.02311,
+          "kind": 2
+        },
+        {
+          "name": "Museo sefardi",
+          "lat": 39.85586,
+          "lon": -4.02945,
+          "kind": 2
+        },
+        {
+          "name": "Palacio de fuensalida",
+          "lat": 39.8567,
+          "lon": -4.02792,
+          "kind": 2
+        },
+        {
+          "name": "Federico Martin Bahamontes",
+          "lat": 39.86136,
+          "lon": -4.02186,
+          "kind": 2
+        },
+        {
+          "name": "Capilla de San José",
+          "lat": 39.8605,
+          "lon": -4.02302,
+          "kind": 2
+        },
+        {
+          "name": "Alcázar de Toledo",
+          "lat": 39.85803,
+          "lon": -4.02037,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de San Servando",
+          "lat": 39.86042,
+          "lon": -4.01561,
+          "kind": 2
+        },
+        {
+          "name": "Sinagoga del Tránsito",
+          "lat": 39.85567,
+          "lon": -4.02956,
+          "kind": 2
+        },
+        {
+          "name": "Plaza de Toros de Toledo",
+          "lat": 39.86729,
+          "lon": -4.02329,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia Parroquial",
+          "lat": 40.05424,
+          "lon": -4.11507,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia Parroquial de San Juan Bautista",
+          "lat": 40.09212,
+          "lon": -4.11989,
+          "kind": 2
+        },
+        {
+          "name": "El Canto",
+          "lat": 40.15397,
+          "lon": -4.12751,
+          "kind": 2
+        },
+        {
+          "name": "Palacio de El Rincón",
+          "lat": 40.29489,
+          "lon": -4.24621,
+          "kind": 2
+        },
+        {
+          "name": "Los Corrales",
+          "lat": 40.32412,
+          "lon": -4.18359,
+          "kind": 2
+        },
+        {
+          "name": "El Bombo",
+          "lat": 40.37726,
+          "lon": -4.21205,
+          "kind": 2
+        },
+        {
+          "name": "Puerto de San Juan",
+          "lat": 40.40013,
+          "lon": -4.2496,
+          "kind": 4,
+          "ele": 747
+        },
+        {
+          "name": "Ermita de Navahonda",
+          "lat": 40.44458,
+          "lon": -4.24523,
+          "kind": 2
+        },
+        {
+          "name": "Puerto de la Almenara",
+          "lat": 40.45082,
+          "lon": -4.26255,
+          "kind": 4,
+          "ele": 949
+        },
+        {
+          "name": "Puente Mocha",
+          "lat": 40.48682,
+          "lon": -4.29931,
+          "kind": 2
+        },
+        {
+          "name": "Molino Harinero",
+          "lat": 40.52563,
+          "lon": -4.18795,
+          "kind": 2
+        },
+        {
+          "name": "Puerto de la Cruz Verde",
+          "lat": 40.55902,
+          "lon": -4.19682,
+          "kind": 4,
+          "ele": 1251
+        },
+        {
+          "name": "La Silla de Felipe II",
+          "lat": 40.56854,
+          "lon": -4.15254,
+          "kind": 1
+        },
+        {
+          "name": "Collado de La Paradilla",
+          "lat": 40.56615,
+          "lon": -4.20714,
+          "kind": 4
+        },
+        {
+          "name": "Iglesia de San Juan Bautista",
+          "lat": 40.60292,
+          "lon": -4.32571,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de los Trece Roeles",
+          "lat": 40.56493,
+          "lon": -4.39161,
+          "kind": 1
+        },
+        {
+          "name": "Ermita Virgen de Valbellido",
+          "lat": 40.60296,
+          "lon": -4.48156,
+          "kind": 2
+        },
+        {
+          "name": "Alto de Valdelavía",
+          "lat": 40.62041,
+          "lon": -4.5106,
+          "kind": 4,
+          "ele": 1448
+        },
+        {
+          "name": "Mirador del Herradón",
+          "lat": 40.60965,
+          "lon": -4.55882,
+          "kind": 1
+        },
+        {
+          "name": "Puerto de las Pilas",
+          "lat": 40.61088,
+          "lon": -4.57335,
+          "kind": 4,
+          "ele": 1338
+        },
+        {
+          "name": "Real Monasterio de Santo Tomás",
+          "lat": 40.65036,
+          "lon": -4.6886,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Pedro Apóstol",
+          "lat": 40.84288,
+          "lon": -4.77116,
+          "kind": 2
+        },
+        {
+          "name": "Molino de los Pobos",
+          "lat": 40.8391,
+          "lon": -4.68935,
+          "kind": 2
+        },
+        {
+          "name": "Molino de El Chorrillo",
+          "lat": 40.89469,
+          "lon": -4.67141,
+          "kind": 2
+        },
+        {
+          "name": "Molino de Moñibas",
+          "lat": 40.92821,
+          "lon": -4.53914,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de San Miguel de Párraces",
+          "lat": 40.97505,
+          "lon": -4.40614,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Nuestra Señora de la Asunción",
+          "lat": 41.01061,
+          "lon": -4.39085,
+          "kind": 2
+        },
+        {
+          "name": "Puente Oñez",
+          "lat": 41.00132,
+          "lon": -4.31632,
+          "kind": 2
+        },
+        {
+          "name": "Estación de Hontanares de Eresma",
+          "lat": 40.99003,
+          "lon": -4.2091,
+          "kind": 2
+        },
+        {
+          "name": "Santuario de la Fuencisla",
+          "lat": 40.95666,
+          "lon": -4.13533,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1174,6 +4619,249 @@
         [42.28706, 3.22206],
         [42.29692, 3.23542],
         [42.2888, 3.2766]
+      ],
+      "sights": [
+        {
+          "name": "Far de Tossa",
+          "lat": 41.71563,
+          "lon": 2.93399,
+          "kind": 2
+        },
+        {
+          "name": "Torre de Pola",
+          "lat": 41.73428,
+          "lon": 2.95317,
+          "kind": 2
+        },
+        {
+          "name": "Paradolmen de Ses Rates",
+          "lat": 41.7508,
+          "lon": 2.91983,
+          "kind": 2
+        },
+        {
+          "name": "Paradolmen d'en Garcia",
+          "lat": 41.75194,
+          "lon": 2.92833,
+          "kind": 2
+        },
+        {
+          "name": "Menhir d'en Llac",
+          "lat": 41.75932,
+          "lon": 2.93508,
+          "kind": 2
+        },
+        {
+          "name": "Pedra dels Sacrificis de Can Cabanyes",
+          "lat": 41.77017,
+          "lon": 2.94315,
+          "kind": 2
+        },
+        {
+          "name": "Cova dels Lladres",
+          "lat": 41.77371,
+          "lon": 2.9619,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de Pedralta",
+          "lat": 41.79384,
+          "lon": 2.98152,
+          "kind": 1
+        },
+        {
+          "name": "Sant Amanç",
+          "lat": 41.78768,
+          "lon": 3.01511,
+          "kind": 2
+        },
+        {
+          "name": "Museu del Salvament Marítim",
+          "lat": 41.77997,
+          "lon": 3.03543,
+          "kind": 2
+        },
+        {
+          "name": "Església de Nostra Senyora de l'Esperança",
+          "lat": 41.79494,
+          "lon": 3.05886,
+          "kind": 2
+        },
+        {
+          "name": "Santa Maria de Fenals d'Amunt",
+          "lat": 41.8429,
+          "lon": 3.04331,
+          "kind": 2
+        },
+        {
+          "name": "Castell de Calonge",
+          "lat": 41.86305,
+          "lon": 3.07333,
+          "kind": 2
+        },
+        {
+          "name": "Santa Eugènia de Vila-Romà",
+          "lat": 41.85744,
+          "lon": 3.12967,
+          "kind": 2
+        },
+        {
+          "name": "Castell de Cap Roig",
+          "lat": 41.87729,
+          "lon": 3.17736,
+          "kind": 2
+        },
+        {
+          "name": "Fundació Josep Pla",
+          "lat": 41.91704,
+          "lon": 3.16048,
+          "kind": 2
+        },
+        {
+          "name": "Museu del Suro",
+          "lat": 41.91828,
+          "lon": 3.16506,
+          "kind": 2
+        },
+        {
+          "name": "Cova d'en Gispert",
+          "lat": 41.9276,
+          "lon": 3.2175,
+          "kind": 1
+        },
+        {
+          "name": "Sant Vicenç de Torrent",
+          "lat": 41.95206,
+          "lon": 3.12715,
+          "kind": 2
+        },
+        {
+          "name": "Església de Sant Julià de Boada",
+          "lat": 41.9854,
+          "lon": 3.12198,
+          "kind": 2
+        },
+        {
+          "name": "Castell de Fontanilles",
+          "lat": 42.00957,
+          "lon": 3.1072,
+          "kind": 2
+        },
+        {
+          "name": "Museu Palau Solterra",
+          "lat": 42.04153,
+          "lon": 3.12604,
+          "kind": 2
+        },
+        {
+          "name": "Església de Santa Maria",
+          "lat": 42.02861,
+          "lon": 3.07231,
+          "kind": 2
+        },
+        {
+          "name": "Església de Sant Joan de Bellcaire",
+          "lat": 42.08101,
+          "lon": 3.0943,
+          "kind": 2
+        },
+        {
+          "name": "Sant Climent de Tor",
+          "lat": 42.08897,
+          "lon": 3.06721,
+          "kind": 2
+        },
+        {
+          "name": "Església de Sant Feliu de la Garriga",
+          "lat": 42.11912,
+          "lon": 3.05333,
+          "kind": 2
+        },
+        {
+          "name": "Mare de Deu de l'Om",
+          "lat": 42.1501,
+          "lon": 3.06367,
+          "kind": 2
+        },
+        {
+          "name": "Església de Sant Cebrià",
+          "lat": 42.17401,
+          "lon": 3.04509,
+          "kind": 2
+        },
+        {
+          "name": "Capella de Sant Sebastià",
+          "lat": 42.19163,
+          "lon": 3.08253,
+          "kind": 2
+        },
+        {
+          "name": "Església de Sant Mamet",
+          "lat": 42.22748,
+          "lon": 3.04231,
+          "kind": 2
+        },
+        {
+          "name": "Església de Sant Julià i Santa Basilissa",
+          "lat": 42.24201,
+          "lon": 3.04103,
+          "kind": 2
+        },
+        {
+          "name": "Los Barkitos d'Empuriabrava",
+          "lat": 42.24624,
+          "lon": 3.12422,
+          "kind": 2
+        },
+        {
+          "name": "Castell de Vilaüt",
+          "lat": 42.29866,
+          "lon": 3.11437,
+          "kind": 2
+        },
+        {
+          "name": "Ciutadella de Roses",
+          "lat": 42.26694,
+          "lon": 3.17038,
+          "kind": 2
+        },
+        {
+          "name": "Sant Joan de Palau-saverdera",
+          "lat": 42.30681,
+          "lon": 3.14596,
+          "kind": 2
+        },
+        {
+          "name": "Castell de Sant Salvador de Verdera",
+          "lat": 42.31989,
+          "lon": 3.16796,
+          "kind": 2
+        },
+        {
+          "name": "Torre de Can Figa",
+          "lat": 42.273,
+          "lon": 3.23466,
+          "kind": 2
+        },
+        {
+          "name": "Torre de Sant Baldiri",
+          "lat": 42.32573,
+          "lon": 3.22978,
+          "kind": 2
+        },
+        {
+          "name": "Coll de Perafita",
+          "lat": 42.29694,
+          "lon": 3.23662,
+          "kind": 4,
+          "ele": 242
+        },
+        {
+          "name": "Castell de Sant Jaume",
+          "lat": 42.29029,
+          "lon": 3.28073,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1245,6 +4933,122 @@
         [37.17145, -3.04858],
         [37.17471, -3.0473],
         [37.17477, -3.04996]
+      ],
+      "sights": [
+        {
+          "name": "Castillo de Inizar",
+          "lat": 37.00615,
+          "lon": -2.96409,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de las Eras",
+          "lat": 37.03056,
+          "lon": -2.9947,
+          "kind": 1
+        },
+        {
+          "name": "Mirador Fuente Velasco",
+          "lat": 37.03153,
+          "lon": -2.99566,
+          "kind": 1
+        },
+        {
+          "name": "era",
+          "lat": 37.03198,
+          "lon": -2.99825,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de la Mosquera",
+          "lat": 37.06973,
+          "lon": -2.9851,
+          "kind": 1
+        },
+        {
+          "name": "Mirador Barranco del Hornillo",
+          "lat": 37.10553,
+          "lon": -3.0272,
+          "kind": 1
+        },
+        {
+          "name": "Corral de Antonio Manuel",
+          "lat": 37.12244,
+          "lon": -2.99938,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de Ferreira",
+          "lat": 37.12171,
+          "lon": -3.03226,
+          "kind": 1
+        },
+        {
+          "name": "Mirador del Marquesado",
+          "lat": 37.14613,
+          "lon": -3.0461,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de Aldeire",
+          "lat": 37.15902,
+          "lon": -3.05736,
+          "kind": 1
+        },
+        {
+          "name": "Castillo de la Caba",
+          "lat": 37.15757,
+          "lon": -3.06517,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de Cayetano Triviño",
+          "lat": 37.15963,
+          "lon": -3.07082,
+          "kind": 1
+        },
+        {
+          "name": "Hamman",
+          "lat": 37.16133,
+          "lon": -3.07357,
+          "kind": 2
+        },
+        {
+          "name": "Mirador Astronómico",
+          "lat": 37.17122,
+          "lon": -3.06556,
+          "kind": 1
+        },
+        {
+          "name": "Alcazaba",
+          "lat": 37.17222,
+          "lon": -3.03602,
+          "kind": 2
+        },
+        {
+          "name": "Centro de interpretación de la arquitectura árabe de Ferreira",
+          "lat": 37.17226,
+          "lon": -3.0359,
+          "kind": 2
+        },
+        {
+          "name": "alcazaba de Ferreira",
+          "lat": 37.1723,
+          "lon": -3.03593,
+          "kind": 2
+        },
+        {
+          "name": "Castillo árabe de La Calahorra",
+          "lat": 37.18538,
+          "lon": -3.06418,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de La Calahorra",
+          "lat": 37.18339,
+          "lon": -3.06544,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1316,6 +5120,249 @@
         [37.27885, -3.68408],
         [37.24276, -3.66825],
         [37.17732, -3.59862]
+      ],
+      "sights": [
+        {
+          "name": "Monumento a Pastora Imperio",
+          "lat": 37.39193,
+          "lon": -5.99555,
+          "kind": 2
+        },
+        {
+          "name": "puerta Real",
+          "lat": 37.39317,
+          "lon": -6.00353,
+          "kind": 2
+        },
+        {
+          "name": "Torre Schindler",
+          "lat": 37.39343,
+          "lon": -6.00702,
+          "kind": 1
+        },
+        {
+          "name": "Pabellón de la Navegación de la Expo 92",
+          "lat": 37.39412,
+          "lon": -6.00772,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de San Jorge",
+          "lat": 37.38572,
+          "lon": -6.00317,
+          "kind": 2
+        },
+        {
+          "name": "Centro Cerámica Triana",
+          "lat": 37.38555,
+          "lon": -6.00465,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia del Cachorro",
+          "lat": 37.38948,
+          "lon": -6.01094,
+          "kind": 2
+        },
+        {
+          "name": "Cerro Macareno",
+          "lat": 37.47752,
+          "lon": -5.96089,
+          "kind": 2
+        },
+        {
+          "name": "Piedra del Moro",
+          "lat": 37.60451,
+          "lon": -5.82659,
+          "kind": 2
+        },
+        {
+          "name": "Conjunto Histórico Minero \"Pozo Nº 5\"",
+          "lat": 37.65471,
+          "lon": -5.71759,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Juan Bautista",
+          "lat": 37.61473,
+          "lon": -5.67159,
+          "kind": 2
+        },
+        {
+          "name": "Casa de los Leones",
+          "lat": 37.65406,
+          "lon": -5.53129,
+          "kind": 2
+        },
+        {
+          "name": "Antiguo Convento de Santa Clara",
+          "lat": 37.70048,
+          "lon": -5.28529,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Almodóvar del Río",
+          "lat": 37.80731,
+          "lon": -5.02365,
+          "kind": 2
+        },
+        {
+          "name": "Casa Señorial del Ateneo",
+          "lat": 37.8092,
+          "lon": -5.01996,
+          "kind": 2
+        },
+        {
+          "name": "Medina Azahara",
+          "lat": 37.88624,
+          "lon": -4.8684,
+          "kind": 2
+        },
+        {
+          "name": "Plaza de Toros de Los Califas",
+          "lat": 37.88213,
+          "lon": -4.79488,
+          "kind": 2
+        },
+        {
+          "name": "historic centre",
+          "lat": 37.88,
+          "lon": -4.7797,
+          "kind": 2
+        },
+        {
+          "name": "Guadalquivir",
+          "lat": 37.89069,
+          "lon": -4.698,
+          "kind": 1
+        },
+        {
+          "name": "Ategua",
+          "lat": 37.75512,
+          "lon": -4.57549,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Castro del Rio",
+          "lat": 37.69022,
+          "lon": -4.48027,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de dos Hermanas",
+          "lat": 37.65849,
+          "lon": -4.62409,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Montilla",
+          "lat": 37.59231,
+          "lon": -4.63772,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Aguilar de la Frontera",
+          "lat": 37.52059,
+          "lon": -4.66016,
+          "kind": 2
+        },
+        {
+          "name": "Museo Histórico Local",
+          "lat": 37.47337,
+          "lon": -4.57948,
+          "kind": 2
+        },
+        {
+          "name": "Alfar romano de los Tejares",
+          "lat": 37.40684,
+          "lon": -4.51837,
+          "kind": 2
+        },
+        {
+          "name": "Villa del Mitra",
+          "lat": 37.48838,
+          "lon": -4.45909,
+          "kind": 2
+        },
+        {
+          "name": "Puerto del Mojón",
+          "lat": 37.46298,
+          "lon": -4.35515,
+          "kind": 4,
+          "ele": 799
+        },
+        {
+          "name": "Mirador de la Cabrera",
+          "lat": 37.45837,
+          "lon": -4.35503,
+          "kind": 1
+        },
+        {
+          "name": "Castillo de Carcabuey",
+          "lat": 37.44447,
+          "lon": -4.2704,
+          "kind": 2
+        },
+        {
+          "name": "Mirador del Adarve",
+          "lat": 37.43995,
+          "lon": -4.19006,
+          "kind": 1
+        },
+        {
+          "name": "Villa Romana \"El Ruedo\"",
+          "lat": 37.44309,
+          "lon": -4.08962,
+          "kind": 2
+        },
+        {
+          "name": "Fortaleza de la Mota",
+          "lat": 37.46006,
+          "lon": -3.92988,
+          "kind": 2
+        },
+        {
+          "name": "Torre del Cascante",
+          "lat": 37.45608,
+          "lon": -3.90055,
+          "kind": 2
+        },
+        {
+          "name": "Cortijo del Rosalejo",
+          "lat": 37.39475,
+          "lon": -3.76139,
+          "kind": 2
+        },
+        {
+          "name": "Cortijo de Angostura",
+          "lat": 37.41784,
+          "lon": -3.68976,
+          "kind": 2
+        },
+        {
+          "name": "La Casa Grande",
+          "lat": 37.48222,
+          "lon": -3.61552,
+          "kind": 2
+        },
+        {
+          "name": "Ermita Virgen de los Remedios",
+          "lat": 37.38931,
+          "lon": -3.52864,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Nuestra Señora de la Encarnación",
+          "lat": 37.22266,
+          "lon": -3.68855,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia Parroquial de Nuestra Señora del Rosario",
+          "lat": 37.22324,
+          "lon": -3.6068,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1397,6 +5444,252 @@
         [42.67903, 0.78645],
         [42.70558, 0.78902],
         [42.70134, 0.79678]
+      ],
+      "sights": [
+        {
+          "name": "Fuerte de Rapitán",
+          "lat": 42.5891,
+          "lon": -0.53629,
+          "kind": 2
+        },
+        {
+          "name": "Ciudadela de Jaca",
+          "lat": 42.57238,
+          "lon": -0.55216,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Juan Bautista",
+          "lat": 42.58005,
+          "lon": -0.58494,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Esteban",
+          "lat": 42.5862,
+          "lon": -0.51186,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de San Pedro",
+          "lat": 42.5445,
+          "lon": -0.50223,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Julián",
+          "lat": 42.5328,
+          "lon": -0.43577,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Martín",
+          "lat": 42.45159,
+          "lon": -0.41389,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Pedro",
+          "lat": 42.42322,
+          "lon": -0.43754,
+          "kind": 2
+        },
+        {
+          "name": "Cuello Serrablo",
+          "lat": 42.40714,
+          "lon": -0.08878,
+          "kind": 4
+        },
+        {
+          "name": "Puerto de Sarrablo",
+          "lat": 42.40162,
+          "lon": -0.03001,
+          "kind": 4,
+          "ele": 1291
+        },
+        {
+          "name": "Torre de Piedra",
+          "lat": 42.36746,
+          "lon": -0.00235,
+          "kind": 2
+        },
+        {
+          "name": "Cascada del Confesionario",
+          "lat": 42.40593,
+          "lon": 0.01852,
+          "kind": 1
+        },
+        {
+          "name": "Iglesia de Santa Eulalia",
+          "lat": 42.45177,
+          "lon": 0.03978,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Boltaña",
+          "lat": 42.44912,
+          "lon": 0.06877,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de San Visorio",
+          "lat": 42.47067,
+          "lon": 0.09702,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Salvador",
+          "lat": 42.41653,
+          "lon": 0.09877,
+          "kind": 2
+        },
+        {
+          "name": "Esconjuradero de Guaso",
+          "lat": 42.41682,
+          "lon": 0.099,
+          "kind": 2
+        },
+        {
+          "name": "Repetidor de Partara - Mirador",
+          "lat": 42.4035,
+          "lon": 0.12899,
+          "kind": 1
+        },
+        {
+          "name": "Ermita del Castillo",
+          "lat": 42.38197,
+          "lon": 0.1533,
+          "kind": 2
+        },
+        {
+          "name": "Casa Mur",
+          "lat": 42.37505,
+          "lon": 0.25181,
+          "kind": 2
+        },
+        {
+          "name": "Puerto de Foradada",
+          "lat": 42.41307,
+          "lon": 0.33921,
+          "kind": 4,
+          "ele": 1020
+        },
+        {
+          "name": "Museo del Juego Tradicional",
+          "lat": 42.40942,
+          "lon": 0.39426,
+          "kind": 2
+        },
+        {
+          "name": "Menhir de Merli",
+          "lat": 42.33836,
+          "lon": 0.48729,
+          "kind": 2
+        },
+        {
+          "name": "Monasterio de Obarra",
+          "lat": 42.39758,
+          "lon": 0.59733,
+          "kind": 2
+        },
+        {
+          "name": "Mirador del Isábena",
+          "lat": 42.42604,
+          "lon": 0.64128,
+          "kind": 1
+        },
+        {
+          "name": "Puerto de Bonansa",
+          "lat": 42.42354,
+          "lon": 0.64827,
+          "kind": 4,
+          "ele": 1380
+        },
+        {
+          "name": "Ermita de San Aventín",
+          "lat": 42.42834,
+          "lon": 0.67013,
+          "kind": 2
+        },
+        {
+          "name": "Sant Esteve",
+          "lat": 42.43006,
+          "lon": 0.76769,
+          "kind": 2
+        },
+        {
+          "name": "Vilatge de Noufonts",
+          "lat": 42.43132,
+          "lon": 0.74884,
+          "kind": 2
+        },
+        {
+          "name": "Església de Sueix",
+          "lat": 42.41164,
+          "lon": 0.74643,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de Sant Salvador d'Irgo",
+          "lat": 42.43759,
+          "lon": 0.76908,
+          "kind": 2
+        },
+        {
+          "name": "Sant Martí",
+          "lat": 42.45675,
+          "lon": 0.75871,
+          "kind": 2
+        },
+        {
+          "name": "Sant Climent",
+          "lat": 42.47661,
+          "lon": 0.71669,
+          "kind": 2
+        },
+        {
+          "name": "Sant Romà",
+          "lat": 42.48261,
+          "lon": 0.73424,
+          "kind": 2
+        },
+        {
+          "name": "Mare de Déu de Riupedrós",
+          "lat": 42.48408,
+          "lon": 0.71549,
+          "kind": 2
+        },
+        {
+          "name": "Pala del Posso",
+          "lat": 42.51537,
+          "lon": 0.70417,
+          "kind": 1
+        },
+        {
+          "name": "Santa Cecilia",
+          "lat": 42.55772,
+          "lon": 0.75337,
+          "kind": 2
+        },
+        {
+          "name": "Cascada del Pi",
+          "lat": 42.59833,
+          "lon": 0.73215,
+          "kind": 1
+        },
+        {
+          "name": "Túnel de Vielha",
+          "lat": 42.62435,
+          "lon": 0.76465,
+          "kind": 4,
+          "ele": 1609
+        },
+        {
+          "name": "Sant Andreu",
+          "lat": 42.70648,
+          "lon": 0.78636,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1477,6 +5770,248 @@
         [43.54125, -6.03245],
         [43.52305, -6.04266],
         [43.56187, -6.14813]
+      ],
+      "sights": [
+        {
+          "name": "Panteón del Inglés",
+          "lat": 43.4931,
+          "lon": -3.80608,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Pedraja",
+          "lat": 43.45477,
+          "lon": -3.92919,
+          "kind": 2
+        },
+        {
+          "name": "Torre de Velo",
+          "lat": 43.40702,
+          "lon": -3.93502,
+          "kind": 2
+        },
+        {
+          "name": "Mota de Trespalacios",
+          "lat": 43.39691,
+          "lon": -4.0521,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Nuestra Señora de la Asunción",
+          "lat": 43.35182,
+          "lon": -4.04702,
+          "kind": 2
+        },
+        {
+          "name": "Museo Nacional y Centro de Investigación de Altamira",
+          "lat": 43.37742,
+          "lon": -4.12234,
+          "kind": 2
+        },
+        {
+          "name": "Abadia Cisterciense de Viaceli",
+          "lat": 43.38615,
+          "lon": -4.21294,
+          "kind": 2
+        },
+        {
+          "name": "Puerta de los Pájaros",
+          "lat": 43.3875,
+          "lon": -4.28753,
+          "kind": 2
+        },
+        {
+          "name": "Castillo del Rey",
+          "lat": 43.38525,
+          "lon": -4.3995,
+          "kind": 2
+        },
+        {
+          "name": "Castro de Castillo",
+          "lat": 43.39291,
+          "lon": -4.45164,
+          "kind": 2
+        },
+        {
+          "name": "Cueva el Pindal",
+          "lat": 43.39758,
+          "lon": -4.53295,
+          "kind": 1
+        },
+        {
+          "name": "Torre de Noriega",
+          "lat": 43.36053,
+          "lon": -4.56668,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de la Sierra",
+          "lat": 43.38764,
+          "lon": -4.6233,
+          "kind": 1
+        },
+        {
+          "name": "Bufones de Arenillas",
+          "lat": 43.40764,
+          "lon": -4.68772,
+          "kind": 2
+        },
+        {
+          "name": "Faro de Llanes",
+          "lat": 43.42014,
+          "lon": -4.7481,
+          "kind": 2
+        },
+        {
+          "name": "Conventu de San Salvador",
+          "lat": 43.431,
+          "lon": -4.80634,
+          "kind": 2
+        },
+        {
+          "name": "Playa de Gulpiyuri",
+          "lat": 43.44756,
+          "lon": -4.88599,
+          "kind": 2
+        },
+        {
+          "name": "Bufones de Pría",
+          "lat": 43.45871,
+          "lon": -4.97986,
+          "kind": 2
+        },
+        {
+          "name": "Cueva de Tito Bustillo",
+          "lat": 43.46066,
+          "lon": -5.06766,
+          "kind": 1
+        },
+        {
+          "name": "La Punta'l Pozu",
+          "lat": 43.4705,
+          "lon": -5.07501,
+          "kind": 1
+        },
+        {
+          "name": "Mirador d'El Fitu",
+          "lat": 43.4388,
+          "lon": -5.19252,
+          "kind": 1
+        },
+        {
+          "name": "Monasterio de San Pedro de Villanueva",
+          "lat": 43.36697,
+          "lon": -5.15083,
+          "kind": 2
+        },
+        {
+          "name": "La Cruz de Bárcena",
+          "lat": 43.3814,
+          "lon": -5.26251,
+          "kind": 4
+        },
+        {
+          "name": "Santa María de Villamayor",
+          "lat": 43.35946,
+          "lon": -5.30648,
+          "kind": 2
+        },
+        {
+          "name": "Cueva del Sidrón",
+          "lat": 43.38264,
+          "lon": -5.32317,
+          "kind": 1
+        },
+        {
+          "name": "Santuario de la Virgen de la Cueva",
+          "lat": 43.34936,
+          "lon": -5.37469,
+          "kind": 2
+        },
+        {
+          "name": "Museo de la Escuela Rural de Asturias",
+          "lat": 43.42747,
+          "lon": -5.42406,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Andrés",
+          "lat": 43.43247,
+          "lon": -5.47202,
+          "kind": 2
+        },
+        {
+          "name": "Monasterio de Santa María de Valdediós",
+          "lat": 43.43652,
+          "lon": -5.50672,
+          "kind": 2
+        },
+        {
+          "name": "Alto de la Cruz",
+          "lat": 43.47343,
+          "lon": -5.51433,
+          "kind": 4
+        },
+        {
+          "name": "Capilla de Nuestra Señora de las Nieves de Granderroble",
+          "lat": 43.52083,
+          "lon": -5.54599,
+          "kind": 2
+        },
+        {
+          "name": "Universidad Laboral",
+          "lat": 43.52453,
+          "lon": -5.61642,
+          "kind": 2
+        },
+        {
+          "name": "Museo Evaristo Valle",
+          "lat": 43.5345,
+          "lon": -5.61881,
+          "kind": 2
+        },
+        {
+          "name": "Palacio de los Bernaldo de Quirós",
+          "lat": 43.55654,
+          "lon": -5.73205,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen de San Pablo",
+          "lat": 43.53374,
+          "lon": -5.76352,
+          "kind": 2
+        },
+        {
+          "name": "Palacio de los Rodríguez de León",
+          "lat": 43.5467,
+          "lon": -5.87847,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de los Padres Franciscanos",
+          "lat": 43.55738,
+          "lon": -5.92097,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Cipriano",
+          "lat": 43.52445,
+          "lon": -5.98126,
+          "kind": 2
+        },
+        {
+          "name": "Casa Corujedo",
+          "lat": 43.50056,
+          "lon": -6.07125,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia-Panteón Jesús Nazareno",
+          "lat": 43.55072,
+          "lon": -6.13986,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1558,6 +6093,251 @@
         [40.36377, -1.06253],
         [40.36558, -1.10316],
         [40.34564, -1.10654]
+      ],
+      "sights": [
+        {
+          "name": "Castell de La Suda",
+          "lat": 40.81524,
+          "lon": 0.52398,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de Sant Josep de la Muntanya",
+          "lat": 40.81748,
+          "lon": 0.5426,
+          "kind": 2
+        },
+        {
+          "name": "Avançades de Sant Joan",
+          "lat": 40.81638,
+          "lon": 0.5279,
+          "kind": 2
+        },
+        {
+          "name": "Museu de Tortosa",
+          "lat": 40.81606,
+          "lon": 0.52207,
+          "kind": 2
+        },
+        {
+          "name": "Reials Col·legis",
+          "lat": 40.81473,
+          "lon": 0.52488,
+          "kind": 2
+        },
+        {
+          "name": "Sant Antoni de Pàdua",
+          "lat": 40.82057,
+          "lon": 0.50316,
+          "kind": 2
+        },
+        {
+          "name": "Torre d'en Corder",
+          "lat": 40.84914,
+          "lon": 0.51258,
+          "kind": 2
+        },
+        {
+          "name": "Sant Martí",
+          "lat": 40.90636,
+          "lon": 0.4909,
+          "kind": 2
+        },
+        {
+          "name": "Sant Zenó",
+          "lat": 40.90709,
+          "lon": 0.4929,
+          "kind": 2
+        },
+        {
+          "name": "Mare de Déu de la Fontcalda",
+          "lat": 41.00106,
+          "lon": 0.42867,
+          "kind": 2
+        },
+        {
+          "name": "Sant Josep",
+          "lat": 41.00425,
+          "lon": 0.39325,
+          "kind": 2
+        },
+        {
+          "name": "Coll d'en Gra",
+          "lat": 40.9666,
+          "lon": 0.37099,
+          "kind": 4,
+          "ele": 439
+        },
+        {
+          "name": "Ermita de Santa Bàrbara",
+          "lat": 40.95691,
+          "lon": 0.33838,
+          "kind": 2
+        },
+        {
+          "name": "Santa Magdalena",
+          "lat": 40.91009,
+          "lon": 0.26113,
+          "kind": 2
+        },
+        {
+          "name": "Santa Madrona",
+          "lat": 40.91053,
+          "lon": 0.25214,
+          "kind": 2
+        },
+        {
+          "name": "Cova dels Lladres",
+          "lat": 40.86421,
+          "lon": 0.23469,
+          "kind": 1
+        },
+        {
+          "name": "Iglesia de Santa María la Mayor",
+          "lat": 40.87583,
+          "lon": 0.15551,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Valderrobres",
+          "lat": 40.87603,
+          "lon": 0.15503,
+          "kind": 2
+        },
+        {
+          "name": "Matarraña Nautic",
+          "lat": 40.81698,
+          "lon": 0.13937,
+          "kind": 2
+        },
+        {
+          "name": "Ermita Mare de Déu de la Font / Ermita Virgen de la Fuente",
+          "lat": 40.77004,
+          "lon": 0.03242,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia Santa María la Mayor",
+          "lat": 40.75529,
+          "lon": 0.03947,
+          "kind": 2
+        },
+        {
+          "name": "Església Parroquial de Sant Bertomeu Apòstol",
+          "lat": 40.72121,
+          "lon": -0.00408,
+          "kind": 2
+        },
+        {
+          "name": "el Castellot",
+          "lat": 40.66304,
+          "lon": -0.01987,
+          "kind": 2
+        },
+        {
+          "name": "Port de Torre Miró",
+          "lat": 40.67102,
+          "lon": -0.05811,
+          "kind": 4,
+          "ele": 1250
+        },
+        {
+          "name": "el Torrelló",
+          "lat": 40.67048,
+          "lon": -0.06489,
+          "kind": 2
+        },
+        {
+          "name": "Castell de Morella",
+          "lat": 40.62013,
+          "lon": -0.10214,
+          "kind": 2
+        },
+        {
+          "name": "Església Parroquial de la Mare de Déu de l'Assumpció",
+          "lat": 40.64628,
+          "lon": -0.19805,
+          "kind": 2
+        },
+        {
+          "name": "Castell de la Todolella",
+          "lat": 40.64761,
+          "lon": -0.24599,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de la Magdalena",
+          "lat": 40.63908,
+          "lon": -0.33113,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Santa Margarita",
+          "lat": 40.58678,
+          "lon": -0.34209,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Miguel",
+          "lat": 40.52941,
+          "lon": -0.4056,
+          "kind": 2
+        },
+        {
+          "name": "Fuerte de Las Horcas",
+          "lat": 40.52418,
+          "lon": -0.41224,
+          "kind": 2
+        },
+        {
+          "name": "Cueva de las Brujas",
+          "lat": 40.54672,
+          "lon": -0.45577,
+          "kind": 1
+        },
+        {
+          "name": "Puerto del Cuarto Pelao",
+          "lat": 40.54238,
+          "lon": -0.49295,
+          "kind": 4,
+          "ele": 1657
+        },
+        {
+          "name": "Castillo de Fontanete",
+          "lat": 40.50684,
+          "lon": -0.52384,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Monteagudo (ruinas)",
+          "lat": 40.45744,
+          "lon": -0.82,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de Loreto",
+          "lat": 40.50473,
+          "lon": -0.86129,
+          "kind": 2
+        },
+        {
+          "name": "Trincheras Cabigordo",
+          "lat": 40.41494,
+          "lon": -0.96893,
+          "kind": 2
+        },
+        {
+          "name": "Salto del Chorrillo",
+          "lat": 40.42788,
+          "lon": -1.00492,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Pedro",
+          "lat": 40.34251,
+          "lon": -1.10611,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1644,6 +6424,249 @@
         [36.89578, -2.44471],
         [36.85505, -2.47477],
         [36.83798, -2.45978]
+      ],
+      "sights": [
+        {
+          "name": "Museo Cuevas del Sacromonte",
+          "lat": 37.18313,
+          "lon": -3.58432,
+          "kind": 2
+        },
+        {
+          "name": "Parque de las Ciencias",
+          "lat": 37.16232,
+          "lon": -3.60512,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Santa Ana",
+          "lat": 37.1237,
+          "lon": -3.60411,
+          "kind": 2
+        },
+        {
+          "name": "Parroquia de la Concepción",
+          "lat": 37.10829,
+          "lon": -3.6459,
+          "kind": 2
+        },
+        {
+          "name": "Puerto del Suspiro del Moro",
+          "lat": 37.06829,
+          "lon": -3.65125,
+          "kind": 4,
+          "ele": 835
+        },
+        {
+          "name": "La Casa Grande",
+          "lat": 37.02381,
+          "lon": -3.62644,
+          "kind": 2
+        },
+        {
+          "name": "Atalaya de Cónchar",
+          "lat": 36.97786,
+          "lon": -3.60019,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Dúrcal",
+          "lat": 36.978,
+          "lon": -3.57786,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Lojuela",
+          "lat": 36.94665,
+          "lon": -3.57722,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Mondùjar",
+          "lat": 36.9493,
+          "lon": -3.53822,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de San Sebastián",
+          "lat": 36.90978,
+          "lon": -3.55651,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Lanjarón",
+          "lat": 36.91481,
+          "lon": -3.48884,
+          "kind": 2
+        },
+        {
+          "name": "Mirador del Visillo",
+          "lat": 36.91293,
+          "lon": -3.47598,
+          "kind": 1
+        },
+        {
+          "name": "Orgiva tea garden",
+          "lat": 36.89552,
+          "lon": -3.40048,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia Parroquial de Santa Ana",
+          "lat": 36.92638,
+          "lon": -3.4278,
+          "kind": 2
+        },
+        {
+          "name": "Ermita del Padre Eterno",
+          "lat": 36.92106,
+          "lon": -3.3882,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia Parroquial Nuestra Señora de la Cabeza",
+          "lat": 36.96117,
+          "lon": -3.35998,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia Parroquial de Nuestra Señora del Rosario",
+          "lat": 36.94883,
+          "lon": -3.35721,
+          "kind": 2
+        },
+        {
+          "name": "Mezquita de Busquìstar",
+          "lat": 36.93118,
+          "lon": -3.30314,
+          "kind": 2
+        },
+        {
+          "name": "Mirador del Barranco de los Alisos",
+          "lat": 36.96775,
+          "lon": -3.29092,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de Trevélez",
+          "lat": 37.00924,
+          "lon": -3.30141,
+          "kind": 1
+        },
+        {
+          "name": "Iglesia de San Miguel",
+          "lat": 36.93156,
+          "lon": -3.25361,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Sebastián",
+          "lat": 36.94829,
+          "lon": -3.22521,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Juan Bautista",
+          "lat": 36.97561,
+          "lon": -3.19025,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de San Blas",
+          "lat": 36.93996,
+          "lon": -3.17889,
+          "kind": 2
+        },
+        {
+          "name": "Peñón del Fuerte",
+          "lat": 36.98086,
+          "lon": -3.11195,
+          "kind": 2
+        },
+        {
+          "name": "Casa Doña Concha",
+          "lat": 36.96023,
+          "lon": -3.05471,
+          "kind": 2
+        },
+        {
+          "name": "Puente de Hierro",
+          "lat": 36.96594,
+          "lon": -3.01168,
+          "kind": 2
+        },
+        {
+          "name": "Cortijo de los Alamillos",
+          "lat": 36.931,
+          "lon": -2.93756,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de la Virgen de la Salud",
+          "lat": 36.99359,
+          "lon": -2.89631,
+          "kind": 2
+        },
+        {
+          "name": "Casa-palacio de las Godoyas",
+          "lat": 36.97932,
+          "lon": -2.85875,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Roque",
+          "lat": 37.01146,
+          "lon": -2.79168,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de la Purísima Concepción",
+          "lat": 37.03742,
+          "lon": -2.74488,
+          "kind": 2
+        },
+        {
+          "name": "San Juan Bautista",
+          "lat": 36.99274,
+          "lon": -2.65987,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Nuestra Señora de la Anunciación",
+          "lat": 36.96839,
+          "lon": -2.61035,
+          "kind": 2
+        },
+        {
+          "name": "Fortaleza «Pago de los Nietos»",
+          "lat": 36.98343,
+          "lon": -2.58403,
+          "kind": 2
+        },
+        {
+          "name": "Yacimiento Los Millares",
+          "lat": 36.96531,
+          "lon": -2.52065,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia Parroquial de Santa María",
+          "lat": 36.95321,
+          "lon": -2.49302,
+          "kind": 2
+        },
+        {
+          "name": "Zona arqueológica de el Chuche",
+          "lat": 36.9107,
+          "lon": -2.45184,
+          "kind": 2
+        },
+        {
+          "name": "Parroquia San Agustín",
+          "lat": 36.84477,
+          "lon": -2.46362,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1730,6 +6753,253 @@
         [42.4977, -5.41503],
         [42.47201, -5.50666],
         [42.59877, -5.56595]
+      ],
+      "sights": [
+        {
+          "name": "Coreano",
+          "lat": 42.80997,
+          "lon": -1.63569,
+          "kind": 2
+        },
+        {
+          "name": "Korostegi",
+          "lat": 42.83297,
+          "lon": -1.83733,
+          "kind": 2
+        },
+        {
+          "name": "Etxauri gaina",
+          "lat": 42.78596,
+          "lon": -1.84424,
+          "kind": 4,
+          "ele": 848
+        },
+        {
+          "name": "Montehermosoko Markesaren jauregia",
+          "lat": 42.75615,
+          "lon": -1.90802,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia del Santo Sepulcro",
+          "lat": 42.6697,
+          "lon": -2.02522,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de San Esteban de Deio",
+          "lat": 42.63382,
+          "lon": -2.10618,
+          "kind": 2
+        },
+        {
+          "name": "Torre del agua (1928)",
+          "lat": 42.66211,
+          "lon": -2.19093,
+          "kind": 2
+        },
+        {
+          "name": "iglesia de San Andrés",
+          "lat": 42.69581,
+          "lon": -2.33492,
+          "kind": 2
+        },
+        {
+          "name": "Santa Koloma eliza",
+          "lat": 42.63538,
+          "lon": -2.46901,
+          "kind": 2
+        },
+        {
+          "name": "Puerto de Bernedo",
+          "lat": 42.6055,
+          "lon": -2.46934,
+          "kind": 4,
+          "ele": 1000
+        },
+        {
+          "name": "La Aldea",
+          "lat": 42.6053,
+          "lon": -2.46924,
+          "kind": 4,
+          "ele": 1000
+        },
+        {
+          "name": "La Custodia",
+          "lat": 42.50447,
+          "lon": -2.3907,
+          "kind": 2
+        },
+        {
+          "name": "Mantibleko zubia",
+          "lat": 42.50979,
+          "lon": -2.50735,
+          "kind": 2
+        },
+        {
+          "name": "Erregeen Andre Mariaren eliza",
+          "lat": 42.5553,
+          "lon": -2.58544,
+          "kind": 2
+        },
+        {
+          "name": "San Esteban",
+          "lat": 42.574,
+          "lon": -2.71114,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Nuestra Señora de la Asunción",
+          "lat": 42.60082,
+          "lon": -2.83191,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Leiva",
+          "lat": 42.50149,
+          "lon": -3.04779,
+          "kind": 2
+        },
+        {
+          "name": "Convento de Nuestra Señora de la Bretonera",
+          "lat": 42.41954,
+          "lon": -3.19888,
+          "kind": 2
+        },
+        {
+          "name": "Cueva de Fuentemolinos",
+          "lat": 42.37384,
+          "lon": -3.245,
+          "kind": 1
+        },
+        {
+          "name": "Collado de San Pedro",
+          "lat": 42.3214,
+          "lon": -3.21621,
+          "kind": 4,
+          "ele": 1009
+        },
+        {
+          "name": "Mirador Barranco de la Genciana",
+          "lat": 42.28062,
+          "lon": -3.24935,
+          "kind": 1
+        },
+        {
+          "name": "El Matorro",
+          "lat": 42.31389,
+          "lon": -3.34713,
+          "kind": 4,
+          "ele": 1160
+        },
+        {
+          "name": "Iglesia de la Asunción de Nuestra Señora",
+          "lat": 42.3465,
+          "lon": -3.48521,
+          "kind": 2
+        },
+        {
+          "name": "Sima del Elefante",
+          "lat": 42.35005,
+          "lon": -3.5194,
+          "kind": 1
+        },
+        {
+          "name": "Monasterio de San Felices de Calatrava",
+          "lat": 42.36476,
+          "lon": -3.65231,
+          "kind": 2
+        },
+        {
+          "name": "Torreón de los Gallo",
+          "lat": 42.2646,
+          "lon": -3.74148,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de Villacisla",
+          "lat": 42.17706,
+          "lon": -3.8402,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Esteban",
+          "lat": 42.21519,
+          "lon": -4.06082,
+          "kind": 2
+        },
+        {
+          "name": "Convento de San Antón",
+          "lat": 42.29253,
+          "lon": -4.09903,
+          "kind": 2
+        },
+        {
+          "name": "Ermita del Santísimo Cristo de Torre Marte",
+          "lat": 42.19316,
+          "lon": -4.32566,
+          "kind": 2
+        },
+        {
+          "name": "Esclusas del Canal de Castilla",
+          "lat": 42.26353,
+          "lon": -4.39944,
+          "kind": 2
+        },
+        {
+          "name": "Santa María la Blanca",
+          "lat": 42.31682,
+          "lon": -4.54248,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Santa María de las Victorias y del Camino",
+          "lat": 42.3374,
+          "lon": -4.60149,
+          "kind": 2
+        },
+        {
+          "name": "Museo Parroquial de Santa Eulalia",
+          "lat": 42.15302,
+          "lon": -4.69396,
+          "kind": 2
+        },
+        {
+          "name": "Monumento al Chiborra",
+          "lat": 42.22105,
+          "lon": -4.8566,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Fructuoso",
+          "lat": 42.25491,
+          "lon": -4.96621,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Grajal de Campos",
+          "lat": 42.322,
+          "lon": -5.02108,
+          "kind": 2
+        },
+        {
+          "name": "Ruinas de la inglesia de EL Salvador",
+          "lat": 42.38725,
+          "lon": -5.14635,
+          "kind": 2
+        },
+        {
+          "name": "Lancia",
+          "lat": 42.53039,
+          "lon": -5.43155,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Francisco",
+          "lat": 42.59324,
+          "lon": -5.57031,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1816,6 +7086,248 @@
         [42.58899, -8.77422],
         [42.57128, -8.80806],
         [42.5126, -8.81399]
+      ],
+      "sights": [
+        {
+          "name": "Obelisco",
+          "lat": 43.36866,
+          "lon": -8.4022,
+          "kind": 2
+        },
+        {
+          "name": "Castro de Pastoriza",
+          "lat": 43.33709,
+          "lon": -8.47275,
+          "kind": 2
+        },
+        {
+          "name": "Pazo das Covadas",
+          "lat": 43.30966,
+          "lon": -8.57149,
+          "kind": 2
+        },
+        {
+          "name": "As Torres de Cillobre",
+          "lat": 43.24689,
+          "lon": -8.57458,
+          "kind": 2
+        },
+        {
+          "name": "Museo de Bergantiños",
+          "lat": 43.21139,
+          "lon": -8.68967,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de Santo Estevo de Goiáns",
+          "lat": 43.23142,
+          "lon": -8.73403,
+          "kind": 2
+        },
+        {
+          "name": "Torre de Nogueira",
+          "lat": 43.15375,
+          "lon": -8.76163,
+          "kind": 2
+        },
+        {
+          "name": "Capela de San Brais de Folgoso",
+          "lat": 43.16726,
+          "lon": -8.84984,
+          "kind": 2
+        },
+        {
+          "name": "As Torres do Allo",
+          "lat": 43.16001,
+          "lon": -8.93884,
+          "kind": 2
+        },
+        {
+          "name": "Fornela dos Mouros",
+          "lat": 43.16767,
+          "lon": -9.00726,
+          "kind": 2
+        },
+        {
+          "name": "Castro das Barreiras",
+          "lat": 43.09855,
+          "lon": -9.04195,
+          "kind": 2
+        },
+        {
+          "name": "Casota de Freáns",
+          "lat": 43.04785,
+          "lon": -9.08636,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Martiño de Ozón",
+          "lat": 43.08501,
+          "lon": -9.16593,
+          "kind": 2
+        },
+        {
+          "name": "A Ferida",
+          "lat": 43.11117,
+          "lon": -9.2195,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Cibrán de Vilastose",
+          "lat": 43.04861,
+          "lon": -9.15402,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de Santa Locacia de Frixe",
+          "lat": 43.01134,
+          "lon": -9.22817,
+          "kind": 2
+        },
+        {
+          "name": "Museo Marítimo Seno de Corcubión",
+          "lat": 42.93985,
+          "lon": -9.19047,
+          "kind": 2
+        },
+        {
+          "name": "Fervenza do Ézaro",
+          "lat": 42.91288,
+          "lon": -9.11644,
+          "kind": 1
+        },
+        {
+          "name": "Petróglifo do Alto de Adraño",
+          "lat": 42.88188,
+          "lon": -9.08057,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Mamede de Carnota",
+          "lat": 42.85311,
+          "lon": -9.07998,
+          "kind": 2
+        },
+        {
+          "name": "A Torre dos Mouros",
+          "lat": 42.79662,
+          "lon": -9.11449,
+          "kind": 2
+        },
+        {
+          "name": "Laxe das Rodas",
+          "lat": 42.76875,
+          "lon": -9.07812,
+          "kind": 2
+        },
+        {
+          "name": "Ermida das Neves",
+          "lat": 42.78159,
+          "lon": -9.06618,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de Santiago de Tal",
+          "lat": 42.78751,
+          "lon": -9.00086,
+          "kind": 2
+        },
+        {
+          "name": "Capela de San Bieito",
+          "lat": 42.79422,
+          "lon": -8.95462,
+          "kind": 2
+        },
+        {
+          "name": "A Ponte Nafonso",
+          "lat": 42.82801,
+          "lon": -8.8757,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Martiño de Noia",
+          "lat": 42.78237,
+          "lon": -8.88849,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de San Sadurniño de Goiáns",
+          "lat": 42.75782,
+          "lon": -8.9447,
+          "kind": 2
+        },
+        {
+          "name": "Mámoa de Montemuíño 3",
+          "lat": 42.70571,
+          "lon": -8.99562,
+          "kind": 2
+        },
+        {
+          "name": "Capela de Pedrafurada",
+          "lat": 42.6645,
+          "lon": -9.03203,
+          "kind": 2
+        },
+        {
+          "name": "Dolmen de Axeitos",
+          "lat": 42.60007,
+          "lon": -9.01677,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de Santa Uxía de Ribeira",
+          "lat": 42.55433,
+          "lon": -8.99205,
+          "kind": 2
+        },
+        {
+          "name": "Torre de Bermúdez",
+          "lat": 42.60347,
+          "lon": -8.93769,
+          "kind": 2
+        },
+        {
+          "name": "Castelo de Vitres",
+          "lat": 42.6673,
+          "lon": -8.9221,
+          "kind": 2
+        },
+        {
+          "name": "Centro Arqueolóxico do Barbanza",
+          "lat": 42.66633,
+          "lon": -8.84345,
+          "kind": 2
+        },
+        {
+          "name": "A Graneira do Araño",
+          "lat": 42.69423,
+          "lon": -8.80133,
+          "kind": 2
+        },
+        {
+          "name": "Torres de Oeste",
+          "lat": 42.67665,
+          "lon": -8.72502,
+          "kind": 2
+        },
+        {
+          "name": "Petróglifos da Sobreira",
+          "lat": 42.62581,
+          "lon": -8.71428,
+          "kind": 2
+        },
+        {
+          "name": "Museo do Ferrocarril",
+          "lat": 42.60822,
+          "lon": -8.7675,
+          "kind": 2
+        },
+        {
+          "name": "Igrexa de Santa María de Caleiro",
+          "lat": 42.56166,
+          "lon": -8.81359,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1902,6 +7414,248 @@
         [43.34872, -5.02268],
         [43.34403, -5.04997],
         [43.35101, -5.12833]
+      ],
+      "sights": [
+        {
+          "name": "Panteón del Inglés",
+          "lat": 43.4931,
+          "lon": -3.80608,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de la Virgen del Mar",
+          "lat": 43.47843,
+          "lon": -3.8773,
+          "kind": 2
+        },
+        {
+          "name": "Molino de la Canal",
+          "lat": 43.4704,
+          "lon": -3.895,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Pedraja",
+          "lat": 43.45477,
+          "lon": -3.92919,
+          "kind": 2
+        },
+        {
+          "name": "Torre de Velo",
+          "lat": 43.40702,
+          "lon": -3.93502,
+          "kind": 2
+        },
+        {
+          "name": "Fuente Vieja (Los Covachos)",
+          "lat": 43.39709,
+          "lon": -3.94393,
+          "kind": 1
+        },
+        {
+          "name": "Mirador de Usgo",
+          "lat": 43.43793,
+          "lon": -4.00131,
+          "kind": 1
+        },
+        {
+          "name": "Mota de Trespalacios",
+          "lat": 43.39691,
+          "lon": -4.0521,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Nuestra Señora de la Asunción",
+          "lat": 43.35182,
+          "lon": -4.04702,
+          "kind": 2
+        },
+        {
+          "name": "Castillo de Vispieres",
+          "lat": 43.37879,
+          "lon": -4.09196,
+          "kind": 2
+        },
+        {
+          "name": "Museo Nacional y Centro de Investigación de Altamira",
+          "lat": 43.37742,
+          "lon": -4.12234,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Santa María de la Asunción",
+          "lat": 43.37822,
+          "lon": -4.17676,
+          "kind": 2
+        },
+        {
+          "name": "Abadia Cisterciense de Viaceli",
+          "lat": 43.38615,
+          "lon": -4.21294,
+          "kind": 2
+        },
+        {
+          "name": "Puerta de los Pájaros",
+          "lat": 43.3875,
+          "lon": -4.28753,
+          "kind": 2
+        },
+        {
+          "name": "El Ángel Exterminador",
+          "lat": 43.39005,
+          "lon": -4.29364,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de San Esteban",
+          "lat": 43.34671,
+          "lon": -4.29471,
+          "kind": 1
+        },
+        {
+          "name": "Ermita de Santa Marina",
+          "lat": 43.37571,
+          "lon": -4.3528,
+          "kind": 2
+        },
+        {
+          "name": "Castillo del Rey",
+          "lat": 43.38525,
+          "lon": -4.3995,
+          "kind": 2
+        },
+        {
+          "name": "Fuente de las Doblas",
+          "lat": 43.35409,
+          "lon": -4.38598,
+          "kind": 1
+        },
+        {
+          "name": "Castro de Castillo",
+          "lat": 43.39291,
+          "lon": -4.45164,
+          "kind": 2
+        },
+        {
+          "name": "Cueva Fuente Salín",
+          "lat": 43.36617,
+          "lon": -4.48123,
+          "kind": 1
+        },
+        {
+          "name": "Mirador del Poeta",
+          "lat": 43.33044,
+          "lon": -4.49545,
+          "kind": 1
+        },
+        {
+          "name": "Yacimiento paleontológico de Rábago/El Soplao",
+          "lat": 43.30559,
+          "lon": -4.4472,
+          "kind": 2
+        },
+        {
+          "name": "Torre de Cabanzón",
+          "lat": 43.31974,
+          "lon": -4.49714,
+          "kind": 2
+        },
+        {
+          "name": "Torca de la Grañaja",
+          "lat": 43.29061,
+          "lon": -4.5684,
+          "kind": 1
+        },
+        {
+          "name": "Torre de Noriega",
+          "lat": 43.36053,
+          "lon": -4.56668,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Juan de Ciliergo",
+          "lat": 43.32082,
+          "lon": -4.59181,
+          "kind": 2
+        },
+        {
+          "name": "Cueva de Llonín",
+          "lat": 43.33201,
+          "lon": -4.6457,
+          "kind": 1
+        },
+        {
+          "name": "Capilla de San Pedro de Plecín / Capiella de San Pedru de Plecín",
+          "lat": 43.32985,
+          "lon": -4.70135,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de San Pedro",
+          "lat": 43.33251,
+          "lon": -4.70343,
+          "kind": 2
+        },
+        {
+          "name": "Mildón",
+          "lat": 43.2969,
+          "lon": -4.75369,
+          "kind": 1
+        },
+        {
+          "name": "Iglesia de Santa María de Llas",
+          "lat": 43.30605,
+          "lon": -4.81665,
+          "kind": 2
+        },
+        {
+          "name": "Vistas",
+          "lat": 43.29296,
+          "lon": -4.82965,
+          "kind": 1
+        },
+        {
+          "name": "Iglesia de Santa Cruz",
+          "lat": 43.30888,
+          "lon": -4.86599,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de Canales",
+          "lat": 43.31925,
+          "lon": -4.9003,
+          "kind": 1
+        },
+        {
+          "name": "Centro de Interpretación de la Fauna Glacial",
+          "lat": 43.33496,
+          "lon": -4.95405,
+          "kind": 2
+        },
+        {
+          "name": "Iglesia de Santa Eulalia",
+          "lat": 43.33432,
+          "lon": -4.97257,
+          "kind": 2
+        },
+        {
+          "name": "Don Pelayo",
+          "lat": 43.30911,
+          "lon": -5.05404,
+          "kind": 2
+        },
+        {
+          "name": "La Grandera",
+          "lat": 43.34566,
+          "lon": -5.08595,
+          "kind": 2
+        },
+        {
+          "name": "Puente Romano",
+          "lat": 43.35018,
+          "lon": -5.13215,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1967,6 +7721,253 @@
         [40.13663, -0.28153],
         [40.12353, -0.28818],
         [40.11656, -0.28267]
+      ],
+      "sights": [
+        {
+          "name": "Església Parroquial del Salvador",
+          "lat": 40.33783,
+          "lon": -0.16573,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de Sant Roc",
+          "lat": 40.34028,
+          "lon": -0.16522,
+          "kind": 2
+        },
+        {
+          "name": "Ermita de Sant Cristòfol",
+          "lat": 40.3269,
+          "lon": -0.16652,
+          "kind": 2
+        },
+        {
+          "name": "Covatxa de Fèlix",
+          "lat": 40.31803,
+          "lon": -0.20123,
+          "kind": 1
+        },
+        {
+          "name": "Cova dels Mardans",
+          "lat": 40.30676,
+          "lon": -0.16322,
+          "kind": 1
+        },
+        {
+          "name": "Cova d'Arnes",
+          "lat": 40.31834,
+          "lon": -0.11217,
+          "kind": 1
+        },
+        {
+          "name": "Parc Miner del Maestrat",
+          "lat": 40.31019,
+          "lon": -0.09816,
+          "kind": 2
+        },
+        {
+          "name": "Espai Nivi Collblanc",
+          "lat": 40.27432,
+          "lon": -0.09032,
+          "kind": 2
+        },
+        {
+          "name": "Coll de la Manxa",
+          "lat": 40.27419,
+          "lon": -0.11034,
+          "kind": 4,
+          "ele": 552
+        },
+        {
+          "name": "Ermita de Sant Gregori",
+          "lat": 40.22513,
+          "lon": -0.16558,
+          "kind": 2
+        },
+        {
+          "name": "Cova de Pere Tomàs",
+          "lat": 40.21403,
+          "lon": -0.19708,
+          "kind": 1
+        },
+        {
+          "name": "Castell d'Atzeneta del Maestrat",
+          "lat": 40.19666,
+          "lon": -0.20276,
+          "kind": 2
+        },
+        {
+          "name": "Cova Obscura",
+          "lat": 40.20083,
+          "lon": -0.21,
+          "kind": 1
+        },
+        {
+          "name": "el Collado",
+          "lat": 40.19292,
+          "lon": -0.17131,
+          "kind": 4,
+          "ele": 490
+        },
+        {
+          "name": "Església de la Transfiguració del Senyor de les Useres",
+          "lat": 40.15702,
+          "lon": -0.16486,
+          "kind": 2
+        },
+        {
+          "name": "Coll del Pla",
+          "lat": 40.13834,
+          "lon": -0.17457,
+          "kind": 4,
+          "ele": 450
+        },
+        {
+          "name": "Avenc de Nel",
+          "lat": 40.13165,
+          "lon": -0.18777,
+          "kind": 1
+        },
+        {
+          "name": "Cova del Covartxo",
+          "lat": 40.12689,
+          "lon": -0.14181,
+          "kind": 1
+        },
+        {
+          "name": "Cova de l'Artiga",
+          "lat": 40.11195,
+          "lon": -0.15893,
+          "kind": 1
+        },
+        {
+          "name": "Coll de la Fossanxa",
+          "lat": 40.12125,
+          "lon": -0.19156,
+          "kind": 4,
+          "ele": 470
+        },
+        {
+          "name": "Castell de l'Alcalatén",
+          "lat": 40.09251,
+          "lon": -0.19695,
+          "kind": 2
+        },
+        {
+          "name": "Església de Sant Francesc",
+          "lat": 40.0729,
+          "lon": -0.21179,
+          "kind": 2
+        },
+        {
+          "name": "Museo de la Cerámica de Alcora",
+          "lat": 40.07682,
+          "lon": -0.21124,
+          "kind": 2
+        },
+        {
+          "name": "horno de yesos",
+          "lat": 40.10561,
+          "lon": -0.21988,
+          "kind": 2
+        },
+        {
+          "name": "Poblat Ibèric del Castellar",
+          "lat": 40.11963,
+          "lon": -0.22364,
+          "kind": 2
+        },
+        {
+          "name": "Església de Sant Mateu",
+          "lat": 40.11757,
+          "lon": -0.23796,
+          "kind": 2
+        },
+        {
+          "name": "La Teuleria",
+          "lat": 40.11928,
+          "lon": -0.24636,
+          "kind": 2
+        },
+        {
+          "name": "Mirador Mitja Lluna",
+          "lat": 40.13583,
+          "lon": -0.27828,
+          "kind": 1
+        },
+        {
+          "name": "Cova de les Fleixes",
+          "lat": 40.14906,
+          "lon": -0.26928,
+          "kind": 1
+        },
+        {
+          "name": "Museu Etnològic de Llucena",
+          "lat": 40.13939,
+          "lon": -0.27937,
+          "kind": 2
+        },
+        {
+          "name": "Mirador de la Terrasseta Polos",
+          "lat": 40.13858,
+          "lon": -0.27925,
+          "kind": 1
+        },
+        {
+          "name": "Ermita de Sant Antoni Abat",
+          "lat": 40.13606,
+          "lon": -0.28445,
+          "kind": 2
+        },
+        {
+          "name": "Torre de Foios",
+          "lat": 40.13792,
+          "lon": -0.32228,
+          "kind": 2
+        },
+        {
+          "name": "Collet de Ferrís",
+          "lat": 40.12864,
+          "lon": -0.28378,
+          "kind": 4,
+          "ele": 659
+        },
+        {
+          "name": "Xorrador del mas d'Andreu",
+          "lat": 40.12729,
+          "lon": -0.30028,
+          "kind": 1
+        },
+        {
+          "name": "Cova de l'Ocre",
+          "lat": 40.09702,
+          "lon": -0.27348,
+          "kind": 1
+        },
+        {
+          "name": "Coveta de les Ovelles",
+          "lat": 40.0931,
+          "lon": -0.28718,
+          "kind": 1
+        },
+        {
+          "name": "el Xorrador",
+          "lat": 40.09208,
+          "lon": -0.2879,
+          "kind": 1
+        },
+        {
+          "name": "els Cauets",
+          "lat": 40.08298,
+          "lon": -0.2799,
+          "kind": 1
+        },
+        {
+          "name": "Cova Cega",
+          "lat": 40.11219,
+          "lon": -0.28744,
+          "kind": 1
+        }
       ]
     }
   ]

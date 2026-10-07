@@ -4,65 +4,65 @@
     {
       "country": "AT",
       "name": "Austria",
-      "version": 1,
-      "sha256": "a6ba45ba9c1c21eb3bcb955d0f746fd909dba2e26ceaffeed37f1a1185b9fdb1",
-      "bytes": 44592
+      "version": 2,
+      "sha256": "56ac7cce9d6aaf682648362e6c16d660b2dbfbb40c130a53e61424b3304d6a85",
+      "bytes": 153661
     },
     {
       "country": "CH",
       "name": "Switzerland",
-      "version": 1,
-      "sha256": "0d71c2e30a2a33abbe882c3e35652a21cf659cdff5821608cfbb2ea51dd705c8",
-      "bytes": 43726
+      "version": 2,
+      "sha256": "0cd776a42d1f5c0581babdd2cb49a1521ab7c715b8f86f3bc156db72a6b435cb",
+      "bytes": 150433
     },
     {
       "country": "DE",
       "name": "Germany",
-      "version": 1,
-      "sha256": "8383d49513489cc8357c41ea9005f5473c13453b20d63105bbc653322ab6df3e",
-      "bytes": 56532
+      "version": 2,
+      "sha256": "443c53744be33153a2e93eaabd8e0fc62c56aa8e40948d1fd8114bdb5e44d36d",
+      "bytes": 191884
     },
     {
       "country": "ES",
       "name": "Spain",
-      "version": 1,
-      "sha256": "035793145bc620fcd0d75532913e560104d2c219806c2813a214f45ea6f83160",
-      "bytes": 55464
+      "version": 2,
+      "sha256": "d457b929c594ad268ee3d9a95f557cc001f93350df5b09d0f96169f329fc066c",
+      "bytes": 193584
     },
     {
       "country": "FR",
       "name": "France",
-      "version": 1,
-      "sha256": "e96f34305df0ad4e1264d4b598aa0e49310893adccfa90d2c20efdf743ee8e60",
-      "bytes": 57803
+      "version": 2,
+      "sha256": "40e043e28748b0941c27fafc56994079f9da3cf0ea791b8e8bf541f54ea3de3b",
+      "bytes": 203875
     },
     {
       "country": "HR",
       "name": "Croatia",
-      "version": 1,
-      "sha256": "028268c5c6b75f7057e23c62ac497fe52a153ef83baf247ccdedab547ec7f76f",
-      "bytes": 33194
+      "version": 2,
+      "sha256": "2a4b396d04ef1cf8a49cb11b3d69c72668924bc0a1486346221c761efb8cdd3d",
+      "bytes": 114399
     },
     {
       "country": "IT",
       "name": "Italy",
-      "version": 1,
-      "sha256": "0a26ca7909c14e5902e548ccec9454aa278aa78494d7aa4f2ded92b369e5bf86",
-      "bytes": 55670
+      "version": 2,
+      "sha256": "de747da53484347e0fdce2fefdaf4e3295ab0e94bcdf7102ddc0d046f8a96479",
+      "bytes": 197720
     },
     {
       "country": "PT",
       "name": "Portugal",
-      "version": 1,
-      "sha256": "ff38682e2bac43322160fb0a2286d42c53e042bf59e32ccb7fffe051ca03e406",
-      "bytes": 32454
+      "version": 2,
+      "sha256": "046f8390b19248543ddc2a97615267cbee6540dd6f9c5b5665d72ebd425dfb58",
+      "bytes": 118075
     },
     {
       "country": "SI",
       "name": "Slovenia",
-      "version": 1,
-      "sha256": "4bd676bc364833c7ca08ab7cb56df5e2086ee4c9cd91ec2e8439cce6b228be99",
-      "bytes": 33464
+      "version": 2,
+      "sha256": "54e78555231229ac5c4a61594d63e07dc8e68bde725b15c4370540db42fd986f",
+      "bytes": 117211
     }
   ]
 }

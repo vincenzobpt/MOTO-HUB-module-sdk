@@ -74,13 +74,20 @@ class RideGenerator internal constructor(private val services: Services) {
         else FloatArray(n - 1) { Float.NaN }
 
         onProgress(CoreStrings.FETCHING_ELEVATIONS)
+        val samples = ElevationSampling.sampleIndices(routed.latitudes, routed.longitudes)
         val fetchedAltitudes = try {
-            services.routing.elevations(routed.latitudes, routed.longitudes)
+            services.routing.elevations(
+                DoubleArray(samples.size) { routed.latitudes[samples[it]] },
+                DoubleArray(samples.size) { routed.longitudes[samples[it]] },
+            )
         } catch (e: Exception) {
             null
         }
-        val altitudes = if (fetchedAltitudes != null && fetchedAltitudes.size == n) fetchedAltitudes
-        else DoubleArray(n) { Double.NaN }
+        val altitudes = if (fetchedAltitudes != null && fetchedAltitudes.size == samples.size) {
+            ElevationSampling.spread(routed.latitudes, routed.longitudes, samples, fetchedAltitudes)
+        } else {
+            DoubleArray(n) { Double.NaN }
+        }
 
         val route = Densify.densify(routed.latitudes, routed.longitudes, altitudes, limits)
         if (route.lats.size < 2) return Prepare.Failed(CoreStrings.ROUTE_EMPTY, ModuleRouteError.OTHER)

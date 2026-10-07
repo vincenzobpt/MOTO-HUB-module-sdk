@@ -33,7 +33,7 @@ class RouteSimulatorEntry : MotoHubModuleEntry {
 /** The manifest the module states about itself; the build compares it with the module package. */
 internal val routeSimulatorManifest = ModuleManifest(
     id = "flyby-route-simulator",
-    version = "0.1.1",
+    version = "0.1.2",
     contractVersion = 22,
     entryClass = "io.motohub.android.routesim.plugin.RouteSimulatorEntry",
     displayName = "Flyby Route Simulator",
@@ -81,7 +81,7 @@ private class RouteSimulatorModule(private val host: MotoHubModuleHost) : MotoHu
 
     private fun simulateFeature(id: String): ModuleFeature = ModuleFeature(
         id = id,
-        title = Strings.SIMULATE_TITLE,
+        title = Strings.simulateTitle,
         description = Strings.SIMULATE_DESCRIPTION,
         placement = ModuleFeaturePlacement.NONE,
         screen = { onBack -> RouteSimulatorApp(env, false, onBack) }

@@ -124,7 +124,7 @@ class ExperienceRoutes(
             return plain(base, baseStops, complete = true, note = RouteNotes.BASE_OVER_LIMIT).also { store(key, it) }
         }
 
-        val found = findSights(identity, base)
+        val found = findSights(experience, identity, base)
         if (found == null) {
             // The plain road is still a good answer; not cached, so the next call tries the sights again.
             // A search that came back with nothing at all counts as unavailable too: the host turns
@@ -253,11 +253,14 @@ class ExperienceRoutes(
     private class FoundSights(val sights: List<Sight>, val complete: Boolean)
 
     /**
-     * The sights near [base]'s road, from the cache when this experience's road was searched at this
-     * radius before. Null when the host could not search or found nothing at all (see [buildChecked]):
-     * such an answer is never cached.
+     * The sights near [base]'s road. The catalogue's own, when the pack carries them: looked up once
+     * by the catalogue tool, they need no network and never keep a rider waiting. Otherwise the
+     * host's search, from the cache when this experience's road was searched at this radius before.
+     * Null when the host could not search or found nothing at all (see [buildChecked]): such an
+     * answer is never cached.
      */
-    private fun findSights(identity: ExperienceIdentity, base: BaseRoute): FoundSights? {
+    private fun findSights(experience: Experience, identity: ExperienceIdentity, base: BaseRoute): FoundSights? {
+        if (experience.sights.isNotEmpty()) return FoundSights(experience.sights, true)
         val key = SightsKey(identity, radiusM)
         synchronized(sightsCache) { sightsCache[key] }?.let { return it }
         // What an earlier run of the app found: the map servers are not asked again for it.

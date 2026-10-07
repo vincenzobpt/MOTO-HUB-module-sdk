@@ -30,6 +30,11 @@ data class Experience(
     val maxElevationM: Int,
     /** 12..40 points of (latitude, longitude) outlining the ride, drawn as the card's small map. */
     val shape: List<Pair<Double, Double>>,
+    /**
+     * The places worth a detour along the road, looked up once by the catalogue tool and shipped in
+     * the pack. Empty in a pack written before them: the module then asks the host, as it used to.
+     */
+    val sights: List<Sight> = emptyList(),
 )
 
 /** One country's experiences. [version] counts the pack's revisions: the higher one wins. */

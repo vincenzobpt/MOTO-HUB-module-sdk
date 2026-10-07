@@ -20,6 +20,26 @@ internal object Strings {
     const val ABOUT_TITLE = "Route Simulator"
     const val ABOUT_DESCRIPTION = "Plan a route and ride it virtually, to make a flyby of it"
     const val SIMULATE_TITLE = "Simulate a ride"
+
+    /**
+     * The one name the app shows outside the module - the key on top of TRIPS, the entry in Flyby -
+     * so it follows the app's language even while the module's own pages are English only.
+     */
+    val simulateTitle: String
+        get() = SIMULATE_TITLES[Locale.getDefault().language] ?: SIMULATE_TITLE
+
+    private val SIMULATE_TITLES = mapOf(
+        "it" to "Simula un giro",
+        "fr" to "Simuler une balade",
+        "de" to "Fahrt simulieren",
+        "es" to "Simular una ruta",
+        "pt" to "Simular um passeio",
+        "nl" to "Rit simuleren",
+        "cs" to "Simulovat jízdu",
+        "ru" to "Симуляция поездки",
+        "tr" to "Sürüş simüle et",
+        "ko" to "주행 시뮬레이션"
+    )
     const val SIMULATE_DESCRIPTION = "Plan a route and generate a ride to make a flyby of"
     const val ABOUT_BLURB =
         "Plan a route on the map, choose when and how it is ridden, and the module rides it " +

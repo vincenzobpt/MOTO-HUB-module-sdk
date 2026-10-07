@@ -56,6 +56,39 @@ class CatalogJsonTest {
     }
 
     @Test
+    fun catalogueSightsAreReadAndRoundTrip() {
+        val parsed = parseOne {
+            put("sights", JSONArray()
+                .put(JSONObject().put("name", "Passo Campolongo").put("lat", 46.51386).put("lon", 11.87237).put("kind", 4).put("ele", 1875))
+                .put(JSONObject().put("name", "Cascate").put("lat", 46.48959).put("lon", 11.78065).put("kind", 1)))
+        }
+        assertTrue(parsed.problems.isEmpty())
+        val e = parsed.pack.experiences.last()
+        assertEquals(listOf("Passo Campolongo", "Cascate"), e.sights.map { it.name })
+        assertEquals(1875.0, e.sights[0].elevationM, 0.0)
+        assertTrue(e.sights[1].elevationM.isNaN())
+        assertEquals(parsed.pack, CatalogJson.parsePack(CatalogJson.packToJson(parsed.pack)).pack)
+    }
+
+    @Test
+    fun aBadSightIsDroppedAndTheRideKept() {
+        val parsed = parseOne {
+            put("sights", JSONArray()
+                .put(JSONObject().put("name", "Good").put("lat", 46.5).put("lon", 11.8).put("kind", 2))
+                .put(JSONObject().put("name", "No kind").put("lat", 46.5).put("lon", 11.8))
+                .put(JSONObject().put("name", "").put("lat", 46.5).put("lon", 11.8).put("kind", 1)))
+        }
+        assertEquals(listOf("it-ok", "it-test"), parsed.pack.experiences.map { it.id })
+        assertEquals(listOf("Good"), parsed.pack.experiences.last().sights.map { it.name })
+        assertEquals(2, parsed.problems.size)
+    }
+
+    @Test
+    fun aPackWithoutSightsHasNone() {
+        assertTrue(parseOne {}.pack.experiences.all { it.sights.isEmpty() })
+    }
+
+    @Test
     fun viaIsOptional() {
         val parsed = CatalogJson.parsePack(packJson(experiences = listOf(experienceJson("it-direct") { remove("via") })))
         assertTrue(parsed.problems.isEmpty())

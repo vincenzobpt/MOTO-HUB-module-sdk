@@ -2,7 +2,7 @@
   "schema": 1,
   "country": "AT",
   "name": "Austria",
-  "version": 1,
+  "version": 2,
   "experiences": [
     {
       "id": "at-wachau-danube",
@@ -78,6 +78,248 @@
         [48.4058, 15.59202],
         [48.40927, 15.6018],
         [48.41059, 15.60058]
+      ],
+      "sights": [
+        {
+          "name": "Evangelische Pfarrgemeinde A.B. Melk-Scheibbs",
+          "lat": 48.2234,
+          "lon": 15.32486,
+          "kind": 2
+        },
+        {
+          "name": "Ruine Weitenegg",
+          "lat": 48.23005,
+          "lon": 15.29415,
+          "kind": 2
+        },
+        {
+          "name": "Stift Melk",
+          "lat": 48.22828,
+          "lon": 15.33136,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Luberegg",
+          "lat": 48.23262,
+          "lon": 15.31399,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Albrechtsberg",
+          "lat": 48.21387,
+          "lon": 15.3878,
+          "kind": 2
+        },
+        {
+          "name": "Hubschacht",
+          "lat": 48.23939,
+          "lon": 15.35154,
+          "kind": 1
+        },
+        {
+          "name": "Dachberg-Warte",
+          "lat": 48.24001,
+          "lon": 15.31261,
+          "kind": 1
+        },
+        {
+          "name": "Hl. Nikolaus",
+          "lat": 48.24296,
+          "lon": 15.3342,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Gossam",
+          "lat": 48.26292,
+          "lon": 15.33543,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Schönbühel",
+          "lat": 48.25798,
+          "lon": 15.37365,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Rosalia",
+          "lat": 48.26267,
+          "lon": 15.37686,
+          "kind": 2
+        },
+        {
+          "name": "Einsiedlerlucke",
+          "lat": 48.28618,
+          "lon": 15.36905,
+          "kind": 1
+        },
+        {
+          "name": "Pfarrkirche Gerolding",
+          "lat": 48.2503,
+          "lon": 15.42221,
+          "kind": 2
+        },
+        {
+          "name": "Ruine Wolfstein",
+          "lat": 48.2734,
+          "lon": 15.4345,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Aggsbach Markt",
+          "lat": 48.29445,
+          "lon": 15.40164,
+          "kind": 2
+        },
+        {
+          "name": "Flöhweibelhöhle",
+          "lat": 48.31065,
+          "lon": 15.37706,
+          "kind": 1
+        },
+        {
+          "name": "Burgruine Aggstein",
+          "lat": 48.31396,
+          "lon": 15.42152,
+          "kind": 2
+        },
+        {
+          "name": "Venus-Fundstelle",
+          "lat": 48.3234,
+          "lon": 15.40427,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche Johannes der Täufer",
+          "lat": 48.33701,
+          "lon": 15.40985,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche hl. Sigismund",
+          "lat": 48.33948,
+          "lon": 15.40367,
+          "kind": 2
+        },
+        {
+          "name": "Rote Wand",
+          "lat": 48.34806,
+          "lon": 15.42268,
+          "kind": 1
+        },
+        {
+          "name": "Ruine Hinterhaus",
+          "lat": 48.35865,
+          "lon": 15.40708,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Spitz-Niederhaus",
+          "lat": 48.36575,
+          "lon": 15.4128,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Rupert",
+          "lat": 48.36449,
+          "lon": 15.42793,
+          "kind": 2
+        },
+        {
+          "name": "Wehrkirche St. Michael",
+          "lat": 48.37144,
+          "lon": 15.43847,
+          "kind": 2
+        },
+        {
+          "name": "Arnsdorfer Halbhöhle",
+          "lat": 48.37175,
+          "lon": 15.45241,
+          "kind": 1
+        },
+        {
+          "name": "Pfarrkirche Wösendorf",
+          "lat": 48.38069,
+          "lon": 15.45381,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Weißenkirchen",
+          "lat": 48.39801,
+          "lon": 15.47025,
+          "kind": 2
+        },
+        {
+          "name": "Felsentor",
+          "lat": 48.40294,
+          "lon": 15.4725,
+          "kind": 1
+        },
+        {
+          "name": "Weigl-Warte",
+          "lat": 48.42766,
+          "lon": 15.4865,
+          "kind": 1
+        },
+        {
+          "name": "Waldschlössl",
+          "lat": 48.4148,
+          "lon": 15.53294,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Rossatz",
+          "lat": 48.39656,
+          "lon": 15.50564,
+          "kind": 2
+        },
+        {
+          "name": "Weinbergschnecke",
+          "lat": 48.39482,
+          "lon": 15.52895,
+          "kind": 1
+        },
+        {
+          "name": "Kapelle Oberbergern",
+          "lat": 48.36405,
+          "lon": 15.5324,
+          "kind": 2
+        },
+        {
+          "name": "Ferdinand-Warte",
+          "lat": 48.3812,
+          "lon": 15.54225,
+          "kind": 1
+        },
+        {
+          "name": "Filialkirche hl. Johannes der Täufer",
+          "lat": 48.38727,
+          "lon": 15.556,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Baumgarten",
+          "lat": 48.37813,
+          "lon": 15.58051,
+          "kind": 2
+        },
+        {
+          "name": "Donauwarte",
+          "lat": 48.40992,
+          "lon": 15.56836,
+          "kind": 1
+        },
+        {
+          "name": "Kunsthalle Krems",
+          "lat": 48.40471,
+          "lon": 15.58712,
+          "kind": 2
+        },
+        {
+          "name": "Evangelische Pfarrkirche",
+          "lat": 48.40598,
+          "lon": 15.59602,
+          "kind": 2
+        }
       ]
     },
     {
@@ -154,6 +396,219 @@
         [46.96101, 13.61795],
         [46.98549, 13.62346],
         [47.01706, 13.6136]
+      ],
+      "sights": [
+        {
+          "name": "Kirche zu Sankt Oswald",
+          "lat": 46.83772,
+          "lon": 13.76179,
+          "kind": 2
+        },
+        {
+          "name": "Alte Hubermühle",
+          "lat": 46.81508,
+          "lon": 13.7943,
+          "kind": 2
+        },
+        {
+          "name": "Kathrein Kirche",
+          "lat": 46.81579,
+          "lon": 13.78046,
+          "kind": 2
+        },
+        {
+          "name": "Evangelische Kirche Bad Kleinkirchheim",
+          "lat": 46.81419,
+          "lon": 13.79169,
+          "kind": 2
+        },
+        {
+          "name": "Kirche Wiedweg",
+          "lat": 46.81789,
+          "lon": 13.85676,
+          "kind": 2
+        },
+        {
+          "name": "Reptilienzoo",
+          "lat": 46.82363,
+          "lon": 13.86382,
+          "kind": 2
+        },
+        {
+          "name": "St- Lorenzen",
+          "lat": 46.85694,
+          "lon": 13.9269,
+          "kind": 2
+        },
+        {
+          "name": "St. Anna",
+          "lat": 46.85876,
+          "lon": 13.93344,
+          "kind": 2
+        },
+        {
+          "name": "Heidialm",
+          "lat": 46.861,
+          "lon": 13.83253,
+          "kind": 2
+        },
+        {
+          "name": "Falkertspitz",
+          "lat": 46.86155,
+          "lon": 13.82925,
+          "kind": 1
+        },
+        {
+          "name": "Grünseeblick",
+          "lat": 46.90719,
+          "lon": 13.88269,
+          "kind": 1
+        },
+        {
+          "name": "Kraftfeld",
+          "lat": 46.9063,
+          "lon": 13.88655,
+          "kind": 2
+        },
+        {
+          "name": "Schauplätze",
+          "lat": 46.90718,
+          "lon": 13.88261,
+          "kind": 2
+        },
+        {
+          "name": "Alle Sinne",
+          "lat": 46.90936,
+          "lon": 13.87993,
+          "kind": 2
+        },
+        {
+          "name": "Blickwinkel",
+          "lat": 46.90957,
+          "lon": 13.88364,
+          "kind": 2
+        },
+        {
+          "name": "Duftnote",
+          "lat": 46.91261,
+          "lon": 13.88214,
+          "kind": 2
+        },
+        {
+          "name": "Erfindergeist",
+          "lat": 46.91304,
+          "lon": 13.88184,
+          "kind": 2
+        },
+        {
+          "name": "Mineralienmuseum",
+          "lat": 46.91468,
+          "lon": 13.87678,
+          "kind": 2
+        },
+        {
+          "name": "Mythos Edelstein Kranzelbinder",
+          "lat": 46.91432,
+          "lon": 13.87695,
+          "kind": 2
+        },
+        {
+          "name": "Nocky's AlmZeit Park",
+          "lat": 46.91575,
+          "lon": 13.86625,
+          "kind": 2
+        },
+        {
+          "name": "Schiestelscharte",
+          "lat": 46.89006,
+          "lon": 13.79351,
+          "kind": 4,
+          "ele": 2024
+        },
+        {
+          "name": "Wunschglocke",
+          "lat": 46.89029,
+          "lon": 13.79362,
+          "kind": 2
+        },
+        {
+          "name": "Zunderwand",
+          "lat": 46.87635,
+          "lon": 13.73864,
+          "kind": 2
+        },
+        {
+          "name": "Silva Magica",
+          "lat": 46.8952,
+          "lon": 13.77412,
+          "kind": 2
+        },
+        {
+          "name": "Grundalm - Ausstellung Bäume als Überlebenskünstler",
+          "lat": 46.89558,
+          "lon": 13.77388,
+          "kind": 2
+        },
+        {
+          "name": "Almwirtschaftsmuseum",
+          "lat": 46.94602,
+          "lon": 13.74866,
+          "kind": 2
+        },
+        {
+          "name": "Wilde Nockberge",
+          "lat": 46.9399,
+          "lon": 13.7429,
+          "kind": 2
+        },
+        {
+          "name": "Biosphärenpark-Zentrum Nockalmhof",
+          "lat": 46.95399,
+          "lon": 13.72703,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Andreas",
+          "lat": 46.96825,
+          "lon": 13.7266,
+          "kind": 2
+        },
+        {
+          "name": "Schatz der Donnerschlucht",
+          "lat": 46.97089,
+          "lon": 13.75861,
+          "kind": 2
+        },
+        {
+          "name": "Leobenegg",
+          "lat": 46.93668,
+          "lon": 13.60413,
+          "kind": 2
+        },
+        {
+          "name": "Maria Trost",
+          "lat": 46.96102,
+          "lon": 13.61774,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Johannes",
+          "lat": 46.94994,
+          "lon": 13.60156,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Johannes Nepomuk",
+          "lat": 46.93747,
+          "lon": 13.60337,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Nikolaus",
+          "lat": 46.96926,
+          "lon": 13.62101,
+          "kind": 2
+        }
       ]
     },
     {
@@ -235,6 +690,248 @@
         [46.9315, 10.12939],
         [46.91895, 10.10945],
         [46.91804, 10.09559]
+      ],
+      "sights": [
+        {
+          "name": "Burg Rosenegg",
+          "lat": 47.14201,
+          "lon": 9.80524,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Martin",
+          "lat": 47.14931,
+          "lon": 9.80243,
+          "kind": 2
+        },
+        {
+          "name": "Friedenskirche",
+          "lat": 47.15331,
+          "lon": 9.80643,
+          "kind": 2
+        },
+        {
+          "name": "Vineriuskirche",
+          "lat": 47.17309,
+          "lon": 9.79698,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Sonnenberg",
+          "lat": 47.17649,
+          "lon": 9.79931,
+          "kind": 2
+        },
+        {
+          "name": "Bezirkshauptmannschaft Bludenz",
+          "lat": 47.15754,
+          "lon": 9.82042,
+          "kind": 2
+        },
+        {
+          "name": "St. Laurentius",
+          "lat": 47.15746,
+          "lon": 9.81986,
+          "kind": 2
+        },
+        {
+          "name": "Stadtmuseum Bludenz",
+          "lat": 47.1572,
+          "lon": 9.81939,
+          "kind": 2
+        },
+        {
+          "name": "Diebsschlössle",
+          "lat": 47.13502,
+          "lon": 9.8493,
+          "kind": 2
+        },
+        {
+          "name": "Wallfahrtskirche Mariä Geburt",
+          "lat": 47.13999,
+          "lon": 9.85549,
+          "kind": 2
+        },
+        {
+          "name": "Partells-Wasserfall",
+          "lat": 47.15751,
+          "lon": 9.90844,
+          "kind": 1
+        },
+        {
+          "name": "Mariahilf-Kapelle",
+          "lat": 47.13754,
+          "lon": 9.93723,
+          "kind": 2
+        },
+        {
+          "name": "Knappenkirche St. Agatha",
+          "lat": 47.10777,
+          "lon": 9.98283,
+          "kind": 2
+        },
+        {
+          "name": "Klostertalmuseum",
+          "lat": 47.13037,
+          "lon": 10.03067,
+          "kind": 2
+        },
+        {
+          "name": "Bärenhöhle",
+          "lat": 47.11074,
+          "lon": 10.05378,
+          "kind": 1
+        },
+        {
+          "name": "Pfarrkirche hl. Johannes der Täufer",
+          "lat": 47.13133,
+          "lon": 10.09117,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Theresia vom Kinde Jesu",
+          "lat": 47.13213,
+          "lon": 10.12311,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Stuben am Arlberg",
+          "lat": 47.13831,
+          "lon": 10.15874,
+          "kind": 2
+        },
+        {
+          "name": "Bergkirche Zürs",
+          "lat": 47.16923,
+          "lon": 10.165,
+          "kind": 2
+        },
+        {
+          "name": "Valluga",
+          "lat": 47.15757,
+          "lon": 10.21309,
+          "kind": 1
+        },
+        {
+          "name": "Faselfadhütte",
+          "lat": 47.08636,
+          "lon": 10.21879,
+          "kind": 2
+        },
+        {
+          "name": "Stiegeneggkapelle",
+          "lat": 47.11777,
+          "lon": 10.2382,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Anton und Mariahilf",
+          "lat": 47.1316,
+          "lon": 10.26918,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Jakobus der Ältere",
+          "lat": 47.14278,
+          "lon": 10.28918,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Mariä Himmelfahrt",
+          "lat": 47.14766,
+          "lon": 10.33941,
+          "kind": 2
+        },
+        {
+          "name": "Schnanner Klamm",
+          "lat": 47.15486,
+          "lon": 10.38024,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Bartholomäus",
+          "lat": 47.14852,
+          "lon": 10.408,
+          "kind": 2
+        },
+        {
+          "name": "Wolfenkapelle",
+          "lat": 47.13686,
+          "lon": 10.42534,
+          "kind": 2
+        },
+        {
+          "name": "Rosannabrücke",
+          "lat": 47.12569,
+          "lon": 10.46134,
+          "kind": 2
+        },
+        {
+          "name": "Kapelle hl. Antonius von Padua",
+          "lat": 47.13478,
+          "lon": 10.50554,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Wiesberg",
+          "lat": 47.11698,
+          "lon": 10.49268,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Hl. Sebastian",
+          "lat": 47.08459,
+          "lon": 10.47049,
+          "kind": 2
+        },
+        {
+          "name": "Kapelle Maierhof",
+          "lat": 47.07653,
+          "lon": 10.45662,
+          "kind": 2
+        },
+        {
+          "name": "Bürgerhaus Beim Tonesn (Haus Tobias Bock)",
+          "lat": 47.06448,
+          "lon": 10.3801,
+          "kind": 2
+        },
+        {
+          "name": "DiasAlpe Kapelle",
+          "lat": 47.06755,
+          "lon": 10.35687,
+          "kind": 2
+        },
+        {
+          "name": "Mathias Schmid Museum",
+          "lat": 47.00915,
+          "lon": 10.28983,
+          "kind": 2
+        },
+        {
+          "name": "Paznauner Bauernmuseum",
+          "lat": 46.989,
+          "lon": 10.24564,
+          "kind": 2
+        },
+        {
+          "name": "Sonnenkopf",
+          "lat": 46.97861,
+          "lon": 10.20237,
+          "kind": 1
+        },
+        {
+          "name": "St. Antonius Kapelle",
+          "lat": 46.96564,
+          "lon": 10.16566,
+          "kind": 2
+        },
+        {
+          "name": "Aussichtsplattform Stausee Kops",
+          "lat": 46.97331,
+          "lon": 10.11427,
+          "kind": 1
+        }
       ]
     },
     {
@@ -311,6 +1008,248 @@
         [47.27565, 12.44141],
         [47.27815, 12.47589],
         [47.28151, 12.48385]
+      ],
+      "sights": [
+        {
+          "name": "Maria zum Siege",
+          "lat": 47.26459,
+          "lon": 11.89632,
+          "kind": 2
+        },
+        {
+          "name": "Herz-Jesu Kapelle",
+          "lat": 47.23797,
+          "lon": 11.8744,
+          "kind": 2
+        },
+        {
+          "name": "Heiliger Leonhard",
+          "lat": 47.26005,
+          "lon": 11.90091,
+          "kind": 2
+        },
+        {
+          "name": "Wiesbergkapelle",
+          "lat": 47.25811,
+          "lon": 11.90819,
+          "kind": 2
+        },
+        {
+          "name": "Unterlehenkapelle",
+          "lat": 47.24134,
+          "lon": 11.91218,
+          "kind": 2
+        },
+        {
+          "name": "Wallfahrtskirche Maria Rast",
+          "lat": 47.22467,
+          "lon": 11.88935,
+          "kind": 2
+        },
+        {
+          "name": "Strasser, Stille Nacht, heilige Nacht",
+          "lat": 47.21746,
+          "lon": 11.86581,
+          "kind": 2
+        },
+        {
+          "name": "Goldschaubergwerk",
+          "lat": 47.22179,
+          "lon": 11.89641,
+          "kind": 2
+        },
+        {
+          "name": "Kapelle Spielleiten",
+          "lat": 47.20842,
+          "lon": 11.85665,
+          "kind": 2
+        },
+        {
+          "name": "Heiliger Ingenuin und Albuin",
+          "lat": 47.20591,
+          "lon": 11.86495,
+          "kind": 2
+        },
+        {
+          "name": "Dorfkapelle",
+          "lat": 47.19891,
+          "lon": 11.85884,
+          "kind": 2
+        },
+        {
+          "name": "Maria sieben Schmerzen",
+          "lat": 47.20474,
+          "lon": 11.87507,
+          "kind": 2
+        },
+        {
+          "name": "Zillertaler Almtribüne",
+          "lat": 47.20218,
+          "lon": 11.9042,
+          "kind": 1
+        },
+        {
+          "name": "Farm zoo Gerlossstein",
+          "lat": 47.20114,
+          "lon": 11.91801,
+          "kind": 2
+        },
+        {
+          "name": "Panoramablick",
+          "lat": 47.24373,
+          "lon": 12.02645,
+          "kind": 1
+        },
+        {
+          "name": "Nöckentalblick",
+          "lat": 47.24616,
+          "lon": 12.03207,
+          "kind": 1
+        },
+        {
+          "name": "Filz Rast",
+          "lat": 47.2214,
+          "lon": 12.08225,
+          "kind": 1
+        },
+        {
+          "name": "Königsleiten Photopoint",
+          "lat": 47.26251,
+          "lon": 12.09263,
+          "kind": 2
+        },
+        {
+          "name": "Hochkrimml Speedcheck",
+          "lat": 47.23348,
+          "lon": 12.12623,
+          "kind": 2
+        },
+        {
+          "name": "Hochkrimml Skimovie",
+          "lat": 47.2334,
+          "lon": 12.13795,
+          "kind": 2
+        },
+        {
+          "name": "Hochkrimml Photopoint",
+          "lat": 47.224,
+          "lon": 12.13404,
+          "kind": 2
+        },
+        {
+          "name": "Krimmler Wasserfälle",
+          "lat": 47.20838,
+          "lon": 12.17022,
+          "kind": 2
+        },
+        {
+          "name": "Krimmler WasserFestSpiele",
+          "lat": 47.21829,
+          "lon": 12.17347,
+          "kind": 2
+        },
+        {
+          "name": "historischer Kalkofen",
+          "lat": 47.23074,
+          "lon": 12.18151,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Friedburg",
+          "lat": 47.23529,
+          "lon": 12.2391,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Hieburg",
+          "lat": 47.24696,
+          "lon": 12.24448,
+          "kind": 2
+        },
+        {
+          "name": "Sigg Kapelle",
+          "lat": 47.22956,
+          "lon": 12.24723,
+          "kind": 2
+        },
+        {
+          "name": "Schaubergwerk Hochfeld",
+          "lat": 47.22196,
+          "lon": 12.27395,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Neukirchen",
+          "lat": 47.25386,
+          "lon": 12.27711,
+          "kind": 2
+        },
+        {
+          "name": "Weyerturm",
+          "lat": 47.2608,
+          "lon": 12.31795,
+          "kind": 2
+        },
+        {
+          "name": "Heimatmuseum Bramberg",
+          "lat": 47.27035,
+          "lon": 12.33806,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche zu den Heiligen Laurentius und Bartholomäus",
+          "lat": 47.27341,
+          "lon": 12.34634,
+          "kind": 2
+        },
+        {
+          "name": "Zimmeredtkapelle",
+          "lat": 47.29208,
+          "lon": 12.41838,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Vitus",
+          "lat": 47.27532,
+          "lon": 12.4191,
+          "kind": 2
+        },
+        {
+          "name": "Schlössl Einödberg",
+          "lat": 47.28267,
+          "lon": 12.43128,
+          "kind": 2
+        },
+        {
+          "name": "Auf der Platte",
+          "lat": 47.25772,
+          "lon": 12.46352,
+          "kind": 1
+        },
+        {
+          "name": "Felberturm",
+          "lat": 47.27759,
+          "lon": 12.49202,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Lichtenau",
+          "lat": 47.2884,
+          "lon": 12.52972,
+          "kind": 2
+        },
+        {
+          "name": "Felberkirche",
+          "lat": 47.27785,
+          "lon": 12.49146,
+          "kind": 2
+        },
+        {
+          "name": "Schnettkapelle",
+          "lat": 47.28472,
+          "lon": 12.48401,
+          "kind": 2
+        }
       ]
     },
     {
@@ -387,6 +1326,248 @@
         [46.66098, 13.97158],
         [46.67524, 13.98477],
         [46.676, 13.98255]
+      ],
+      "sights": [
+        {
+          "name": "Schloss Ehrental",
+          "lat": 46.65364,
+          "lon": 14.30183,
+          "kind": 2
+        },
+        {
+          "name": "Christkönigskirche",
+          "lat": 46.62324,
+          "lon": 14.2957,
+          "kind": 2
+        },
+        {
+          "name": "St. Martin",
+          "lat": 46.62421,
+          "lon": 14.27972,
+          "kind": 2
+        },
+        {
+          "name": "Minimundus",
+          "lat": 46.61968,
+          "lon": 14.26462,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Maria Loretto",
+          "lat": 46.61542,
+          "lon": 14.25021,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Hornstein",
+          "lat": 46.63621,
+          "lon": 14.22581,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Krumpendorf",
+          "lat": 46.62679,
+          "lon": 14.2119,
+          "kind": 2
+        },
+        {
+          "name": "Sekirn Kirche",
+          "lat": 46.60824,
+          "lon": 14.21566,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Reifnitz",
+          "lat": 46.61123,
+          "lon": 14.18152,
+          "kind": 2
+        },
+        {
+          "name": "Aussichtsturm Pyramidenkogel",
+          "lat": 46.609,
+          "lon": 14.14498,
+          "kind": 2
+        },
+        {
+          "name": "Arnulfsfeste",
+          "lat": 46.66028,
+          "lon": 14.1583,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Leonstain",
+          "lat": 46.6367,
+          "lon": 14.13776,
+          "kind": 2
+        },
+        {
+          "name": "Sankt Bartlmä",
+          "lat": 46.65957,
+          "lon": 14.11014,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche St. Georg",
+          "lat": 46.63474,
+          "lon": 14.09643,
+          "kind": 2
+        },
+        {
+          "name": "Kirche St. Michael",
+          "lat": 46.6047,
+          "lon": 14.09669,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche St. Vitus",
+          "lat": 46.64685,
+          "lon": 14.06226,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche hll. Johannes und Paul (Franzosenkirche)",
+          "lat": 46.62274,
+          "lon": 14.05385,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Velden",
+          "lat": 46.61194,
+          "lon": 14.04308,
+          "kind": 2
+        },
+        {
+          "name": "Pfarre Velden am Wörthersee",
+          "lat": 46.61538,
+          "lon": 14.03821,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Rosegg",
+          "lat": 46.5915,
+          "lon": 14.02423,
+          "kind": 2
+        },
+        {
+          "name": "Gräberfeld Frög",
+          "lat": 46.58139,
+          "lon": 14.01923,
+          "kind": 2
+        },
+        {
+          "name": "Kirche Sankt Laurentius",
+          "lat": 46.59228,
+          "lon": 14.00607,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Heiliger Georg",
+          "lat": 46.62567,
+          "lon": 13.99222,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Damtschach",
+          "lat": 46.6292,
+          "lon": 13.96605,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Sankt Niklas an der Drau",
+          "lat": 46.59971,
+          "lon": 13.94352,
+          "kind": 2
+        },
+        {
+          "name": "Aussichtsplattform",
+          "lat": 46.61879,
+          "lon": 13.92832,
+          "kind": 1
+        },
+        {
+          "name": "Filialkirche Heiliger Michael",
+          "lat": 46.62843,
+          "lon": 13.90296,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Sankt Leonhard",
+          "lat": 46.62538,
+          "lon": 13.85982,
+          "kind": 2
+        },
+        {
+          "name": "Auferstehungskirche",
+          "lat": 46.62638,
+          "lon": 13.83615,
+          "kind": 2
+        },
+        {
+          "name": "Eggerloch",
+          "lat": 46.59166,
+          "lon": 13.81816,
+          "kind": 1
+        },
+        {
+          "name": "Pfarrkirche St. Josef",
+          "lat": 46.59678,
+          "lon": 13.84388,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Maria Landskron",
+          "lat": 46.6335,
+          "lon": 13.88451,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche Sankt Ruprecht",
+          "lat": 46.6467,
+          "lon": 13.87072,
+          "kind": 2
+        },
+        {
+          "name": "Der faule Willi",
+          "lat": 46.65748,
+          "lon": 13.89123,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Bartholomäus",
+          "lat": 46.66485,
+          "lon": 13.91769,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche Heiliger Bartholomäus",
+          "lat": 46.63851,
+          "lon": 13.94736,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Aichelberg",
+          "lat": 46.64507,
+          "lon": 13.96098,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Hohenwart",
+          "lat": 46.63802,
+          "lon": 13.99578,
+          "kind": 2
+        },
+        {
+          "name": "Domenig Steinhaus",
+          "lat": 46.69583,
+          "lon": 14.00562,
+          "kind": 2
+        },
+        {
+          "name": "Alte Pfarrkirche St. Josef",
+          "lat": 46.68871,
+          "lon": 13.9615,
+          "kind": 2
+        }
       ]
     },
     {
@@ -466,6 +1647,252 @@
         [46.83976, 12.82789],
         [46.83104, 12.8369],
         [46.83013, 12.7682]
+      ],
+      "sights": [
+        {
+          "name": "Spielzeugmuseum",
+          "lat": 47.79964,
+          "lon": 13.03992,
+          "kind": 2
+        },
+        {
+          "name": "Steintheater",
+          "lat": 47.75695,
+          "lon": 13.06809,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Gutrat (Guetrat)",
+          "lat": 47.70806,
+          "lon": 13.06062,
+          "kind": 2
+        },
+        {
+          "name": "Marmormuseum",
+          "lat": 47.69671,
+          "lon": 13.13203,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche zum Heiligen Georg",
+          "lat": 47.63507,
+          "lon": 13.15971,
+          "kind": 2
+        },
+        {
+          "name": "Burg Golling",
+          "lat": 47.59721,
+          "lon": 13.16683,
+          "kind": 2
+        },
+        {
+          "name": "Pass Lueg",
+          "lat": 47.57561,
+          "lon": 13.19469,
+          "kind": 4,
+          "ele": 553
+        },
+        {
+          "name": "Scheukofen",
+          "lat": 47.52763,
+          "lon": 13.1562,
+          "kind": 1
+        },
+        {
+          "name": "Eisriesenwelt",
+          "lat": 47.51086,
+          "lon": 13.19323,
+          "kind": 1
+        },
+        {
+          "name": "Festung Hohenwerfen",
+          "lat": 47.4827,
+          "lon": 13.18841,
+          "kind": 2
+        },
+        {
+          "name": "Sinnhubschlössl",
+          "lat": 47.43755,
+          "lon": 13.20921,
+          "kind": 2
+        },
+        {
+          "name": "St. Vinzenz Friedenskirche",
+          "lat": 47.38153,
+          "lon": 13.26598,
+          "kind": 2
+        },
+        {
+          "name": "Evang. Annakapelle",
+          "lat": 47.34897,
+          "lon": 13.20453,
+          "kind": 2
+        },
+        {
+          "name": "Burg Plankenau",
+          "lat": 47.32492,
+          "lon": 13.18398,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Schernberg",
+          "lat": 47.32535,
+          "lon": 13.13901,
+          "kind": 2
+        },
+        {
+          "name": "Annakirche",
+          "lat": 47.3297,
+          "lon": 13.07973,
+          "kind": 2
+        },
+        {
+          "name": "Wahlfahrtskapelle Maria Elend",
+          "lat": 47.27955,
+          "lon": 12.9881,
+          "kind": 2
+        },
+        {
+          "name": "Kitzlochklamm",
+          "lat": 47.2857,
+          "lon": 12.97412,
+          "kind": 2
+        },
+        {
+          "name": "St. Georg",
+          "lat": 47.28704,
+          "lon": 12.8739,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Maria",
+          "lat": 47.28635,
+          "lon": 12.82387,
+          "kind": 2
+        },
+        {
+          "name": "Evang. Auferstehungskirche",
+          "lat": 47.32456,
+          "lon": 12.79097,
+          "kind": 2
+        },
+        {
+          "name": "Burg Kaprun",
+          "lat": 47.27444,
+          "lon": 12.7708,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hll. Ägidius und Martin",
+          "lat": 47.22707,
+          "lon": 12.82573,
+          "kind": 2
+        },
+        {
+          "name": "Rieger Hochalm (verfallen)",
+          "lat": 47.1812,
+          "lon": 12.86091,
+          "kind": 2
+        },
+        {
+          "name": "Wildpark Ferleiten",
+          "lat": 47.17145,
+          "lon": 12.81667,
+          "kind": 2
+        },
+        {
+          "name": "Hochmais",
+          "lat": 47.12848,
+          "lon": 12.80703,
+          "kind": 1
+        },
+        {
+          "name": "Alpine Naturschau",
+          "lat": 47.12231,
+          "lon": 12.82113,
+          "kind": 2
+        },
+        {
+          "name": "Fuscher Törl",
+          "lat": 47.11679,
+          "lon": 12.82391,
+          "kind": 4,
+          "ele": 2428
+        },
+        {
+          "name": "Gletscherblick",
+          "lat": 47.10116,
+          "lon": 12.83711,
+          "kind": 1
+        },
+        {
+          "name": "Bretterscharte",
+          "lat": 47.09009,
+          "lon": 12.83162,
+          "kind": 4,
+          "ele": 2603
+        },
+        {
+          "name": "Leiterfall",
+          "lat": 47.05192,
+          "lon": 12.7845,
+          "kind": 1
+        },
+        {
+          "name": "Aussichtspunkt Südrampe",
+          "lat": 47.04987,
+          "lon": 12.84264,
+          "kind": 1
+        },
+        {
+          "name": "Goldgräberdorf",
+          "lat": 47.045,
+          "lon": 12.90284,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche Pockhorn",
+          "lat": 47.0269,
+          "lon": 12.85751,
+          "kind": 2
+        },
+        {
+          "name": "Gartl-Wasserfall",
+          "lat": 46.96436,
+          "lon": 12.88919,
+          "kind": 1
+        },
+        {
+          "name": "Filialkirche und Wallfahrtskirche Maria Hilf",
+          "lat": 46.89947,
+          "lon": 12.90217,
+          "kind": 2
+        },
+        {
+          "name": "hl. Rupert",
+          "lat": 46.86152,
+          "lon": 12.88924,
+          "kind": 2
+        },
+        {
+          "name": "Iselsberg",
+          "lat": 46.85425,
+          "lon": 12.85812,
+          "kind": 4,
+          "ele": 1209
+        },
+        {
+          "name": "Pfarrkirche St. Ulrich",
+          "lat": 46.79524,
+          "lon": 12.8367,
+          "kind": 2
+        },
+        {
+          "name": "Sankt Silvester Kapelle",
+          "lat": 46.83355,
+          "lon": 12.8146,
+          "kind": 2
+        }
       ]
     },
     {
@@ -542,6 +1969,249 @@
         [46.91564, 11.08209],
         [46.90103, 11.09233],
         [46.90535, 11.0973]
+      ],
+      "sights": [
+        {
+          "name": "Museum Goldenes Dachl",
+          "lat": 47.26866,
+          "lon": 11.39327,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Mentlberg",
+          "lat": 47.2486,
+          "lon": 11.36296,
+          "kind": 2
+        },
+        {
+          "name": "Neue Pfarrkirche Völs",
+          "lat": 47.25288,
+          "lon": 11.32983,
+          "kind": 2
+        },
+        {
+          "name": "Kaiser-Max-Grotte",
+          "lat": 47.26939,
+          "lon": 11.26928,
+          "kind": 1
+        },
+        {
+          "name": "Ansitz Ferklehen",
+          "lat": 47.25856,
+          "lon": 11.25332,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Magnus",
+          "lat": 47.25772,
+          "lon": 11.21069,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Anna",
+          "lat": 47.21629,
+          "lon": 11.22082,
+          "kind": 2
+        },
+        {
+          "name": "Innsbrucker Bankl",
+          "lat": 47.20809,
+          "lon": 11.18336,
+          "kind": 1
+        },
+        {
+          "name": "Pfarrkirche hl. Martin",
+          "lat": 47.19591,
+          "lon": 11.15667,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Sigmund",
+          "lat": 47.20228,
+          "lon": 11.10298,
+          "kind": 2
+        },
+        {
+          "name": "Panoramablick",
+          "lat": 47.20939,
+          "lon": 11.10184,
+          "kind": 1
+        },
+        {
+          "name": "Hofkapelle Kühtai",
+          "lat": 47.21282,
+          "lon": 11.01387,
+          "kind": 2
+        },
+        {
+          "name": "Bergbau Schwarze Wand",
+          "lat": 47.20062,
+          "lon": 10.96621,
+          "kind": 2
+        },
+        {
+          "name": "Kapelle Mariae Heimsuchung",
+          "lat": 47.24927,
+          "lon": 11.00575,
+          "kind": 2
+        },
+        {
+          "name": "Kirche Maria Heimsuchung",
+          "lat": 47.22883,
+          "lon": 10.94049,
+          "kind": 2
+        },
+        {
+          "name": "Sattele",
+          "lat": 47.23134,
+          "lon": 10.92771,
+          "kind": 4,
+          "ele": 1690
+        },
+        {
+          "name": "Pfarrkirche hll. Chrysanth und Daria",
+          "lat": 47.25424,
+          "lon": 10.8865,
+          "kind": 2
+        },
+        {
+          "name": "Area 47",
+          "lat": 47.2285,
+          "lon": 10.83845,
+          "kind": 2
+        },
+        {
+          "name": "Burg Auenstein",
+          "lat": 47.21726,
+          "lon": 10.87634,
+          "kind": 2
+        },
+        {
+          "name": "Mariä Heimsuchung",
+          "lat": 47.20729,
+          "lon": 10.86233,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Georg und Nikolaus",
+          "lat": 47.20498,
+          "lon": 10.89819,
+          "kind": 2
+        },
+        {
+          "name": "Platzlekapelle",
+          "lat": 47.20347,
+          "lon": 10.89975,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Martin",
+          "lat": 47.17263,
+          "lon": 10.90671,
+          "kind": 2
+        },
+        {
+          "name": "Reichalmkapelle",
+          "lat": 47.16656,
+          "lon": 10.94019,
+          "kind": 2
+        },
+        {
+          "name": "St. Vitus",
+          "lat": 47.13947,
+          "lon": 10.92797,
+          "kind": 2
+        },
+        {
+          "name": "Expositurkirche Mariä Schmerzen",
+          "lat": 47.12071,
+          "lon": 10.91588,
+          "kind": 2
+        },
+        {
+          "name": "Stuibenfall",
+          "lat": 47.12662,
+          "lon": 10.94905,
+          "kind": 1
+        },
+        {
+          "name": "Kaplaneikirche St. Antonius",
+          "lat": 47.12769,
+          "lon": 10.96678,
+          "kind": 2
+        },
+        {
+          "name": "Loretokapelle Au",
+          "lat": 47.09767,
+          "lon": 10.95463,
+          "kind": 2
+        },
+        {
+          "name": "Kaplaneikirche Maria Hilf",
+          "lat": 47.07177,
+          "lon": 11.02051,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Michael",
+          "lat": 47.04326,
+          "lon": 10.96989,
+          "kind": 2
+        },
+        {
+          "name": "Kapelle Bruggen",
+          "lat": 47.02109,
+          "lon": 10.99666,
+          "kind": 2
+        },
+        {
+          "name": "Hochwaldkapelle",
+          "lat": 46.99977,
+          "lon": 11.0044,
+          "kind": 2
+        },
+        {
+          "name": "Christophoruskapelle Sölden",
+          "lat": 46.99848,
+          "lon": 11.01009,
+          "kind": 2
+        },
+        {
+          "name": "Marienkapelle Grünwald",
+          "lat": 46.97353,
+          "lon": 11.00327,
+          "kind": 2
+        },
+        {
+          "name": "007 Elements",
+          "lat": 46.942,
+          "lon": 10.96692,
+          "kind": 2
+        },
+        {
+          "name": "Maria-Hilf-Kapelle",
+          "lat": 46.9374,
+          "lon": 11.02782,
+          "kind": 2
+        },
+        {
+          "name": "St. Johannes Nepomuk",
+          "lat": 46.8703,
+          "lon": 11.0264,
+          "kind": 2
+        },
+        {
+          "name": "Motorcycle Museum",
+          "lat": 46.90975,
+          "lon": 11.05331,
+          "kind": 2
+        },
+        {
+          "name": "Fernrohr Scheibkopf - Telescopio Scheibkopf",
+          "lat": 46.89288,
+          "lon": 11.12057,
+          "kind": 1
+        }
       ]
     },
     {
@@ -623,6 +2293,249 @@
         [47.13489, 10.20601],
         [47.11519, 10.22196],
         [47.12914, 10.2665]
+      ],
+      "sights": [
+        {
+          "name": "Känzele",
+          "lat": 47.48755,
+          "lon": 9.7621,
+          "kind": 1
+        },
+        {
+          "name": "Maria Hilf Kirche",
+          "lat": 47.49534,
+          "lon": 9.72746,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Wolfurt",
+          "lat": 47.4706,
+          "lon": 9.75447,
+          "kind": 2
+        },
+        {
+          "name": "Wallfahrtskirche Maria Bildstein",
+          "lat": 47.45802,
+          "lon": 9.77185,
+          "kind": 2
+        },
+        {
+          "name": "Heilige Maria",
+          "lat": 47.42313,
+          "lon": 9.80832,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Hl. Martin Alberschwende",
+          "lat": 47.45105,
+          "lon": 9.83089,
+          "kind": 2
+        },
+        {
+          "name": "Fátimakapelle",
+          "lat": 47.4589,
+          "lon": 9.85778,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Müselbach",
+          "lat": 47.45511,
+          "lon": 9.8787,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Johannes der Täufer",
+          "lat": 47.45043,
+          "lon": 9.91959,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Andelsbuch",
+          "lat": 47.41332,
+          "lon": 9.89586,
+          "kind": 2
+        },
+        {
+          "name": "Hll. Martin und Wendelin",
+          "lat": 47.40158,
+          "lon": 9.86553,
+          "kind": 2
+        },
+        {
+          "name": "Rothenbachschrofen",
+          "lat": 47.38932,
+          "lon": 9.84146,
+          "kind": 1
+        },
+        {
+          "name": "Heimatmuseum Bezau",
+          "lat": 47.37827,
+          "lon": 9.89597,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Reuthe",
+          "lat": 47.37147,
+          "lon": 9.89428,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Mellau",
+          "lat": 47.35009,
+          "lon": 9.88173,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Bizau",
+          "lat": 47.36923,
+          "lon": 9.929,
+          "kind": 2
+        },
+        {
+          "name": "Wetzsteinhöhle",
+          "lat": 47.36333,
+          "lon": 9.94015,
+          "kind": 1
+        },
+        {
+          "name": "Pfarrkirche Schnepfau",
+          "lat": 47.3521,
+          "lon": 9.94569,
+          "kind": 2
+        },
+        {
+          "name": "Liegstein",
+          "lat": 47.33943,
+          "lon": 9.98124,
+          "kind": 1
+        },
+        {
+          "name": "Barockbaumeister-Museum",
+          "lat": 47.3223,
+          "lon": 9.99715,
+          "kind": 2
+        },
+        {
+          "name": "Felder Museum",
+          "lat": 47.31219,
+          "lon": 10.01625,
+          "kind": 2
+        },
+        {
+          "name": "Kapelle Schalzbachvorsäß",
+          "lat": 47.2943,
+          "lon": 10.03773,
+          "kind": 2
+        },
+        {
+          "name": "Kapelle, hl. Maria",
+          "lat": 47.28388,
+          "lon": 10.05634,
+          "kind": 2
+        },
+        {
+          "name": "Abenteuerpark",
+          "lat": 47.25866,
+          "lon": 10.08751,
+          "kind": 2
+        },
+        {
+          "name": "Mariä Himmelfahrt",
+          "lat": 47.2574,
+          "lon": 10.09221,
+          "kind": 2
+        },
+        {
+          "name": "Salober-Alm",
+          "lat": 47.25276,
+          "lon": 10.11818,
+          "kind": 2
+        },
+        {
+          "name": "Kapelle St. Jakobus",
+          "lat": 47.26866,
+          "lon": 10.13596,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Sebastian",
+          "lat": 47.25905,
+          "lon": 10.18179,
+          "kind": 2
+        },
+        {
+          "name": "St. Wendelin",
+          "lat": 47.26223,
+          "lon": 10.19926,
+          "kind": 2
+        },
+        {
+          "name": "Bürstegger Kirchle",
+          "lat": 47.23829,
+          "lon": 10.15955,
+          "kind": 2
+        },
+        {
+          "name": "Skyspace",
+          "lat": 47.22593,
+          "lon": 10.13456,
+          "kind": 2
+        },
+        {
+          "name": "Sebastianskirche",
+          "lat": 47.20061,
+          "lon": 10.10944,
+          "kind": 2
+        },
+        {
+          "name": "Bergkirche Zürs",
+          "lat": 47.16923,
+          "lon": 10.165,
+          "kind": 2
+        },
+        {
+          "name": "Hall Of Fame",
+          "lat": 47.15383,
+          "lon": 10.1796,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Stuben am Arlberg",
+          "lat": 47.13831,
+          "lon": 10.15874,
+          "kind": 2
+        },
+        {
+          "name": "Valluga",
+          "lat": 47.15757,
+          "lon": 10.21309,
+          "kind": 1
+        },
+        {
+          "name": "Arlberg",
+          "lat": 47.12985,
+          "lon": 10.21063,
+          "kind": 4,
+          "ele": 1793
+        },
+        {
+          "name": "Christophoruskapelle",
+          "lat": 47.12738,
+          "lon": 10.21329,
+          "kind": 2
+        },
+        {
+          "name": "Stiegeneggkapelle",
+          "lat": 47.11777,
+          "lon": 10.2382,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Jakobus der Ältere",
+          "lat": 47.14278,
+          "lon": 10.28918,
+          "kind": 2
+        }
       ]
     },
     {
@@ -703,6 +2616,248 @@
         [46.84407, 12.7172],
         [46.82794, 12.75727],
         [46.83013, 12.7682]
+      ],
+      "sights": [
+        {
+          "name": "Tischoferhöhle",
+          "lat": 47.59242,
+          "lon": 12.19662,
+          "kind": 1
+        },
+        {
+          "name": "Evang. Johanneskirche",
+          "lat": 47.58349,
+          "lon": 12.1742,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Sparchen",
+          "lat": 47.59352,
+          "lon": 12.17961,
+          "kind": 2
+        },
+        {
+          "name": "Heilig-Kreuz-Kirche",
+          "lat": 47.6118,
+          "lon": 12.18648,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Zell",
+          "lat": 47.58533,
+          "lon": 12.16395,
+          "kind": 2
+        },
+        {
+          "name": "Mariae Heimsuchung",
+          "lat": 47.58145,
+          "lon": 12.15686,
+          "kind": 2
+        },
+        {
+          "name": "Pfarre Endach",
+          "lat": 47.57241,
+          "lon": 12.15455,
+          "kind": 2
+        },
+        {
+          "name": "Lochererkapelle",
+          "lat": 47.56178,
+          "lon": 12.16256,
+          "kind": 2
+        },
+        {
+          "name": "Kaufmannkapelle",
+          "lat": 47.54618,
+          "lon": 12.17823,
+          "kind": 2
+        },
+        {
+          "name": "Hexenwasser",
+          "lat": 47.48062,
+          "lon": 12.1962,
+          "kind": 2
+        },
+        {
+          "name": "Bärnstattkapelle Sankt Leonhard",
+          "lat": 47.54238,
+          "lon": 12.23294,
+          "kind": 2
+        },
+        {
+          "name": "Veitskirche",
+          "lat": 47.55477,
+          "lon": 12.24867,
+          "kind": 1
+        },
+        {
+          "name": "Pfarrkirche",
+          "lat": 47.51278,
+          "lon": 12.30146,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche zum heiligen Kreuz",
+          "lat": 47.51333,
+          "lon": 12.32865,
+          "kind": 2
+        },
+        {
+          "name": "Diebsöfen",
+          "lat": 47.54316,
+          "lon": 12.37067,
+          "kind": 1
+        },
+        {
+          "name": "Museum St. Johann in Tirol",
+          "lat": 47.52171,
+          "lon": 12.42935,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Oberndorf",
+          "lat": 47.49957,
+          "lon": 12.38555,
+          "kind": 2
+        },
+        {
+          "name": "Hornkapelle",
+          "lat": 47.47473,
+          "lon": 12.42933,
+          "kind": 2
+        },
+        {
+          "name": "Tennerhofkapelle",
+          "lat": 47.45435,
+          "lon": 12.39653,
+          "kind": 2
+        },
+        {
+          "name": "Ehrenbachkapelle",
+          "lat": 47.42015,
+          "lon": 12.37696,
+          "kind": 2
+        },
+        {
+          "name": "Götschenkapelle",
+          "lat": 47.40029,
+          "lon": 12.43341,
+          "kind": 2
+        },
+        {
+          "name": "Bauernhausmuseum Vorderkünstler",
+          "lat": 47.3783,
+          "lon": 12.42509,
+          "kind": 2
+        },
+        {
+          "name": "Schlössl Einödberg",
+          "lat": 47.28267,
+          "lon": 12.43128,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Lichtenau",
+          "lat": 47.2884,
+          "lon": 12.52972,
+          "kind": 2
+        },
+        {
+          "name": "Felberturm",
+          "lat": 47.27759,
+          "lon": 12.49202,
+          "kind": 2
+        },
+        {
+          "name": "Zwölferkogel",
+          "lat": 47.23537,
+          "lon": 12.52494,
+          "kind": 1
+        },
+        {
+          "name": "Pihapper",
+          "lat": 47.23409,
+          "lon": 12.46127,
+          "kind": 1
+        },
+        {
+          "name": "Höhleneingang",
+          "lat": 47.17726,
+          "lon": 12.53168,
+          "kind": 1
+        },
+        {
+          "name": "Säge (Venezianergatter)",
+          "lat": 47.11996,
+          "lon": 12.49589,
+          "kind": 2
+        },
+        {
+          "name": "Schildbachfall",
+          "lat": 47.10185,
+          "lon": 12.50609,
+          "kind": 1
+        },
+        {
+          "name": "Bergerkirchle",
+          "lat": 47.05142,
+          "lon": 12.5155,
+          "kind": 2
+        },
+        {
+          "name": "Kapelle zur heiligen Dreifaltigkeit",
+          "lat": 47.00165,
+          "lon": 12.493,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Weißenstein",
+          "lat": 47.00845,
+          "lon": 12.5381,
+          "kind": 2
+        },
+        {
+          "name": "Adlerhorst",
+          "lat": 46.99292,
+          "lon": 12.59632,
+          "kind": 1
+        },
+        {
+          "name": "Herz Jesu",
+          "lat": 46.9364,
+          "lon": 12.57365,
+          "kind": 2
+        },
+        {
+          "name": "Burg Kienburg",
+          "lat": 46.91906,
+          "lon": 12.60021,
+          "kind": 2
+        },
+        {
+          "name": "Maria Schnee",
+          "lat": 46.90821,
+          "lon": 12.63648,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche Maria Heimsuchung",
+          "lat": 46.88296,
+          "lon": 12.67253,
+          "kind": 2
+        },
+        {
+          "name": "Oberlienz",
+          "lat": 46.8439,
+          "lon": 12.72972,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Bruck",
+          "lat": 46.83227,
+          "lon": 12.74892,
+          "kind": 2
+        }
       ]
     },
     {
@@ -788,6 +2943,249 @@
         [47.75404, 13.07482],
         [47.78966, 13.06561],
         [47.80056, 13.04403]
+      ],
+      "sights": [
+        {
+          "name": "Spielzeugmuseum",
+          "lat": 47.79964,
+          "lon": 13.03992,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Neuhaus",
+          "lat": 47.80929,
+          "lon": 13.07357,
+          "kind": 2
+        },
+        {
+          "name": "Gaisberghöhle",
+          "lat": 47.8013,
+          "lon": 13.12956,
+          "kind": 1
+        },
+        {
+          "name": "Pfarrkirche Koppl",
+          "lat": 47.80814,
+          "lon": 13.15701,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche zum heiligen Jakobus",
+          "lat": 47.8649,
+          "lon": 13.1737,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Fuschl",
+          "lat": 47.80864,
+          "lon": 13.25622,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Wartenfels",
+          "lat": 47.81566,
+          "lon": 13.30636,
+          "kind": 2
+        },
+        {
+          "name": "Verkehrs- und Ischlerbahnmuseum",
+          "lat": 47.85128,
+          "lon": 13.34826,
+          "kind": 2
+        },
+        {
+          "name": "Laurentiuskirche St. Lorenz",
+          "lat": 47.82281,
+          "lon": 13.35639,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Hüttenstein",
+          "lat": 47.78136,
+          "lon": 13.38615,
+          "kind": 2
+        },
+        {
+          "name": "Schafberg panorama",
+          "lat": 47.77662,
+          "lon": 13.43338,
+          "kind": 1
+        },
+        {
+          "name": "Ferrary-Kapelle",
+          "lat": 47.78928,
+          "lon": 13.49783,
+          "kind": 2
+        },
+        {
+          "name": "Steinbachblick",
+          "lat": 47.81284,
+          "lon": 13.56393,
+          "kind": 1
+        },
+        {
+          "name": "Gamskeller",
+          "lat": 47.81156,
+          "lon": 13.56941,
+          "kind": 1
+        },
+        {
+          "name": "Schlund",
+          "lat": 47.80701,
+          "lon": 13.62173,
+          "kind": 1
+        },
+        {
+          "name": "Weißenbacher Sattel",
+          "lat": 47.77125,
+          "lon": 13.62265,
+          "kind": 4,
+          "ele": 566
+        },
+        {
+          "name": "Röhriggrabenfall",
+          "lat": 47.76049,
+          "lon": 13.65691,
+          "kind": 1
+        },
+        {
+          "name": "Illingloch",
+          "lat": 47.73156,
+          "lon": 13.6614,
+          "kind": 1
+        },
+        {
+          "name": "Kaiservilla",
+          "lat": 47.71515,
+          "lon": 13.62078,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Wildenstein",
+          "lat": 47.69674,
+          "lon": 13.60491,
+          "kind": 2
+        },
+        {
+          "name": "Maria im Schatten",
+          "lat": 47.67189,
+          "lon": 13.61611,
+          "kind": 2
+        },
+        {
+          "name": "Giselawarte",
+          "lat": 47.63122,
+          "lon": 13.6175,
+          "kind": 1
+        },
+        {
+          "name": "Hoher Sarstein",
+          "lat": 47.6026,
+          "lon": 13.69908,
+          "kind": 1
+        },
+        {
+          "name": "Gräberfeld",
+          "lat": 47.56124,
+          "lon": 13.64104,
+          "kind": 2
+        },
+        {
+          "name": "Indianer",
+          "lat": 47.61256,
+          "lon": 13.56721,
+          "kind": 2
+        },
+        {
+          "name": "Katholische Kirche",
+          "lat": 47.57997,
+          "lon": 13.52519,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche zum Hl. Kreuz",
+          "lat": 47.5926,
+          "lon": 13.46597,
+          "kind": 2
+        },
+        {
+          "name": "Kirche Radochsberg",
+          "lat": 47.59351,
+          "lon": 13.39122,
+          "kind": 2
+        },
+        {
+          "name": "Röm. Kath. Pfarrkirche zum Heiligen Blasius",
+          "lat": 47.56424,
+          "lon": 13.34644,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche Mühlrain",
+          "lat": 47.57706,
+          "lon": 13.3257,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche Weitenau",
+          "lat": 47.60608,
+          "lon": 13.27055,
+          "kind": 2
+        },
+        {
+          "name": "Winnerfall",
+          "lat": 47.56491,
+          "lon": 13.27931,
+          "kind": 1
+        },
+        {
+          "name": "Scheffau",
+          "lat": 47.59046,
+          "lon": 13.21117,
+          "kind": 2
+        },
+        {
+          "name": "Burg Golling",
+          "lat": 47.59721,
+          "lon": 13.16683,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche zum Heiligen Georg",
+          "lat": 47.63507,
+          "lon": 13.15971,
+          "kind": 2
+        },
+        {
+          "name": "Evang. Schaitbergerkirche",
+          "lat": 47.6776,
+          "lon": 13.10083,
+          "kind": 2
+        },
+        {
+          "name": "Stadtpfarrkirche Hallein",
+          "lat": 47.68058,
+          "lon": 13.09214,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Gutrat (Guetrat)",
+          "lat": 47.70806,
+          "lon": 13.06062,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Anif",
+          "lat": 47.74502,
+          "lon": 13.07036,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Frohnburg",
+          "lat": 47.77734,
+          "lon": 13.06114,
+          "kind": 2
+        }
       ]
     },
     {
@@ -874,6 +3272,248 @@
         [46.64031, 14.42842],
         [46.62868, 14.41224],
         [46.62367, 14.3076]
+      ],
+      "sights": [
+        {
+          "name": "Grazer Märchenbahn",
+          "lat": 47.07367,
+          "lon": 15.43735,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Messendorf",
+          "lat": 47.04727,
+          "lon": 15.48355,
+          "kind": 2
+        },
+        {
+          "name": "Österreichisches Luftfahrtmuseum",
+          "lat": 46.98673,
+          "lon": 15.44794,
+          "kind": 2
+        },
+        {
+          "name": "Österreichischer Skulpturenpark",
+          "lat": 46.97891,
+          "lon": 15.43269,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Nikolaus",
+          "lat": 46.92522,
+          "lon": 15.44904,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Schwarzenegg",
+          "lat": 46.88109,
+          "lon": 15.49697,
+          "kind": 2
+        },
+        {
+          "name": "Schloss St. Georgen an der Stiefing",
+          "lat": 46.87619,
+          "lon": 15.5785,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Laubegg",
+          "lat": 46.82386,
+          "lon": 15.59638,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Seggau",
+          "lat": 46.78063,
+          "lon": 15.52391,
+          "kind": 2
+        },
+        {
+          "name": "Glockenturm",
+          "lat": 46.75604,
+          "lon": 15.6116,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Ehrenhausen",
+          "lat": 46.72633,
+          "lon": 15.58704,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Gamlitz",
+          "lat": 46.71845,
+          "lon": 15.55346,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Trautenburg",
+          "lat": 46.65953,
+          "lon": 15.47357,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Mariä Geburt",
+          "lat": 46.67595,
+          "lon": 15.4012,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Heiliger Johannes der Täufer",
+          "lat": 46.70236,
+          "lon": 15.40087,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Ulrich in Greith",
+          "lat": 46.71471,
+          "lon": 15.32144,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Maria im Dorn",
+          "lat": 46.68801,
+          "lon": 15.24899,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche hl. Antonius der Einsiedler",
+          "lat": 46.65265,
+          "lon": 15.19943,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Laurentius",
+          "lat": 46.66191,
+          "lon": 15.16703,
+          "kind": 2
+        },
+        {
+          "name": "St. Katharina in der Wiel",
+          "lat": 46.72503,
+          "lon": 15.12786,
+          "kind": 2
+        },
+        {
+          "name": "Messkapelle hl. Klemens",
+          "lat": 46.67079,
+          "lon": 15.11898,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche hl. Leonhard",
+          "lat": 46.67989,
+          "lon": 15.04422,
+          "kind": 2
+        },
+        {
+          "name": "St.Vinzenz Kapelle",
+          "lat": 46.6962,
+          "lon": 15.01372,
+          "kind": 2
+        },
+        {
+          "name": "Soboth",
+          "lat": 46.66835,
+          "lon": 15.00998,
+          "kind": 4
+        },
+        {
+          "name": "St. Lorenzen",
+          "lat": 46.63726,
+          "lon": 14.99388,
+          "kind": 2
+        },
+        {
+          "name": "Kath. Filialkirche hl. Lambert",
+          "lat": 46.67435,
+          "lon": 14.97022,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Leifling",
+          "lat": 46.62512,
+          "lon": 14.94066,
+          "kind": 2
+        },
+        {
+          "name": "Museum Liaunig",
+          "lat": 46.64652,
+          "lon": 14.89175,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Rabenstein",
+          "lat": 46.6888,
+          "lon": 14.87217,
+          "kind": 2
+        },
+        {
+          "name": "Wallfahrtskirche Heiligengrab",
+          "lat": 46.61222,
+          "lon": 14.79945,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Maria Magdalena",
+          "lat": 46.65893,
+          "lon": 14.77351,
+          "kind": 2
+        },
+        {
+          "name": "Alte Pfarrkirche",
+          "lat": 46.69854,
+          "lon": 14.70318,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Heunburg",
+          "lat": 46.69232,
+          "lon": 14.66998,
+          "kind": 2
+        },
+        {
+          "name": "St. Ruprecht Kirche",
+          "lat": 46.6638,
+          "lon": 14.62393,
+          "kind": 2
+        },
+        {
+          "name": "St.Margarethen am Töllerberg",
+          "lat": 46.67609,
+          "lon": 14.57285,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche Wabelsdorf",
+          "lat": 46.65639,
+          "lon": 14.50876,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Grafenstein",
+          "lat": 46.61034,
+          "lon": 14.46496,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Gurnitz",
+          "lat": 46.60204,
+          "lon": 14.39147,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Krastowitz",
+          "lat": 46.64709,
+          "lon": 14.35415,
+          "kind": 2
+        },
+        {
+          "name": "Kreuzberglkirche",
+          "lat": 46.62873,
+          "lon": 14.29195,
+          "kind": 2
+        }
       ]
     },
     {
@@ -955,6 +3595,248 @@
         [47.8768, 16.87098],
         [47.85439, 16.83711],
         [47.85679, 16.83368]
+      ],
+      "sights": [
+        {
+          "name": "Hill Arches",
+          "lat": 48.19906,
+          "lon": 16.37162,
+          "kind": 2
+        },
+        {
+          "name": "Fälschermuseum",
+          "lat": 48.20774,
+          "lon": 16.39327,
+          "kind": 2
+        },
+        {
+          "name": "Evangelisch-Koreanische Gemeinde in Wien",
+          "lat": 48.19482,
+          "lon": 16.38861,
+          "kind": 2
+        },
+        {
+          "name": "Böhmischer Prater",
+          "lat": 48.1665,
+          "lon": 16.39995,
+          "kind": 2
+        },
+        {
+          "name": "St. Nikolaus",
+          "lat": 48.15034,
+          "lon": 16.34706,
+          "kind": 2
+        },
+        {
+          "name": "Grafenhof",
+          "lat": 48.13875,
+          "lon": 16.38152,
+          "kind": 2
+        },
+        {
+          "name": "Wallfahrtskirche Maria Lanzendorf",
+          "lat": 48.10085,
+          "lon": 16.42471,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche",
+          "lat": 48.08372,
+          "lon": 16.34599,
+          "kind": 2
+        },
+        {
+          "name": "Concordiatempel",
+          "lat": 48.05594,
+          "lon": 16.3621,
+          "kind": 2
+        },
+        {
+          "name": "St. Leonhard",
+          "lat": 48.03009,
+          "lon": 16.37866,
+          "kind": 2
+        },
+        {
+          "name": "Pfarre Trumau",
+          "lat": 47.99678,
+          "lon": 16.34229,
+          "kind": 2
+        },
+        {
+          "name": "Heiliger Georg",
+          "lat": 47.97944,
+          "lon": 16.44323,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Ebreichsdorf",
+          "lat": 47.96301,
+          "lon": 16.39682,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hll. Philippus und Jakobus",
+          "lat": 47.93861,
+          "lon": 16.47232,
+          "kind": 2
+        },
+        {
+          "name": "Schlossruine Pottendorf",
+          "lat": 47.91148,
+          "lon": 16.38431,
+          "kind": 2
+        },
+        {
+          "name": "Ruine Hornstein",
+          "lat": 47.87625,
+          "lon": 16.45446,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche zum hl. Kreuz",
+          "lat": 47.83782,
+          "lon": 16.4086,
+          "kind": 2
+        },
+        {
+          "name": "St. Ägidius",
+          "lat": 47.84418,
+          "lon": 16.45876,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche, hl. Johannes d. Täufer",
+          "lat": 47.8343,
+          "lon": 16.48157,
+          "kind": 2
+        },
+        {
+          "name": "Buchkogelwarte",
+          "lat": 47.87775,
+          "lon": 16.53885,
+          "kind": 1
+        },
+        {
+          "name": "zur Schmerzhaften Muttergottes",
+          "lat": 47.79624,
+          "lon": 16.50302,
+          "kind": 2
+        },
+        {
+          "name": "Allerheiligen",
+          "lat": 47.77866,
+          "lon": 16.54258,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Johannes d. Täufer",
+          "lat": 47.8036,
+          "lon": 16.60688,
+          "kind": 2
+        },
+        {
+          "name": "Familypark",
+          "lat": 47.80283,
+          "lon": 16.64731,
+          "kind": 2
+        },
+        {
+          "name": "Vogelbeobachtungsturm",
+          "lat": 47.79705,
+          "lon": 16.67867,
+          "kind": 1
+        },
+        {
+          "name": "Silberberg",
+          "lat": 47.81978,
+          "lon": 16.63666,
+          "kind": 1
+        },
+        {
+          "name": "Pfarrkirche Oslip (Mariae Himmelfahrt)",
+          "lat": 47.83386,
+          "lon": 16.62129,
+          "kind": 2
+        },
+        {
+          "name": "Hl Maria Magdalena",
+          "lat": 47.85037,
+          "lon": 16.62484,
+          "kind": 2
+        },
+        {
+          "name": "Lourdeskapelle",
+          "lat": 47.88992,
+          "lon": 16.64752,
+          "kind": 2
+        },
+        {
+          "name": "Befestigte Höhensiedlung Burgstallberg",
+          "lat": 47.93859,
+          "lon": 16.66312,
+          "kind": 2
+        },
+        {
+          "name": "Purbacher Türke",
+          "lat": 47.91505,
+          "lon": 16.69462,
+          "kind": 2
+        },
+        {
+          "name": "Die Grube",
+          "lat": 47.95154,
+          "lon": 16.72629,
+          "kind": 2
+        },
+        {
+          "name": "Bärenhöhle",
+          "lat": 47.97015,
+          "lon": 16.75454,
+          "kind": 1
+        },
+        {
+          "name": "Herz-Jesu-Kirche",
+          "lat": 47.95957,
+          "lon": 16.79296,
+          "kind": 2
+        },
+        {
+          "name": "Gaishof",
+          "lat": 48.00212,
+          "lon": 16.81546,
+          "kind": 2
+        },
+        {
+          "name": "Ruine Tabor",
+          "lat": 47.95206,
+          "lon": 16.84091,
+          "kind": 1
+        },
+        {
+          "name": "Kirche zur hl. Dreifaltigkeit",
+          "lat": 47.92703,
+          "lon": 16.86831,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Jakobus der Ältere",
+          "lat": 47.89685,
+          "lon": 16.90704,
+          "kind": 2
+        },
+        {
+          "name": "Aussichtsturm Zitzmannsdorfer Wiesen",
+          "lat": 47.88951,
+          "lon": 16.85445,
+          "kind": 1
+        },
+        {
+          "name": "750 Jahre Podersdorf am See",
+          "lat": 47.85005,
+          "lon": 16.84136,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1035,6 +3917,248 @@
         [47.37609, 15.08176],
         [47.37765, 15.09829],
         [47.38059, 15.09486]
+      ],
+      "sights": [
+        {
+          "name": "St. Rupert am Kulm",
+          "lat": 47.41708,
+          "lon": 13.67536,
+          "kind": 2
+        },
+        {
+          "name": "Luserwasserfall",
+          "lat": 47.42711,
+          "lon": 13.75128,
+          "kind": 1
+        },
+        {
+          "name": "Gradenbachwasserfall",
+          "lat": 47.44802,
+          "lon": 13.7962,
+          "kind": 1
+        },
+        {
+          "name": "Friedenskircherl",
+          "lat": 47.45689,
+          "lon": 13.82385,
+          "kind": 2
+        },
+        {
+          "name": "Ortskapelle Hl. Dreifaltigkeit",
+          "lat": 47.42572,
+          "lon": 13.87091,
+          "kind": 2
+        },
+        {
+          "name": "Evang. Christuskirche",
+          "lat": 47.43943,
+          "lon": 13.90173,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Gstatt",
+          "lat": 47.46372,
+          "lon": 13.98175,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Öblarn",
+          "lat": 47.46009,
+          "lon": 13.99054,
+          "kind": 2
+        },
+        {
+          "name": "Trummer-Kapelle",
+          "lat": 47.4755,
+          "lon": 14.01981,
+          "kind": 2
+        },
+        {
+          "name": "Singer-Kapelle",
+          "lat": 47.50813,
+          "lon": 14.04885,
+          "kind": 2
+        },
+        {
+          "name": "Johanneskapelle",
+          "lat": 47.53074,
+          "lon": 14.07018,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Georg",
+          "lat": 47.53029,
+          "lon": 14.06708,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Pichlarn",
+          "lat": 47.50389,
+          "lon": 14.12032,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Heiliger Florian",
+          "lat": 47.52107,
+          "lon": 14.14365,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Wolkenstein",
+          "lat": 47.55639,
+          "lon": 14.15083,
+          "kind": 2
+        },
+        {
+          "name": "Wörschachklamm",
+          "lat": 47.56268,
+          "lon": 14.14676,
+          "kind": 2
+        },
+        {
+          "name": "Kath. Pfarrkirche Christi Himmelfahrt",
+          "lat": 47.57129,
+          "lon": 14.20238,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Lassing",
+          "lat": 47.52655,
+          "lon": 14.26259,
+          "kind": 2
+        },
+        {
+          "name": "Herz-Jesu-Kirche",
+          "lat": 47.54944,
+          "lon": 14.31342,
+          "kind": 2
+        },
+        {
+          "name": "Moor-Plattform",
+          "lat": 47.57956,
+          "lon": 14.34257,
+          "kind": 1
+        },
+        {
+          "name": "Pfarrkirche hl. Johannes der Täufer Ardning",
+          "lat": 47.59302,
+          "lon": 14.36334,
+          "kind": 2
+        },
+        {
+          "name": "Wallfahrtskirche Mariä Opferung Frauenberg",
+          "lat": 47.58429,
+          "lon": 14.3979,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Kreuz",
+          "lat": 47.60111,
+          "lon": 14.46039,
+          "kind": 2
+        },
+        {
+          "name": "Gesäuseeingang",
+          "lat": 47.58071,
+          "lon": 14.55382,
+          "kind": 1
+        },
+        {
+          "name": "Kopflose Madonna mit Kind",
+          "lat": 47.54541,
+          "lon": 14.58277,
+          "kind": 1
+        },
+        {
+          "name": "Hubertuskapelle",
+          "lat": 47.5914,
+          "lon": 14.63859,
+          "kind": 2
+        },
+        {
+          "name": "Bärenhöhle",
+          "lat": 47.56645,
+          "lon": 14.70742,
+          "kind": 1
+        },
+        {
+          "name": "Reste des Hieflauer Rechens",
+          "lat": 47.60902,
+          "lon": 14.74154,
+          "kind": 2
+        },
+        {
+          "name": "Scheunenzeile",
+          "lat": 47.59448,
+          "lon": 14.7479,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Leopoldstein",
+          "lat": 47.57066,
+          "lon": 14.85095,
+          "kind": 2
+        },
+        {
+          "name": "Schwarzer Hof",
+          "lat": 47.53982,
+          "lon": 14.88749,
+          "kind": 2
+        },
+        {
+          "name": "Abenteuer Erzberg",
+          "lat": 47.53977,
+          "lon": 14.89767,
+          "kind": 2
+        },
+        {
+          "name": "Frauenmauerhöhle Westeingang",
+          "lat": 47.56456,
+          "lon": 14.96883,
+          "kind": 1
+        },
+        {
+          "name": "Grüblzinkenschacht",
+          "lat": 47.50572,
+          "lon": 14.94336,
+          "kind": 1
+        },
+        {
+          "name": "Laurenzi-Röst",
+          "lat": 47.50238,
+          "lon": 14.98686,
+          "kind": 2
+        },
+        {
+          "name": "Hochofen des Radwerks X",
+          "lat": 47.48184,
+          "lon": 14.98873,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Rupert",
+          "lat": 47.42795,
+          "lon": 15.00837,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Mell",
+          "lat": 47.42495,
+          "lon": 15.01295,
+          "kind": 2
+        },
+        {
+          "name": "Maria sieben Schmerzen auf Freienstein",
+          "lat": 47.40175,
+          "lon": 15.03375,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Maria am Waasen",
+          "lat": 47.37711,
+          "lon": 15.09207,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1121,6 +4245,248 @@
         [46.60071, 13.83983],
         [46.61477, 13.8588],
         [46.61658, 13.85039]
+      ],
+      "sights": [
+        {
+          "name": "Schloss Bruck",
+          "lat": 46.83227,
+          "lon": 12.74892,
+          "kind": 2
+        },
+        {
+          "name": "Sankt Silvester Kapelle",
+          "lat": 46.83355,
+          "lon": 12.8146,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Ulrich",
+          "lat": 46.79524,
+          "lon": 12.8367,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Lengberg",
+          "lat": 46.79705,
+          "lon": 12.89177,
+          "kind": 2
+        },
+        {
+          "name": "Heiliger Bartholomäus",
+          "lat": 46.78642,
+          "lon": 12.90941,
+          "kind": 2
+        },
+        {
+          "name": "St. Chrysanthen",
+          "lat": 46.77681,
+          "lon": 12.92245,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Flaschberg",
+          "lat": 46.74948,
+          "lon": 12.93866,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Stein",
+          "lat": 46.7325,
+          "lon": 13.02153,
+          "kind": 2
+        },
+        {
+          "name": "Silberfall Wasserfall",
+          "lat": 46.73471,
+          "lon": 12.96752,
+          "kind": 1
+        },
+        {
+          "name": "Burgruine Pittersberg",
+          "lat": 46.69879,
+          "lon": 12.98141,
+          "kind": 2
+        },
+        {
+          "name": "Museum 1915-1918",
+          "lat": 46.67159,
+          "lon": 12.99977,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Markus",
+          "lat": 46.66281,
+          "lon": 12.99905,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Mandorf",
+          "lat": 46.67329,
+          "lon": 13.021,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Daniel",
+          "lat": 46.66285,
+          "lon": 13.05491,
+          "kind": 2
+        },
+        {
+          "name": "St. Helena",
+          "lat": 46.66398,
+          "lon": 13.11056,
+          "kind": 2
+        },
+        {
+          "name": "Troistöckl",
+          "lat": 46.64494,
+          "lon": 13.13454,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Sankt Peter und Paul",
+          "lat": 46.65132,
+          "lon": 13.15096,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Hl. Martin",
+          "lat": 46.64168,
+          "lon": 13.18569,
+          "kind": 2
+        },
+        {
+          "name": "Seilbahn Mittelstation",
+          "lat": 46.59949,
+          "lon": 13.22563,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Tröpolach",
+          "lat": 46.61393,
+          "lon": 13.27747,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche Watschig",
+          "lat": 46.61903,
+          "lon": 13.30876,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Magdalena",
+          "lat": 46.61858,
+          "lon": 13.34516,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Malenthein",
+          "lat": 46.62294,
+          "lon": 13.36339,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Michael",
+          "lat": 46.61347,
+          "lon": 13.40264,
+          "kind": 2
+        },
+        {
+          "name": "Ruine Khünburg",
+          "lat": 46.6371,
+          "lon": 13.4201,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Jakob der Ältere",
+          "lat": 46.62924,
+          "lon": 13.47186,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Aichelburg",
+          "lat": 46.61072,
+          "lon": 13.51267,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St.Stephanus",
+          "lat": 46.61605,
+          "lon": 13.5166,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche Kerschdorf (Hl. Nikolaus)",
+          "lat": 46.61657,
+          "lon": 13.55741,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Georg",
+          "lat": 46.60355,
+          "lon": 13.59656,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Wasserleonburg",
+          "lat": 46.59231,
+          "lon": 13.62904,
+          "kind": 2
+        },
+        {
+          "name": "Kapelle Mariä Himmelfahrt",
+          "lat": 46.60363,
+          "lon": 13.6701,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Maria am Stein",
+          "lat": 46.60235,
+          "lon": 13.67217,
+          "kind": 2
+        },
+        {
+          "name": "Gailitzer Kircherl",
+          "lat": 46.55136,
+          "lon": 13.69389,
+          "kind": 2
+        },
+        {
+          "name": "Klosterruine Arnoldstein",
+          "lat": 46.54833,
+          "lon": 13.70952,
+          "kind": 2
+        },
+        {
+          "name": "Bunkermuseum Wurzenpass",
+          "lat": 46.53501,
+          "lon": 13.74827,
+          "kind": 2
+        },
+        {
+          "name": "Maria Siebenbrünn",
+          "lat": 46.54146,
+          "lon": 13.78911,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche Heiliger Matthäus",
+          "lat": 46.57039,
+          "lon": 13.8112,
+          "kind": 2
+        },
+        {
+          "name": "Eggerloch",
+          "lat": 46.59166,
+          "lon": 13.81816,
+          "kind": 1
+        },
+        {
+          "name": "Kirche im Stadtpark",
+          "lat": 46.60818,
+          "lon": 13.84487,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1207,6 +4573,250 @@
         [47.63416, 15.83368],
         [47.60125, 15.72727],
         [47.60536, 15.67204]
+      ],
+      "sights": [
+        {
+          "name": "Hill Arches",
+          "lat": 48.19906,
+          "lon": 16.37162,
+          "kind": 2
+        },
+        {
+          "name": "Verkehrsmuseum Remise",
+          "lat": 48.1966,
+          "lon": 16.40829,
+          "kind": 2
+        },
+        {
+          "name": "La Sfânta Înviere",
+          "lat": 48.16991,
+          "lon": 16.42157,
+          "kind": 2
+        },
+        {
+          "name": "St. Nikolaus",
+          "lat": 48.15034,
+          "lon": 16.34706,
+          "kind": 2
+        },
+        {
+          "name": "Wallfahrtskirche Maria Lanzendorf",
+          "lat": 48.10085,
+          "lon": 16.42471,
+          "kind": 2
+        },
+        {
+          "name": "Lukaskirche",
+          "lat": 48.08443,
+          "lon": 16.43469,
+          "kind": 2
+        },
+        {
+          "name": "Franzensburg",
+          "lat": 48.06554,
+          "lon": 16.37259,
+          "kind": 2
+        },
+        {
+          "name": "Kirche St. Jakob",
+          "lat": 48.04733,
+          "lon": 16.3133,
+          "kind": 2
+        },
+        {
+          "name": "Sankt Michael",
+          "lat": 48.04605,
+          "lon": 16.27431,
+          "kind": 2
+        },
+        {
+          "name": "St. Josef",
+          "lat": 48.00435,
+          "lon": 16.25176,
+          "kind": 2
+        },
+        {
+          "name": "St.Christoph",
+          "lat": 48.00211,
+          "lon": 16.2176,
+          "kind": 2
+        },
+        {
+          "name": "Naturdenkmal Schneckenreservat",
+          "lat": 47.96645,
+          "lon": 16.21437,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Merkenstein",
+          "lat": 47.98433,
+          "lon": 16.13127,
+          "kind": 2
+        },
+        {
+          "name": "Berndorfer Stilklassen",
+          "lat": 47.94202,
+          "lon": 16.10261,
+          "kind": 2
+        },
+        {
+          "name": "Ruine Hernstein",
+          "lat": 47.89784,
+          "lon": 16.10207,
+          "kind": 2
+        },
+        {
+          "name": "Pechermuseum",
+          "lat": 47.89435,
+          "lon": 16.10883,
+          "kind": 2
+        },
+        {
+          "name": "Hubertuskapelle",
+          "lat": 47.87727,
+          "lon": 16.1438,
+          "kind": 2
+        },
+        {
+          "name": "Ruine Starhemberg",
+          "lat": 47.86669,
+          "lon": 16.09899,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Brunn",
+          "lat": 47.8276,
+          "lon": 16.15471,
+          "kind": 2
+        },
+        {
+          "name": "Karnitschstüberl",
+          "lat": 47.84138,
+          "lon": 16.07008,
+          "kind": 1
+        },
+        {
+          "name": "Schloss Strelzhof",
+          "lat": 47.79966,
+          "lon": 16.06876,
+          "kind": 2
+        },
+        {
+          "name": "Maria Kirchbüchl",
+          "lat": 47.79343,
+          "lon": 16.03669,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Michael",
+          "lat": 47.79754,
+          "lon": 15.98664,
+          "kind": 2
+        },
+        {
+          "name": "Grünbacher Sattel",
+          "lat": 47.79573,
+          "lon": 15.96136,
+          "kind": 4,
+          "ele": 678
+        },
+        {
+          "name": "Katharinenhöhle",
+          "lat": 47.83156,
+          "lon": 15.91656,
+          "kind": 1
+        },
+        {
+          "name": "Burgruine Puchberg",
+          "lat": 47.78562,
+          "lon": 15.91444,
+          "kind": 2
+        },
+        {
+          "name": "Sierningrieshöhle",
+          "lat": 47.77043,
+          "lon": 15.93294,
+          "kind": 1
+        },
+        {
+          "name": "Burg Stixenstein",
+          "lat": 47.74512,
+          "lon": 15.97956,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Vöstenhof",
+          "lat": 47.7171,
+          "lon": 15.98166,
+          "kind": 2
+        },
+        {
+          "name": "St. Laurentius",
+          "lat": 47.74088,
+          "lon": 16.0358,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Valentin - Landschach",
+          "lat": 47.68564,
+          "lon": 16.0161,
+          "kind": 2
+        },
+        {
+          "name": "Burg Kranichberg",
+          "lat": 47.64573,
+          "lon": 15.97407,
+          "kind": 2
+        },
+        {
+          "name": "St. Ägydius",
+          "lat": 47.64326,
+          "lon": 15.93062,
+          "kind": 2
+        },
+        {
+          "name": "Historisches Postamt Küb",
+          "lat": 47.6807,
+          "lon": 15.87926,
+          "kind": 2
+        },
+        {
+          "name": "Semmeringbahn",
+          "lat": 47.64878,
+          "lon": 15.82797,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Familie",
+          "lat": 47.63896,
+          "lon": 15.82549,
+          "kind": 2
+        },
+        {
+          "name": "Semmeringpass",
+          "lat": 47.63265,
+          "lon": 15.82906,
+          "kind": 4,
+          "ele": 984
+        },
+        {
+          "name": "Alfredhütte",
+          "lat": 47.61691,
+          "lon": 15.79707,
+          "kind": 2
+        },
+        {
+          "name": "Zatzkakapelle",
+          "lat": 47.61818,
+          "lon": 15.74481,
+          "kind": 2
+        },
+        {
+          "name": "Südbahnmuseum Mürzzuschlag",
+          "lat": 47.60851,
+          "lon": 15.68032,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1293,6 +4903,252 @@
         [47.25675, 13.49964],
         [47.33389, 13.50737],
         [47.38473, 13.46279]
+      ],
+      "sights": [
+        {
+          "name": "Burg Kaprun",
+          "lat": 47.27444,
+          "lon": 12.7708,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Fischhorn",
+          "lat": 47.2885,
+          "lon": 12.81462,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hll. Ägidius und Martin",
+          "lat": 47.22707,
+          "lon": 12.82573,
+          "kind": 2
+        },
+        {
+          "name": "Wildpark Ferleiten",
+          "lat": 47.17145,
+          "lon": 12.81667,
+          "kind": 2
+        },
+        {
+          "name": "Hochmais",
+          "lat": 47.12848,
+          "lon": 12.80703,
+          "kind": 1
+        },
+        {
+          "name": "Restaurant Fuschertörl",
+          "lat": 47.11809,
+          "lon": 12.82923,
+          "kind": 2
+        },
+        {
+          "name": "Fuscher Törl",
+          "lat": 47.11679,
+          "lon": 12.82391,
+          "kind": 4,
+          "ele": 2428
+        },
+        {
+          "name": "Bretterscharte",
+          "lat": 47.09009,
+          "lon": 12.83162,
+          "kind": 4,
+          "ele": 2603
+        },
+        {
+          "name": "Leiterfall",
+          "lat": 47.05192,
+          "lon": 12.7845,
+          "kind": 1
+        },
+        {
+          "name": "St. Vinzenz",
+          "lat": 47.03938,
+          "lon": 12.84136,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche Pockhorn",
+          "lat": 47.0269,
+          "lon": 12.85751,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche und Wallfahrtskirche Maria Hilf",
+          "lat": 46.89947,
+          "lon": 12.90217,
+          "kind": 2
+        },
+        {
+          "name": "hl. Benedikt",
+          "lat": 46.87288,
+          "lon": 12.86297,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Rangersdorf",
+          "lat": 46.86238,
+          "lon": 12.9639,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Stall-Wildegg",
+          "lat": 46.89147,
+          "lon": 13.03051,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche Unsere Liebe Frau",
+          "lat": 46.93517,
+          "lon": 13.1063,
+          "kind": 2
+        },
+        {
+          "name": "Burg Groppenstein",
+          "lat": 46.94166,
+          "lon": 13.18235,
+          "kind": 2
+        },
+        {
+          "name": "Danielsberg",
+          "lat": 46.88777,
+          "lon": 13.28256,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche hl. Andreas",
+          "lat": 46.85215,
+          "lon": 13.3634,
+          "kind": 2
+        },
+        {
+          "name": "Filialkirche Maria am Bichl",
+          "lat": 46.83412,
+          "lon": 13.43928,
+          "kind": 2
+        },
+        {
+          "name": "St. Anton am Fratres",
+          "lat": 46.80353,
+          "lon": 13.49459,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Rothenthurn",
+          "lat": 46.76357,
+          "lon": 13.58505,
+          "kind": 2
+        },
+        {
+          "name": "Granatium",
+          "lat": 46.80258,
+          "lon": 13.70422,
+          "kind": 2
+        },
+        {
+          "name": "Kirche zu Sankt Oswald",
+          "lat": 46.83772,
+          "lon": 13.76179,
+          "kind": 2
+        },
+        {
+          "name": "Kirche Wiedweg",
+          "lat": 46.81789,
+          "lon": 13.85676,
+          "kind": 2
+        },
+        {
+          "name": "Falkertspitz",
+          "lat": 46.86155,
+          "lon": 13.82925,
+          "kind": 1
+        },
+        {
+          "name": "Schiestelscharte",
+          "lat": 46.89006,
+          "lon": 13.79351,
+          "kind": 4,
+          "ele": 2024
+        },
+        {
+          "name": "Wunschglocke",
+          "lat": 46.89029,
+          "lon": 13.79362,
+          "kind": 2
+        },
+        {
+          "name": "Zunderwand",
+          "lat": 46.87635,
+          "lon": 13.73864,
+          "kind": 2
+        },
+        {
+          "name": "Almwirtschaftsmuseum",
+          "lat": 46.94602,
+          "lon": 13.74866,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Andreas",
+          "lat": 46.96825,
+          "lon": 13.7266,
+          "kind": 2
+        },
+        {
+          "name": "Leobenegg",
+          "lat": 46.93668,
+          "lon": 13.60413,
+          "kind": 2
+        },
+        {
+          "name": "Herz-Jesu-Kirche",
+          "lat": 47.10363,
+          "lon": 13.59474,
+          "kind": 2
+        },
+        {
+          "name": "St. Margaretha",
+          "lat": 47.07957,
+          "lon": 13.69497,
+          "kind": 2
+        },
+        {
+          "name": "Burg Mauterndorf",
+          "lat": 47.1374,
+          "lon": 13.67841,
+          "kind": 2
+        },
+        {
+          "name": "Ansagerkreuz",
+          "lat": 47.18955,
+          "lon": 13.60259,
+          "kind": 2
+        },
+        {
+          "name": "Radstädter Tauern",
+          "lat": 47.24799,
+          "lon": 13.55926,
+          "kind": 4,
+          "ele": 1738
+        },
+        {
+          "name": "Zum Heiligen Petrus in Banden",
+          "lat": 47.2503,
+          "lon": 13.54009,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Untertauern",
+          "lat": 47.30436,
+          "lon": 13.5073,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Mauer",
+          "lat": 47.38717,
+          "lon": 13.47186,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1374,6 +5230,250 @@
         [46.886, 11.03805],
         [46.92151, 11.05337],
         [46.90535, 11.0973]
+      ],
+      "sights": [
+        {
+          "name": "Känzele",
+          "lat": 47.48755,
+          "lon": 9.7621,
+          "kind": 1
+        },
+        {
+          "name": "Stadtmuseum Dornbirn",
+          "lat": 47.41368,
+          "lon": 9.74326,
+          "kind": 2
+        },
+        {
+          "name": "Wallfahrtskirche Maria Bildstein",
+          "lat": 47.45802,
+          "lon": 9.77185,
+          "kind": 2
+        },
+        {
+          "name": "Kapelle zu den Sieben Schmerzen Mariens",
+          "lat": 47.46728,
+          "lon": 9.83096,
+          "kind": 2
+        },
+        {
+          "name": "Kapelle Heilige Anna auf dem Felde",
+          "lat": 47.44784,
+          "lon": 9.91147,
+          "kind": 2
+        },
+        {
+          "name": "Denkmal Seilbahnfähre Andelsbuch–Schwarzenberg",
+          "lat": 47.41188,
+          "lon": 9.87874,
+          "kind": 2
+        },
+        {
+          "name": "Heimatmuseum Bezau",
+          "lat": 47.37827,
+          "lon": 9.89597,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Bizau",
+          "lat": 47.36923,
+          "lon": 9.929,
+          "kind": 2
+        },
+        {
+          "name": "Liegstein",
+          "lat": 47.33943,
+          "lon": 9.98124,
+          "kind": 1
+        },
+        {
+          "name": "Kapelle Schalzbachvorsäß",
+          "lat": 47.2943,
+          "lon": 10.03773,
+          "kind": 2
+        },
+        {
+          "name": "Mariä Himmelfahrt",
+          "lat": 47.2574,
+          "lon": 10.09221,
+          "kind": 2
+        },
+        {
+          "name": "Kapelle St. Jakobus",
+          "lat": 47.26866,
+          "lon": 10.13596,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Sebastian",
+          "lat": 47.25905,
+          "lon": 10.18179,
+          "kind": 2
+        },
+        {
+          "name": "Skyspace",
+          "lat": 47.22593,
+          "lon": 10.13456,
+          "kind": 2
+        },
+        {
+          "name": "Sebastianskirche",
+          "lat": 47.20061,
+          "lon": 10.10944,
+          "kind": 2
+        },
+        {
+          "name": "Flexenpass",
+          "lat": 47.15835,
+          "lon": 10.16486,
+          "kind": 4,
+          "ele": 1773
+        },
+        {
+          "name": "Pfarrkirche Stuben am Arlberg",
+          "lat": 47.13831,
+          "lon": 10.15874,
+          "kind": 2
+        },
+        {
+          "name": "Arlberg",
+          "lat": 47.12985,
+          "lon": 10.21063,
+          "kind": 4,
+          "ele": 1793
+        },
+        {
+          "name": "Christophoruskapelle",
+          "lat": 47.12738,
+          "lon": 10.21329,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Anton und Mariahilf",
+          "lat": 47.1316,
+          "lon": 10.26918,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Mariä Himmelfahrt",
+          "lat": 47.14766,
+          "lon": 10.33941,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Bartholomäus",
+          "lat": 47.14852,
+          "lon": 10.408,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Hl. Sebastian",
+          "lat": 47.08459,
+          "lon": 10.47049,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Magnus",
+          "lat": 47.12591,
+          "lon": 10.51312,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Bruggen",
+          "lat": 47.14031,
+          "lon": 10.55584,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Kronburg",
+          "lat": 47.17813,
+          "lon": 10.62368,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Mils bei Imst",
+          "lat": 47.2066,
+          "lon": 10.67396,
+          "kind": 2
+        },
+        {
+          "name": "Kapuzinerkirche",
+          "lat": 47.23852,
+          "lon": 10.73912,
+          "kind": 2
+        },
+        {
+          "name": "Expositurkirche hll. Magdalena und Nikolaus",
+          "lat": 47.22538,
+          "lon": 10.7681,
+          "kind": 2
+        },
+        {
+          "name": "Area 47",
+          "lat": 47.2285,
+          "lon": 10.83845,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Georg und Nikolaus",
+          "lat": 47.20498,
+          "lon": 10.89819,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Martin",
+          "lat": 47.17263,
+          "lon": 10.90671,
+          "kind": 2
+        },
+        {
+          "name": "Expositurkirche Mariä Schmerzen",
+          "lat": 47.12071,
+          "lon": 10.91588,
+          "kind": 2
+        },
+        {
+          "name": "Ötztaler Heimatmuseum",
+          "lat": 47.08428,
+          "lon": 10.94493,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Michael",
+          "lat": 47.04326,
+          "lon": 10.96989,
+          "kind": 2
+        },
+        {
+          "name": "Hochwaldkapelle",
+          "lat": 46.99977,
+          "lon": 11.0044,
+          "kind": 2
+        },
+        {
+          "name": "Kreuzkapelle Wohlfahrt",
+          "lat": 46.95712,
+          "lon": 11.01279,
+          "kind": 2
+        },
+        {
+          "name": "St. Johannes Nepomuk",
+          "lat": 46.8703,
+          "lon": 11.0264,
+          "kind": 2
+        },
+        {
+          "name": "Motorcycle Museum",
+          "lat": 46.90975,
+          "lon": 11.05331,
+          "kind": 2
+        },
+        {
+          "name": "Fernrohr Scheibkopf - Telescopio Scheibkopf",
+          "lat": 46.89288,
+          "lon": 11.12057,
+          "kind": 1
+        }
       ]
     },
     {
@@ -1460,6 +5560,248 @@
         [48.30983, 16.3258],
         [48.26455, 16.36613],
         [48.20893, 16.37221]
+      ],
+      "sights": [
+        {
+          "name": "Schlosskirche Altenhof",
+          "lat": 48.50557,
+          "lon": 13.77722,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Marsbach",
+          "lat": 48.45828,
+          "lon": 13.82306,
+          "kind": 2
+        },
+        {
+          "name": "Hammerschmiede",
+          "lat": 48.38487,
+          "lon": 13.84672,
+          "kind": 2
+        },
+        {
+          "name": "Burg Winzberg",
+          "lat": 48.42008,
+          "lon": 13.96028,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Schaunberg",
+          "lat": 48.34141,
+          "lon": 13.97742,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Mühldorf",
+          "lat": 48.34126,
+          "lon": 14.08195,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Ottensheim",
+          "lat": 48.32988,
+          "lon": 14.17352,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Puchenau",
+          "lat": 48.312,
+          "lon": 14.23469,
+          "kind": 2
+        },
+        {
+          "name": "forum metall",
+          "lat": 48.31214,
+          "lon": 14.29321,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Stephan",
+          "lat": 48.28577,
+          "lon": 14.36483,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Luftenberg",
+          "lat": 48.2698,
+          "lon": 14.41,
+          "kind": 2
+        },
+        {
+          "name": "St. Laurenz",
+          "lat": 48.21844,
+          "lon": 14.46669,
+          "kind": 2
+        },
+        {
+          "name": "Stadtpfarrkirche Perg",
+          "lat": 48.25005,
+          "lon": 14.63338,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Mitterberg",
+          "lat": 48.25231,
+          "lon": 14.65931,
+          "kind": 2
+        },
+        {
+          "name": "Burg Clam",
+          "lat": 48.22089,
+          "lon": 14.77876,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Markt Ardagger",
+          "lat": 48.18199,
+          "lon": 14.82791,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Greinburg",
+          "lat": 48.22644,
+          "lon": 14.85282,
+          "kind": 2
+        },
+        {
+          "name": "Ruine Sarmingstein",
+          "lat": 48.23453,
+          "lon": 14.94121,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Martin",
+          "lat": 48.16459,
+          "lon": 15.01901,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Persenbeug",
+          "lat": 48.19007,
+          "lon": 15.07535,
+          "kind": 2
+        },
+        {
+          "name": "Basilika Maria Taferl",
+          "lat": 48.2252,
+          "lon": 15.15626,
+          "kind": 2
+        },
+        {
+          "name": "Ruine Zelking",
+          "lat": 48.18431,
+          "lon": 15.26829,
+          "kind": 2
+        },
+        {
+          "name": "Evangelische Pfarrgemeinde A.B. Melk-Scheibbs",
+          "lat": 48.2234,
+          "lon": 15.32486,
+          "kind": 2
+        },
+        {
+          "name": "Hl. Nikolaus",
+          "lat": 48.24296,
+          "lon": 15.3342,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Aggstein",
+          "lat": 48.31396,
+          "lon": 15.42152,
+          "kind": 2
+        },
+        {
+          "name": "Ruine Hinterhaus",
+          "lat": 48.35865,
+          "lon": 15.40708,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Weißenkirchen",
+          "lat": 48.39801,
+          "lon": 15.47025,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Baumgarten",
+          "lat": 48.37813,
+          "lon": 15.58051,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Veit",
+          "lat": 48.41177,
+          "lon": 15.5999,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Gobelsburg",
+          "lat": 48.46114,
+          "lon": 15.69572,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Ulrich",
+          "lat": 48.42375,
+          "lon": 15.73949,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Thürnthal",
+          "lat": 48.43742,
+          "lon": 15.8457,
+          "kind": 2
+        },
+        {
+          "name": "St. Urban",
+          "lat": 48.42374,
+          "lon": 15.92912,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Juliusburg",
+          "lat": 48.40528,
+          "lon": 16.02298,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Schmida",
+          "lat": 48.37727,
+          "lon": 16.11328,
+          "kind": 2
+        },
+        {
+          "name": "Kirche zum heiligen Andreas",
+          "lat": 48.32101,
+          "lon": 16.20712,
+          "kind": 2
+        },
+        {
+          "name": "Museum Gugging",
+          "lat": 48.31319,
+          "lon": 16.25827,
+          "kind": 2
+        },
+        {
+          "name": "Martinschlössl",
+          "lat": 48.3133,
+          "lon": 16.31986,
+          "kind": 2
+        },
+        {
+          "name": "St. Jakobus und St. Josef",
+          "lat": 48.25852,
+          "lon": 16.3997,
+          "kind": 2
+        },
+        {
+          "name": "Salesianerinnenkirche",
+          "lat": 48.19588,
+          "lon": 16.38167,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1541,6 +5883,251 @@
         [46.83976, 12.82789],
         [46.83104, 12.8369],
         [46.83013, 12.7682]
+      ],
+      "sights": [
+        {
+          "name": "Localbahnmuseum",
+          "lat": 47.25333,
+          "lon": 11.39791,
+          "kind": 2
+        },
+        {
+          "name": "Museum Goldenes Dachl",
+          "lat": 47.26866,
+          "lon": 11.39327,
+          "kind": 2
+        },
+        {
+          "name": "Glockenturm Ampass",
+          "lat": 47.26,
+          "lon": 11.45677,
+          "kind": 2
+        },
+        {
+          "name": "Ansitz Hauzenheim",
+          "lat": 47.27834,
+          "lon": 11.54968,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Mariä Heimsuchung",
+          "lat": 47.30025,
+          "lon": 11.63138,
+          "kind": 2
+        },
+        {
+          "name": "Kreuzkirchl",
+          "lat": 47.32638,
+          "lon": 11.69233,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Tratzberg",
+          "lat": 47.38491,
+          "lon": 11.74282,
+          "kind": 2
+        },
+        {
+          "name": "Wallfahrtskirche Maria Brettfall",
+          "lat": 47.39345,
+          "lon": 11.8177,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Heiliger Bartholomäus",
+          "lat": 47.35021,
+          "lon": 11.8737,
+          "kind": 2
+        },
+        {
+          "name": "Heiliger Rupert",
+          "lat": 47.29065,
+          "lon": 11.88667,
+          "kind": 2
+        },
+        {
+          "name": "Wallfahrtskirche Maria Rast",
+          "lat": 47.22467,
+          "lon": 11.88935,
+          "kind": 2
+        },
+        {
+          "name": "Heiliger Ingenuin und Albuin",
+          "lat": 47.20591,
+          "lon": 11.86495,
+          "kind": 2
+        },
+        {
+          "name": "Panoramablick",
+          "lat": 47.24373,
+          "lon": 12.02645,
+          "kind": 1
+        },
+        {
+          "name": "Königsleiten Photopoint",
+          "lat": 47.26251,
+          "lon": 12.09263,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Krimml",
+          "lat": 47.22199,
+          "lon": 12.17479,
+          "kind": 2
+        },
+        {
+          "name": "Burgruine Friedburg",
+          "lat": 47.23529,
+          "lon": 12.2391,
+          "kind": 2
+        },
+        {
+          "name": "Weyerturm",
+          "lat": 47.2608,
+          "lon": 12.31795,
+          "kind": 2
+        },
+        {
+          "name": "Schlössl Einödberg",
+          "lat": 47.28267,
+          "lon": 12.43128,
+          "kind": 2
+        },
+        {
+          "name": "Felberturm",
+          "lat": 47.27759,
+          "lon": 12.49202,
+          "kind": 2
+        },
+        {
+          "name": "Kirche zum hl. Rupert",
+          "lat": 47.28643,
+          "lon": 12.57061,
+          "kind": 2
+        },
+        {
+          "name": "Kulturverein Samerstall",
+          "lat": 47.28086,
+          "lon": 12.64765,
+          "kind": 2
+        },
+        {
+          "name": "Sigmund Thun-Klamm",
+          "lat": 47.25905,
+          "lon": 12.73829,
+          "kind": 2
+        },
+        {
+          "name": "Kirche St. Pius X",
+          "lat": 47.30333,
+          "lon": 12.79326,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Fischhorn",
+          "lat": 47.2885,
+          "lon": 12.81462,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hll. Ägidius und Martin",
+          "lat": 47.22707,
+          "lon": 12.82573,
+          "kind": 2
+        },
+        {
+          "name": "Wildpark Ferleiten",
+          "lat": 47.17145,
+          "lon": 12.81667,
+          "kind": 2
+        },
+        {
+          "name": "Hochmais",
+          "lat": 47.12848,
+          "lon": 12.80703,
+          "kind": 1
+        },
+        {
+          "name": "Alpine Naturschau",
+          "lat": 47.12231,
+          "lon": 12.82113,
+          "kind": 2
+        },
+        {
+          "name": "Fuscher Törl",
+          "lat": 47.11679,
+          "lon": 12.82391,
+          "kind": 4,
+          "ele": 2428
+        },
+        {
+          "name": "Alter Steintransportwagen",
+          "lat": 47.11181,
+          "lon": 12.83211,
+          "kind": 2
+        },
+        {
+          "name": "Bretterscharte",
+          "lat": 47.09009,
+          "lon": 12.83162,
+          "kind": 4,
+          "ele": 2603
+        },
+        {
+          "name": "Leiterfall",
+          "lat": 47.05192,
+          "lon": 12.7845,
+          "kind": 1
+        },
+        {
+          "name": "Gössnitzfall",
+          "lat": 47.04209,
+          "lon": 12.81155,
+          "kind": 1
+        },
+        {
+          "name": "St. Vinzenz",
+          "lat": 47.03938,
+          "lon": 12.84136,
+          "kind": 2
+        },
+        {
+          "name": "Gartl-Wasserfall",
+          "lat": 46.96436,
+          "lon": 12.88919,
+          "kind": 1
+        },
+        {
+          "name": "Filialkirche und Wallfahrtskirche Maria Hilf",
+          "lat": 46.89947,
+          "lon": 12.90217,
+          "kind": 2
+        },
+        {
+          "name": "hl. Rupert",
+          "lat": 46.86152,
+          "lon": 12.88924,
+          "kind": 2
+        },
+        {
+          "name": "Iselsberg",
+          "lat": 46.85425,
+          "lon": 12.85812,
+          "kind": 4,
+          "ele": 1209
+        },
+        {
+          "name": "Filialkirche Hl. Schutzengel",
+          "lat": 46.83757,
+          "lon": 12.84344,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Ulrich",
+          "lat": 46.79524,
+          "lon": 12.8367,
+          "kind": 2
+        }
       ]
     },
     {
@@ -1626,6 +6213,250 @@
         [47.12344, 15.35441],
         [47.10707, 15.41187],
         [47.07153, 15.43778]
+      ],
+      "sights": [
+        {
+          "name": "Hill Arches",
+          "lat": 48.19906,
+          "lon": 16.37162,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Neusimmering",
+          "lat": 48.17584,
+          "lon": 16.4132,
+          "kind": 2
+        },
+        {
+          "name": "Grafenhof",
+          "lat": 48.13875,
+          "lon": 16.38152,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Laxenburg Blauer Hof",
+          "lat": 48.06777,
+          "lon": 16.35803,
+          "kind": 2
+        },
+        {
+          "name": "Pfarre Trumau",
+          "lat": 47.99678,
+          "lon": 16.34229,
+          "kind": 2
+        },
+        {
+          "name": "Schlossruine Pottendorf",
+          "lat": 47.91148,
+          "lon": 16.38431,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Ebenfurth",
+          "lat": 47.87588,
+          "lon": 16.3687,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Lichtenwörth",
+          "lat": 47.83261,
+          "lon": 16.29589,
+          "kind": 2
+        },
+        {
+          "name": "Museum St. Peter an der Sperr",
+          "lat": 47.81609,
+          "lon": 16.24318,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Katzelsdorf",
+          "lat": 47.77903,
+          "lon": 16.27127,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Schwarzau",
+          "lat": 47.73052,
+          "lon": 16.16685,
+          "kind": 2
+        },
+        {
+          "name": "Städtisches Museum Neunkirchen",
+          "lat": 47.7227,
+          "lon": 16.08339,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche St. Valentin - Landschach",
+          "lat": 47.68564,
+          "lon": 16.0161,
+          "kind": 2
+        },
+        {
+          "name": "Burg Wartenstein",
+          "lat": 47.65048,
+          "lon": 15.91913,
+          "kind": 2
+        },
+        {
+          "name": "Semmeringbahn",
+          "lat": 47.64878,
+          "lon": 15.82797,
+          "kind": 2
+        },
+        {
+          "name": "Semmeringpass",
+          "lat": 47.63265,
+          "lon": 15.82906,
+          "kind": 4,
+          "ele": 984
+        },
+        {
+          "name": "Alfredhütte",
+          "lat": 47.61691,
+          "lon": 15.79707,
+          "kind": 2
+        },
+        {
+          "name": "Südbahnmuseum Mürzzuschlag",
+          "lat": 47.60851,
+          "lon": 15.68032,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche hl. Margaretha",
+          "lat": 47.64675,
+          "lon": 15.63052,
+          "kind": 2
+        },
+        {
+          "name": "ehem. Zisterzienserabtei Neuberg an der Mürz",
+          "lat": 47.66295,
+          "lon": 15.57788,
+          "kind": 2
+        },
+        {
+          "name": "Kaiserliches Jagdschloss Mürzsteg",
+          "lat": 47.67689,
+          "lon": 15.492,
+          "kind": 2
+        },
+        {
+          "name": "Megaspalte",
+          "lat": 47.72993,
+          "lon": 15.43961,
+          "kind": 1
+        },
+        {
+          "name": "Kaltenbachloch",
+          "lat": 47.77398,
+          "lon": 15.50177,
+          "kind": 1
+        },
+        {
+          "name": "Lahnsattel",
+          "lat": 47.77489,
+          "lon": 15.48568,
+          "kind": 4,
+          "ele": 1015
+        },
+        {
+          "name": "Hohlensteinhöhle",
+          "lat": 47.78465,
+          "lon": 15.34325,
+          "kind": 1
+        },
+        {
+          "name": "Hl. Sigmund",
+          "lat": 47.75622,
+          "lon": 15.30522,
+          "kind": 2
+        },
+        {
+          "name": "Montanmuseum Gußwerk",
+          "lat": 47.74114,
+          "lon": 15.306,
+          "kind": 2
+        },
+        {
+          "name": "Hochofenstock",
+          "lat": 47.66991,
+          "lon": 15.33839,
+          "kind": 2
+        },
+        {
+          "name": "Katholische Pfarrkirche St. Leonhard Seewiesen",
+          "lat": 47.62071,
+          "lon": 15.27096,
+          "kind": 2
+        },
+        {
+          "name": "Pfarrkirche Aflenz",
+          "lat": 47.54479,
+          "lon": 15.24027,
+          "kind": 2
+        },
+        {
+          "name": "Kath. Pfarrkirche Hl. Dreifaltigkeit",
+          "lat": 47.52118,
+          "lon": 15.22867,
+          "kind": 2
+        },
+        {
+          "name": "Rettenwandhöhle",
+          "lat": 47.46833,
+          "lon": 15.25282,
+          "kind": 1
+        },
+        {
+          "name": "Römerbrücke",
+          "lat": 47.40722,
+          "lon": 15.22321,
+          "kind": 2
+        },
+        {
+          "name": "Kirchdorfkirche",
+          "lat": 47.3614,
+          "lon": 15.33263,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Pernegg",
+          "lat": 47.36061,
+          "lon": 15.34711,
+          "kind": 2
+        },
+        {
+          "name": "Schloss Weyer",
+          "lat": 47.27984,
+          "lon": 15.30244,
+          "kind": 2
+        },
+        {
+          "name": "Mariä Himmelfahrt",
+          "lat": 47.27006,
+          "lon": 15.32437,
+          "kind": 2
+        },
+        {
+          "name": "Grabhöhle",
+          "lat": 47.22397,
+          "lon": 15.33732,
+          "kind": 1
+        },
+        {
+          "name": "Burgruine Rein",
+          "lat": 47.1341,
+          "lon": 15.28219,
+          "kind": 2
+        },
+        {
+          "name": "Jungfernsprung",
+          "lat": 47.10484,
+          "lon": 15.38284,
+          "kind": 1
+        }
       ]
     }
   ]
