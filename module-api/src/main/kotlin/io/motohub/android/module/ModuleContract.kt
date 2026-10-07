@@ -116,8 +116,15 @@ object MotoHubModuleContract {
      *    gains the Real 3D export's wet road and its reflections, valley mist and low cloud, season,
      *    dense grass and flowers, fences, waterfalls and a colour grade. Appended with defaults that
      *    draw today's picture; the minimum stays at 3.
+     * 25: spread rendering. A film can be cut into pieces drawn at the same time by several devices
+     *    and put together on the phone: ModuleExportSpec.RENDER_SPREAD asks for it (RENDER_AUTO
+     *    still means one device), ModuleScene.spreadDevices lists the devices it would use,
+     *    ModuleRenderServer.kind and .spreads say what each device is and whether it can draw a
+     *    piece, ModuleExportJob.renderedOnAll and spreadProgress say who draws and how far each one
+     *    is (ModuleSpreadDevice), and renderedOn is null for such a film. Appends with defaults, none
+     *    in an existing constructor; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 24
+    const val CONTRACT_VERSION = 25
 
     /**
      * The oldest contract this app can still run.

@@ -180,6 +180,15 @@ interface ModuleScene {
      * its QR. The app owns it, the module only asks for it; [renderServers] changes when it is done.
      */
     fun pairRenderServer() {}
+
+    /**
+     * The devices a film asked for with [ModuleExportSpec.RENDER_SPREAD] would be cut over if it started now (contract 25): every
+     * paired, ready device that can draw a piece of this scene's film ([ModuleRenderServer.spreads]), and this phone
+     * ([ModuleRenderServer.KIND_PHONE], id [ModuleExportSpec.RENDER_PHONE]) when it draws pieces too. A spread needs two; with
+     * fewer the app draws the film as [ModuleExportSpec.RENDER_AUTO] would. Empty on an app that does not spread films. The latest
+     * known, like [renderServers]: ask again when [watchRenderServers] calls back, or when the scene's engine changes.
+     */
+    fun spreadDevices(): List<ModuleRenderServer> = emptyList()
 }
 
 /**
@@ -206,7 +215,34 @@ class ModuleRenderServer @JvmOverloads constructor(
     /** Whether this server draws [kind] at [version] of its format. */
     fun draws(kind: String, version: Int): Boolean = overlays[kind]?.contains(version) == true
 
+    /**
+     * What the device is (contract 25): [KIND_STUDIO], a computer running MOTO-HUB Studio, or [KIND_PHONE], a phone running
+     * MOTO-HUB. Not a constructor parameter, for the reason [ModuleExportSpec.remote] gives: set by the app with [withSpread].
+     */
+    var kind: String = KIND_STUDIO
+        private set
+
+    /**
+     * It can draw a piece of this scene's film now (contract 25): it draws ranges of a film and this film's engine. Only such a
+     * device takes part in a [ModuleExportSpec.RENDER_SPREAD] film; whether it is paired and ready is [paired] and [ready].
+     */
+    var spreads: Boolean = false
+        private set
+
+    /** A copy of this server with [kind] and [spreads] (contract 25). Made by the app; a module only reads them. */
+    fun withSpread(kind: String, spreads: Boolean): ModuleRenderServer =
+        ModuleRenderServer(id, name, paired, ready, busy, problem, queue, overlays).also {
+            it.kind = kind
+            it.spreads = spreads
+        }
+
     companion object {
+        /** [kind]: a computer running MOTO-HUB Studio with its render server on. */
+        const val KIND_STUDIO = "studio"
+
+        /** [kind]: a phone running MOTO-HUB, this one ([ModuleExportSpec.RENDER_PHONE] as its id) or another on the Wi-Fi. */
+        const val KIND_PHONE = "phone"
+
         /** A paired computer that is not answering on this network now. */
         const val PROBLEM_OFFLINE = "OFFLINE"
         const val PROBLEM_BROWSER_MISSING = "BROWSER_MISSING"
@@ -387,6 +423,15 @@ class ModuleExportSpec @JvmOverloads constructor(
 
         /** [renderOn]: draw it on the phone. */
         const val RENDER_PHONE = "phone"
+
+        /**
+         * [renderOn] (contract 25): cut the film into pieces drawn at the same time by every device of
+         * [ModuleScene.spreadDevices], this phone included when it draws pieces, and put it together on this phone with the
+         * overlay and the sound. With fewer than two such devices when the export starts, it is drawn as [RENDER_AUTO] would draw
+         * it. [RENDER_AUTO] keeps its meaning: one device. An app older than contract 25 does not know this value; a module
+         * offers it only where [ModuleScene.spreadDevices] answers.
+         */
+        const val RENDER_SPREAD = "spread"
     }
 }
 
@@ -584,9 +629,71 @@ interface ModuleExportJob {
 
     /**
      * The computer drawing this film (contract 23), or null when the phone is: known as soon as the export starts. A module that
-     * is told the export failed asks it, to know whether the phone's own drawing is still an answer to offer.
+     * is told the export failed asks it, to know whether the phone's own drawing is still an answer to offer. From contract 25
+     * also null for a film spread over several devices ([renderedOnAll]).
      */
     fun renderedOn(): ModuleRenderServer? = null
+
+    /**
+     * The devices of a spread film (contract 25): while it runs, every device taking part (not one that was left out when it was
+     * asked); once it is over, the ones that drew at least one piece of it. Empty for a film that is not spread. For a spread
+     * film [renderedOn] is null: no single device draws it, and a module that is told the export failed asks this one instead.
+     */
+    fun renderedOnAll(): List<ModuleRenderServer> = emptyList()
+
+    /**
+     * How each device of a spread film is doing now (contract 25), in the order the app lists them: devices taking part first,
+     * then the ones left out with why. Empty for a film that is not spread. Read it when [ModuleExportListener.onExportProgress]
+     * is called, or every second or so: it is the latest known, never a wait.
+     */
+    fun spreadProgress(): List<ModuleSpreadDevice> = emptyList()
+}
+
+/**
+ * One device of a spread film as it is now (contract 25), made by the app and read by the module.
+ *
+ * [device] says which, with its [ModuleRenderServer.kind]. [state] is one of the STATE_ constants. [framesDone]: frames of this
+ * film it has drawn, the piece it draws now included. [pieceFirst] and [pieceCount] are the frames of the piece it holds now, in
+ * the film's frames, with [pieceFramesDone] of them drawn; [pieceFirst] is -1 when it holds none. [failures]: pieces it could not
+ * draw. [problem]: what went wrong with it, as a sentence for the rider in the app's language, which says which part of the film
+ * it was drawing and that the part went to another device (or waits for one); null when nothing went wrong.
+ */
+class ModuleSpreadDevice(
+    val device: ModuleRenderServer,
+    val state: String,
+    val framesDone: Int,
+    val pieceFirst: Int,
+    val pieceCount: Int,
+    val pieceFramesDone: Int,
+    val failures: Int,
+    val problem: String?
+) {
+    companion object {
+        /** Being asked whether it can draw pieces of this film. */
+        const val STATE_CHECKING = "CHECKING"
+
+        /** Given a piece; the piece is on its way and its page loads the world. */
+        const val STATE_STARTING = "STARTING"
+        const val STATE_DRAWING = "DRAWING"
+
+        /** Holding no piece for now. */
+        const val STATE_WAITING = "WAITING"
+
+        /** Taking no piece for now, by its own word: a phone too hot to draw. It takes pieces again once it has cooled. */
+        const val STATE_RESTING = "RESTING"
+
+        /** The film is finished, or in its last step. */
+        const val STATE_FINISHED = "FINISHED"
+
+        /** It stopped answering or gave up; its piece went to another device and it is given nothing more. */
+        const val STATE_GONE = "GONE"
+
+        /** It could not draw pieces of this film when it was asked ([problem] says why) and was never given one. */
+        const val STATE_LEFT_OUT = "LEFT_OUT"
+
+        /** The film failed or was stopped while it was part of it. */
+        const val STATE_STOPPED = "STOPPED"
+    }
 }
 
 /**

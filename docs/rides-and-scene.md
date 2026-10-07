@@ -216,6 +216,22 @@ A computer draws only the overlay kinds it lists in `overlays` (`server.draws(ki
 Studio carries the drawing code for those itself. Today that is Flyby's overlay, so for other
 modules a remote render is the 3D picture without your overlay unless Studio learns it.
 
+### One film drawn by every device at once (contract 25)
+
+A film can also be cut into pieces drawn at the same time by every ready device (Studio
+computers, and other phones that lend themselves) and put together on the rider's phone, which
+draws your overlay once over the whole film.
+
+- `ModuleExportSpec.RENDER_SPREAD` as `renderOn` asks for it; `RENDER_AUTO` keeps meaning one
+  device. With fewer than two devices ready, the film is drawn as `RENDER_AUTO` would draw it.
+- `scene.spreadDevices()` lists the devices a spread film would use now. Each
+  `ModuleRenderServer` also says what it is (`kind`: Studio or phone) and whether it can draw a
+  piece of this film (`spreads`).
+- `job.renderedOnAll()` says which devices drew the film, and `job.spreadProgress()` gives one
+  `ModuleSpreadDevice` per device: its state, frames done, the part of the film it holds and how
+  far, and a `problem` sentence when it failed and its part went to another device.
+  `job.renderedOn()` is `null` for a spread film.
+
 ---
 
 ## Actions on one ride or route
