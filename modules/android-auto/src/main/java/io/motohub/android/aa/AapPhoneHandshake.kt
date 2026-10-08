@@ -5,8 +5,11 @@ package io.motohub.android.aa
 
 import android.content.Context
 import android.os.SystemClock
+import io.motohub.android.aa.phone.AapPhoneSession
+import io.motohub.android.aa.phone.PhoneDiscovery
 import io.motohub.android.aa.proto.Control
 import io.motohub.android.aaplugin.AaIdentityProvider
+import io.motohub.android.module.MotoHubModuleHost
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -16,9 +19,9 @@ import java.util.concurrent.atomic.AtomicBoolean
  * source - the exact inverse of [AapTransport]/[AaReceiver], which make MOTO-HUB masquerade as a
  * head unit for Google's own Android Auto app.
  *
- * This is the de-risking probe, not a session: it takes the handshake as far as service discovery
- * and reports what the head unit said. Everything after that (channel opens, video setup, the
- * encoder) is only worth building once this answers yes.
+ * It takes the handshake as far as service discovery and reports what the head unit said. Given a
+ * host, it then hands the link to [io.motohub.android.aa.phone.AapPhoneSession], which opens the
+ * channels and projects the Ride Dashboard; without one it stops there, as the original probe did.
  *
  * Two things are independent here, and conflating them is what cost the first two attempts:
  *
@@ -42,6 +45,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 object AapPhoneHandshake {
     private const val MSG_VERSION_REQUEST = 1
     private const val MSG_VERSION_RESPONSE = 2
+    private const val MSG_ENCAPSULATED_SSL = 3
     private const val MSG_AUTH_COMPLETE = 4
 
     /**
@@ -49,6 +53,9 @@ object AapPhoneHandshake {
      * generous wait here does not buy patience, it just misses the window.
      */
     private const val LISTEN_MS = 6_000
+
+    /** Inside the second or so a head unit gives a silent phone before closing the accessory. */
+    private const val LISTEN_FIRST_MS = 800
 
     /** Wide enough to span more than one of the head unit's AOA retry cycles (~20s each). */
     private const val SILENT_WATCH_MS = 25_000
@@ -71,23 +78,27 @@ object AapPhoneHandshake {
         @Suppress("UNUSED_PARAMETER") context: Context,
         identity: AaIdentityProvider,
         connection: AccessoryConnection,
-        log: (String) -> Unit
+        log: (String) -> Unit,
+        /** Null stops at service discovery, as the probe did; otherwise the session follows. */
+        host: MotoHubModuleHost? = null
     ): Outcome {
         val pump = AtomicBoolean(false)
         var pumpThread: Thread? = null
         try {
-            // Speak immediately, then listen. Waiting first cost the whole earlier attempt: the
-            // head unit creates the accessory, stays quiet, and tears the link down within
-            // seconds - by the time a 15s listen expired the stream was already closed and the
-            // fallback never ran on a live link. Sending costs nothing if the unit was going to
-            // speak anyway; its frame simply arrives next.
-            val request = Messages.versionRequest
-            if (connection.sendBlocking(request, request.size, 2000) < 0) {
-                return Outcome(false, "Could not send VERSION_REQUEST: the accessory stream is closed.")
+            // Listen briefly first. Over AOA the head unit is the one that opens with a
+            // VERSION_REQUEST (aasdk, aa-proxy-rs and gearslip all agree), and the silence that
+            // made the earlier version speak first was our own reader never reading - see
+            // UsbAoaAccessoryConnection. A unit that has not spoken in this window still gets our
+            // request, so a unit that waits for the phone is covered too.
+            var first = readFrame(connection, LISTEN_FIRST_MS)
+            if (first == null) {
+                val request = Messages.versionRequest
+                if (connection.sendBlocking(request, request.size, 2000) < 0) {
+                    return Outcome(false, "Could not send VERSION_REQUEST: the accessory stream is closed.")
+                }
+                log("Head unit silent for ${LISTEN_FIRST_MS}ms. Sent VERSION_REQUEST; waiting up to ${LISTEN_MS / 1000}s.")
+                first = readFrame(connection, LISTEN_MS)
             }
-            log("Sent VERSION_REQUEST; waiting up to ${LISTEN_MS / 1000}s for the head unit.")
-
-            var first = readFrame(connection, LISTEN_MS)
             if (first == null) {
                 // Keep listening in silence rather than giving up here. aa-proxy-rs - a working
                 // dongle that plays this exact role, a USB gadget in accessory mode facing a car -
@@ -148,11 +159,20 @@ object AapPhoneHandshake {
                 )
             }
 
-            // Both sides may have opened at once, and the loser's frame is still queued. Drained
-            // here rather than left for the TLS reader, which parses raw frames and would take a
-            // stray version message for a ClientHello.
+            // Both sides may have opened at once, and the loser's version frame is still queued.
+            // Drained here rather than left for the TLS reader, which parses raw frames and would
+            // take a stray version message for a ClientHello. An SSL frame is NOT stray: when the
+            // head unit drives, its ClientHello follows the version exchange within milliseconds
+            // (14 ms on Vincenzo's unit, 2026-10-08), and dropping it here left the TLS server
+            // waiting for a hello that had already come and gone.
+            var initialTls = ByteArray(0)
             var stray = readFrame(connection, STRAY_DRAIN_MS)
             while (stray != null) {
+                if (stray.channel == Channel.ID_CTR && stray.type == MSG_ENCAPSULATED_SSL) {
+                    log("First TLS record arrived with the version exchange: $stray - handing it to TLS.")
+                    initialTls = stray.payload
+                    break
+                }
                 log("Drained a queued frame before TLS: $stray")
                 stray = readFrame(connection, STRAY_DRAIN_MS)
             }
@@ -170,9 +190,18 @@ object AapPhoneHandshake {
             // the one it has is a head-unit identity being used as a phone's. That is precisely
             // the question this probe exists to answer: a unit that checks the role, or checks
             // against Google's root at all, will reject it here and say so.
-            val ssl = AapSslContext(SingleKeyKeyManager(identity), useClientMode = tlsClient)
+            // In server mode (head unit drives) mirror gearslip's proven TLS stack: platform
+            // provider, TLS 1.2 pinned, peer certificate requested. Conscrypt as a TLS server
+            // threw "Failure in SSL library" on this unit's ClientHello (2026-10-08).
+            val ssl = AapSslContext(
+                SingleKeyKeyManager(identity),
+                useClientMode = tlsClient,
+                usePlatformProvider = !tlsClient,
+                pinnedProtocols = if (tlsClient) null else arrayOf("TLSv1.2"),
+                requestPeerCertificate = !tlsClient
+            )
             log("Starting the TLS handshake in ${if (tlsClient) "client" else "server"} mode.")
-            if (!ssl.performHandshake(connection)) {
+            if (!ssl.performHandshake(connection, initialTls)) {
                 return Outcome(
                     false,
                     "TLS handshake failed in ${if (tlsClient) "client" else "server"} mode. The " +
@@ -181,7 +210,39 @@ object AapPhoneHandshake {
                 )
             }
             ssl.postHandshakeReset()
-            log("TLS handshake complete: the head unit accepted MOTO-HUB's certificate.")
+            log("TLS handshake complete.")
+
+            // AUTH_COMPLETE goes the same way the version request went: the side that opened the
+            // conversation declares the channel authenticated. AapTransport sends Messages.statusOk
+            // here in exactly this position when MOTO-HUB is the one who dialled.
+            //
+            // It travels in clear (flags 3, like Messages.statusOk), so when the head unit sends
+            // it this reads it as a raw frame, before the encrypted reader starts: that reader
+            // drops any frame without the encryption bit and would have timed out here.
+            if (tlsClient) {
+                val statusOk = Messages.statusOk
+                if (connection.sendBlocking(statusOk, statusOk.size, 2000) < 0) {
+                    return Outcome(false, "Failed to send AUTH_COMPLETE.")
+                }
+                log("Sent AUTH_COMPLETE.")
+            } else {
+                val auth = readFrame(connection, REPLY_TIMEOUT_MS)
+                    ?: return Outcome(false, "Timed out waiting for AUTH_COMPLETE after TLS.")
+                // The status is the certificate verdict: 08 00 is 0, accepted. A negative status
+                // (-2 certificate error, -3 authentication failure) is a ten-byte varint.
+                // Logged raw so the number is on record either way.
+                log("Received $auth body=${hex(auth.payload)}")
+                if (auth.type != MSG_AUTH_COMPLETE) {
+                    log("That is not AUTH_COMPLETE; continuing anyway.")
+                } else if (!(auth.payload.size >= 2 && auth.payload[0] == 8.toByte() && auth.payload[1] == 0.toByte())) {
+                    return Outcome(
+                        false,
+                        "The head unit completed TLS but rejected the certificate at AUTH_COMPLETE " +
+                            "(body ${hex(auth.payload)}). It checks the phone identity."
+                    )
+                }
+            }
+            log("The head unit accepted MOTO-HUB's certificate.")
 
             val inbox = LinkedBlockingQueue<AapMessage>()
             val reader = AapReadMultipleMessages(
@@ -199,25 +260,6 @@ object AapPhoneHandshake {
                     if (reader.read() < 0) pump.set(false)
                 }
             }, "AapPhoneHandshake-pump").apply { isDaemon = true; start() }
-
-            // AUTH_COMPLETE goes the same way the version request went: the side that opened the
-            // conversation declares the channel authenticated. AapTransport sends Messages.statusOk
-            // here in exactly this position when MOTO-HUB is the one who dialled.
-            if (tlsClient) {
-                val statusOk = Messages.statusOk
-                if (connection.sendBlocking(statusOk, statusOk.size, 2000) < 0) {
-                    return Outcome(false, "Failed to send AUTH_COMPLETE.")
-                }
-                log("Sent AUTH_COMPLETE.")
-            } else {
-                val auth = inbox.poll(REPLY_TIMEOUT_MS.toLong(), TimeUnit.MILLISECONDS)
-                    ?: return Outcome(false, "Timed out waiting for AUTH_COMPLETE after TLS.")
-                if (auth.type != MSG_AUTH_COMPLETE) {
-                    log("Expected AUTH_COMPLETE, got type=${auth.type}; continuing anyway.")
-                } else {
-                    log("Received AUTH_COMPLETE.")
-                }
-            }
 
             val discovery = AapMessage(
                 Channel.ID_CTR,
@@ -241,16 +283,33 @@ object AapPhoneHandshake {
                         "(${MsgType.name(reply.type, reply.channel)})."
                 )
             }
-            val parsed = reply.parse(Control.ServiceDiscoveryResponse.newBuilder()).build()
+            // buildPartial, not build: the proto marks some fields required (e.g.
+            // can_play_native_media_during_vr), and real head units omit them. build() throws on a
+            // perfectly usable response; we only read make/model and the service list.
+            val parsed = reply.parse(Control.ServiceDiscoveryResponse.newBuilder()).buildPartial()
             for (service in parsed.servicesList) {
                 log("  service id=${service.id} ${describe(service)}")
             }
-            return Outcome(
-                true,
-                "The head unit accepted MOTO-HUB as a phone: make=${parsed.make} " +
-                    "model=${parsed.model} headUnit=${parsed.headUnitMake}/${parsed.headUnitModel} " +
-                    "services=${parsed.servicesCount}."
-            )
+            val accepted = "The head unit accepted MOTO-HUB as a phone: make=${parsed.make} " +
+                "model=${parsed.model} headUnit=${parsed.headUnitMake}/${parsed.headUnitModel} " +
+                "services=${parsed.servicesCount}."
+            if (host == null) return Outcome(true, accepted)
+
+            // From here the link is the session's: same TLS, same reader, same inbox. Read again
+            // by field number rather than through the generated classes, which miss fields units
+            // depend on (see ProtoWire).
+            log(accepted)
+            val discovered = PhoneDiscovery.parse(reply.data.copyOfRange(reply.dataOffset, reply.size))
+            val session = AapPhoneSession(
+                host = host,
+                connection = connection,
+                ssl = ssl,
+                discovery = discovered,
+                inbox = inbox,
+                readerAlive = { pump.get() },
+                log = log
+            ).run()
+            return Outcome(session.success, "$accepted ${session.detail}")
         } catch (e: Exception) {
             return Outcome(false, "Exception during the phone-role handshake: ${e.message}")
         } finally {
@@ -281,6 +340,14 @@ object AapPhoneHandshake {
         AaLog.d("AapPhoneHandshake: frame after ${SystemClock.elapsedRealtime() - started}ms")
         return Frame(header[0].toInt() and 0xFF, header[1].toInt() and 0xFF, type, payload)
     }
+
+    private fun hex(bytes: ByteArray): String =
+        buildString(bytes.size * 3) {
+            for (i in bytes.indices) {
+                if (i > 0) append(' ')
+                append("%02x".format(bytes[i]))
+            }
+        }
 
     /** A big-endian 16-bit field, or [fallback] when the payload is too short to carry one. */
     private fun beShort(payload: ByteArray, offset: Int, fallback: Int): Int =

@@ -97,17 +97,11 @@ object AapProxyBridge {
                 label = "UNIT -> PHONE",
                 counter = unitToPhone,
                 log = log,
-                read = { buffer ->
-                    // The accessory stream has no read timeout of its own, so this polls the way
-                    // UsbAoaAccessoryConnection does rather than blocking a thread forever on a
-                    // head unit that has gone quiet.
-                    if (fromUnit.available() <= 0) {
-                        Thread.sleep(20)
-                        0
-                    } else {
-                        fromUnit.read(buffer)
-                    }
-                },
+                // A plain blocking read. Polling available() first, as this used to, never read
+                // anything: the accessory device cannot report pending bytes, and only receives
+                // while a read is queued (see UsbAoaAccessoryConnection). The thread is a daemon
+                // and the read ends when the app closes the accessory after the bridge returns.
+                read = { buffer -> fromUnit.read(buffer) },
                 write = { buffer, length -> socket.getOutputStream().write(buffer, 0, length) }
             )
 

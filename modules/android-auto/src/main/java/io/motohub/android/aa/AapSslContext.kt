@@ -13,19 +13,33 @@ import javax.net.ssl.SSLEngineResult
 
 class AapSslContext(
     keyManager: SingleKeyKeyManager,
-    private val useClientMode: Boolean = true
+    private val useClientMode: Boolean = true,
+    // The receiver path (MOTO-HUB as head unit, TLS client) uses Conscrypt with engine defaults,
+    // which is proven. The phone-role server path mirrors gearslip, which is proven on a real head
+    // unit: platform TLS provider, protocol pinned to TLS 1.2, and the peer certificate requested.
+    private val usePlatformProvider: Boolean = false,
+    private val pinnedProtocols: Array<String>? = null,
+    private val requestPeerCertificate: Boolean = false
 ) : AapSsl {
-    private val sslContext: SSLContext = createSslContext(keyManager)
+    private val sslContext: SSLContext = createSslContext(keyManager, usePlatformProvider)
     private lateinit var sslEngine: SSLEngine
     private lateinit var txBuffer: ByteBuffer
     private lateinit var rxBuffer: ByteBuffer
 
     @Volatile var isUserDisconnect = false
 
-    override fun performHandshake(connection: AccessoryConnection): Boolean {
+    override fun performHandshake(connection: AccessoryConnection): Boolean =
+        performHandshake(connection, ByteArray(0))
+
+    /**
+     * [initialTlsData] is handshake data the caller already took off the wire before TLS began:
+     * in the phone role the head unit sends its ClientHello right behind the version exchange,
+     * and whoever read that frame must hand its payload on rather than drop it.
+     */
+    fun performHandshake(connection: AccessoryConnection, initialTlsData: ByteArray): Boolean {
         if (prepare() < 0) return false
 
-        var pendingTlsData = ByteArray(0)
+        var pendingTlsData = initialTlsData
         val deadline = android.os.SystemClock.elapsedRealtime() + SSL_HANDSHAKE_TIMEOUT_MS
 
         while (getHandshakeStatus() != SSLEngineResult.HandshakeStatus.FINISHED &&
@@ -118,6 +132,23 @@ class AapSslContext(
     private fun prepare(): Int {
         sslEngine = sslContext.createSSLEngine("android-auto", 5277).apply {
             this.useClientMode = this@AapSslContext.useClientMode
+            if (requestPeerCertificate && !this@AapSslContext.useClientMode) {
+                // want, not need: logs what the head unit presents without failing when it sends
+                // nothing. Mirrors gearslip's server engine.
+                wantClientAuth = true
+            }
+            pinnedProtocols?.let { wanted ->
+                val supported = HashSet<String>()
+                for (p in supportedProtocols) supported.add(p)
+                val pin = wanted.filter { it in supported }.toTypedArray()
+                if (pin.isNotEmpty()) {
+                    try {
+                        enabledProtocols = pin
+                    } catch (e: Exception) {
+                        AaLog.w("SSL: could not pin protocols ${wanted.joinToString()}: ${e.message}")
+                    }
+                }
+            }
             session.also {
                 val appBufferMax = it.applicationBufferSize
                 val netBufferMax = it.packetBufferSize
@@ -235,8 +266,8 @@ class AapSslContext(
     companion object {
         private const val SSL_HANDSHAKE_TIMEOUT_MS = 15_000L
 
-        private fun createSslContext(keyManager: SingleKeyKeyManager): SSLContext {
-            val providerName = ConscryptInitializer.getProviderName()
+        private fun createSslContext(keyManager: SingleKeyKeyManager, usePlatformProvider: Boolean): SSLContext {
+            val providerName = if (usePlatformProvider) null else ConscryptInitializer.getProviderName()
             val sslContext = if (providerName != null) {
                 try {
                     AaLog.d("Creating SSLContext with Conscrypt provider")
@@ -246,7 +277,7 @@ class AapSslContext(
                     SSLContext.getInstance("TLS")
                 }
             } else {
-                AaLog.d("Creating SSLContext with default provider")
+                AaLog.d("Creating SSLContext with platform provider")
                 SSLContext.getInstance("TLS")
             }
             return sslContext.apply {

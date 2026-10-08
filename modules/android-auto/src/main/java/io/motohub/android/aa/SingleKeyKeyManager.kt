@@ -59,6 +59,13 @@ class SingleKeyKeyManager(certificate: X509Certificate, privateKey: PrivateKey) 
     override fun chooseEngineClientAlias(keyType: Array<out String>?, issuers: Array<out Principal>?, engine: SSLEngine?): String =
         DEFAULT_ALIAS
 
+    // X509ExtendedKeyManager's default returns null for server mode, so the SSLEngine presents no
+    // certificate. In the phone role the head unit drives and MOTO-HUB is the TLS server, and a
+    // server without a certificate fails the handshake at once ("Failure in SSL library", measured
+    // on Vincenzo's head unit 2026-10-08). The Extend module carries the same fix.
+    override fun chooseEngineServerAlias(keyType: String?, issuers: Array<out Principal>?, engine: SSLEngine?): String =
+        DEFAULT_ALIAS
+
     companion object {
         private const val DEFAULT_ALIAS = "defaultSingleKeyAlias"
 

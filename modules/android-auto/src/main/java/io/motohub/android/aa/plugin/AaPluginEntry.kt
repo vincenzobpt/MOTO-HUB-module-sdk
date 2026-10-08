@@ -48,7 +48,7 @@ private class AndroidAutoModule(private val host: MotoHubModuleHost) : MotoHubMo
 
     override val manifest = ModuleManifest(
         id = "android-auto",
-        version = "0.2.7",
+        version = "0.2.18",
         contractVersion = 10,
         entryClass = AaPluginContract.ENTRY_CLASS,
         displayName = "Android Auto",
@@ -127,7 +127,10 @@ private class AaModule : ModuleProjection, ModuleNavigation, ModuleAccessoryProb
             // the same identity - anything else would be testing a peer we never actually are.
             identity = ModuleIdentity,
             connection = UsbAoaAccessoryConnection(streams),
-            log = { host.log.log(it) }
+            log = { host.log.log(it) },
+            // A unit that accepts us gets the Ride Dashboard rather than a report: the probe is
+            // the only way in the contract has to an accessory the head unit opened.
+            host = host
         )
         return ModuleProbeOutcome(outcome.success, outcome.detail)
     }
