@@ -232,6 +232,26 @@ draws your overlay once over the whole film.
   far, and a `problem` sentence when it failed and its part went to another device.
   `job.renderedOn()` is `null` for a spread film.
 
+### A project edited on a computer (contract 26)
+
+A module whose projects can also be edited in MOTO-HUB Studio can send one to a computer paired
+with the phone. It is one way: what is changed on the computer does not come back to the phone.
+
+- `host.scene.remoteEditing()` is `null` on an app that does not do this. Otherwise
+  `editors(kind, format)` lists the paired computers that answer now and open projects of that
+  `kind` in that package `format`, and `watchEditors(kind, format, listener)` keeps that list
+  fresh until you close the handle.
+- `send(serverId, edit, listener)` sends a `ModuleRemoteEdit`: the project's `kind`, `format`,
+  its own `projectId` (the same every time, so the computer knows it already has it), a `title`,
+  the package's `files` by their path in it, `uris` the app reads for you (a song the rider
+  picked), the `engine` it is shown with and the `hashes` of your sources it was made with. The
+  app adds the scene's start, the manifest and the 3D pages, and does the network.
+- The listener hears `ModuleRemoteEditState` on the main thread: `PREPARING`, `SENDING` (with
+  `progress`), `WAITING` while the computer's rider decides whether to replace a copy changed
+  there, then one final phase: `OPENED`, `KEPT_BOTH` (under a new `title`), `CLOSED`,
+  `NEEDS_UPDATE`, `FAILED` or `CANCELLED`. `job.cancel()` stops it; `job.close()` only stops
+  listening, when your screen goes away.
+
 ---
 
 ## Actions on one ride or route

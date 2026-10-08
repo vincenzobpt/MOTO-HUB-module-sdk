@@ -22,6 +22,120 @@ interface ModuleSceneHost {
 
     /** A new scene. The caller owns it and must [close][ModuleScene.close] it. */
     fun open(): ModuleScene
+
+    /**
+     * Sending a module's project to a computer, to be edited there (contract 26). Null on an app that does not do this; an app
+     * older than 26 has no such call at all, which a module guards against as it does every newer call.
+     */
+    fun remoteEditing(): ModuleRemoteEditing? = null
+}
+
+/**
+ * A module's project opened on a computer (contract 26): MOTO-HUB Studio, paired with this phone to draw films
+ * ([ModuleRenderServer]), takes the project into its own copy of the module's editor. One way: what is changed there does not
+ * come back to the phone.
+ *
+ * The module says what the project is made of ([ModuleRemoteEdit]); the app does the rest - which computers take projects of
+ * that kind, packing the files (and the rider's song, read with the permission the rider gave the app), the network, and
+ * waiting for the computer's answer. A computer that already has the project with changes made there asks its own rider whether
+ * to replace them; the phone hears [ModuleRemoteEditState.WAITING] until somebody answers there.
+ */
+interface ModuleRemoteEditing {
+    /**
+     * The paired computers that answer now and open projects of [kind] in package [format], as the app knows them now (the
+     * latest known, like [ModuleScene.renderServers]). Empty when there is none.
+     */
+    fun editors(kind: String, format: Int): List<ModuleRenderServer>
+
+    /**
+     * Calls [listener] now and whenever [editors] for [kind] and [format] changes, on the main thread, and keeps the app asking
+     * the paired computers how they are until the returned handle is closed. Close it when the screen goes away.
+     */
+    fun watchEditors(kind: String, format: Int, listener: (List<ModuleRenderServer>) -> Unit): AutoCloseable
+
+    /**
+     * Sends [edit] to the computer [serverId] and follows it until that computer has said what became of it. [listener] hears
+     * every step on the main thread ([ModuleRemoteEditState]), the last one [finished][ModuleRemoteEditState.finished]. The app
+     * looks for the answer only while the job is open: [ModuleRemoteEditJob.close] it when the screen goes away.
+     */
+    fun send(serverId: String, edit: ModuleRemoteEdit, listener: (ModuleRemoteEditState) -> Unit): ModuleRemoteEditJob
+}
+
+/** A project on its way to a computer (contract 26). */
+interface ModuleRemoteEditJob {
+    /** The rider gives up: the upload stops, or the question waiting on the computer is withdrawn. Heard as [ModuleRemoteEditState.CANCELLED]. */
+    fun cancel()
+
+    /** Stops following it (the screen went away): nothing is withdrawn, and the listener hears nothing more. */
+    fun close()
+}
+
+/**
+ * What a module sends to be edited on a computer (contract 26). [kind] and [format] say what the package is and which version of
+ * its layout, and only a computer that lists both takes it ([ModuleRemoteEditing.editors]). [projectId] is the project's own,
+ * the same every time it is sent: it is how the computer knows it already has it. [title] is what the rider calls it.
+ *
+ * [files] are the package's files on the phone, by their path in it (`project.mhf`, `ride/track.json`, `photos/p1.jpg`). [uris]
+ * are files the app reads for the module, by their path in the package: the rider's song, a `content://` address only the app
+ * may read. The app adds the scene's start (map style, imagery, the rider's own map keys), the manifest and the 3D pages.
+ * [engine] is the [ModuleSceneEngine] the project is shown with. [hashes] are fingerprints of the module's own sources the
+ * project was made with, written into the package's manifest under their names (`editorHash`, `overlayHash`).
+ */
+class ModuleRemoteEdit @JvmOverloads constructor(
+    val kind: String,
+    val format: Int,
+    val projectId: String,
+    val title: String,
+    val files: Map<String, java.io.File>,
+    val uris: Map<String, String> = emptyMap(),
+    val engine: Int = ModuleSceneEngine.MAPLIBRE,
+    val hashes: Map<String, String> = emptyMap()
+)
+
+/**
+ * Where a project sent to a computer is (contract 26). [phase] is one of the constants below; [progress] 0..1 while it
+ * is [SENDING]; [serverName] the computer's name; [message] the computer's own words or the app's reason, null when the phase says
+ * it all; [title] what the computer's library calls the project once it has it (after "Keep both", the phone's copy beside the
+ * computer's, under a title of its own).
+ */
+class ModuleRemoteEditState(
+    val phase: Int,
+    val progress: Float,
+    val serverName: String,
+    val message: String?,
+    val title: String?
+) {
+    /** Nothing more will happen to this sending. */
+    val finished: Boolean get() = phase >= OPENED
+
+    companion object {
+        /** The package is being made on the phone. */
+        const val PREPARING = 0
+
+        /** Going up to the computer: [progress]. */
+        const val SENDING = 1
+
+        /** The computer has it and asks its rider whether to replace the copy changed there, or keep both. */
+        const val WAITING = 2
+
+        /** In the computer's library and open to edit there. */
+        const val OPENED = 3
+
+        /** In the computer's library beside the copy changed there, as [title]. */
+        const val KEPT_BOTH = 4
+
+        /** Not taken: the computer's rider closed the question, or a newer copy came. [message] says which. */
+        const val CLOSED = 5
+
+        /** The computer's software is older than the project: it needs updating. */
+        const val NEEDS_UPDATE = 6
+
+        /** It did not get there, or the computer refused it: [message]. Sending again may work. */
+        const val FAILED = 7
+
+        /** The rider stopped it on the phone. */
+        const val CANCELLED = 8
+    }
 }
 
 /**

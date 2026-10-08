@@ -123,8 +123,12 @@ object MotoHubModuleContract {
      *    piece, ModuleExportJob.renderedOnAll and spreadProgress say who draws and how far each one
      *    is (ModuleSpreadDevice), and renderedOn is null for such a film. Appends with defaults, none
      *    in an existing constructor; the minimum stays at 3.
+     * 26: a project edited on a computer. ModuleSceneHost.remoteEditing lists the paired computers
+     *    that open a module's projects (ModuleRemoteEditing.editors, watchEditors) and sends one there
+     *    (send: ModuleRemoteEdit, followed through ModuleRemoteEditState, stopped or left with
+     *    ModuleRemoteEditJob). A default method and new types only; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 25
+    const val CONTRACT_VERSION = 26
 
     /**
      * The oldest contract this app can still run.
