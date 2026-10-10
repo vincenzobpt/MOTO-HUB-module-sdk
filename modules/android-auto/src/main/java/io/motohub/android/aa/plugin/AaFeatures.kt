@@ -4,14 +4,25 @@
 // The screens this module brings with it. The app hosts them without knowing what they are.
 package io.motohub.android.aa.plugin
 
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import io.motohub.android.aa.AapPhoneHandshake
 import io.motohub.android.aa.AaReceiver
 import io.motohub.android.aa.AaSelfMode
+import io.motohub.android.aa.phone.WirelessHeadUnitTransport
 import io.motohub.android.aaplugin.AaPluginContract
 import io.motohub.android.module.ModuleFeature
 import io.motohub.android.module.ModuleFeaturePlacement
 import io.motohub.android.module.ModuleFeatures
 import io.motohub.android.module.MotoHubModuleHost
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * What this module adds to the app's own screens.
@@ -47,8 +58,86 @@ internal class AaFeatures(private val host: MotoHubModuleHost) : ModuleFeatures 
             description = "For diagnosing a session that will not start",
             placement = ModuleFeaturePlacement.NONE,
             screen = { onBack -> TechnicalScreen(onBack) }
+        ),
+        // The inverse of the receiver above: MOTO-HUB as the phone, projecting onto an external
+        // head unit (Carpuride, Chigee and the like) over wireless Android Auto. NONE, like the
+        // page above: the Modules card opens only a module's first MODULES page, so a second one
+        // placed there was unreachable. Reached from the About page instead.
+        ModuleFeature(
+            id = "android-auto-external",
+            title = "External head unit",
+            description = "Project MOTO-HUB onto a Carpuride-style display over wireless Android Auto",
+            placement = ModuleFeaturePlacement.NONE,
+            screen = { onBack -> ExternalHeadUnitScreen(onBack) }
         )
     )
+
+    @Composable
+    private fun ExternalHeadUnitScreen(onBack: () -> Unit) {
+        var running by remember { mutableStateOf(false) }
+        var result by remember { mutableStateOf<String?>(null) }
+        var logText by remember { mutableStateOf("") }
+
+        host.ui.Screen("External head unit", onBack) {
+            host.ui.Paragraph(
+                "Connects MOTO-HUB to an external head unit (Carpuride, Chigee or similar) over " +
+                    "wireless Android Auto: it pairs over Bluetooth, takes the head unit's Wi-Fi " +
+                    "credentials, joins that network and runs the Android Auto handshake. Pair the " +
+                    "head unit in Android's Bluetooth settings first, then pick it below."
+            )
+            host.ui.Paragraph(
+                "Accept the Wi-Fi prompt when it appears. If you use an always-on VPN, turn it off " +
+                    "first — it blocks the connection to the head unit's network."
+            )
+
+            host.ui.SectionLabel("PAIRED DEVICES")
+            val adapter = host.context.getSystemService(BluetoothManager::class.java)?.adapter
+            val bonded = try { adapter?.bondedDevices?.toList() ?: emptyList() } catch (_: SecurityException) { emptyList() }
+            if (bonded.isEmpty()) {
+                host.ui.Fact("Bluetooth", "No paired devices — pair the head unit in Android settings first", technical = false)
+            }
+            for (device in bonded) {
+                val name = deviceName(device)
+                host.ui.ActionRow(name, device.address) {
+                    if (!running) {
+                        running = true
+                        result = null
+                        logText = ""
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val sink: (String) -> Unit = { line ->
+                                host.log.log("[Extend] $line")
+                                logText += "$line\n"
+                            }
+                            val transport = WirelessHeadUnitTransport.connect(host.context, device, sink)
+                            val outcome = if (transport.connection == null) {
+                                AapPhoneHandshake.Outcome(false, transport.detail)
+                            } else {
+                                AapPhoneHandshake.run(host.context, ModuleIdentity, transport.connection, sink, host)
+                            }
+                            result = if (outcome.success) "OK: ${outcome.detail}" else "FAIL: ${outcome.detail}"
+                            running = false
+                        }
+                    }
+                }
+            }
+
+            host.ui.SectionLabel("RESULT")
+            if (running) host.ui.Fact("Status", "Running…", technical = false)
+            result?.let { host.ui.Fact("Result", it, technical = false) }
+            if (logText.isNotEmpty()) host.ui.Fact("Log", logText, technical = true)
+            host.ui.Paragraph("The full log is also saved to diagnostics — send a report from Settings after a run.")
+
+            host.ui.SectionLabel("IDENTITY")
+            host.ui.Fact(
+                "Certificate",
+                if (ModuleIdentity.isAvailable()) "bundled" else "MISSING — build with -PincludeAndroidAutoIdentity=true",
+                technical = true
+            )
+        }
+    }
+
+    private fun deviceName(device: BluetoothDevice): String =
+        try { device.name ?: device.address } catch (_: SecurityException) { device.address }
 
     @Composable
     private fun AboutScreen(onBack: () -> Unit) {
@@ -84,6 +173,12 @@ internal class AaFeatures(private val host: MotoHubModuleHost) : ModuleFeatures 
                 ) {
                     // The host opens it; this module never learns what is on screen or how to get there.
                     host.openFeature("android-auto-technical")
+                }
+                host.ui.ActionRow(
+                    title = "External head unit",
+                    description = "Show MOTO-HUB on a Carpuride, Chigee or similar display"
+                ) {
+                    host.openFeature("android-auto-external")
                 }
         }
     }
