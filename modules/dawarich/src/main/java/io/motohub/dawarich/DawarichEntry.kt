@@ -1,0 +1,283 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright (C) 2026 Vincenzo Buonomano.
+// Part of the MOTO-HUB module SDK; see module-api/LICENSE.
+package io.motohub.dawarich
+
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ComposableTarget
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import io.motohub.android.module.ModuleFeature
+import io.motohub.android.module.ModuleFeaturePlacement
+import io.motohub.android.module.ModuleFeatures
+import io.motohub.android.module.ModuleLiveStatus
+import io.motohub.android.module.ModuleManifest
+import io.motohub.android.module.ModuleRideTrack
+import io.motohub.android.module.ModuleUi
+import io.motohub.android.module.MotoHubModule
+import io.motohub.android.module.MotoHubModuleEntry
+import io.motohub.android.module.MotoHubModuleHost
+
+class DawarichEntry : MotoHubModuleEntry {
+    override fun create(host: MotoHubModuleHost): MotoHubModule = DawarichModule(host)
+}
+
+private class DawarichModule(private val host: MotoHubModuleHost) : MotoHubModule {
+
+    // Must agree with motohubModule { } in build.gradle.kts.
+    override val manifest = ModuleManifest(
+        id = "dawarich",
+        version = "0.4.2",
+        contractVersion = 27,
+        entryClass = "io.motohub.dawarich.DawarichEntry",
+        displayName = "Dawarich",
+        description = "Sends your position to your own Dawarich server while you ride."
+    )
+
+    private val tracker = Tracker(host)
+    private val features = DawarichFeatures(host, tracker)
+    private val liveStatus = object : ModuleLiveStatus {
+        override val live = tracker.pill
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : Any> capability(type: Class<T>): T? = when (type) {
+        ModuleFeatures::class.java -> features as T
+        ModuleLiveStatus::class.java -> liveStatus as T
+        else -> null
+    }
+
+    override fun release() = tracker.release()
+}
+
+private class DawarichFeatures(private val host: MotoHubModuleHost, private val tracker: Tracker) : ModuleFeatures {
+
+    override fun features(): List<ModuleFeature> = listOf(
+        ModuleFeature(
+            id = "dawarich-settings",
+            title = "Dawarich",
+            description = "Server, API key and live tracking",
+            placement = ModuleFeaturePlacement.MODULES,
+            screen = { onBack -> Page(onBack) }
+        ),
+        ModuleFeature(
+            id = "dawarich-send-ride",
+            title = "Send to Dawarich",
+            description = "Sends this ride's track to your Dawarich server",
+            placement = ModuleFeaturePlacement.RIDE_ACTION,
+            screen = { onBack -> SendRide(onBack) }
+        )
+    )
+
+    @Composable
+    private fun SendRide(onBack: () -> Unit) {
+        val entry = remember { host.openedFor() }
+        var status by remember { mutableStateOf("") }
+        var busy by remember { mutableStateOf(false) }
+        // Sent whole before: the first tap only asks, the second sends again.
+        var sentBefore by remember { mutableStateOf(entry?.let { tracker.sentRides.get(it.id) }) }
+        var confirming by remember { mutableStateOf(false) }
+        // Rides sent before this module kept a record: the server itself says whether it has them.
+        var onServer by remember { mutableStateOf<Int?>(null) }
+        var checking by remember { mutableStateOf(entry != null && sentBefore == null && tracker.configured) }
+        LaunchedEffect(entry) {
+            if (!checking || entry == null) return@LaunchedEffect
+            onServer = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                tracker.pointsOnServer(entry.dateMillis, entry.dateMillis + entry.durationMillis)
+            }
+            checking = false
+        }
+        host.ui.Screen("Send to Dawarich", onBack) {
+            if (entry == null) {
+                host.ui.Paragraph("Open this from a recorded ride.")
+                return@Screen
+            }
+            host.ui.Fact("Ride", entry.title, false)
+            host.ui.Fact("Distance", String.format("%.1f km", entry.distanceMeters / 1000.0), false)
+            val previous = sentBefore
+            if (previous != null) {
+                host.ui.SectionLabel("ALREADY SENT")
+                host.ui.Fact("Sent on", dateTime(previous.atMillis), false)
+                host.ui.Fact("Points", previous.points.toString(), false)
+                host.ui.Fact("To", previous.server, false)
+                host.ui.Paragraph(
+                    if (previous.server == tracker.serverUrl.trim()) {
+                        "This ride is already on your server. Send it again only if you deleted it there: " +
+                            "points the server already has are ignored."
+                    } else {
+                        "It went to a different server than the one set now. Send it again to put it on this one too."
+                    }
+                )
+            } else if ((onServer ?: 0) > 0) {
+                host.ui.SectionLabel("ALREADY ON YOUR SERVER")
+                host.ui.Fact("Points in this ride's time", onServer.toString(), false)
+                host.ui.Paragraph(
+                    "Your server already has points from this ride, sent earlier or by live tracking. " +
+                        "Send it again only to fill gaps: points the server already has are ignored."
+                )
+            } else {
+                host.ui.Paragraph(
+                    "Fills any gap live tracking left. Points the server already has are ignored, " +
+                        "so sending a ride twice is harmless."
+                )
+            }
+            if (checking) host.ui.Fact("Server", "Checking whether it has this ride…", false)
+            if (!tracker.configured) host.ui.Paragraph("Set the server address and API key on the Dawarich page first.")
+            if (status.isNotEmpty()) host.ui.Fact("Status", status, false)
+            if (confirming) host.ui.Paragraph("Send this ride again?")
+            val askFirst = previous != null || (onServer ?: 0) > 0
+            val label = when {
+                busy -> "Sending…"
+                !askFirst -> "Send"
+                confirming -> "Yes, send it again"
+                else -> "Send again…"
+            }
+            host.ui.PrimaryButton(label, !busy && !checking && tracker.configured) {
+                if (askFirst && !confirming) {
+                    confirming = true
+                    return@PrimaryButton
+                }
+                confirming = false
+                busy = true
+                status = "Reading the ride…"
+                Thread {
+                    try {
+                        val track = host.rides.track(entry, MAX_POINTS)
+                        if (track == null) {
+                            status = "This ride no longer exists."
+                        } else {
+                            val fixes = fixesOf(entry.dateMillis, track)
+                            val result = tracker.sendTrack(fixes) { status = "Sent $it of ${fixes.size}" }
+                            status = result.message
+                            if (result.complete) {
+                                val sent = SentRide(System.currentTimeMillis(), fixes.size, tracker.serverUrl.trim())
+                                tracker.sentRides.mark(entry.id, sent)
+                                sentBefore = sent
+                            }
+                        }
+                    } catch (e: Exception) {
+                        status = "Failed: ${e.message}"
+                    } finally {
+                        busy = false
+                    }
+                }.start()
+            }
+        }
+    }
+
+    private fun dateTime(millis: Long): String =
+        java.text.DateFormat.getDateTimeInstance(java.text.DateFormat.MEDIUM, java.text.DateFormat.SHORT)
+            .format(java.util.Date(millis))
+
+    /** A recorded track as fixes. Times are milliseconds since the first point; the ride starts at [startMillis]. */
+    private fun fixesOf(startMillis: Long, t: ModuleRideTrack): List<Fix> {
+        val out = ArrayList<Fix>(t.latitudes.size)
+        for (i in 0 until t.latitudes.size) {
+            if (t.latitudes[i].isNaN() || t.longitudes[i].isNaN()) continue
+            val kph = t.speedsKph[i]
+            out.add(
+                Fix(
+                    t.latitudes[i], t.longitudes[i], (startMillis + t.timesMillis[i]) / 1000L, -1f,
+                    t.altitudesMeters[i], if (kph.isNaN()) -1f else kph / 3.6f, -1f, -1f, false
+                )
+            )
+        }
+        return out
+    }
+
+    @Composable
+    private fun Page(onBack: () -> Unit) {
+        var url by remember { mutableStateOf(tracker.serverUrl) }
+        var key by remember { mutableStateOf(tracker.apiKey) }
+        var auto by remember { mutableStateOf(tracker.autoTrack) }
+        var manual by remember { mutableStateOf(tracker.manual) }
+        var live by remember { mutableStateOf(tracker.live) }
+        var test by remember { mutableStateOf("") }
+        var refresh by remember { mutableIntStateOf(0) }
+        // The tracker works on its own threads; this page only re-reads it.
+        LaunchedEffect(Unit) {
+            while (true) {
+                kotlinx.coroutines.delay(2000)
+                refresh++
+            }
+        }
+        refresh.let { }
+        host.ui.Screen("Dawarich", onBack) {
+            host.ui.Paragraph(
+                "Sends your GPS track to your own Dawarich server while MOTO-HUB is connected to " +
+                    "the motorcycle. Points wait on the phone until the server has taken them."
+            )
+            host.ui.SectionLabel("SERVER")
+            Field("Address (https://…)", url, false) { url = it; tracker.serverUrl = it; tracker.save() }
+            Field("API key", key, true) { key = it; tracker.apiKey = it; tracker.save() }
+            host.ui.ActionRow("Test connection", "Asks the server whether it accepts this key") {
+                test = "Testing…"
+                Thread { test = tracker.check() }.start()
+            }
+            if (test.isNotEmpty()) host.ui.Fact("Connection", test, false)
+            host.ui.SectionLabel("TRACKING")
+            host.ui.ActionRow(
+                "Track while connected: " + if (auto) "on" else "off",
+                "Follows the GPS whenever MOTO-HUB has a ride session up"
+            ) { auto = !auto; tracker.autoTrack = auto; tracker.save() }
+            host.ui.ActionRow(
+                "Live mode: " + if (live) "on" else "off",
+                if (live) "Each point is sent the moment it arrives" else "Points are sent in batches every 20 seconds"
+            ) { live = !live; tracker.live = live; tracker.save() }
+            host.ui.ActionRow(
+                if (manual) "Stop tracking now" else "Track now",
+                "Ignores the connection and follows the GPS until you stop it"
+            ) { manual = !manual; tracker.manual = manual }
+            host.ui.SectionLabel("STATE")
+            host.ui.Fact("Tracking", if (tracker.tracking) "yes" else "no", false)
+            host.ui.Fact("Location permission", if (tracker.hasPermission) "granted" else "missing: grant it to MOTO-HUB in Android settings", false)
+            host.ui.Fact("Waiting to send", tracker.queued().toString(), false)
+            host.ui.Fact("Sent", tracker.sent.toString(), false)
+            host.ui.Fact("Last upload", tracker.lastUpload, false)
+        }
+    }
+
+    @Composable
+    @ComposableTarget(ModuleUi.UI_APPLIER)
+    private fun Field(label: String, value: String, secret: Boolean, onChange: (String) -> Unit) {
+        var shown by remember { mutableStateOf(!secret) }
+        host.ui.Fact(label, if (secret) (if (shown) "shown" else "hidden") else "", false)
+        Box(
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
+                .border(1.dp, Color(0x80808080), RoundedCornerShape(12.dp)).padding(14.dp)
+        ) {
+            BasicTextField(
+                value = value,
+                onValueChange = onChange,
+                singleLine = true,
+                textStyle = TextStyle(color = LocalContentColor.current, fontSize = 16.sp),
+                cursorBrush = SolidColor(LocalContentColor.current),
+                visualTransformation = if (shown) VisualTransformation.None else PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        if (secret) host.ui.ActionRow(if (shown) "Hide the key" else "Show the key", "") { shown = !shown }
+    }
+}
+
+private const val MAX_POINTS = 100_000
