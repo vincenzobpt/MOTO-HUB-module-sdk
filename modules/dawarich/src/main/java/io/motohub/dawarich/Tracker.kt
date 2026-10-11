@@ -54,23 +54,51 @@ class Tracker(private val host: MotoHubModuleHost) {
     @Volatile var autoTrack = true
     @Volatile var live = true
     @Volatile var manual = false
+    /** Record with the official Dawarich app instead of this module's own GPS follower. */
+    @Volatile var useApp = false
+    // Persisted: the app keeps recording if MOTO-HUB's process dies, and must still be stopped.
+    @Volatile private var appStarted = false
+    // A refused start is not retried every tick; the next ride, or the rider, tries again.
+    @Volatile private var appRefused = false
+    // Stopped by hand during a ride: stays stopped until that ride ends.
+    @Volatile private var held = false
+    val app = DawarichApp(context) {
+        host.log.log(it)
+        android.util.Log.i("MotoHubDawarich", it)
+    }
     @Volatile var lastUpload = "Nothing sent yet"
     @Volatile var lastFixSeconds = 0L
     @Volatile var sent = 0L
     private var intervalMs = FAST_MS
     private var stillSince = 0L
 
+    /** The Ride page's live pill (contract 27): there while recording, by this module or the app; it opens the module page. */
+    val pill = MutableStateFlow<ModuleLiveState?>(null)
+
     init {
         load()
+        if (useApp && appStarted) pill.value = ModuleLiveState("Dawarich", "dawarich-settings")
+        app.onResult = { command, ok ->
+            if (command == DawarichApp.Command.START) {
+                if (ok) {
+                    pill.value = ModuleLiveState("Dawarich", "dawarich-settings")
+                } else {
+                    appStarted = false
+                    appRefused = true
+                    pill.value = null
+                    save()
+                }
+            }
+        }
         worker.scheduleWithFixedDelay({ safely { tick() } }, 3, 5, TimeUnit.SECONDS)
         worker.scheduleWithFixedDelay({ kick() }, 10, 20, TimeUnit.SECONDS)
     }
 
     val configured: Boolean get() = serverUrl.isNotBlank() && apiKey.isNotBlank()
     val tracking: Boolean get() = listener != null
+    /** Recording right now, by this module's GPS follower or by the Dawarich app. */
+    val recording: Boolean get() = if (useApp) appStarted else listener != null
 
-    /** The Ride page's live pill (contract 27): there while the GPS is followed; it opens the module page. */
-    val pill = MutableStateFlow<ModuleLiveState?>(null)
     val hasPermission: Boolean
         get() = context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
@@ -82,11 +110,14 @@ class Tracker(private val host: MotoHubModuleHost) {
         p.setProperty("keyEnc", if (apiKey.isBlank()) "" else Secret.seal(apiKey.trim()))
         p.setProperty("auto", autoTrack.toString())
         p.setProperty("live", live.toString())
+        p.setProperty("app", useApp.toString())
+        p.setProperty("appStarted", appStarted.toString())
         synchronized(lock) { configFile.outputStream().use { p.store(it, null) } }
     }
 
     fun release() {
         stopListening()
+        app.release()
         worker.shutdownNow()
         sender.shutdownNow()
     }
@@ -101,6 +132,8 @@ class Tracker(private val host: MotoHubModuleHost) {
         apiKey = if (sealed.isNotEmpty()) Secret.open(sealed) ?: "" else plain
         autoTrack = p.getProperty("auto", "true") != "false"
         live = p.getProperty("live", "true") != "false"
+        useApp = p.getProperty("app", "false") == "true"
+        appStarted = p.getProperty("appStarted", "false") == "true"
         // The first version kept the key in clear: seal it now and drop the clear copy.
         if (plain.isNotEmpty()) save()
     }
@@ -123,10 +156,57 @@ class Tracker(private val host: MotoHubModuleHost) {
         }
     }
 
+    /** After the rider fixed what the app refused for: try again on the next tick. */
+    fun retryApp() {
+        appRefused = false
+    }
+
+    /** The page's Start: records now, whatever the connection. */
+    fun startNow() {
+        held = false
+        manual = true
+        appRefused = false
+        worker.execute { safely { tick() } }
+    }
+
+    /** The page's Stop: stops now, and for the rest of this ride. The app is told even if we never started it. */
+    fun stopNow() {
+        manual = false
+        held = true
+        worker.execute {
+            safely {
+                if (useApp) stopApp() else stopListening()
+            }
+        }
+    }
+
     private fun tick() {
-        val want = configured && hasPermission && (manual || (autoTrack && host.session.isActive()))
+        val withRide = autoTrack && host.session.isActive()
+        if (!manual && !withRide) held = false
+        val riding = !held && (manual || withRide)
+        if (useApp) {
+            if (listener != null) stopListening()
+            if (!riding) appRefused = false
+            if (riding && !appStarted && !appRefused) {
+                appStarted = true
+                save()
+                app.send(DawarichApp.Command.START)
+            }
+            if (!riding && appStarted) stopApp()
+            return
+        }
+        if (appStarted) stopApp()
+        val want = configured && hasPermission && riding
         if (want && listener == null) startListening()
         if (!want && listener != null) stopListening()
+    }
+
+    private fun stopApp() {
+        appStarted = false
+        save()
+        pill.value = null
+        app.send(DawarichApp.Command.STOP)
+        app.send(DawarichApp.Command.UPLOAD)
     }
 
     private fun startListening() {
