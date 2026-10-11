@@ -16,6 +16,10 @@ class SocketAccessoryConnection(private val socket: Socket) : AccessoryConnectio
     private var output: OutputStream? = null
     private var input: DataInputStream? = null
 
+    /** Why the last receive failed, so a caller can tell a closed peer from a reset one. */
+    @Volatile var lastError: String? = null
+        private set
+
     init {
         try {
             socket.tcpNoDelay = true
@@ -53,6 +57,7 @@ class SocketAccessoryConnection(private val socket: Socket) : AccessoryConnectio
     }
 
     override fun recvBlocking(buf: ByteArray, length: Int, timeout: Int, readFully: Boolean): Int {
+        lastError = null
         val inp = input ?: return -1
         return try {
             try { socket.soTimeout = timeout } catch (_: Exception) {}
@@ -65,6 +70,7 @@ class SocketAccessoryConnection(private val socket: Socket) : AccessoryConnectio
         } catch (e: SocketTimeoutException) {
             0
         } catch (e: IOException) {
+            lastError = "${e.javaClass.simpleName}: ${e.message}"
             -1
         }
     }

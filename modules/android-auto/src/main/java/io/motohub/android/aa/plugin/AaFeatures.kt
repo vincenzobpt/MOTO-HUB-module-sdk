@@ -112,7 +112,10 @@ internal class AaFeatures(private val host: MotoHubModuleHost) : ModuleFeatures 
                             val outcome = if (transport.connection == null) {
                                 AapPhoneHandshake.Outcome(false, transport.detail)
                             } else {
-                                AapPhoneHandshake.run(host.context, ModuleIdentity, transport.connection, sink, host)
+                                AapPhoneHandshake.run(
+                                    host.context, ModuleIdentity, transport.connection, sink, host,
+                                    listenFirstMs = AapPhoneHandshake.WIRELESS_LISTEN_FIRST_MS
+                                )
                             }
                             result = if (outcome.success) "OK: ${outcome.detail}" else "FAIL: ${outcome.detail}"
                             running = false

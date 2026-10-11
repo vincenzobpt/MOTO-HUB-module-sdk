@@ -57,6 +57,13 @@ object AapPhoneHandshake {
     /** Inside the second or so a head unit gives a silent phone before closing the accessory. */
     private const val LISTEN_FIRST_MS = 800
 
+    /**
+     * Over Wi-Fi the head unit opens, and speaking first loses it: a Carpuride met with our
+     * VERSION_REQUEST at 800ms never answered, while the Extend probe, which listened 4s, got the
+     * unit's own request every time (support 7F65-77FA-5586).
+     */
+    const val WIRELESS_LISTEN_FIRST_MS = 4_000
+
     /** Wide enough to span more than one of the head unit's AOA retry cycles (~20s each). */
     private const val SILENT_WATCH_MS = 25_000
 
@@ -80,7 +87,8 @@ object AapPhoneHandshake {
         connection: AccessoryConnection,
         log: (String) -> Unit,
         /** Null stops at service discovery, as the probe did; otherwise the session follows. */
-        host: MotoHubModuleHost? = null
+        host: MotoHubModuleHost? = null,
+        listenFirstMs: Int = LISTEN_FIRST_MS
     ): Outcome {
         val pump = AtomicBoolean(false)
         var pumpThread: Thread? = null
@@ -90,14 +98,14 @@ object AapPhoneHandshake {
             // made the earlier version speak first was our own reader never reading - see
             // UsbAoaAccessoryConnection. A unit that has not spoken in this window still gets our
             // request, so a unit that waits for the phone is covered too.
-            var first = readFrame(connection, LISTEN_FIRST_MS)
+            var first = readFrame(connection, listenFirstMs, log)
             if (first == null) {
                 val request = Messages.versionRequest
                 if (connection.sendBlocking(request, request.size, 2000) < 0) {
                     return Outcome(false, "Could not send VERSION_REQUEST: the accessory stream is closed.")
                 }
-                log("Head unit silent for ${LISTEN_FIRST_MS}ms. Sent VERSION_REQUEST; waiting up to ${LISTEN_MS / 1000}s.")
-                first = readFrame(connection, LISTEN_MS)
+                log("Head unit silent for ${listenFirstMs}ms. Sent VERSION_REQUEST; waiting up to ${LISTEN_MS / 1000}s.")
+                first = readFrame(connection, LISTEN_MS, log)
             }
             if (first == null) {
                 // Keep listening in silence rather than giving up here. aa-proxy-rs - a working
@@ -107,7 +115,7 @@ object AapPhoneHandshake {
                 // asking is not "did it answer us" but "does it ever speak at all", and answering
                 // it needs a window wider than one of its cycles.
                 log("Nothing in ${LISTEN_MS / 1000}s. Listening in silence for ${SILENT_WATCH_MS / 1000}s more.")
-                first = readFrame(connection, SILENT_WATCH_MS)
+                first = readFrame(connection, SILENT_WATCH_MS, log)
                     ?: return Outcome(
                         false,
                         "The head unit put no byte on the wire in " +
@@ -324,10 +332,19 @@ object AapPhoneHandshake {
      * Reads the header with the full deadline and the payload with a short one: a head unit that
      * has begun a frame finishes it promptly, and the long wait is for it to begin one at all.
      */
-    private fun readFrame(connection: AccessoryConnection, timeoutMs: Int): Frame? {
+    /** [why] hears why no frame came, for the reads where that is the question. */
+    private fun readFrame(connection: AccessoryConnection, timeoutMs: Int, why: ((String) -> Unit)? = null): Frame? {
         val header = ByteArray(6)
         val started = SystemClock.elapsedRealtime()
-        if (connection.recvBlocking(header, 6, timeoutMs, true) != 6) return null
+        val got = connection.recvBlocking(header, 6, timeoutMs, true)
+        if (got != 6) {
+            val after = SystemClock.elapsedRealtime() - started
+            why?.invoke(
+                if (got == 0) "No frame: read timed out after ${after}ms."
+                else "No frame: the connection failed after ${after}ms (${(connection as? SocketAccessoryConnection)?.lastError ?: "closed"})."
+            )
+            return null
+        }
         val length = ((header[2].toInt() and 0xFF) shl 8) or (header[3].toInt() and 0xFF)
         val type = ((header[4].toInt() and 0xFF) shl 8) or (header[5].toInt() and 0xFF)
         val payloadLength = (length - MsgType.SIZE).coerceIn(0, Messages.DEF_BUFFER_LENGTH)
