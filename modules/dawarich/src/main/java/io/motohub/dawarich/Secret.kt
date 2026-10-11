@@ -1,6 +1,6 @@
-// SPDX-License-Identifier: Apache-2.0
-// Copyright (C) 2026 Vincenzo Buonomano.
-// Part of the MOTO-HUB module SDK; see module-api/LICENSE.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Copyright (C) 2026 Vincenzo Buonomano and the MOTO-HUB contributors.
+// Part of MOTO-HUB. Free software under the GNU AGPL v3; see LICENSE.
 package io.motohub.dawarich
 
 import android.security.keystore.KeyGenParameterSpec
