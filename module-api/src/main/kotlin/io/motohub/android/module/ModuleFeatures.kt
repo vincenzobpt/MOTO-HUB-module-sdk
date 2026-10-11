@@ -4,6 +4,7 @@
 package io.motohub.android.module
 
 import androidx.compose.runtime.Composable
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * How a module puts its own features into the app.
@@ -89,3 +90,24 @@ class ModuleFeature(
 interface ModuleFeatures {
     fun features(): List<ModuleFeature>
 }
+
+/**
+ * Something a module is doing right now that the rider should be able to see at a glance -
+ * sending the position, recording - drawn by the app as a small animated pill at the top of the
+ * Ride page for as long as [live] holds a value (contract 27). Answered as a capability; a module
+ * with nothing live to show does not answer it.
+ *
+ * The app draws the pill, not the module: every live pill reads as one family wherever it comes
+ * from, and a module cannot fill the Ride page with its own drawing.
+ */
+interface ModuleLiveStatus {
+    /** What is live now, or null while nothing is. Read on the main thread; set from anywhere. */
+    val live: StateFlow<ModuleLiveState?>
+}
+
+class ModuleLiveState(
+    /** The module's own words, short enough for a pill: "Dawarich · live". */
+    val label: String,
+    /** The module's feature the pill opens when tapped, or null when it opens nothing. */
+    val featureId: String? = null
+)

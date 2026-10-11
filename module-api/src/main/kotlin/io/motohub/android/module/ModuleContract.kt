@@ -127,8 +127,11 @@ object MotoHubModuleContract {
      *    that open a module's projects (ModuleRemoteEditing.editors, watchEditors) and sends one there
      *    (send: ModuleRemoteEdit, followed through ModuleRemoteEditState, stopped or left with
      *    ModuleRemoteEditJob). A default method and new types only; the minimum stays at 3.
+     * 27: a live pill on the Ride page. ModuleLiveStatus, a new capability, says what a module is
+     *    doing right now (ModuleLiveState); the app draws it while it lasts. New types only; the
+     *    minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 26
+    const val CONTRACT_VERSION = 27
 
     /**
      * The oldest contract this app can still run.

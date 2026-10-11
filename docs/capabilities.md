@@ -16,6 +16,7 @@ as the Android Auto module does.
 | [`ModuleNavigator`](#the-dashboard-on-someone-elses-screen-modulenavigator) | 7 | a third-party head unit opens MOTO-HUB through the Car App Library |
 | [`ModuleAccessoryBridge`](#usb-accessories-moduleaccessoryprobe-and-moduleaccessorybridge) | 10 | diagnostics bridge a USB head unit to Android Auto |
 | [`ModuleExtensions`](#adding-to-another-module-moduleextensions-and-modulebridge) | 22 | it draws the card of the module you add to, or that module asks `host.modules.extensions()` |
+| [`ModuleLiveStatus`](#something-live-modulelivestatus) | 27 | it draws the Ride page |
 
 Where only one module can serve (the whole-screen projection, navigator), the app takes the
 **first installed** module that answers. That is a deliberate, predictable choice. A dashboard's
@@ -55,7 +56,7 @@ class ModuleFeature(
 | `NONE` | Nowhere. Reached from your own pages with `host.openFeature(id)`. |
 | `RIDE_ACTION` | On a recorded trip's page, as an action on that ride (contract 14). |
 | `ROUTE_ACTION` | On a route's preview, as an action on that route (contract 14). |
-| `TRIPS_HEADER` | A small pill with your `title` at the top of Trips (contract 14). |
+| `TRIPS_HEADER` | A key with your `title` at the top of Trips (contract 14): the way in to what your module **made from the rides**, its own list of them. Not a status light and not a way to your settings: use [`ModuleLiveStatus`](#something-live-modulelivestatus) and `MODULES` for those. |
 
 For the last three, `host.openedFor()` says which ride or route; see
 [rides-and-scene.md](rides-and-scene.md#actions-on-one-ride-or-route).
@@ -260,6 +261,31 @@ to it, and hands your module its two streams (`ModuleAccessoryStreams`: `input`,
 - `bridge(host, streams)`: sit between the accessory and something else and report what passes.
 
 Neither may start a session.
+
+---
+
+## Something live: `ModuleLiveStatus`
+
+For a module that **does something while the rider rides** and should show it: sending the
+position to a server, recording. The app draws a small animated pill at the top of the Ride page
+for as long as your state holds a value, on every page of the Ride tab, with or without a
+session. Tapping it opens the feature you name.
+
+```kotlin
+interface ModuleLiveStatus {                       // a capability, since contract 27
+    val live: StateFlow<ModuleLiveState?>          // null while nothing is live
+}
+
+class ModuleLiveState(
+    val label: String,                             // short: your module's name is usually enough
+    val featureId: String? = null                  // one of your features, opened on a tap
+)
+```
+
+Keep one `MutableStateFlow` and set it from wherever the work starts and stops; any thread will
+do. The app draws the pill itself, the same for every module, so `label` is the only thing you
+choose: the pill already says "live", so do not repeat it. A module that answers
+`ModuleLiveStatus` declares contract **27**, and needs ADV-SOLO 0.1.40 or later.
 
 ---
 

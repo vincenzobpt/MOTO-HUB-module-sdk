@@ -131,7 +131,7 @@ These all come from real failures on real motorcycles.
 
 ## Versioning
 
-`MotoHubModuleContract.CONTRACT_VERSION` (currently **26**) is bumped whenever anything in
+`MotoHubModuleContract.CONTRACT_VERSION` (currently **27**) is bumped whenever anything in
 `io.motohub.android.module` changes shape. The contract **only grows by appending**: new
 capabilities, and new members on interfaces the *app* implements. An older module simply does
 not answer a capability it predates, and never calls a host member it does not know.
@@ -169,5 +169,6 @@ history is in the KDoc of `MotoHubModuleContract`.
 | 24 | `ModuleSceneWeather.AFTER_RAIN`; `ModuleRenderSettings` wet road and reflections, valley mist, low cloud, season, grass, flowers, fences, waterfalls, colour grade | 0.1.34 |
 | 25 | `ModuleExportSpec.RENDER_SPREAD`; `ModuleScene.spreadDevices`; `ModuleRenderServer.kind`, `.spreads`; `ModuleExportJob.renderedOnAll`, `spreadProgress`, `ModuleSpreadDevice` (one film drawn by every ready device at once) | 0.1.34 |
 | 26 | `ModuleSceneHost.remoteEditing`; `ModuleRemoteEditing` (`editors`, `watchEditors`, `send`), `ModuleRemoteEdit`, `ModuleRemoteEditState`, `ModuleRemoteEditJob` (a module's project sent to a paired computer and edited there) | 0.1.36 |
+| 27 | `ModuleLiveStatus`, `ModuleLiveState` (a live pill on the Ride page while a module is doing something) | 0.1.40 |
 
 This repository tags every contract release as `contract-<n>`.

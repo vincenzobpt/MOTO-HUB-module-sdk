@@ -62,7 +62,7 @@ The full walk-through, including how to start your own module, is in
 
 ## Status
 
-The contract is at **version 26**. It only grows by appending, and the app still loads modules
+The contract is at **version 27**. It only grows by appending, and the app still loads modules
 built against contract 3 or later. Contracts 11 to 14 (rides, the 3D scene, ride and route
 actions, the rider's AI) need ADV-SOLO 0.1.29, contract 15 (draft, real-time and H.265 video
 exports) ADV-SOLO 0.1.30, contract 16 (credits in the film's credit roll) ADV-SOLO 0.1.31,
@@ -73,7 +73,7 @@ routing, place search, sights near a road and a flat map, and adding to another 
 (drawing a film on a computer running MOTO-HUB Studio) ADV-SOLO 0.1.33,
 contracts 24 (the weather after the rain) and 25 (one film drawn by every ready device at once)
 ADV-SOLO 0.1.34, contract 26 (a project sent to a paired computer and edited there) ADV-SOLO
-0.1.36; a module
+0.1.36, contract 27 (a live pill on the Ride page) ADV-SOLO 0.1.40; a module
 that does not use them can keep declaring 10 and run on 0.1.25 and later. See [docs/contract.md](docs/contract.md#versioning).
 
 ## Community
