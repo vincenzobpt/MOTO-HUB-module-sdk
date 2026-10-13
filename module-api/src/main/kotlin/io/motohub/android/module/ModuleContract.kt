@@ -130,8 +130,10 @@ object MotoHubModuleContract {
      * 27: a live pill on the Ride page. ModuleLiveStatus, a new capability, says what a module is
      *    doing right now (ModuleLiveState); the app draws it while it lasts. New types only; the
      *    minimum stays at 3.
+     * 28: only the ridden line. ModuleScene.setTrackAhead hides the faint track still ahead of the
+     *    rider. A default method only; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 27
+    const val CONTRACT_VERSION = 28
 
     /**
      * The oldest contract this app can still run.

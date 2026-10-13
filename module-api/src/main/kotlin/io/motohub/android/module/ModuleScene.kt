@@ -271,6 +271,13 @@ interface ModuleScene {
     fun setBasicMode(basic: Boolean) {}
 
     /**
+     * Whether the track still ahead of the rider shows, faint and dashed, while the look draws it as
+     * it goes ([ModuleSceneLook.progressiveTrack]) (contract 28). Off, only the ridden line is drawn.
+     * On by default; a whole track ignores it.
+     */
+    fun setTrackAhead(shown: Boolean) {}
+
+    /**
      * The computers the rider has set up to draw films (contract 23), as the app knows them now:
      * the ones paired with this phone, found or not, and the ones found on the network that are not
      * paired yet. Empty when there is none, and on an app that does not do this. The status of each
