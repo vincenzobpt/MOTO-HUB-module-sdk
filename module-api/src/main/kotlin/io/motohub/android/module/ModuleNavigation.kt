@@ -24,8 +24,37 @@ data class ModuleGuidance(
     val timeToManeuverSeconds: Int = -1,
     val distanceRemainingMeters: Int = -1,
     val timeToArrivalSeconds: Long = -1L,
-    val estimatedTimeAtArrival: String = ""
-)
+    val estimatedTimeAtArrival: String = "",
+    /** The turn after the next one, same vocabulary as [maneuverType]; -1 when not sent. */
+    val thenManeuverType: Int = -1,
+    /** Lanes at the next turn, left to right; empty when the module has none. */
+    val lanes: List<ModuleGuidanceLane> = emptyList()
+) {
+    /**
+     * The shape modules built for contract 28 and older construct. Their dex calls exactly this
+     * signature, so it must keep existing for them to link: removing it is a NoSuchMethodError
+     * on the first turn of a ride.
+     */
+    constructor(
+        active: Boolean,
+        rerouting: Boolean,
+        maneuverType: Int,
+        roundaboutExitNumber: Int,
+        road: String,
+        distanceToManeuverMeters: Int,
+        timeToManeuverSeconds: Int,
+        distanceRemainingMeters: Int,
+        timeToArrivalSeconds: Long,
+        estimatedTimeAtArrival: String
+    ) : this(
+        active, rerouting, maneuverType, roundaboutExitNumber, road, distanceToManeuverMeters,
+        timeToManeuverSeconds, distanceRemainingMeters, timeToArrivalSeconds, estimatedTimeAtArrival,
+        -1, emptyList()
+    )
+}
+
+/** One lane at the next turn: the arrow to draw ([ModuleGuidance.maneuverType] vocabulary) and whether to take it. */
+data class ModuleGuidanceLane(val maneuverType: Int, val recommended: Boolean)
 
 fun interface ModuleGuidanceListener {
     fun onGuidance(guidance: ModuleGuidance)

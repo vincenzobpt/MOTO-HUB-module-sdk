@@ -132,8 +132,14 @@ object MotoHubModuleContract {
      *    minimum stays at 3.
      * 28: only the ridden line. ModuleScene.setTrackAhead hides the faint track still ahead of the
      *    rider. A default method only; the minimum stays at 3.
+     * 29: the turn after the next one and the lanes. ModuleGuidance.thenManeuverType and .lanes
+     *    (ModuleGuidanceLane), appended to the constructor; the contract-28 constructor is kept
+     *    as a secondary one so older modules still link. The minimum stays at 3.
+     * 30: pins on the NAV map. ModuleMapLayer, a new capability, gives the pins near the map's centre
+     *    (ModuleMapLayerPin) and hears a tap on one; the app draws them and lists the layer in the
+     *    map's layers menu. New types only; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 28
+    const val CONTRACT_VERSION = 30
 
     /**
      * The oldest contract this app can still run.
@@ -337,6 +343,9 @@ interface MotoHubModule {
 /**
  * Implemented by the class the manifest names in [ModuleManifest.entryClass]. Must have a public
  * no-argument constructor: it is built reflectively, and it is the only class in a module that is.
+ *
+ * [create] may run on any thread, usually a background one at app start: build objects there, and
+ * leave anything that needs the main thread for later.
  */
 interface MotoHubModuleEntry {
     fun create(host: MotoHubModuleHost): MotoHubModule
