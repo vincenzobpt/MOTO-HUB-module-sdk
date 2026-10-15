@@ -24,13 +24,14 @@ particular module: it asks for *capabilities* by interface and draws whatever th
 | [`modules/dashcam/`](modules/dashcam) | The complete source of the Dashcam module: a Wi-Fi dashcam on the phone and in the dashboard's map panel. | **AGPL-3.0** |
 | [`modules/flyby-route-simulator/`](modules/flyby-route-simulator) | The complete source of the Flyby Route Simulator: plans a route and rides it virtually. The reference for rides, routing, places, maps and extensions; see [docs/example-route-simulator.md](docs/example-route-simulator.md). | **AGPL-3.0** |
 | [`modules/dawarich/`](modules/dawarich) | The complete source of the Dawarich module: sends your position to your own [Dawarich](https://dawarich.app) server while you ride, and sends recorded rides on request. | **AGPL-3.0** |
+| [`modules/immich/`](modules/immich) | The complete source of the Immich module: the photos of your own [Immich](https://immich.app) server as pins on the NAV map, opened full screen with everything Immich knows about them. The reference for map layers (contract 30). | **AGPL-3.0** |
 | [`docs/`](docs) | The developer guide. | Apache-2.0 |
 
 The contract and tooling are Apache-2.0 so that you can write a module under any licence you
 like, including a closed one. The Android Auto module is AGPL-3.0 because it is derived from
 [headunit-revived](https://github.com/andreknieriem/headunit-revived); its source is published
 here to meet that licence, and each published version of it has a matching tag in this repository.
-The Dashcam, Flyby Route Simulator and Dawarich modules are AGPL-3.0 by choice, and are tagged the same way.
+The Dashcam, Flyby Route Simulator, Dawarich and Immich modules are AGPL-3.0 by choice, and are tagged the same way.
 
 ## Quick start
 
