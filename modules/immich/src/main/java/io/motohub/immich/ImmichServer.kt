@@ -13,6 +13,7 @@ import java.net.URL
 import java.time.Instant
 import java.util.Properties
 import java.util.concurrent.Semaphore
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -151,7 +152,8 @@ class ImmichServer(private val host: MotoHubModuleHost) {
             filter = filter.copy(albumId = null, albumName = null)
             save()
         }
-        imageDir.deleteRecursively()
+        // Up to IMAGE_CACHE_BYTES of files: not on the main thread, where a keystroke calls this.
+        Thread({ imageDir.deleteRecursively() }, "immich-forget").start()
     }
 
     /** Asks the server who the key belongs to: null when it answered, or why not. */
@@ -322,8 +324,11 @@ class ImmichServer(private val host: MotoHubModuleHost) {
         return PhotoDetails.parse(a, albums)
     }
 
-    /** A "thumbnail" or "preview" image of a photo, from the disk when it was fetched before. */
-    fun image(id: String, size: String): ByteArray? {
+    /**
+     * A "thumbnail" or "preview" image of a photo, from the disk when it was fetched before.
+     * [wanted] false stops the wait for a free connection: the tile scrolled away.
+     */
+    fun image(id: String, size: String, wanted: () -> Boolean = { true }): ByteArray? {
         if (!SAFE_ID.matches(id)) return null
         val file = File(imageDir, "$size/$id.img")
         if (file.isFile) runCatching {
@@ -332,7 +337,7 @@ class ImmichServer(private val host: MotoHubModuleHost) {
             file.setLastModified(System.currentTimeMillis())
             return bytes
         }
-        val bytes = get("/api/assets/$id/thumbnail?size=$size")
+        val bytes = get("/api/assets/$id/thumbnail?size=$size", wanted)
         runCatching {
             file.parentFile?.mkdirs()
             val tmp = File(file.parentFile, "$id.tmp")
@@ -375,10 +380,11 @@ class ImmichServer(private val host: MotoHubModuleHost) {
         if (!tmp.renameTo(file)) throw IOException("Could not save ${file.name}.")
     }
 
-    private fun get(path: String): ByteArray {
+    private fun get(path: String, wanted: () -> Boolean = { true }): ByteArray {
         val root = base ?: throw IOException("The address must start with https://")
         if (apiKey.any { it.isWhitespace() || it.code < 0x21 || it.code > 0x7E }) throw IOException("The key has characters a key cannot have.")
-        gate.acquire()
+        // Polled, not a plain acquire: a flung grid must not leave threads parked for tiles no one sees.
+        while (!gate.tryAcquire(200, TimeUnit.MILLISECONDS)) if (!wanted()) throw IOException("No longer wanted.")
         try {
             val c = URL(root + path).openConnection() as HttpURLConnection
             c.connectTimeout = 10_000

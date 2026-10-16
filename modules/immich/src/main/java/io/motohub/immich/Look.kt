@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.motohub.android.module.ModuleUi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
 
 /** The module's colours: Immich's indigo on a dark ground, the same on any app theme. */
@@ -178,8 +179,10 @@ internal object Bitmaps {
     suspend fun load(server: ImmichServer, id: String, size: String, maxSide: Int): ImageBitmap? {
         held(id, size)?.let { return it }
         return withContext(Dispatchers.IO) {
+            // Cancelled (the tile left the screen), the fetch gives up its place in the queue.
+            val job = coroutineContext[Job]
             runCatching {
-                val bytes = server.image(id, size) ?: return@runCatching null
+                val bytes = server.image(id, size) { job?.isActive != false } ?: return@runCatching null
                 val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
                 BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
                 val sample = sampleFor(bounds.outWidth, bounds.outHeight, maxSide)

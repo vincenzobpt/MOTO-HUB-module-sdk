@@ -95,17 +95,20 @@ internal fun SettingsPage(host: MotoHubModuleHost, server: ImmichServer, onBack:
             Column(Modifier.fillMaxWidth().card().padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                 Field("Address", "https://photos.example.com", url, false) {
                     url = it
+                    val before = server.base
                     server.serverUrl = it
+                    // Only another server makes what is held stale; a trailing slash does not.
+                    if (server.base != before) server.forget()
                     server.save()
-                    server.forget()
                     tested = false
                     version++
                 }
                 Field("API key", "Paste the key made in Immich", key, true) {
                     key = it
+                    val before = server.apiKey.trim()
                     server.apiKey = it
+                    if (it.trim() != before) server.forget()
                     server.save()
-                    server.forget()
                     tested = false
                     version++
                 }
