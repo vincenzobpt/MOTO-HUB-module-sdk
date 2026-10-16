@@ -10,7 +10,7 @@ plugins {
 
 motohubModule {
     id = "dawarich"
-    version = "0.6.0"
+    version = "0.6.1"
     entryClass = "io.motohub.dawarich.DawarichEntry"
     // RIDE_ACTION (contract 14), host.rides.track and the live pill (ModuleLiveStatus, contract 27).
     contractVersion = 27
