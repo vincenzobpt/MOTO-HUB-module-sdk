@@ -152,6 +152,16 @@ internal fun GlassKey(symbol: String, lit: Boolean, onClick: () -> Unit) {
 }
 
 /**
+ * The power-of-two step that brings the long side to at most [maxSide]. A 50 MP photo left at
+ * 8160 px is a 200 MB bitmap, over what Android will draw, and the crash takes the whole app.
+ */
+internal fun sampleFor(width: Int, height: Int, maxSide: Int): Int {
+    var sample = 1
+    while (maxOf(width, height) / sample > maxSide) sample *= 2
+    return sample
+}
+
+/**
  * Decoded images, a few at a time: swiping back to the photo just seen must not fetch and decode
  * it again, and a phone's memory is not a disk cache.
  */
@@ -172,8 +182,7 @@ internal object Bitmaps {
                 val bytes = server.image(id, size) ?: return@runCatching null
                 val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
                 BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
-                var sample = 1
-                while (maxOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= maxSide) sample *= 2
+                val sample = sampleFor(bounds.outWidth, bounds.outHeight, maxSide)
                 BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().apply { inSampleSize = sample })
                     ?.asImageBitmap()
             }.getOrNull()?.also { cache.put("$size/$id", it) }

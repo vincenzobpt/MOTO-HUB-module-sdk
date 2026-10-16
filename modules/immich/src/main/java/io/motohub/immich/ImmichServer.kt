@@ -109,6 +109,9 @@ class ImmichServer(private val host: MotoHubModuleHost) {
             null
         } catch (e: IOException) {
             e.message ?: "No answer."
+        } catch (e: org.json.JSONException) {
+            // A web page where the server should be - a typo, a parked domain, a login wall.
+            "This address answers, but not as an Immich server."
         }
     }
 
