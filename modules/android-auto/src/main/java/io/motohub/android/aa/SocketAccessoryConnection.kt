@@ -40,8 +40,6 @@ class SocketAccessoryConnection(private val socket: Socket) : AccessoryConnectio
 
     override val isConnected: Boolean get() = socket.isConnected && !socket.isClosed
 
-    override fun connect(): Boolean = socket.isConnected
-
     override fun sendBlocking(buf: ByteArray, length: Int, timeout: Int): Int {
         val out = output ?: return -1
         return try {

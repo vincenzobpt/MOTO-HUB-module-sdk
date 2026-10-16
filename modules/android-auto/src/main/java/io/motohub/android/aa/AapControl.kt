@@ -93,11 +93,6 @@ internal class AapControlMedia(private val aapTransport: AapTransport) : AapCont
         AaLog.i("Media Sink Stop Request: " + Channel.name(channel))
         AaAudioTap.stopped(channel)
         if (channel == Channel.ID_VID) {
-            if (aapTransport.ignoreNextStopRequest) {
-                AaLog.i("Video Sink Stopped -> Ignored (Forced Keyframe Request)")
-                aapTransport.ignoreNextStopRequest = false
-                return 0
-            }
             AaLog.i("Video Sink Stopped -> Normal background/transition behavior")
         }
         return 0
@@ -265,23 +260,12 @@ internal class AapControlService(private val aapTransport: AapTransport) : AapCo
     }
 }
 
-internal class AapControlGateway(
-    private val aapTransport: AapTransport,
-    private val serviceControl: AapControl,
-    private val mediaControl: AapControl,
-    private val touchControl: AapControl,
-    private val sensorControl: AapControl,
-    private val navigationControl: AapControl
-) : AapControl {
-
-    constructor(aapTransport: AapTransport) : this(
-        aapTransport,
-        AapControlService(aapTransport),
-        AapControlMedia(aapTransport),
-        AapControlTouch(aapTransport),
-        AapControlSensor(aapTransport),
-        AapControlNavigation()
-    )
+internal class AapControlGateway(private val aapTransport: AapTransport) : AapControl {
+    private val serviceControl: AapControl = AapControlService(aapTransport)
+    private val mediaControl: AapControl = AapControlMedia(aapTransport)
+    private val touchControl: AapControl = AapControlTouch(aapTransport)
+    private val sensorControl: AapControl = AapControlSensor(aapTransport)
+    private val navigationControl: AapControl = AapControlNavigation()
 
     override fun execute(message: AapMessage): Int {
         if (message.type == 7) {

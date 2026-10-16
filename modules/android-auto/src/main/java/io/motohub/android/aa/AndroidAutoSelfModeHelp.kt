@@ -231,11 +231,6 @@ object AndroidAutoSelfModeHelp {
             (major == FIRST_BROKEN_MAJOR && minor >= FIRST_BROKEN_MINOR)
     }
 
-    fun isMessageAboutSelfMode(message: String?): Boolean =
-        message == NEVER_CONNECTED_MESSAGE ||
-            message == ACCEPTED_BUT_SILENT_MESSAGE ||
-            message == ACCEPTED_BUT_SILENT_ON_CLOSED_RELEASE_MESSAGE
-
     /**
      * Opens Android Auto's settings, falling back to its App info page: the settings activity is
      * an internal component and may stop being launchable, exactly as the wireless-startup one did.

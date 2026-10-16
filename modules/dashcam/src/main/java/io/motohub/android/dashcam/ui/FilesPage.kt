@@ -42,6 +42,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.motohub.android.dashcam.DashcamController
+import io.motohub.android.dashcam.protocol.Answers
 import io.motohub.android.dashcam.protocol.CameraFile
 import io.motohub.android.dashcam.protocol.CameraFolder
 import io.motohub.android.module.ModuleUi
@@ -110,7 +111,8 @@ internal fun FilesPage(controller: DashcamController, startLocal: Boolean, open:
             val tiles: List<Tile>? = if (folder == null) {
                 remember(localVersion) { controller.localFiles() }.map { Tile(null, it, false) }
             } else files?.let { list ->
-                val writing = if (state.status?.recording == true)
+                // Only the loop folder, always the first: an event or locked clip is finished when it lands there.
+                val writing = if (state.status?.recording == true && folder == folders.firstOrNull())
                     list.filter { !it.photo }.maxByOrNull { it.createdMillis }?.path else null
                 list.map { Tile(it, null, it.path == writing) }
             }
@@ -164,7 +166,7 @@ private fun FileTile(tile: Tile, saving: Float?, onClick: () -> Unit) {
     val camera = tile.camera
     val local = tile.local
     val name = camera?.name ?: local?.name.orEmpty()
-    val photo = camera?.photo ?: name.substringAfterLast('.').lowercase(Locale.ROOT).let { it == "jpg" || it == "jpeg" || it == "png" }
+    val photo = camera?.photo ?: Answers.isPhoto(name)
     val created = camera?.createdMillis?.takeIf { it > 0 } ?: local?.lastModified() ?: 0L
     val size = camera?.sizeBytes ?: local?.length() ?: 0L
     Column(Modifier.fillMaxWidth().alpha(if (tile.writing) 0.85f else 1f).clip(RoundedCornerShape(12.dp)).clickable(enabled = !tile.writing, onClick = onClick),

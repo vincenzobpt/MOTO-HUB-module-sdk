@@ -30,7 +30,6 @@ import java.util.concurrent.atomic.AtomicLong
  */
 object AapProxyBridge {
 
-    private const val HEAD_UNIT_SERVER_PORT = 5277
     private const val CONNECT_TIMEOUT_MS = 5_000
     private const val READ_TIMEOUT_MS = 1_000
 
@@ -58,17 +57,17 @@ object AapProxyBridge {
     fun run(streams: ModuleAccessoryStreams, log: (String) -> Unit): Outcome {
         val socket = try {
             Socket().apply {
-                connect(InetSocketAddress("127.0.0.1", HEAD_UNIT_SERVER_PORT), CONNECT_TIMEOUT_MS)
+                connect(InetSocketAddress("127.0.0.1", AaReceiver.HEAD_UNIT_SERVER_PORT), CONNECT_TIMEOUT_MS)
                 tcpNoDelay = true
             }
         } catch (e: Exception) {
             return Outcome(
                 false,
-                "Could not reach Android Auto's head unit server on :$HEAD_UNIT_SERVER_PORT " +
+                "Could not reach Android Auto's head unit server on :${AaReceiver.HEAD_UNIT_SERVER_PORT} " +
                     "(${e.message}). Start it from Android Auto's developer settings first."
             )
         }
-        log("Connected to Android Auto's head unit server on :$HEAD_UNIT_SERVER_PORT.")
+        log("Connected to Android Auto's head unit server on :${AaReceiver.HEAD_UNIT_SERVER_PORT}.")
 
         val running = AtomicBoolean(true)
         val phoneToUnit = AtomicLong(0)

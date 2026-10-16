@@ -41,7 +41,17 @@ object WirelessHeadUnitTransport {
     private const val TCP_RETRIES = 5
     private const val TCP_RETRY_BACKOFF_MS = 1_000L
 
-    class Result(val connection: AccessoryConnection?, val detail: String)
+    class Result(
+        val connection: AccessoryConnection?,
+        val detail: String,
+        private val releaseWifi: () -> Unit = {}
+    ) {
+        /** Closes the socket and drops the Wi-Fi request, or every run leaves both behind. */
+        fun close() {
+            try { connection?.disconnect() } catch (_: Exception) {}
+            releaseWifi()
+        }
+    }
 
     fun connect(context: Context, targetDevice: BluetoothDevice, log: (String) -> Unit): Result {
         log("=== Wireless head unit transport ===")
@@ -63,10 +73,16 @@ object WirelessHeadUnitTransport {
             val credentials = wppResult.credentials
 
             log("--- Wi-Fi join ---")
-            val network = joinWifi(context, credentials, log)
-            if (network == null) {
+            val joined = joinWifi(context, credentials, log)
+            if (joined == null) {
                 wpp.sendConnectStatus(false)
                 return Result(null, "Wi-Fi join failed for ssid=${credentials.ssid}.")
+            }
+            val (network, wifiCallback) = joined
+            // The callback holds the head unit's Wi-Fi up; it must be unregistered once we are done.
+            val releaseWifi = {
+                val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                try { cm.unregisterNetworkCallback(wifiCallback) } catch (_: Exception) {}
             }
             wpp.sendConnectStatus(true)
             log("Wi-Fi joined. network=$network")
@@ -76,8 +92,9 @@ object WirelessHeadUnitTransport {
             log("--- TCP to ${endpoint.ipAddress}:${endpoint.port} ---")
             val socket = connectTcp(context, network, endpoint, log)
                 ?: return Result(null, "TCP connect to ${endpoint.ipAddress}:${endpoint.port} failed. " +
-                    "If the log shows EPERM, an always-on VPN with \"Block connections without VPN\" is blocking it — turn that off and retry.")
-            return Result(SocketAccessoryConnection(socket), "Connected to ${endpoint.ipAddress}:${endpoint.port}.")
+                    "If the log shows EPERM, an always-on VPN with \"Block connections without VPN\" is blocking it — turn that off and retry.",
+                    releaseWifi)
+            return Result(SocketAccessoryConnection(socket), "Connected to ${endpoint.ipAddress}:${endpoint.port}.", releaseWifi)
         } finally {
             try { bt.close() } catch (_: Exception) {}
         }
@@ -122,7 +139,11 @@ object WirelessHeadUnitTransport {
 
     private class WifiVariant(val label: String, val applicable: Boolean, val configure: (WifiNetworkSpecifier.Builder) -> Unit)
 
-    private fun joinWifi(context: Context, credentials: WppCredentials, log: (String) -> Unit): Network? {
+    private fun joinWifi(
+        context: Context,
+        credentials: WppCredentials,
+        log: (String) -> Unit
+    ): Pair<Network, ConnectivityManager.NetworkCallback>? {
         val hasKey = credentials.key.isNotEmpty()
         val hasBssid = credentials.bssid.isNotEmpty() && credentials.bssid != "00:00:00:00:00:00"
         val variants = buildList {
@@ -138,10 +159,10 @@ object WirelessHeadUnitTransport {
 
         for (variant in variants) {
             log("Wi-Fi try: ${variant.label} (ssid=${credentials.ssid})")
-            val network = joinWifiOnce(context, credentials, variant, log)
-            if (network != null) {
+            val joined = joinWifiOnce(context, credentials, variant, log)
+            if (joined != null) {
                 log("Wi-Fi joined via ${variant.label}.")
-                return network
+                return joined
             }
         }
         return null
@@ -153,7 +174,12 @@ object WirelessHeadUnitTransport {
         }
     }
 
-    private fun joinWifiOnce(context: Context, credentials: WppCredentials, variant: WifiVariant, log: (String) -> Unit): Network? {
+    private fun joinWifiOnce(
+        context: Context,
+        credentials: WppCredentials,
+        variant: WifiVariant,
+        log: (String) -> Unit
+    ): Pair<Network, ConnectivityManager.NetworkCallback>? {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val builder = WifiNetworkSpecifier.Builder().setSsid(credentials.ssid)
         try {
@@ -174,11 +200,13 @@ object WirelessHeadUnitTransport {
         }
         cm.requestNetwork(request, callback)
         val joined = try { latch.await(WIFI_JOIN_TIMEOUT_MS, TimeUnit.MILLISECONDS) } catch (_: InterruptedException) { false }
-        if (networkRef.get() == null) {
+        val network = networkRef.get()
+        if (network == null) {
             if (!joined) log("Wi-Fi ${variant.label}: timed out after ${WIFI_JOIN_TIMEOUT_MS}ms")
             try { cm.unregisterNetworkCallback(callback) } catch (_: Exception) {}
+            return null
         }
-        return networkRef.get()
+        return network to callback
     }
 
     // --- TCP ---

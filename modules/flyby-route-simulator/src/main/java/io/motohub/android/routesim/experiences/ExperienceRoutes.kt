@@ -11,10 +11,9 @@ import io.motohub.android.module.ModuleRouteResult
 import io.motohub.android.module.ModuleRouting
 import io.motohub.android.module.ModuleSightKind
 import io.motohub.android.module.ModuleSights
-import io.motohub.android.module.MotoHubModuleHost
 import io.motohub.android.routesim.core.CoreStrings
+import io.motohub.android.routesim.core.RideGenerator
 import io.motohub.android.routesim.core.Stop
-import io.motohub.android.routesim.sim.LatLng
 import java.io.File
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.roundToInt
@@ -74,8 +73,6 @@ class ExperienceRoutes(
     storageDir: File? = null,
     private val clock: () -> Long = { System.currentTimeMillis() },
 ) {
-
-    constructor(host: MotoHubModuleHost) : this(host.routing, host.sights)
 
     private val diskCache: SightsDiskCache? = storageDir?.let { SightsDiskCache(it, clock) }
 
@@ -244,7 +241,7 @@ class ExperienceRoutes(
             return StopsOutcome.Failed(CoreStrings.ROUTE_FAILED, ModuleRouteError.OTHER)
         }
         val meters = if (routed.distanceMeters > 0.0 && !routed.distanceMeters.isNaN()) routed.distanceMeters
-        else polylineLengthM(routed.latitudes, routed.longitudes)
+        else RideGenerator.polylineLength(routed.latitudes, routed.longitudes)
         val seconds = if (routed.durationSeconds > 0.0 && !routed.durationSeconds.isNaN()) routed.durationSeconds
         else meters / (FALLBACK_KPH / 3.6)
         return StopsOutcome.Routed(routed.latitudes, routed.longitudes, meters / 1000.0, seconds / 60.0)
@@ -510,12 +507,6 @@ class ExperienceRoutes(
         internal fun thinIndices(size: Int, max: Int): IntArray {
             if (size <= max) return IntArray(size) { it }
             return IntArray(max) { (it.toLong() * (size - 1) / (max - 1)).toInt() }
-        }
-
-        private fun polylineLengthM(lats: DoubleArray, lons: DoubleArray): Double {
-            var sum = 0.0
-            for (i in 0 until lats.size - 1) sum += LatLng(lats[i], lons[i]).distanceTo(LatLng(lats[i + 1], lons[i + 1]))
-            return sum
         }
     }
 }

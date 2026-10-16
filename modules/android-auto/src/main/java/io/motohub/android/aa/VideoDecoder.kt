@@ -17,10 +17,6 @@ import android.view.Surface
 import java.nio.ByteBuffer
 import java.util.Locale
 
-interface VideoDimensionsListener {
-    fun onVideoDimensionsChanged(width: Int, height: Int)
-}
-
 /**
  * Verdict on a decoder that has stopped producing output while input keeps arriving.
  *
@@ -104,7 +100,6 @@ class VideoDecoder {
     @Volatile var fallbackWidth = 0
     @Volatile var fallbackHeight = 0
 
-    var dimensionsListener: VideoDimensionsListener? = null
     var onFpsChanged: ((Int) -> Unit)? = null
     private var frameCount = 0
     private var lastFpsLogTime = 0L
@@ -120,9 +115,6 @@ class VideoDecoder {
     /** Invoked when the decoder must be re-primed — the transport requests a fresh keyframe. */
     var onDecoderError: (() -> Unit)? = null
 
-    val videoWidth: Int get() = mWidth
-    val videoHeight: Int get() = mHeight
-
     private fun handleOutputFormatChange(format: MediaFormat) {
         AaLog.i("Output Format Changed: $format")
         val newWidth = try { format.getInteger(MediaFormat.KEY_WIDTH) } catch (e: Exception) { mWidth }
@@ -131,7 +123,6 @@ class VideoDecoder {
             AaLog.i("Video dimensions changed via format: ${newWidth}x$newHeight")
             mWidth = newWidth
             mHeight = newHeight
-            dimensionsListener?.onVideoDimensionsChanged(mWidth, mHeight)
         }
         try { codec?.setVideoScalingMode(MediaCodec.VIDEO_SCALING_MODE_SCALE_TO_FIT) } catch (e: Exception) {}
     }
@@ -196,7 +187,6 @@ class VideoDecoder {
                         AaLog.i("Fallback to negotiated dimensions: ${fallbackWidth}x$fallbackHeight")
                         mWidth = fallbackWidth
                         mHeight = fallbackHeight
-                        dimensionsListener?.onVideoDimensionsChanged(mWidth, mHeight)
                     }
                 }
 
@@ -258,7 +248,6 @@ class VideoDecoder {
                         if (mWidth != it.width || mHeight != it.height) {
                             AaLog.i("H.264 SPS parsed: ${it.width}x${it.height}")
                             mWidth = it.width; mHeight = it.height
-                            dimensionsListener?.onVideoDimensionsChanged(mWidth, mHeight)
                         }
                     }
                 } catch (e: Exception) { AaLog.e("Failed to parse SPS data", e) }
@@ -299,6 +288,8 @@ class VideoDecoder {
             AaLog.i("Codec initialized: $bestCodec")
         } catch (e: Exception) {
             AaLog.e("Failed to start decoder", e)
+            // The next frame retries start(): release the half-built codec or each retry leaks one.
+            try { codec?.release() } catch (_: Exception) {}
             codec = null; running = false
         }
     }

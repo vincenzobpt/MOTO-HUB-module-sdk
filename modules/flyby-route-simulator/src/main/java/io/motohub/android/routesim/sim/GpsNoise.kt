@@ -16,6 +16,9 @@ class GpsNoise(private val rng: Random) {
     // Unit-variance AR(1) processes, scaled by the current sigma on output.
     private var zEast = rng.nextGaussian()
     private var zNorth = rng.nextGaussian()
+    // The same, lagged ~1 s: a fresh random step every tick made the heading the host derives from positions jitter.
+    private var sEast = zEast
+    private var sNorth = zNorth
     private var sigma = Double.NaN
 
     // Multipath wander burst: age < 0 means none active.
@@ -41,6 +44,9 @@ class GpsNoise(private val rng: Random) {
         val innov = sqrt(1.0 - phi * phi)
         zEast = phi * zEast + innov * rng.nextGaussian()
         zNorth = phi * zNorth + innov * rng.nextGaussian()
+        val lag = 1.0 - exp(-dtS / POS_SMOOTH_S)
+        sEast += (zEast - sEast) * lag
+        sNorth += (zNorth - sNorth) * lag
         sigma += (sigmaTarget - sigma) * (1.0 - exp(-dtS / SIGMA_BLEND_TAU_S))
 
         // Wander bursts: Poisson arrivals, shaped like t*exp(-t/tau) so they build and fade slowly.
@@ -52,7 +58,8 @@ class GpsNoise(private val rng: Random) {
                 wanderAgeS = -1.0
             } else {
                 val x = wanderAgeS / WANDER_TAU_S
-                val env = x * exp(1.0 - x) // peak 1.0 at x = 1
+                val rise = x * exp(1.0 - x) // peak 1.0 at x = 1
+                val env = rise * rise // squared: the burst starts with no slope instead of its steepest
                 wanderE = wanderAmpM * env * sin(wanderDirRad)
                 wanderN = wanderAmpM * env * cos(wanderDirRad)
             }
@@ -81,7 +88,7 @@ class GpsNoise(private val rng: Random) {
         hdop = hdopMean + (hdop - hdopMean) * hPhi + HDOP_SIGMA * sqrt(1.0 - hPhi * hPhi) * rng.nextGaussian()
         hdop = hdop.coerceIn(HDOP_MIN, HDOP_MAX)
 
-        val fix = compose(zEast * sigma + wanderE, zNorth * sigma + wanderN)
+        val fix = compose(sEast * SMOOTH_GAIN * sigma + wanderE, sNorth * SMOOTH_GAIN * sigma + wanderN)
         last = fix
         return fix
     }
@@ -93,6 +100,9 @@ class GpsNoise(private val rng: Random) {
 
     private companion object {
         const val POS_TAU_S = 25.0
+        const val POS_SMOOTH_S = 1.0
+        // The lag takes the spread down by sqrt(TAU / (TAU + SMOOTH)); this puts it back.
+        val SMOOTH_GAIN = sqrt(1.0 + POS_SMOOTH_S / POS_TAU_S)
         const val SIGMA_MOVING_M = 2.0
         const val SIGMA_STATIONARY_M = 1.2
         const val SIGMA_BLEND_TAU_S = 5.0

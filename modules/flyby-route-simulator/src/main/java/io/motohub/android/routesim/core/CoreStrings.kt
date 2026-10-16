@@ -15,6 +15,7 @@ internal object CoreStrings {
     const val NAMING_PLACES = "Naming the start and the destination…"
     const val ROUTE_EMPTY = "The route has no length. Move the start or the destination."
     const val ROUTE_FAILED = "The route could not be planned."
+    const val CROSSES_180 = "Routes across the 180th meridian cannot be simulated yet."
     const val NO_NETWORK = "No internet connection. Planning a route needs one."
     const val RATE_LIMITED = "The routing server is busy. Wait a minute and try again."
     const val NO_API_KEY = "Routing needs an API key. Add yours in the app's navigation settings."

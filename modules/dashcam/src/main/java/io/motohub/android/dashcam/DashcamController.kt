@@ -5,6 +5,7 @@ package io.motohub.android.dashcam
 
 import io.motohub.android.dashcam.net.CameraHttp
 import io.motohub.android.dashcam.net.CameraWifi
+import io.motohub.android.dashcam.protocol.Answers
 import io.motohub.android.dashcam.protocol.CameraFile
 import io.motohub.android.dashcam.protocol.CameraIdentity
 import io.motohub.android.dashcam.protocol.CameraProtocol
@@ -18,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -122,13 +124,15 @@ class DashcamController(private val host: MotoHubModuleHost) {
         heartbeatJob?.cancel()
         val proto = protocol
         val client = http
+        val joined = wifi.current
         protocol = null
         http = null
         connectJob = scope.launch {
             if (proto != null && client != null) runCatching { proto.logout(client, wifi.phoneAddress()) }
             releaseWifiLock()
-            wifi.release()
-            doConnect()
+            // Only the join this one replaces: a newer reconnect may already be joining.
+            wifi.release(joined)
+            if (isActive) doConnect()
         }
     }
 
@@ -147,13 +151,18 @@ class DashcamController(private val host: MotoHubModuleHost) {
         try {
             wifi.join(ssid, store.password) { onWifiLost() }
         } catch (e: Exception) {
+            // Disconnect pressed while joining: not a failure to show, and it must not overwrite the next state.
+            if (e is kotlinx.coroutines.CancellationException) throw e
             fail(e.message ?: "The phone could not join \"$ssid\".")
             return
         }
+        val joined = wifi.current
         _state.value = _state.value.copy(phase = Phase.FINDING, message = "Looking for the camera…")
         val found = findCamera()
+        // Disconnected or replaced while looking: the Wi-Fi and the state belong to whoever came next.
+        if (!currentCoroutineContext().isActive) return
         if (found == null) {
-            wifi.release()
+            wifi.release(joined)
             fail("The phone joined \"$ssid\" but did not recognise the camera on it. It may run a firmware this " +
                 "module does not speak yet: send a report from Diagnostics and say which camera it is.")
             return
@@ -164,6 +173,11 @@ class DashcamController(private val host: MotoHubModuleHost) {
         log("dashcam: ${proto.family} at ${client.host}, ${identity.maker} ${identity.model} ${identity.firmware}" +
             identity.details.joinToString("") { (k, v) -> ", $k: $v" })
         runCatching { proto.logon(client, wifi.phoneAddress()) }.onFailure { log("dashcam: logon: ${it.message}") }
+        // The live view lost the camera before it could switch recording back on.
+        if (pausedForLive && livePlayer == null && proto.liveNeedsRecording) {
+            log("dashcam: recording was left off by the live view; switching it back on")
+            runCatching { setRecordingForLive(proto, client, true) }.onFailure { log("dashcam: recording on: ${it.message}") }
+        }
         runCatching { proto.syncClock(client) }
         val status = runCatching { proto.status(client) }.getOrNull()
         _state.value = DashcamState(
@@ -245,11 +259,13 @@ class DashcamController(private val host: MotoHubModuleHost) {
         heartbeatJob?.cancel()
         val proto = protocol
         val client = http
+        val joined = wifi.current
         protocol = null
         http = null
         scope.launch {
             if (proto != null && client != null) runCatching { proto.logout(client, wifi.phoneAddress()) }
-            wifi.release()
+            // Only this connection's join: Connect pressed meanwhile has a new one.
+            wifi.release(joined)
         }
         _state.value = DashcamState()
     }
@@ -268,8 +284,29 @@ class DashcamController(private val host: MotoHubModuleHost) {
         @Volatile internal var surface: android.view.Surface? = null
     }
 
-    private var livePlayer: LivePlayer? = null
+    @Volatile private var livePlayer: LivePlayer? = null
     private val viewers = ArrayList<LiveViewer>()
+
+    /**
+     * The live picture switched the camera's recording off and nobody has switched it back on yet.
+     * Unlike [protocol] it outlives a Wi-Fi drop, so the next connection can put recording back.
+     */
+    @Volatile private var pausedForLive = false
+    private val recordingLock = Any()
+
+    /**
+     * Each side re-checks under the lock: a view closed just as the first picture landed must not
+     * have its "off" reach the camera after the "on".
+     */
+    private fun setRecordingForLive(p: CameraProtocol, h: CameraHttp, on: Boolean) = synchronized(recordingLock) {
+        if (on && pausedForLive) {
+            p.setRecording(h, true)
+            pausedForLive = false
+        } else if (!on && livePlayer != null) {
+            p.setRecording(h, false)
+            pausedForLive = true
+        }
+    }
 
     // By index: the app keeps only the library calls it uses itself, and this module may not borrow more.
     private fun top(): LiveViewer? = if (viewers.isEmpty()) null else viewers[viewers.size - 1]
@@ -308,9 +345,10 @@ class DashcamController(private val host: MotoHubModuleHost) {
         player.stop()
         livePlayer = null
         // The last viewer gone: a camera whose recording the live picture paused records again.
+        // Asked even while the "off" is still on its way: the lock puts this one after it.
         if (protocol?.liveNeedsRecording == true) {
             log("live: view closed; recording back on")
-            run(null, { p, h -> p.setRecording(h, true) }) { refreshStatus() }
+            run(null, { p, h -> setRecordingForLive(p, h, true) }) { refreshStatus() }
         }
     }
 
@@ -325,7 +363,7 @@ class DashcamController(private val host: MotoHubModuleHost) {
         onFirstPicture = {
             if (protocol?.liveNeedsRecording == true) {
                 log("live: picture up; switching recording off so the stream is not throttled")
-                run(null, { p, h -> p.setRecording(h, false) }) { refreshStatus() }
+                run(null, { p, h -> setRecordingForLive(p, h, false) }) { refreshStatus() }
             }
         }
     )
@@ -358,19 +396,24 @@ class DashcamController(private val host: MotoHubModuleHost) {
 
     fun clearNotice() { _notice.value = null }
 
-    /** The camera's settings as last read, so the module page can summarise them without asking again. */
-    @Volatile var lastSettings: List<io.motohub.android.dashcam.protocol.CameraSetting> = emptyList()
-
     fun say(text: String) { _notice.value = text }
 
     /** Copies [file] off the camera into the module's own directory. */
     fun download(file: CameraFile) {
         if (_downloads.value.containsKey(file.path)) return
         val client = http ?: return
+        // The camera names the file: "../" in it would write outside the downloads, over the app's own files.
+        val name = Answers.fileName(file.name)
+        if (name.isEmpty() || name == "." || name == "..") {
+            _notice.value = "The camera gave this file a name that cannot be saved."
+            return
+        }
         _downloads.value = HashMap(_downloads.value).apply { put(file.path, -1f) }
+        // A download counts as someone using the camera: leaving the module must not cut it off.
+        attach()
         scope.launch {
-            val target = File(store.downloads, file.name)
-            val partial = File(store.downloads, file.name + ".part")
+            val target = File(store.downloads, name)
+            val partial = File(store.downloads, "$name.part")
             try {
                 client.open(file.path, emptyMap(), 20_000).use { s ->
                     if (s.code !in 200..299) throw IOException("The camera would not send ${file.name} (HTTP ${s.code}).")
@@ -389,16 +432,22 @@ class DashcamController(private val host: MotoHubModuleHost) {
                                 _downloads.value = HashMap(_downloads.value).apply { put(file.path, (copied.toFloat() / total).coerceIn(0f, 1f)) }
                             }
                         }
+                        // A camera that drops the connection mid-file ends the stream like a finished one;
+                        // a cut MP4 has no index at its end and does not play.
+                        if (s.contentLength > 0 && copied != s.contentLength) {
+                            throw IOException("The camera stopped sending ${file.name} at $copied of ${s.contentLength} bytes.")
+                        }
                     }
                 }
                 target.delete()
-                partial.renameTo(target)
+                if (!partial.renameTo(target)) throw IOException("${file.name} could not be saved on the phone.")
                 _notice.value = "Saved ${file.name}"
             } catch (e: Exception) {
                 partial.delete()
                 _notice.value = e.message ?: "The download of ${file.name} failed."
             } finally {
                 _downloads.value = HashMap(_downloads.value).apply { remove(file.path) }
+                detach()
             }
         }
     }

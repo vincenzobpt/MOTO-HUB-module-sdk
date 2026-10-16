@@ -216,9 +216,6 @@ internal object ExperiencesLogic {
         alt = alt.coerceIn(0, DetourPlanner.MAX_ALT),
     )
 
-    /** The route's numbers are the router's, unless it failed (then they are the catalogue's, and not shown as real). */
-    fun isReal(result: CardResult?, key: RouteKey): Boolean = result != null && result.key == key && !result.route.error
-
     fun cardView(
         ranked: RankedExperience,
         filters: ExperienceFilters,

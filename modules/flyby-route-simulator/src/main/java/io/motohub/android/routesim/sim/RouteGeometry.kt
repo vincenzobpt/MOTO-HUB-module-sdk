@@ -27,16 +27,6 @@ data class LatLng(val latitude: Double, val longitude: Double) {
     /** Linear interpolation toward [other] by [t] (0..1). */
     fun interpolateTo(other: LatLng, t: Double): LatLng =
         LatLng(latitude + (other.latitude - latitude) * t, longitude + (other.longitude - longitude) * t)
-
-    /** Initial bearing in degrees [0, 360) from this point to [other]. */
-    fun bearingTo(other: LatLng): Float {
-        val dLon = Math.toRadians(other.longitude - longitude)
-        val lat1 = Math.toRadians(latitude)
-        val lat2 = Math.toRadians(other.latitude)
-        val y = Math.sin(dLon) * Math.cos(lat2)
-        val x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon)
-        return ((Math.toDegrees(atan2(y, x)) + 360.0) % 360.0).toFloat()
-    }
 }
 
 /**
@@ -95,8 +85,6 @@ class RouteGeometry(route: SimRoute, private val lateralAccelMs2: Double = DEFAU
         curveLimits = DoubleArray(gridCount) { STRAIGHT_LIMIT_MS }
         computeCurveLimits()
     }
-
-    val isUsable: Boolean get() = totalMeters > 1.0
 
     // -- Queries ---------------------------------------------------------------------------
 

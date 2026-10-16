@@ -74,7 +74,7 @@ class CameraWifi(context: Context) {
                         )
                     }
                 }
-                callback = cb
+                synchronized(this@CameraWifi) { callback = cb }
                 try {
                     connectivity.requestNetwork(request, cb, JOIN_TIMEOUT_MS)
                 } catch (e: SecurityException) {
@@ -86,7 +86,7 @@ class CameraWifi(context: Context) {
                         )
                     )
                 }
-                cont.invokeOnCancellation { release() }
+                cont.invokeOnCancellation { release(cb) }
             }
         }
     }
@@ -112,7 +112,16 @@ class CameraWifi(context: Context) {
             ?.firstOrNull { it.address is Inet4Address }?.address?.hostAddress
     }
 
-    fun release() {
+    /** The join in place now: hand it to [release] later to let go of that one and no other. */
+    val current: ConnectivityManager.NetworkCallback? get() = callback
+
+    /**
+     * Lets go of [only], by default whatever is joined now. If a later join has replaced it, nothing
+     * happens: a disconnect finishing late must not drop the connection made after it.
+     */
+    @Synchronized
+    fun release(only: ConnectivityManager.NetworkCallback? = callback) {
+        if (only !== callback) return
         callback?.let { cb ->
             try { connectivity.unregisterNetworkCallback(cb) } catch (_: IllegalArgumentException) { }
         }

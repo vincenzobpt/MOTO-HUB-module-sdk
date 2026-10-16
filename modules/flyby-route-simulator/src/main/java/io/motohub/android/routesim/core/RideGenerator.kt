@@ -59,6 +59,14 @@ class RideGenerator internal constructor(private val services: Services) {
         }
         val n = routed.latitudes.size
         if (n < 2 || routed.longitudes.size != n) return Prepare.Failed(CoreStrings.ROUTE_FAILED, ModuleRouteError.OTHER)
+        // Longitudes are not wrapped downstream (geometry, densify): a jump of 360 degrees became a
+        // 38,000 km grid and ran out of memory.
+        // shortcut: routes across the 180th meridian are refused, wrap longitudes if riders there ask
+        for (i in 1 until n) {
+            if (kotlin.math.abs(routed.longitudes[i] - routed.longitudes[i - 1]) > 180.0) {
+                return Prepare.Failed(CoreStrings.CROSSES_180, ModuleRouteError.OTHER)
+            }
+        }
 
         val distance = if (routed.distanceMeters > 0.0 && !routed.distanceMeters.isNaN()) routed.distanceMeters
         else polylineLength(routed.latitudes, routed.longitudes)
@@ -195,12 +203,6 @@ class RideGenerator internal constructor(private val services: Services) {
     private fun tooLong(meters: Double): Prepare =
         Prepare.Failed(CoreStrings.tooLong(Math.round(meters / 1000.0).toInt(), MAX_DISTANCE_KM), ModuleRouteError.TOO_LONG)
 
-    private fun polylineLength(lats: DoubleArray, lons: DoubleArray): Double {
-        var sum = 0.0
-        for (i in 0 until lats.size - 1) sum += LatLng(lats[i], lons[i]).distanceTo(LatLng(lats[i + 1], lons[i + 1]))
-        return sum
-    }
-
     /** Empty when nothing is known; otherwise one finite value per point, gaps filled from the nearest known one. */
     private fun filledAltitudes(alt: DoubleArray): DoubleArray {
         if (alt.none { !it.isNaN() }) return DoubleArray(0)
@@ -232,5 +234,11 @@ class RideGenerator internal constructor(private val services: Services) {
         private const val FLYBY_RIDE_FEATURE = "flyby-ride"
         private const val RECENT_RIDES = 50
         private const val MIN_ESTIMATE_KPH = 10.0
+
+        internal fun polylineLength(lats: DoubleArray, lons: DoubleArray): Double {
+            var sum = 0.0
+            for (i in 0 until lats.size - 1) sum += LatLng(lats[i], lons[i]).distanceTo(LatLng(lats[i + 1], lons[i + 1]))
+            return sum
+        }
     }
 }

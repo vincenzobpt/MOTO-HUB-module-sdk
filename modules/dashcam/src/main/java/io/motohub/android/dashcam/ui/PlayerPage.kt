@@ -57,6 +57,7 @@ import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import io.motohub.android.dashcam.DashcamController
+import io.motohub.android.dashcam.protocol.Answers
 import io.motohub.android.dashcam.protocol.CameraFile
 import io.motohub.android.dashcam.video.CameraDataSource
 import io.motohub.android.module.ModuleUi
@@ -78,7 +79,7 @@ internal fun PlayerPage(controller: DashcamController, camera: CameraFile?, loca
     val context = LocalView.current.context
     val downloads by controller.downloads.collectAsState()
     val name = camera?.name ?: local?.name.orEmpty()
-    val photo = camera?.photo ?: name.substringAfterLast('.').lowercase(Locale.ROOT).let { it == "jpg" || it == "jpeg" || it == "png" }
+    val photo = camera?.photo ?: Answers.isPhoto(name)
     val created = camera?.createdMillis?.takeIf { it > 0 } ?: local?.lastModified() ?: 0L
     val size = camera?.sizeBytes ?: local?.length() ?: 0L
     var confirmDelete by remember { mutableStateOf(false) }

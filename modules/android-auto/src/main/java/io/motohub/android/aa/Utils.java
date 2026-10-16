@@ -6,10 +6,6 @@
 // Adapted for MOTO-HUB: package + logging shim only.
 package io.motohub.android.aa;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 public class Utils {
 
     public static long ms_sleep(long ms) {
@@ -19,30 +15,6 @@ public class Utils {
         } catch (InterruptedException e) {
             AaLog.INSTANCE.e("Exception e: " + e);
             return (0);
-        }
-    }
-
-    public static long tmr_ms_get() {
-        return (System.nanoTime() / 1000000);
-    }
-
-    public static byte[] toByteArray(InputStream is) throws IOException {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        int nRead;
-        int buffSize = 16384 * 1024; // 16M
-        byte[] data = new byte[buffSize];
-
-        while ((nRead = is.read(data, 0, data.length)) != -1) {
-            buffer.write(data, 0, nRead);
-        }
-        buffer.flush();
-        return buffer.toByteArray();
-    }
-
-    public static void put_time(int offset, byte[] arr, long time) {
-        for (int ctr = 7; ctr >= 0; ctr--) {                           // Fill 8 bytes backwards
-            arr[offset + ctr] = (byte) (time & 0xFF);
-            time = time >> 8;
         }
     }
 
@@ -56,9 +28,5 @@ public class Utils {
             return ((buf[idx] & 0xFF) << 8) + (buf[idx + 1] & 0xFF);
         }
         return ((buf[idx] & 0xFF) << 24) + ((buf[idx + 1] & 0xFF) << 16) + ((buf[idx + 2] & 0xFF) << 8) + (buf[idx + 3] & 0xFF);
-    }
-
-    public static int getAccVersion(byte[] buffer) {
-        return (buffer[1] << 8) | buffer[0];
     }
 }

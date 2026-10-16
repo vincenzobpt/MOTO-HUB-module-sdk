@@ -60,7 +60,6 @@ internal fun SettingsPage(controller: DashcamController, back: () -> Unit) {
     LaunchedEffect(reload) {
         controller.run(null, { p, h -> p.settings(h) }) { result ->
             val list = result.getOrNull() ?: emptyList()
-            controller.lastSettings = list
             settings = list
         }
     }

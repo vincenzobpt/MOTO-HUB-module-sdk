@@ -98,12 +98,6 @@ internal fun Card(modifier: Modifier = Modifier, content: @Composable @Composabl
     ) { content() }
 }
 
-@Composable
-@ComposableTarget(ModuleUi.UI_APPLIER)
-internal fun SectionTitle(text: String) {
-    Txt(text, color = RsColors.Dim, size = 14, weight = FontWeight.Bold)
-}
-
 /** A choice among a few, drawn as a block that is filled when chosen. */
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)

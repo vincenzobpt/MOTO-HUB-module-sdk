@@ -104,8 +104,9 @@ object NovatekProtocol : CameraProtocol {
         runCatching { cmd(http, 3001, "&par=1") }
     }
 
+    // Not through cmd(): the list answers <LIST><ALLFile>… with no <Status> in it.
     override fun files(http: CameraHttp, folder: CameraFolder): List<CameraFile> =
-        parseFiles(cmd(http, 3015)).sortedByDescending { it.createdMillis }
+        parseFiles(http.text("/?custom=1&cmd=3015")).sortedByDescending { it.createdMillis }
 
     /** `<File><NAME>…</NAME><FPATH>A:\CARDV\MOVIE\…MP4</FPATH><SIZE>…</SIZE><TIME>yyyy/MM/dd HH:mm:ss</TIME></File>` */
     internal fun parseFiles(xml: String): List<CameraFile> = Answers.xmlBlocks(xml, "File").mapNotNull { block ->

@@ -33,9 +33,6 @@ open class AapMessage(
     val isAudio: Boolean
         get() = Channel.isAudio(this.channel)
 
-    val isVideo: Boolean
-        get() = this.channel == Channel.ID_VID
-
     override fun toString(): String {
         val sb = StringBuilder()
         sb.append(Channel.name(channel)); sb.append(' ')

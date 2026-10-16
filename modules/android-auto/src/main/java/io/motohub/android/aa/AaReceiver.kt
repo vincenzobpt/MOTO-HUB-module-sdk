@@ -3,7 +3,7 @@
 // Part of MOTO-HUB. Free software under the GNU AGPL v3; see LICENSE.
 // MOTO-HUB receiver glue (uses AGPLv3 code ported from headunit-revived). Orchestrates the loopback
 // "self-mode" Android Auto Projection receiver:
-//   1. Listen on TCP 127.0.0.1:5288 (+ NSD _aawireless._tcp).
+//   1. Listen on TCP 127.0.0.1:5288.
 //   2. Launch Google Android Auto's WirelessStartupActivity pointed at 127.0.0.1:5288 (no VPN).
 //   3. Accept the inbound socket, run the AAP version+SSL handshake, point the H.264 decoder at
 //      the supplied encoder Surface, and start the message loop → AA video flows into the encoder.
@@ -11,8 +11,6 @@ package io.motohub.android.aa
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.nsd.NsdManager
-import android.net.nsd.NsdServiceInfo
 import android.os.SystemClock
 import android.view.Surface
 import io.motohub.android.aaplugin.AaIdentityProvider
@@ -87,8 +85,6 @@ class AaReceiver(
     private var serverSocket: ServerSocket? = null
     private var acceptThread: Thread? = null
     private var headUnitServerThread: Thread? = null
-    private var nsdManager: NsdManager? = null
-    private var registrationListener: NsdManager.RegistrationListener? = null
 
     @Volatile private var transport: AapTransport? = null
 
@@ -245,8 +241,6 @@ class AaReceiver(
             return false
         }
 
-        registerNsd()
-
         acceptThread = thread(name = "aa-accept", isDaemon = true) { acceptLoop() }
         headUnitServerThread = thread(name = "aa-hu-server", isDaemon = true) {
             // A fallback poller must never take the process down: anything escaping this thread
@@ -300,7 +294,9 @@ class AaReceiver(
         val socket = ServerSocket()
         return try {
             socket.reuseAddress = true
-            socket.bind(InetSocketAddress(PORT))
+            // Loopback only: Android Auto on this phone is the only peer. On 0.0.0.0 anyone on the
+            // same Wi-Fi could take the session, push video to the TFT and open the microphone.
+            socket.bind(InetSocketAddress("127.0.0.1", PORT))
             socket
         } catch (failure: Exception) {
             runCatching { socket.close() }
@@ -320,7 +316,6 @@ class AaReceiver(
         try { connection?.disconnect() } catch (_: Exception) {}
         connection = null
         try { videoDecoder.stop("AaReceiver.stop") } catch (_: Exception) {}
-        unregisterNsd()
         try { serverSocket?.close() } catch (_: Exception) {}
         serverSocket = null
         acceptThread?.interrupt(); acceptThread = null
@@ -508,19 +503,7 @@ class AaReceiver(
             androidAutoCapabilityProfile = capabilityProfile
         )
         t.nightMode = initialNightMode
-        t.onQuit = { clean ->
-            val userExit = t.wasUserExit
-            sessionLive = false
-            log("[AA] transport quit (clean=$clean, userExit=$userExit)")
-            keySinks.clear(input)
-            input = null
-            transport = null
-            try { conn.disconnect() } catch (_: Exception) {}
-            connection = null
-            releaseSession()
-            onSessionEnded(clean, userExit)
-        }
-       transport = t
+        transport = t
         t.microphone = AaMicrophone(context, t, log)
 
         // Bike touchscreen → Android Auto: EasyConnProber decodes dash touches (PXC cmdType 32) and
@@ -536,9 +519,25 @@ class AaReceiver(
             transport = null
             try { conn.disconnect() } catch (_: Exception) {}
             connection = null
-            // Nothing else will: onQuit only fires for a transport that started.
+            // Nothing else will: onQuit is set only once the handshake has passed.
             releaseSession()
             return false
+        }
+        // Set only now: a failed handshake calls quit() too, and that is a retry, not the end.
+        t.onQuit = { clean ->
+            val userExit = t.wasUserExit
+            sessionLive = false
+            log("[AA] transport quit (clean=$clean, userExit=$userExit)")
+            // The turn shown came from this session: kept, it would point the rider through the
+            // reattach window, and a new session without navigation never sends anything to replace it.
+            AaNavigationGuidance.clear()
+            keySinks.clear(input)
+            input = null
+            transport = null
+            try { conn.disconnect() } catch (_: Exception) {}
+            connection = null
+            releaseSession()
+            onSessionEnded(clean, userExit)
         }
         sessionLive = true
         keySinks.install(checkNotNull(input))
@@ -584,31 +583,6 @@ class AaReceiver(
         return true
     }
 
-    private fun registerNsd() {
-        try {
-            nsdManager = context.getSystemService(Context.NSD_SERVICE) as? NsdManager
-            if (nsdManager == null) { log("[AA] NSD unavailable"); return }
-            val serviceInfo = NsdServiceInfo().apply {
-                serviceName = "AAWireless"
-                serviceType = "_aawireless._tcp"
-                port = PORT
-            }
-            registrationListener = object : NsdManager.RegistrationListener {
-                override fun onServiceRegistered(info: NsdServiceInfo) = log("[AA] NSD registered: ${info.serviceName}")
-                override fun onRegistrationFailed(info: NsdServiceInfo, err: Int) = log("[AA] NSD reg fail: $err")
-                override fun onServiceUnregistered(info: NsdServiceInfo) = log("[AA] NSD unregistered")
-                override fun onUnregistrationFailed(info: NsdServiceInfo, err: Int) = log("[AA] NSD unreg fail: $err")
-            }
-            nsdManager?.registerService(serviceInfo, NsdManager.PROTOCOL_DNS_SD, registrationListener)
-        } catch (e: Exception) {
-            log("[AA] NSD register error: ${e.message}")
-        }
-    }
-
-    private fun unregisterNsd() {
-        try { registrationListener?.let { nsdManager?.unregisterService(it) } } catch (_: Exception) {}
-        registrationListener = null
-    }
 }
 
 /** ENONET / unreachable from a socket that never leaves the phone: the pin, not the port. */

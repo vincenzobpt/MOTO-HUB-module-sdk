@@ -57,7 +57,9 @@ class WppPhoneHandshake(
                     ByteArray(payloadSize).also { if (readFully(input, it) < 0) return fail("RFCOMM stream closed mid-payload") }
                 } else ByteArray(0)
 
-                log("WPP recv type=$type (${typeName(type)}) len=$payloadSize ${hex(payload, 48)}")
+                // INFO_RESPONSE is the head unit's SSID and Wi-Fi password, and this log goes into rider reports.
+                val shown = if (type == WppMessageType.INFO_RESPONSE) "(credentials, not logged)" else hex(payload, 48)
+                log("WPP recv type=$type (${typeName(type)}) len=$payloadSize $shown")
 
                 when (type) {
                     WppMessageType.VERSION_REQUEST -> {

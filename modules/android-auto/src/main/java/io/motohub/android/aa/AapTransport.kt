@@ -23,10 +23,9 @@ class AapTransport(
     private val videoDecoder: VideoDecoder,
     private val context: Context,
     private val identity: AaIdentityProvider,
-    internal val androidAutoCapabilityProfile: AaVideoConfig,
-    private val externalSsl: AapSslContext? = null
+    internal val androidAutoCapabilityProfile: AaVideoConfig
 ) {
-    val ssl: AapSsl = externalSsl ?: AapSslContext(SingleKeyKeyManager(identity))
+    val ssl: AapSsl = AapSslContext(SingleKeyKeyManager(identity))
 
     internal val aapVideo: AapVideo
     private var sendThread: HandlerThread? = null
@@ -36,7 +35,6 @@ class AapTransport(
     private var connection: AccessoryConnection? = null
     private var aapRead: AapRead? = null
 
-    var ignoreNextStopRequest: Boolean = false
     /** Set when VIDEO_FOCUS_NATIVE triggers a stop (user tapped Exit on the phone). */
    @Volatile var wasUserExit: Boolean = false
    @Volatile var onQuit: ((Boolean) -> Unit)? = null
@@ -133,7 +131,6 @@ class AapTransport(
         // and then terminates, which is what the old sleep(150) was approximating.
         pollThread?.quit()
         sendThread?.quitSafely()
-        aapVideo.release()
         videoDecoder.onDecoderError = null
         try {
             if (Thread.currentThread() != pollThread) pollThread?.join(1000)

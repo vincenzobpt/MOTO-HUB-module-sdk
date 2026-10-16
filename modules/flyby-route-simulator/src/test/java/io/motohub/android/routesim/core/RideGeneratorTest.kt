@@ -191,6 +191,15 @@ class RideGeneratorTest {
     }
 
     @Test
+    fun aRouteAcrossThe180thMeridianIsRefusedWithAMessage() {
+        val rig = Rig()
+        rig.ok(doubleArrayOf(-17.0, -17.0, -17.0), doubleArrayOf(179.98, 179.999, -179.99), 3_500.0)
+        val r = rig.generator.prepare(listOf(Stop(-17.0, 179.98, "A"), Stop(-17.0, -179.99, "B"))) {} as Prepare.Failed
+        assertEquals(CoreStrings.CROSSES_180, r.message)
+        assertEquals(ModuleRouteError.OTHER, r.kind)
+    }
+
+    @Test
     fun aThrowingRouterIsAFailureNotACrash() {
         val rig = Rig()   // no route result set: the fake throws
         val r = rig.generator.prepare(SHORT_STOPS) {} as Prepare.Failed

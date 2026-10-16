@@ -16,7 +16,6 @@ import java.util.Locale
 internal object Strings {
 
     // The module's card under Modules, and the entry offered inside Flyby.
-    const val MODULE_NAME = "Flyby Route Simulator"
     const val ABOUT_TITLE = "Route Simulator"
     const val ABOUT_DESCRIPTION = "Plan a route and ride it virtually, to make a flyby of it"
     const val SIMULATE_TITLE = "Simulate a ride"
@@ -78,9 +77,6 @@ internal object Strings {
     const val STOPS_EMPTY = "No places yet. Long-press the map or search below."
     const val STOP_START = "Start"
     const val STOP_FINISH = "Finish"
-    const val MOVE_UP = "Move up"
-    const val MOVE_DOWN = "Move down"
-    const val REMOVE_STOP = "Remove"
     const val CLEAR_ALL = "Clear all"
 
     const val SEARCH_TITLE = "Add a place"
@@ -106,7 +102,6 @@ internal object Strings {
     const val PREVIEW = "Preview"
     const val GENERATE_AND_OPEN = "Generate and open in Flyby"
     const val FLYBY_MISSING = "Flyby is not installed, so the ride cannot be opened there."
-    const val FLYBY_CHECKING = "Checking for Flyby…"
     const val SAVE_PLAN = "Save this plan"
     const val NEED_TWO_STOPS = "Add at least a start and a destination."
 
@@ -122,7 +117,6 @@ internal object Strings {
     const val OPEN_IN_FLYBY = "Open in Flyby"
     const val FLYBY_OPEN_FAILED = "Flyby could not be opened. Find the ride in TRIPS."
     const val SAVE_FAILED = "The ride could not be saved."
-    const val ROUTE_REMOVED = "The route is no longer available."
 
     // Preview.
     const val PREVIEW_TITLE = "Preview"
@@ -289,8 +283,6 @@ internal object Strings {
     fun calibrateIntro(needed: Int, minKm: Int): String =
         "Reads your recorded rides, not simulated ones, and works out how you accelerate, brake, corner " +
             "and lean. It needs at least $needed rides of $minKm km or more. Nothing is learned unless you ask."
-
-    fun cursorAt(clock: String): String = "at $clock"
 
     fun distanceKm(km: Int): String = "$km km"
 

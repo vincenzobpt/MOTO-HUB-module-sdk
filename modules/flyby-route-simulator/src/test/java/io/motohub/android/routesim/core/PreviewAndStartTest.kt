@@ -56,6 +56,20 @@ class PreviewAndStartTest {
     }
 
     @Test
+    fun aOneSampleLeanPeakAndSpeedPeakSurviveALongRide() {
+        val o = output(10_001)
+        o.leanDegrees.fill(0f)
+        o.leanDegrees[5_003] = 52f
+        o.speedsKph.fill(50f)
+        o.speedsKph[7_001] = 120f
+        val s = previewSeries(o, 200)
+        assertEquals(200, s.leanDeg.size)
+        assertEquals(52f, s.leanDeg.maxOrNull()!!, 0f)
+        assertEquals(120f, s.speedKph.maxOrNull()!!, 0f)
+        for (i in 1 until s.timesSeconds.size) assertTrue(s.timesSeconds[i] > s.timesSeconds[i - 1])
+    }
+
+    @Test
     fun degenerateInputsDoNotThrow() {
         assertEquals(0, previewSeries(output(0), 10).timesSeconds.size)
         assertEquals(1, previewSeries(output(1), 10).timesSeconds.size)

@@ -142,6 +142,15 @@ class GpsNoiseTest {
     }
 
     @Test
+    fun positionMovesLittleFromTickToTickWhileMoving() {
+        // A fresh step every 100 ms used to put ~0.4 m between ticks: the derived heading jittered at walking pace.
+        val r = run(seed = 9, dt = 0.1, steps = 36000, stationary = false)
+        val steps = (1 until r.east.size).map { kotlin.math.hypot(r.east[it] - r.east[it - 1], r.north[it] - r.north[it - 1]) }.sorted()
+        val p95 = steps[(steps.size * 0.95).toInt()]
+        assertTrue("95th percentile tick-to-tick change $p95 m", p95 < 0.2)
+    }
+
+    @Test
     fun accuracyTracksHdop() {
         val r = run(seed = 8, dt = 0.1, steps = 5000, stationary = false)
         for (f in r.fixes) {

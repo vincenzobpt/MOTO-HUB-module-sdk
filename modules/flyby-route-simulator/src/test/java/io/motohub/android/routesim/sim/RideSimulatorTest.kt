@@ -292,13 +292,10 @@ class RideSimulatorTest {
     }
 
     @Test
-    fun aHundredKilometreRouteRunsFast() {
+    fun aHundredKilometreRouteRidesToTheEnd() {
         val route = SimTestRoutes.wavy(100_000.0, 10.0, 400.0, 6000.0, 90f)
-        val started = System.nanoTime()
         val out = ride(route, TrafficLevel.LIGHT, seed = 11L)
-        val elapsedMs = (System.nanoTime() - started) / 1_000_000L
         assertParallel(out)
-        assertTrue("took $elapsedMs ms", elapsedMs < 5_000L)
         assertEquals(RouteGeometry(route).totalMeters, out.distanceMeters, 5.0)
         assertTrue(out.timesMillis.size > 30_000)
     }

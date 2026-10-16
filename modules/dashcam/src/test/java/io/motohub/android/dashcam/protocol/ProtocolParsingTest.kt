@@ -112,6 +112,27 @@ class ProtocolParsingTest {
     }
 
     @Test
+    fun `novatek files accepts the list answer, which has no status`() {
+        val xml = """<?xml version="1.0"?><LIST><ALLFile><File><NAME>A.MP4</NAME><FPATH>A:\CARDV\MOVIE\A.MP4</FPATH>""" +
+            "<SIZE>1</SIZE><TIME>2026/10/03 10:15:00</TIME></File></ALLFile></LIST>"
+        // One request on loopback, answered with the list: the camera side of cmd=3015.
+        val server = java.net.ServerSocket(0, 1, java.net.InetAddress.getLoopbackAddress())
+        val camera = Thread {
+            server.accept().use { s ->
+                val input = s.getInputStream().bufferedReader()
+                while (input.readLine().orEmpty().isNotEmpty()) { }
+                val body = xml.toByteArray()
+                s.getOutputStream().write("HTTP/1.1 200 OK\r\nContent-Length: ${body.size}\r\n\r\n".toByteArray() + body)
+            }
+        }.apply { start() }
+        val http = io.motohub.android.dashcam.net.CameraHttp("127.0.0.1", {}, server.localPort)
+        val files = NovatekProtocol.files(http, NovatekProtocol.folders.first())
+        camera.join(5000)
+        server.close()
+        assertEquals("/CARDV/MOVIE/A.MP4", files.single().path)
+    }
+
+    @Test
     fun `mstar file list reads names, sizes and times`() {
         val xml = "<DCIM><file><name>/SD/Normal/F/FILE261003-101500F.MP4</name><format>avi</format>" +
             "<size>98765</size><attr>RW</attr><time>2026-10-03 10:15:00</time></file></DCIM>"

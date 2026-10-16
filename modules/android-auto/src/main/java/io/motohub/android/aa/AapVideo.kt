@@ -40,6 +40,9 @@ internal class AapVideo(
 
     fun process(message: AapMessage): Boolean {
         val flags = message.flags.toInt()
+        // Only MEDIA_MESSAGE_DATA (0) and CODEC_CONFIG (1) carry video. Control messages (SETUP,
+        // START, STOP, VIDEO_FOCUS_REQUEST: 32768+) go to the handler without touching the frame state.
+        if ((flags == 11 || flags == 9) && message.type !in 0..1) return false
         val buf = message.data
         val len = message.size
 
@@ -111,6 +114,4 @@ internal class AapVideo(
         }
         return false
     }
-
-    fun release() { /* synchronous decode; nothing to release */ }
 }

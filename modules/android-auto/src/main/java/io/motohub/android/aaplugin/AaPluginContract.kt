@@ -7,10 +7,7 @@ import android.content.Context
 import io.motohub.android.module.ModuleDashboardNetwork
 import io.motohub.android.module.ModuleKeySink
 import io.motohub.android.module.ModuleKeySinkRegistry
-import io.motohub.android.module.ModuleProjectionSource
 import io.motohub.android.module.ModuleSessionDetail
-import io.motohub.android.module.ModuleProjectionSpec
-import io.motohub.android.module.ModuleTouchAction
 import io.motohub.android.module.ModuleVideoConfig
 import io.motohub.android.module.ModuleVideoPreset
 import java.io.InputStream
@@ -23,11 +20,8 @@ import java.io.InputStream
  *
  * These aliases exist so the receiver's own code keeps reading in its own words.
  */
-typealias AaTouchAction = ModuleTouchAction
 typealias AaVideoPreset = ModuleVideoPreset
 typealias AaVideoConfig = ModuleVideoConfig
-typealias AaReceiverSpec = ModuleProjectionSpec
-typealias AaReceiverPlugin = ModuleProjectionSource
 typealias AaKeySink = ModuleKeySink
 typealias AaKeySinkRegistry = ModuleKeySinkRegistry
 typealias AaDashboardNetwork = ModuleDashboardNetwork
@@ -53,55 +47,14 @@ typealias AaDashboardNetwork = ModuleDashboardNetwork
  *
  * Rule of the road, inherited from the CORE contract: **append, never insert or rename.** An
  * older module answering a newer app must fail on the call it lacks, not misbehave on one it
- * misreads. [AaPluginContract.CONTRACT_VERSION] is what the loader compares before trusting a
- * module with a session.
+ * misreads.
  */
 object AaPluginContract {
-    /** Bump whenever anything in this package changes shape. 1: the initial contract. */
-    const val CONTRACT_VERSION = 1
-
     /**
      * The one class the loader looks up by name. It must implement [AaPluginEntry] and have a
      * public no-argument constructor; everything else about the module is reached from there.
      */
     const val ENTRY_CLASS = "io.motohub.android.aa.plugin.AaPluginEntry"
-
-    /** The local port the receiver listens on for Google's Android Auto app. */
-    const val RECEIVER_PORT = 5288
-
-    /** Android Auto's own head unit server, the way in on releases that closed self-mode. */
-    const val HEAD_UNIT_SERVER_PORT = 5277
-}
-
-/**
- * Turn-by-turn guidance parsed from the session's instrument-cluster navigation channel.
- * [maneuverType] carries the AA wire enum raw value; -1 when the app has not described the next
- * turn. Distances and times are -1 when the app did not send them.
- */
-data class AaNavigationGuidance(
-    val active: Boolean,
-    val rerouting: Boolean = false,
-    val maneuverType: Int = -1,
-    val roundaboutExitNumber: Int = 0,
-    val road: String = "",
-    val distanceToManeuverMeters: Int = -1,
-    val timeToManeuverSeconds: Int = -1,
-    val distanceRemainingMeters: Int = -1,
-    val timeToArrivalSeconds: Long = -1L,
-    val estimatedTimeAtArrival: String = ""
-)
-
-fun interface AaNavigationGuidanceListener {
-    fun onGuidance(guidance: AaNavigationGuidance)
-}
-
-/**
- * Where the module's log lines go. The app routes them into the same event log everything else
- * writes, so a rider's diagnostics report is still one merged log - a report that goes quiet at
- * the module boundary explains nothing.
- */
-fun interface AaLogSink {
-    fun log(line: String)
 }
 
 /**

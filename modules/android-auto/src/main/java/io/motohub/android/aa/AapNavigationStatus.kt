@@ -28,12 +28,19 @@ object AaNavigationGuidance {
         val timeToManeuverSeconds: Int = -1,
         val distanceRemainingMeters: Int = -1,
         val timeToArrivalSeconds: Long = -1L,
-        val estimatedTimeAtArrival: String = ""
+        val estimatedTimeAtArrival: String = "",
+        /** The turn after the next one, same vocabulary as [maneuverType]; -1 when not sent. */
+        val thenManeuverType: Int = -1,
+        /** Lanes at the next turn, left to right; empty when the app sent none. */
+        val lanes: List<Lane> = emptyList()
     ) {
         companion object {
             val INACTIVE = Snapshot(active = false)
         }
     }
+
+    /** One lane: the arrow to draw ([maneuverType] vocabulary) and whether the app recommends it. */
+    data class Lane(val maneuverType: Int, val recommended: Boolean)
 
     @Volatile
     var latest: Snapshot = Snapshot.INACTIVE
@@ -124,23 +131,12 @@ internal class AapControlNavigation : AapControl {
             }
             NavigationStatus.MsgType.INSTRUMENT_CLUSTER_NAVIGATION_STATE_VALUE -> runParsing("state") {
                 val state = message.parse(NavigationStatus.NavigationState.newBuilder()).buildPartial()
-                val step = state.stepsList.firstOrNull() ?: return@runParsing
-                val maneuver = if (step.hasManeuver()) step.maneuver else null
-                val road = step.takeIf { it.hasRoad() }?.road?.name.orEmpty()
-                    .ifBlank { step.takeIf { it.hasCue() }?.cue?.alternateTextList?.firstOrNull().orEmpty() }
+                val next = foldNavigationState(current, state) ?: return@runParsing
                 AaLog.i(
-                    "Nav: state steps=%d maneuver=%s road=%s",
-                    state.stepsCount, maneuver?.type, road
+                    "Nav: state steps=%d maneuver=%d road=%s then=%d lanes=%d",
+                    state.stepsCount, next.maneuverType, next.road, next.thenManeuverType, next.lanes.size
                 )
-                publish(
-                    current.copy(
-                        active = true,
-                        maneuverType = maneuver?.type?.number ?: current.maneuverType,
-                        roundaboutExitNumber = maneuver
-                            ?.takeIf { it.hasRoundaboutExitNumber() }?.roundaboutExitNumber ?: 0,
-                        road = road.ifBlank { current.road }
-                    )
-                )
+                publish(next)
             }
             NavigationStatus.MsgType.INSTRUMENT_CLUSTER_NAVIGATION_CURRENT_POSITION_VALUE -> runParsing("position") {
                 val position = message.parse(NavigationStatus.NavigationCurrentPosition.newBuilder()).buildPartial()
@@ -249,5 +245,62 @@ internal class AapControlNavigation : AapControl {
                 NavigationStatus.NavigationManeuver.NavigationType.DESTINATION.number
             else -> -1
         }
+    }
+}
+
+/**
+ * The modern NavigationState folded into [current]: the next turn, the one after it and the lanes
+ * at the next turn. Only Maps' modern dialect carries the last two; legacy-only apps leave them
+ * empty. Null when the state carries no step at all.
+ */
+internal fun foldNavigationState(
+    current: AaNavigationGuidance.Snapshot,
+    state: NavigationStatus.NavigationState
+): AaNavigationGuidance.Snapshot? {
+    val step = state.stepsList.firstOrNull() ?: return null
+    val maneuver = if (step.hasManeuver()) step.maneuver else null
+    val road = step.takeIf { it.hasRoad() }?.road?.name.orEmpty()
+        .ifBlank { step.takeIf { it.hasCue() }?.cue?.alternateTextList?.firstOrNull().orEmpty() }
+    val then = state.stepsList.getOrNull(1)?.takeIf { it.hasManeuver() }?.maneuver
+    return current.copy(
+        active = true,
+        maneuverType = maneuver?.type?.number ?: current.maneuverType,
+        roundaboutExitNumber = maneuver
+            ?.takeIf { it.hasRoundaboutExitNumber() }?.roundaboutExitNumber ?: 0,
+        road = road.ifBlank { current.road },
+        thenManeuverType = then?.type?.number ?: -1,
+        lanes = step.lanesList.map(::laneOf)
+    )
+}
+
+/** A lane's highlighted arrow when it has one (that is the lane to take), else its first arrow. */
+internal fun laneOf(lane: NavigationStatus.NavigationLane): AaNavigationGuidance.Lane {
+    val highlighted = lane.laneDirectionsList.firstOrNull { it.isHighlighted }
+    val shape = (highlighted ?: lane.laneDirectionsList.firstOrNull())?.shape
+    return AaNavigationGuidance.Lane(laneShapeToManeuverType(shape), recommended = highlighted != null)
+}
+
+/** Lane arrows speak their own enum; fold it into NavigationType so consumers keep one vocabulary. */
+internal fun laneShapeToManeuverType(shape: NavigationStatus.NavigationLane.LaneDirection.Shape?): Int {
+    return when (shape) {
+        NavigationStatus.NavigationLane.LaneDirection.Shape.STRAIGHT ->
+            NavigationStatus.NavigationManeuver.NavigationType.STRAIGHT.number
+        NavigationStatus.NavigationLane.LaneDirection.Shape.SLIGHT_LEFT ->
+            NavigationStatus.NavigationManeuver.NavigationType.TURN_SLIGHT_LEFT.number
+        NavigationStatus.NavigationLane.LaneDirection.Shape.SLIGHT_RIGHT ->
+            NavigationStatus.NavigationManeuver.NavigationType.TURN_SLIGHT_RIGHT.number
+        NavigationStatus.NavigationLane.LaneDirection.Shape.NORMAL_LEFT ->
+            NavigationStatus.NavigationManeuver.NavigationType.TURN_NORMAL_LEFT.number
+        NavigationStatus.NavigationLane.LaneDirection.Shape.NORMAL_RIGHT ->
+            NavigationStatus.NavigationManeuver.NavigationType.TURN_NORMAL_RIGHT.number
+        NavigationStatus.NavigationLane.LaneDirection.Shape.SHARP_LEFT ->
+            NavigationStatus.NavigationManeuver.NavigationType.TURN_SHARP_LEFT.number
+        NavigationStatus.NavigationLane.LaneDirection.Shape.SHARP_RIGHT ->
+            NavigationStatus.NavigationManeuver.NavigationType.TURN_SHARP_RIGHT.number
+        NavigationStatus.NavigationLane.LaneDirection.Shape.U_TURN_LEFT ->
+            NavigationStatus.NavigationManeuver.NavigationType.U_TURN_LEFT.number
+        NavigationStatus.NavigationLane.LaneDirection.Shape.U_TURN_RIGHT ->
+            NavigationStatus.NavigationManeuver.NavigationType.U_TURN_RIGHT.number
+        else -> -1
     }
 }

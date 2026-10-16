@@ -15,7 +15,6 @@ import io.motohub.android.aa.AapPhoneHandshake
 import io.motohub.android.aa.AaReceiver
 import io.motohub.android.aa.AaSelfMode
 import io.motohub.android.aa.phone.WirelessHeadUnitTransport
-import io.motohub.android.aaplugin.AaPluginContract
 import io.motohub.android.module.ModuleFeature
 import io.motohub.android.module.ModuleFeaturePlacement
 import io.motohub.android.module.ModuleFeatures
@@ -109,13 +108,18 @@ internal class AaFeatures(private val host: MotoHubModuleHost) : ModuleFeatures 
                                 logText += "$line\n"
                             }
                             val transport = WirelessHeadUnitTransport.connect(host.context, device, sink)
-                            val outcome = if (transport.connection == null) {
-                                AapPhoneHandshake.Outcome(false, transport.detail)
-                            } else {
-                                AapPhoneHandshake.run(
-                                    host.context, ModuleIdentity, transport.connection, sink, host,
-                                    listenFirstMs = AapPhoneHandshake.WIRELESS_LISTEN_FIRST_MS
-                                )
+                            val outcome = try {
+                                if (transport.connection == null) {
+                                    AapPhoneHandshake.Outcome(false, transport.detail)
+                                } else {
+                                    AapPhoneHandshake.run(
+                                        host.context, ModuleIdentity, transport.connection, sink, host,
+                                        listenFirstMs = AapPhoneHandshake.WIRELESS_LISTEN_FIRST_MS
+                                    )
+                                }
+                            } finally {
+                                // Each run would otherwise leave its socket open and its Wi-Fi request live.
+                                transport.close()
                             }
                             result = if (outcome.success) "OK: ${outcome.detail}" else "FAIL: ${outcome.detail}"
                             running = false
@@ -199,8 +203,8 @@ internal class AaFeatures(private val host: MotoHubModuleHost) : ModuleFeatures 
                 "Both are fixed and local to this phone. Only one session can hold them, which is why " +
                     "starting a second one stops the first instead of failing to bind."
             )
-            host.ui.Fact("Receiver", AaPluginContract.RECEIVER_PORT.toString(), technical = true)
-            host.ui.Fact("Head unit server", AaPluginContract.HEAD_UNIT_SERVER_PORT.toString(), technical = true)
+            host.ui.Fact("Receiver", AaReceiver.PORT.toString(), technical = true)
+            host.ui.Fact("Head unit server", AaReceiver.HEAD_UNIT_SERVER_PORT.toString(), technical = true)
 
             host.ui.SectionLabel("THIS MODULE")
             host.ui.Fact(

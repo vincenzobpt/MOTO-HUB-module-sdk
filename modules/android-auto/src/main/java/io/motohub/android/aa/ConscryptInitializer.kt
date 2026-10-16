@@ -34,6 +34,5 @@ object ConscryptInitializer {
         return conscryptAvailable
     }
 
-    fun isAvailable(): Boolean = conscryptAvailable
     fun getProviderName(): String? = if (conscryptAvailable) "Conscrypt" else null
 }

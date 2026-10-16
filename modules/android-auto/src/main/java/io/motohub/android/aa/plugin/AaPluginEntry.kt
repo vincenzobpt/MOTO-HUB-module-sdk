@@ -20,6 +20,7 @@ import io.motohub.android.module.ModuleAccessoryStreams
 import io.motohub.android.module.ModuleAudio
 import io.motohub.android.module.ModuleAudioSink
 import io.motohub.android.module.ModuleGuidance
+import io.motohub.android.module.ModuleGuidanceLane
 import io.motohub.android.module.ModuleGuidanceListener
 import io.motohub.android.module.ModuleNavigation
 import io.motohub.android.module.ModuleProbeOutcome
@@ -48,8 +49,8 @@ private class AndroidAutoModule(private val host: MotoHubModuleHost) : MotoHubMo
 
     override val manifest = ModuleManifest(
         id = "android-auto",
-        version = "0.2.21",
-        contractVersion = 10,
+        version = "0.2.22",
+        contractVersion = 29,
         entryClass = AaPluginContract.ENTRY_CLASS,
         displayName = "Android Auto",
         description = "Runs Android Auto on the motorcycle's screen."
@@ -196,5 +197,7 @@ private fun AaNavigationGuidance.Snapshot.toModule() = ModuleGuidance(
     timeToManeuverSeconds = timeToManeuverSeconds,
     distanceRemainingMeters = distanceRemainingMeters,
     timeToArrivalSeconds = timeToArrivalSeconds,
-    estimatedTimeAtArrival = estimatedTimeAtArrival
+    estimatedTimeAtArrival = estimatedTimeAtArrival,
+    thenManeuverType = thenManeuverType,
+    lanes = lanes.map { ModuleGuidanceLane(it.maneuverType, it.recommended) }
 )

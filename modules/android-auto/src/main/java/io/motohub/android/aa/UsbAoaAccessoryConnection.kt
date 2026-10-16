@@ -44,8 +44,6 @@ class UsbAoaAccessoryConnection(private val session: ModuleAccessoryStreams) : A
 
     override val isConnected: Boolean get() = !closed
 
-    override fun connect(): Boolean = !closed
-
     override fun sendBlocking(buf: ByteArray, length: Int, timeout: Int): Int {
         if (closed) return -1
         return try {

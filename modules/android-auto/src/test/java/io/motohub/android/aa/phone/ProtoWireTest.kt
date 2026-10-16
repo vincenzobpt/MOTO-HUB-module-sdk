@@ -26,38 +26,29 @@ class ProtoWireTest {
     }
 
     @Test
-    fun aSmallVarintIsOneTagByteAndOneValueByte() {
-        assertArrayEquals(byteArrayOf(0x08, 0x7F), ProtoWriter().varint(1, 127).toByteArray())
-    }
-
-    @Test
-    fun aMultiByteVarintCarriesSevenBitsPerByte() {
-        assertArrayEquals(byteArrayOf(0x08, 0x80.toByte(), 0x01), ProtoWriter().varint(1, 128).toByteArray())
-        assertArrayEquals(byteArrayOf(0x08, 0xAC.toByte(), 0x02), ProtoWriter().varint(1, 300).toByteArray())
+    fun varintsCarrySevenBitsPerByte() {
+        val cases = listOf(
+            // A small one is one tag byte and one value byte.
+            127L to byteArrayOf(0x08, 0x7F),
+            128L to byteArrayOf(0x08, 0x80.toByte(), 0x01),
+            300L to byteArrayOf(0x08, 0xAC.toByte(), 0x02),
+        )
+        for ((value, bytes) in cases) assertArrayEquals("$value", bytes, ProtoWriter().varint(1, value).toByteArray())
+        // A negative int takes ten varint bytes.
+        assertEquals(1 + 10, ProtoWriter().varint(1, -1).toByteArray().size)
     }
 
     @Test
     fun varintsRoundTripAcrossTheirWidths() {
-        val values = listOf(0L, 1L, 127L, 128L, 16_383L, 16_384L, 1L shl 40, Long.MAX_VALUE)
+        // Negatives included: they come back negative, Long.MIN_VALUE through its tenth byte.
+        val values = listOf(0L, 1L, 127L, 128L, 16_383L, 16_384L, 1L shl 40, Long.MAX_VALUE, -1L, -12345L, Long.MIN_VALUE)
         for (v in values) {
-            assertEquals(v, parse(ProtoWriter().varint(3, v)).long(3))
+            val msg = parse(ProtoWriter().varint(3, v))
+            assertEquals("$v", v, msg.long(3))
+            if (v in Int.MIN_VALUE..Int.MAX_VALUE) assertEquals("$v", v.toInt(), msg.int(3))
         }
-    }
-
-    @Test
-    fun aNegativeIntTakesTenVarintBytesAndComesBackNegative() {
-        val data = ProtoWriter().varint(1, -1).toByteArray()
-        assertEquals(1 + 10, data.size)
-
-        val msg = ProtoMessage.parse(data)
-        assertEquals(-1, msg.int(1))
-        assertEquals(-1L, msg.long(1))
+        // The Int overload widens the same way.
         assertEquals(-12345, parse(ProtoWriter().varint(1, -12345)).int(1))
-    }
-
-    @Test
-    fun longMinValueSurvivesTheTenthByte() {
-        assertEquals(Long.MIN_VALUE, parse(ProtoWriter().varint(1, Long.MIN_VALUE)).long(1))
     }
 
     @Test

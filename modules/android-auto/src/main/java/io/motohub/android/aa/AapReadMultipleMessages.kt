@@ -26,13 +26,12 @@ internal class AapReadMultipleMessages(
             return -1
         }
 
+        // -1 means closed or failed (timeouts return 0). A TCP peer that closes leaves
+        // isConnected true, so returning 0 here would busy-spin and hide the dead reader.
         if (size < 0) {
-            if (!connection.isConnected) {
-                AaLog.e("AapRead: Connection lost. Stopping read loop.")
-                fifo.clear()
-                return -1
-            }
-            return 0
+            AaLog.e("AapRead: Connection lost. Stopping read loop.")
+            fifo.clear()
+            return -1
         }
         if (size == 0) return 0
 

@@ -431,6 +431,8 @@ internal class PlannerModel(val env: RsEnv) {
         job = env.scope.launch(Dispatchers.Default) {
             try {
                 val route = ensurePrepared(list, title, roadScenic, mine) ?: return@launch
+                // The steps below block and never look at the job: Cancel is seen only here, between them.
+                if (mine != generation) return@launch
                 progress = Strings.PROGRESS_SIMULATING
                 val ride = env.generator.generate(route, snapshot, java.util.Random().nextLong())
                 if (mode == RunMode.PREVIEW) {
@@ -440,11 +442,13 @@ internal class PlannerModel(val env: RsEnv) {
                         onPreviewReady()
                     }
                 } else {
+                    if (mine != generation) return@launch
                     progress = Strings.PROGRESS_SAVING
                     when (val saved = env.generator.save(ride)) {
                         is Save.Ok -> {
                             val info = SavedRide(saved.rideId, route.title)
                             if (mode == RunMode.SAVE_AND_OPEN) {
+                                if (mine != generation) return@launch
                                 progress = Strings.PROGRESS_OPENING
                                 val opened = env.generator.openInFlyby(saved.rideId)
                                 withContext(Dispatchers.Main) {
@@ -522,9 +526,12 @@ internal class PlannerModel(val env: RsEnv) {
         val result = env.generator.prepare(list, title, routePreferenceOf(scenic)) { text -> if (mine == generation) { progress = text } }
         return when (result) {
             is Prepare.Ok -> {
-                prepared = result.route
-                preparedKey = key
-                fitVersion++
+                // A cancelled run's route must not replace the plan the rider has moved on to.
+                if (mine == generation) {
+                    prepared = result.route
+                    preparedKey = key
+                    fitVersion++
+                }
                 result.route
             }
             is Prepare.Failed -> {
