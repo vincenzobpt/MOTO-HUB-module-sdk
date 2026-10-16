@@ -9,6 +9,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import kotlin.math.cos
 import kotlin.math.floor
+import kotlin.math.round
 import kotlin.math.sqrt
 import kotlin.random.Random
 
@@ -85,6 +86,22 @@ class MarkersTest {
     }
 
     @Test
+    fun aPanNorthKeepsThePhotosInTheirPins() {
+        val rnd = Random(7)
+        val markers = (0 until 3_000).map { Marker("p$it", 45.3 + rnd.nextDouble(-0.05, 0.05), 9.2 + rnd.nextDouble(-0.07, 0.07), null, null) }
+        val index = MarkerIndex(markers)
+        // One radius, as the app asks at one zoom; the centre moves about 1.1 km north.
+        val before = index.near(45.30, 9.2, 5_000, 100)
+        val after = index.near(45.31, 9.2, 5_000, 100)
+        fun groups(spots: List<Spot>) = spots.flatMap { s -> s.ids.map { it to s.ids.toSet() } }.toMap()
+        val a = groups(before)
+        val b = groups(after)
+        val common = a.keys intersect b.keys
+        assertTrue(common.size > 500)
+        for (id in common) assertEquals(id, a.getValue(id) intersect common, b.getValue(id) intersect common)
+    }
+
+    @Test
     fun photosAcrossTheAntimeridianAreNear() {
         val markers = listOf(Marker("east", -17.0, 179.99, null, null), Marker("west", -17.0, -179.99, null, null))
         val spots = MarkerIndex(markers).near(-17.0, 180.0, 5_000, 100)
@@ -120,6 +137,7 @@ class MarkersTest {
     private fun scan(markers: List<Marker>, latitude: Double, longitude: Double, radiusMeters: Int, limit: Int): List<Spot> {
         val m2d = 111_320.0
         val lonScale = m2d * cos(Math.toRadians(latitude)).coerceAtLeast(0.01)
+        val columnScale = m2d * cos(Math.toRadians(round(latitude))).coerceAtLeast(0.01)
         val r2 = radiusMeters.toDouble() * radiusMeters
         val cell = (2.0 * radiusMeters / sqrt(limit.toDouble())).coerceAtLeast(1.0)
         val cells = LinkedHashMap<Long, MutableList<Marker>>()
@@ -129,7 +147,7 @@ class MarkersTest {
             val dx = d * lonScale
             val dy = (m.latitude - latitude) * m2d
             if (dx * dx + dy * dy > r2) continue
-            val cx = floor(m.longitude * lonScale / cell).toLong()
+            val cx = floor(m.longitude * columnScale / cell).toLong()
             val cy = floor(m.latitude * m2d / cell).toLong()
             cells.getOrPut((cx shl 32) xor (cy and 0xFFFFFFFFL)) { ArrayList() }.add(m)
         }

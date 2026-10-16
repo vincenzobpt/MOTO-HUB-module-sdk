@@ -7,6 +7,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import kotlin.math.cos
 import kotlin.math.floor
+import kotlin.math.round
 import kotlin.math.sqrt
 
 /** A photo with a position, as Immich's map gives it. */
@@ -81,11 +82,15 @@ class MarkerIndex(private val markers: List<Marker>) {
      * The markers within [radiusMeters] of the centre, at most [limit] spots: the ground is cut into
      * a grid fine enough for [limit] cells, and each cell shows its first photo with the others
      * behind it. The grid is anchored to the globe, not to the centre, so panning keeps each pin
-     * where it was instead of making them jump.
+     * where it was instead of making them jump; it changes only when the centre crosses into
+     * another whole degree of latitude.
      */
     fun near(latitude: Double, longitude: Double, radiusMeters: Int, limit: Int): List<Spot> {
         if (limit <= 0 || radiusMeters < 0 || !latitude.isFinite() || !longitude.isFinite()) return emptyList()
         val lonScale = METERS_PER_DEGREE * cos(Math.toRadians(latitude)).coerceAtLeast(0.01)
+        // The columns take the cosine of the whole degree, not of the centre: with the centre's own,
+        // a pan of a kilometre north or south slid every column and the pins regrouped at each move.
+        val columnScale = METERS_PER_DEGREE * cos(Math.toRadians(round(latitude))).coerceAtLeast(0.01)
         val radius = radiusMeters.toDouble()
         val found = candidates(latitude, longitude, radius / METERS_PER_DEGREE, radius / lonScale)
         // List order, as a scan of every marker would meet them: the same first photo per cell, the same cells kept.
@@ -98,7 +103,7 @@ class MarkerIndex(private val markers: List<Marker>) {
             val dx = wrap(m.longitude - longitude) * lonScale
             val dy = (m.latitude - latitude) * METERS_PER_DEGREE
             if (dx * dx + dy * dy > r2) continue
-            val cx = floor(m.longitude * lonScale / cell).toLong()
+            val cx = floor(m.longitude * columnScale / cell).toLong()
             val cy = floor(m.latitude * METERS_PER_DEGREE / cell).toLong()
             cells.getOrPut((cx shl 32) xor (cy and 0xFFFFFFFFL)) { ArrayList() }.add(m)
         }
