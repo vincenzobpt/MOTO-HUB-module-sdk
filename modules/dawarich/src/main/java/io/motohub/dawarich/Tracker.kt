@@ -67,7 +67,6 @@ class Tracker(private val host: MotoHubModuleHost) {
         android.util.Log.i("MotoHubDawarich", it)
     }
     @Volatile var lastUpload = "Nothing sent yet"
-    @Volatile var lastFixSeconds = 0L
     @Volatile var sent = 0L
     private var intervalMs = FAST_MS
     private var stillSince = 0L
@@ -273,7 +272,6 @@ class Tracker(private val host: MotoHubModuleHost) {
             if (level >= 0) level / scale.toFloat() else -1f,
             status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL
         )
-        lastFixSeconds = fix.epochSeconds
         synchronized(lock) {
             java.io.FileOutputStream(queueFile, true).use { it.write((Overland.feature(fix).toString() + "\n").toByteArray()) }
             // shortcut: a ride offline for days drops the oldest points past this, not the newest.
@@ -334,11 +332,6 @@ class Tracker(private val host: MotoHubModuleHost) {
     }
 
     /**
-     * Sends a recorded ride straight to the server, [BATCH] points at a time, without touching the
-     * live queue. Dawarich ignores a point it already has, so sending a ride twice is harmless.
-     * Blocks: call it off the main thread.
-     */
-    /**
      * How many points the server already holds between [startMillis] and [endMillis], or null when
      * it cannot say. Blocks: call it off the main thread. One point per page, so the page count
      * Dawarich returns is the point count; ISO dates, which old servers parse as well as new ones.
@@ -366,7 +359,12 @@ class Tracker(private val host: MotoHubModuleHost) {
         }
     }
 
-    /** [SendResult.complete] only when every point reached the server. */
+    /**
+     * Sends a recorded ride straight to the server, [BATCH] points at a time, without touching the
+     * live queue. Dawarich ignores a point it already has, so sending a ride twice is harmless.
+     * [SendResult.complete] only when every point reached the server. Blocks: call it off the main
+     * thread.
+     */
     fun sendTrack(fixes: List<Fix>, onProgress: (Int) -> Unit): SendResult {
         if (!configured) return SendResult(false, "Enter the address and the API key first.")
         var done = 0
