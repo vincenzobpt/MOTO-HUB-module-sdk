@@ -44,4 +44,12 @@ class OverlandTest {
         assertEquals(2, body.getJSONArray("locations").length())
         assertTrue(body.getString("device_id").isNotEmpty())
     }
+
+    @Test
+    fun aTornQueueLineIsSkipped() {
+        val whole = Overland.feature(fix()).toString()
+        // A power cut mid-write leaves half a line; it must not block the batch forever.
+        val points = parseQueued(listOf(whole, whole.take(whole.length / 2), whole))
+        assertEquals(2, points.size)
+    }
 }

@@ -66,6 +66,7 @@ class DawarichApp(private val context: Context, private val log: (String) -> Uni
     fun send(command: Command) {
         listen()
         val reply = Intent(ACTION_RESULT).setPackage(context.packageName).putExtra(EXTRA_COMMAND, command.name)
+            .putExtra(EXTRA_TOKEN, TOKEN)
         val plugin = Bundle().apply {
             putString(EXTRA_RUNNER_CLASS, command.runner)
             putString(EXTRA_INPUT_CLASS, "kotlin.Unit")
@@ -122,6 +123,8 @@ class DawarichApp(private val context: Context, private val log: (String) -> Uni
         if (receiver != null) return
         val r = object : BroadcastReceiver() {
             override fun onReceive(c: Context, intent: Intent) {
+                // Exported, so any app can send it: only an answer to our own request carries the token.
+                if (intent.getStringExtra(EXTRA_TOKEN) != TOKEN) return
                 val command = intent.getStringExtra(EXTRA_COMMAND)
                     ?.let { name -> Command.entries.firstOrNull { it.name == name } } ?: return
                 val code = intent.getIntExtra(EXTRA_RESULT_CODE, RESULT_UNKNOWN)
@@ -154,6 +157,9 @@ class DawarichApp(private val context: Context, private val log: (String) -> Uni
         const val RESULT_UNKNOWN = 4
         const val ACTION_RESULT = "io.motohub.dawarich.APP_RESULT"
         const val EXTRA_COMMAND = "command"
+        const val EXTRA_TOKEN = "token"
+        // Only the Dawarich app sees it, in the completion intent handed to it; new with every process.
+        val TOKEN: String = java.util.UUID.randomUUID().toString()
     }
 }
 

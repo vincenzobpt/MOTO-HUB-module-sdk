@@ -289,11 +289,14 @@ class Tracker(private val host: MotoHubModuleHost) {
         while (true) {
             val batch = synchronized(lock) { readQueue().take(BATCH) }
             if (batch.isEmpty()) return
-            val outcome = post(Overland.batch(batch.map { JSONObject(it) }))
+            val points = parseQueued(batch)
+            // A batch of torn lines only is dropped without asking the server.
+            val outcome = if (points.isEmpty()) Outcome.REJECTED else post(Overland.batch(points))
             when (outcome) {
                 Outcome.OK, Outcome.REJECTED -> synchronized(lock) {
+                    // batch.size, not points.size: torn lines leave the queue with the batch they were in.
                     writeQueue(readQueue().drop(batch.size))
-                    if (outcome == Outcome.OK) sent += batch.size
+                    if (outcome == Outcome.OK) sent += points.size
                 }
                 Outcome.RETRY -> return
             }
@@ -306,7 +309,14 @@ class Tracker(private val host: MotoHubModuleHost) {
     private fun endpoint(path: String): URL? {
         val base = serverUrl.trim().trimEnd('/')
         if (!base.startsWith("https://")) return null
-        return URL("$base$path?api_key=" + URLEncoder.encode(apiKey.trim(), "UTF-8"))
+        return URL("$base$path")
+    }
+
+    // The key goes in a header, not the URL: a reverse proxy's access log keeps every URL.
+    private fun open(url: URL): HttpURLConnection {
+        val key = apiKey.trim()
+        if (key.any { it.code < 0x21 || it.code > 0x7E }) throw java.io.IOException("The key has characters a key cannot have.")
+        return (url.openConnection() as HttpURLConnection).apply { setRequestProperty("Authorization", "Bearer $key") }
     }
 
     /** Asks the server who the key belongs to. Blocks: call it off the main thread. */
@@ -314,7 +324,7 @@ class Tracker(private val host: MotoHubModuleHost) {
         if (!configured) return "Enter the address and the API key first."
         val url = endpoint("/api/v1/users/me") ?: return "The server address must start with https://"
         return try {
-            val c = url.openConnection() as HttpURLConnection
+            val c = open(url)
             c.connectTimeout = 10_000
             c.readTimeout = 10_000
             val code = c.responseCode
@@ -342,12 +352,12 @@ class Tracker(private val host: MotoHubModuleHost) {
             .apply { timeZone = java.util.TimeZone.getTimeZone("UTC") }
         val base = endpoint("/api/v1/points") ?: return null
         val url = URL(
-            "$base&per_page=1&slim=true" +
+            "$base?per_page=1&slim=true" +
                 "&start_at=" + URLEncoder.encode(iso.format(java.util.Date(startMillis)), "UTF-8") +
                 "&end_at=" + URLEncoder.encode(iso.format(java.util.Date(endMillis)), "UTF-8")
         )
         return try {
-            val c = url.openConnection() as HttpURLConnection
+            val c = open(url)
             c.connectTimeout = 10_000
             c.readTimeout = 20_000
             val code = c.responseCode
@@ -387,7 +397,7 @@ class Tracker(private val host: MotoHubModuleHost) {
                 lastUpload = "The server address must start with https://"
                 return Outcome.RETRY
             }
-            val c = url.openConnection() as HttpURLConnection
+            val c = open(url)
             c.requestMethod = "POST"
             c.connectTimeout = 10_000
             c.readTimeout = 20_000
@@ -437,6 +447,10 @@ class Tracker(private val host: MotoHubModuleHost) {
 }
 
 class SendResult(val complete: Boolean, val message: String)
+
+/** The queued points that parse: a line torn by a power cut mid-write is skipped, not retried forever. */
+internal fun parseQueued(lines: List<String>): List<JSONObject> =
+    lines.mapNotNull { runCatching { JSONObject(it) }.getOrNull() }
 
 /**
  * Only an answer about the batch itself drops it: kept, it would block every later batch. Anything
