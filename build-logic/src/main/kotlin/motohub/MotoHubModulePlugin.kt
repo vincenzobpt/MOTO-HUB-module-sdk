@@ -6,6 +6,7 @@ package motohub
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.component.ModuleComponentIdentifier
 import org.gradle.api.attributes.Attribute
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.bundling.Zip
@@ -110,6 +111,19 @@ class MotoHubModulePlugin : Plugin<Project> {
                     attributes.attribute(Attribute.of("artifactType", String::class.java), "android-classes-jar")
                     lenient(true)
                 }.files
+            // What the module carries itself - its `implementation` libraries - dexed into it, not
+            // borrowed. Never the ones the app lends (docs/borrowed-libraries.md): the Kotlin plugin
+            // puts kotlin-stdlib on every runtime classpath, and the app's copy is the one that loads.
+            val bundledFiles = configurations.getByName("releaseRuntimeClasspath").incoming
+                .artifactView {
+                    attributes.attribute(Attribute.of("artifactType", String::class.java), "android-classes-jar")
+                    componentFilter { id -> id !is ModuleComponentIdentifier || BORROWED_GROUPS.none(id.group::startsWith) }
+                    lenient(true)
+                }.files
+            // The classes d8 reads in doFirst: without them as inputs the task saw only last run's
+            // dex and stayed UP-TO-DATE after a change of code.
+            inputs.file(classesJar)
+            inputs.files(bundledFiles)
 
             doFirst {
                 val sdk = androidSdk(rootDir)
@@ -121,9 +135,13 @@ class MotoHubModulePlugin : Plugin<Project> {
                     add("--release")
                     add("--min-api"); add(MIN_API.toString())
                     add("--lib"); add(androidJar.absolutePath)
-                    classpathFiles.filter { it.exists() }.forEach { add("--classpath"); add(it.absolutePath) }
+                    val bundled = bundledFiles.filter { it.exists() }.toSet()
+                    val bundledNames = bundled.map { it.name }.toSet()
+                    classpathFiles.filter { it.exists() && it !in bundled && it.name !in bundledNames }
+                        .forEach { add("--classpath"); add(it.absolutePath) }
                     add("--output"); add(out.absolutePath)
                     add(classesJar.get().asFile.absolutePath)
+                    bundled.forEach { add(it.absolutePath) }
                 }
                 execs.exec { commandLine(command) }.result.get()
             }
@@ -220,6 +238,12 @@ class MotoHubModulePlugin : Plugin<Project> {
 
     private companion object {
         const val GROUP = "motohub"
+
+        /** Maven groups of what the app lends: never packed into a module, even when a library pulls them in. */
+        val BORROWED_GROUPS = listOf(
+            "org.jetbrains.kotlin", "org.jetbrains.kotlinx", "androidx.compose", "androidx.lifecycle",
+            "androidx.car.app", "com.google.protobuf", "org.conscrypt"
+        )
 
         /** MOTO-HUB's own minSdk: a module is never loaded anywhere older. */
         const val MIN_API = 34
