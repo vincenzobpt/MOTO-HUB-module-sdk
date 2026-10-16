@@ -303,7 +303,7 @@ class Tracker(private val host: MotoHubModuleHost) {
         }
     }
 
-    private enum class Outcome { OK, REJECTED, RETRY }
+    internal enum class Outcome { OK, REJECTED, RETRY }
 
     private fun endpoint(path: String): URL? {
         val base = serverUrl.trim().trimEnd('/')
@@ -325,7 +325,7 @@ class Tracker(private val host: MotoHubModuleHost) {
                 code in 200..299 -> "Connected: the server accepts this key."
                 code == 401 || code == 403 -> "The server refused the API key ($code)."
                 // Older Dawarich has no users/me: the server answers, the key is untested.
-                code == 404 -> "The server answers, but this version cannot check the key."
+                code == 404 -> "The server answers 404: check the address, or this version cannot check the key."
                 else -> "The server answered $code."
             }
         } catch (e: java.io.IOException) {
@@ -370,12 +370,15 @@ class Tracker(private val host: MotoHubModuleHost) {
     fun sendTrack(fixes: List<Fix>, onProgress: (Int) -> Unit): SendResult {
         if (!configured) return SendResult(false, "Enter the address and the API key first.")
         var done = 0
+        var refused = 0
         for (chunk in fixes.chunked(BATCH)) {
             val outcome = post(Overland.batch(chunk.map { Overland.feature(it) }))
             if (outcome == Outcome.RETRY) return SendResult(false, "Stopped after $done of ${fixes.size} points: $lastUpload")
+            if (outcome == Outcome.REJECTED) refused += chunk.size
             done += chunk.size
             onProgress(done)
         }
+        if (refused > 0) return SendResult(false, "Sent ${done - refused} points; the server refused $refused.")
         return SendResult(true, "Sent $done points.")
     }
 
@@ -395,13 +398,14 @@ class Tracker(private val host: MotoHubModuleHost) {
             c.outputStream.use { it.write(body.toByteArray()) }
             val code = c.responseCode
             drain(c, code)
-            when {
-                code in 200..299 -> { lastUpload = "Sent at " + java.text.DateFormat.getTimeInstance().format(java.util.Date()); Outcome.OK }
-                code == 401 || code == 403 -> { lastUpload = "Server refused the API key ($code)"; Outcome.RETRY }
-                // A request the server will never accept: keep it and it blocks every later batch.
-                code in 400..499 && code != 408 && code != 429 -> { lastUpload = "Server rejected a batch ($code), dropped it"; Outcome.REJECTED }
-                else -> { lastUpload = "Server answered $code, will retry"; Outcome.RETRY }
+            val outcome = outcomeOf(code)
+            lastUpload = when {
+                outcome == Outcome.OK -> "Sent at " + java.text.DateFormat.getTimeInstance().format(java.util.Date())
+                code == 401 || code == 403 -> "Server refused the API key ($code)"
+                outcome == Outcome.REJECTED -> "Server rejected a batch ($code), dropped it"
+                else -> "Server answered $code, will retry"
             }
+            outcome
         } catch (e: java.io.IOException) {
             lastUpload = "No connection, will retry"
             Outcome.RETRY
@@ -435,3 +439,13 @@ class Tracker(private val host: MotoHubModuleHost) {
 }
 
 class SendResult(val complete: Boolean, val message: String)
+
+/**
+ * Only an answer about the batch itself drops it: kept, it would block every later batch. Anything
+ * else - a 404 from a wrong address, a refused key, a server error - keeps the points for later.
+ */
+internal fun outcomeOf(code: Int): Tracker.Outcome = when (code) {
+    in 200..299 -> Tracker.Outcome.OK
+    400, 413, 422 -> Tracker.Outcome.REJECTED
+    else -> Tracker.Outcome.RETRY
+}
