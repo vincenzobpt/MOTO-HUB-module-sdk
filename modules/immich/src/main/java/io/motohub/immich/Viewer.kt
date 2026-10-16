@@ -3,6 +3,7 @@
 // Part of MOTO-HUB. Free software under the GNU AGPL v3; see LICENSE.
 package io.motohub.immich
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -42,6 +43,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposableTarget
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -65,8 +67,10 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import io.motohub.android.module.ModuleUi
 import io.motohub.android.module.MotoHubModuleHost
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -97,12 +101,42 @@ internal fun PhotoViewer(host: MotoHubModuleHost, server: ImmichServer, spot: Sp
     var info by remember(spot) { mutableStateOf(false) }
     val details = remember(spot) { mutableStateMapOf<String, PhotoDetails>() }
     val problems = remember(spot) { mutableStateMapOf<String, String>() }
+    // Made at the first ▶, so a pin of photos only never starts a player.
+    var video by remember(spot) { mutableStateOf<VideoPlayback?>(null) }
+    var sharing by remember(spot) { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     val current = ids[index.coerceIn(0, ids.lastIndex)]
+    val playing = video?.takeIf { it.id == current && !grid }
+    DisposableEffect(spot) {
+        onDispose { video?.release() }
+    }
+    // Swiped to another photo or back to the grid: the video stops where it was.
+    LaunchedEffect(current, grid) {
+        video?.let { if (grid || it.id != current) it.stop() }
+    }
+    // While a video plays, the bars step aside after a moment; a tap brings them back.
+    LaunchedEffect(chrome, playing?.playing) {
+        if (chrome && playing?.playing == true) {
+            delay(CHROME_HIDE_MS)
+            chrome = false
+        }
+    }
+    val share: () -> Unit = {
+        if (!sharing) {
+            sharing = true
+            val id = current
+            scope.launch {
+                val problem = withContext(Dispatchers.IO) { sharePhoto(host, server, id, details[id]) }
+                problem?.let { Toast.makeText(host.context, it, Toast.LENGTH_LONG).show() }
+                sharing = false
+            }
+        }
+    }
     LaunchedEffect(current) {
         if (current in details) return@LaunchedEffect
         try {
-            details[current] = withContext(kotlinx.coroutines.Dispatchers.IO) { server.details(current) }
+            details[current] = withContext(Dispatchers.IO) { server.details(current) }
         } catch (e: Exception) {
             problems[current] = e.message ?: "Immich did not answer."
         }
@@ -129,6 +163,11 @@ internal fun PhotoViewer(host: MotoHubModuleHost, server: ImmichServer, spot: Sp
                     ids = ids,
                     index = index,
                     videos = { details[it]?.video == true },
+                    video = playing,
+                    onPlay = { id ->
+                        val v = video ?: VideoPlayback(host.context).also { video = it }
+                        if (v.id == id) v.toggle() else v.play(server, id)
+                    },
                     onIndex = { index = it },
                     onTap = { chrome = !chrome },
                     onSwipeUp = { info = true },
@@ -141,11 +180,21 @@ internal fun PhotoViewer(host: MotoHubModuleHost, server: ImmichServer, spot: Sp
                         counter = if (ids.size > 1) "${index + 1} / ${ids.size}" else null,
                         onBack = { if (ids.size > 1) grid = true else onBack() },
                         onGrid = if (ids.size > 1) ({ grid = true }) else null,
+                        sharing = sharing,
+                        onShare = share,
                         onInfo = { info = true }
                     )
                 }
-                AnimatedVisibility(chrome && !info && ids.size > 1, enter = fadeIn(), exit = fadeOut(), modifier = Modifier.align(Alignment.BottomCenter)) {
-                    Filmstrip(server, ids, index) { index = it }
+                AnimatedVisibility(
+                    chrome && !info && (ids.size > 1 || playing != null),
+                    enter = fadeIn(),
+                    exit = fadeOut(),
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                ) {
+                    Column {
+                        playing?.let { VideoBar(it, if (ids.size > 1) Modifier else Modifier.navigationBarsPadding().padding(bottom = 8.dp)) }
+                        if (ids.size > 1) Filmstrip(server, ids, index) { index = it }
+                    }
                 }
                 AnimatedVisibility(
                     info,
@@ -153,7 +202,7 @@ internal fun PhotoViewer(host: MotoHubModuleHost, server: ImmichServer, spot: Sp
                     exit = slideOutVertically { it } + fadeOut(),
                     modifier = Modifier.align(Alignment.BottomCenter)
                 ) {
-                    InfoSheet(host, server, current, details[current], problems[current], onClose = { info = false })
+                    InfoSheet(host, server, current, details[current], problems[current], sharing, share, onClose = { info = false })
                 }
             }
         }
@@ -206,6 +255,8 @@ private fun TopBar(
     counter: String?,
     onBack: () -> Unit,
     onGrid: (() -> Unit)?,
+    sharing: Boolean,
+    onShare: () -> Unit,
     onInfo: () -> Unit
 ) {
     Row(
@@ -223,6 +274,7 @@ private fun TopBar(
         }
         if (counter != null) Txt(counter, 13.sp, Color(0xCCFFFFFF), FontWeight.SemiBold, Modifier.padding(end = 4.dp), 1)
         if (onGrid != null) GlassKey("▦", false, onGrid)
+        GlassKey("⇪", sharing, onShare)
         GlassKey("ⓘ", false, onInfo)
     }
 }
@@ -265,6 +317,8 @@ private fun Pager(
     ids: List<String>,
     index: Int,
     videos: (String) -> Boolean,
+    video: VideoPlayback?,
+    onPlay: (String) -> Unit,
     onIndex: (Int) -> Unit,
     onTap: () -> Unit,
     onSwipeUp: () -> Unit,
@@ -297,9 +351,12 @@ private fun Pager(
                     var moved = false
                     var dragged = Offset.Zero
                     var horizontal = true
+                    // A tap a key on the page (the video's ▶) already took is not a tap on the photo.
+                    var taken = false
                     val slop = viewConfiguration.touchSlop
                     do {
                         val event = awaitPointerEvent()
+                        if (!moved && event.changes.any { it.isConsumed }) taken = true
                         if (event.changes.count { it.pressed } > 1) multi = true
                         val zoomBy = event.calculateZoom()
                         val panBy = event.calculatePan()
@@ -355,7 +412,7 @@ private fun Pager(
                             dragged.y > height * LIFT_SHARE -> onSwipeDown()
                         }
                         scope.launch { lift.animateTo(0f, tween(200)) }
-                    } else {
+                    } else if (!taken) {
                         val at = down.position
                         if (taps.second(at)) {
                             if (scale > 1.01f) {
@@ -382,6 +439,8 @@ private fun Pager(
                 id = ids[i],
                 full = open && scale > 1.6f,
                 video = videos(ids[i]),
+                player = video?.takeIf { open && it.id == ids[i] },
+                onPlay = if (open) ({ onPlay(ids[i]) }) else null,
                 onFitted = { if (open) fitted = it },
                 modifier = Modifier.fillMaxSize().graphicsLayer {
                     translationX = slide.value + step * width + if (open) pan.x else 0f
@@ -400,7 +459,16 @@ private fun Pager(
 /** One photo fitted to the screen: the thumbnail at once, the preview over it, the whole picture once zoomed in. */
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
-private fun Page(server: ImmichServer, id: String, full: Boolean, video: Boolean, onFitted: (Offset) -> Unit, modifier: Modifier) {
+private fun Page(
+    server: ImmichServer,
+    id: String,
+    full: Boolean,
+    video: Boolean,
+    player: VideoPlayback?,
+    onPlay: (() -> Unit)?,
+    onFitted: (Offset) -> Unit,
+    modifier: Modifier
+) {
     var thumb by remember(id) { mutableStateOf(Bitmaps.held(id, ImmichServer.THUMBNAIL)) }
     var preview by remember(id) { mutableStateOf(Bitmaps.held(id, ImmichServer.PREVIEW)) }
     var whole by remember(id) { mutableStateOf<ImageBitmap?>(null) }
@@ -426,10 +494,29 @@ private fun Page(server: ImmichServer, id: String, full: Boolean, video: Boolean
         } else {
             Txt("Loading…", 14.sp, Ink.Faint, FontWeight.Medium, Modifier, 1)
         }
-        if (video) {
-            Box(Modifier.size(76.dp).clip(CircleShape).background(Color(0x99000000)), contentAlignment = Alignment.Center) {
-                Txt("▶", 30.sp, Color.White, FontWeight.Bold, Modifier.padding(start = 4.dp), 1)
-            }
+        if (player != null) {
+            val ratio = player.ratio ?: shown?.let { it.width.toFloat() / it.height }
+            AndroidView(
+                factory = { context -> VideoSurface(context) { player.pause() }.also { player.player.setVideoTextureView(it) } },
+                modifier = (if (ratio != null) Modifier.aspectRatio(ratio) else Modifier.fillMaxSize())
+                    .graphicsLayer { alpha = if (player.drawn) 1f else 0f }
+            )
+        }
+        val problem = player?.problem
+        when {
+            problem != null -> Txt(problem, 15.sp, Color.White, FontWeight.Medium,
+                Modifier.clip(RoundedCornerShape(14.dp)).background(Color(0x99000000)).padding(16.dp), 3)
+            player != null && (player.buffering || (player.playing && !player.drawn)) ->
+                Txt("Loading…", 14.sp, Color.White, FontWeight.Medium,
+                    Modifier.clip(RoundedCornerShape(50)).background(Color(0x99000000)).padding(horizontal = 14.dp, vertical = 8.dp), 1)
+            video && (player == null || !player.playing) ->
+                Box(
+                    Modifier.size(76.dp).clip(CircleShape).background(Color(0x99000000))
+                        .then(if (onPlay != null) Modifier.clickable(onClick = onPlay) else Modifier),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Txt("▶", 30.sp, Color.White, FontWeight.Bold, Modifier.padding(start = 4.dp), 1)
+                }
         }
     }
 }
@@ -465,3 +552,4 @@ private const val DOUBLE_TAP_ZOOM = 2.5f
 private const val PAGE_SHARE = 0.18f
 private const val LIFT_SHARE = 0.12f
 private const val TAP_WAIT_MS = 280L
+private const val CHROME_HIDE_MS = 3500L

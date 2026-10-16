@@ -25,6 +25,14 @@ interface ModuleMapLayer {
 
     /** The rider tapped the pin filed under [pinId]. On the main thread; usually opens a feature with host.openFeature. */
     fun onPinTap(pinId: String)
+
+    /**
+     * A picture for the pin filed under [pinId] (contract 31), about [sizePx] on its shorter side:
+     * the flat map draws it as a round photo instead of the pin's [ModuleMapLayerPin.symbol]. Null
+     * keeps the symbol. Asked off the main thread, it may block on the network; the app keeps what
+     * it gets, so the same pin is not asked again while the rider pans.
+     */
+    fun pinImage(pinId: String, sizePx: Int): android.graphics.Bitmap? = null
 }
 
 class ModuleMapLayerPin(
@@ -35,6 +43,6 @@ class ModuleMapLayerPin(
     val colorArgb: Int,
     /** One emoji drawn inside the pin: "📷". */
     val symbol: String,
-    /** Drawn beside the pin on the flat map; empty for none. */
+    /** Drawn beside the pin on the flat map, or as a small badge on its photo (contract 31); empty for none. */
     val label: String
 )

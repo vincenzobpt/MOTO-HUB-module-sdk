@@ -138,8 +138,12 @@ object MotoHubModuleContract {
      * 30: pins on the NAV map. ModuleMapLayer, a new capability, gives the pins near the map's centre
      *    (ModuleMapLayerPin) and hears a tap on one; the app draws them and lists the layer in the
      *    map's layers menu. New types only; the minimum stays at 3.
+     * 31: photos on the NAV map and a way there. ModuleMapLayer.pinImage gives a pin a picture the
+     *    flat map draws instead of its symbol - a default method, and a layer built against 30, whose
+     *    class has none, reads to the app as a layer without pictures - and MotoHubModuleHost.navigateTo opens the NAV on a point with its route preview,
+     *    for the rider to confirm. An append on the app's side; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 30
+    const val CONTRACT_VERSION = 31
 
     /**
      * The oldest contract this app can still run.
@@ -306,6 +310,13 @@ interface MotoHubModuleHost {
 
     /** Other modules: whether they are installed, opening their features, their extensions (contract 22). See [ModuleBridge]. */
     val modules: ModuleBridge
+
+    /**
+     * Opens the NAV with ([latitude], [longitude]) as the destination and its route preview on
+     * screen (contract 31), named [label] (empty: its coordinates). The rider starts the ride from
+     * the preview as for any destination; nothing is guided until they do. Main thread or not.
+     */
+    fun navigateTo(latitude: Double, longitude: Double, label: String)
 }
 
 /**

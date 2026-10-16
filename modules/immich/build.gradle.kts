@@ -10,10 +10,10 @@ plugins {
 
 motohubModule {
     id = "immich"
-    version = "0.2.0"
+    version = "0.3.0"
     entryClass = "io.motohub.immich.ImmichEntry"
-    // ModuleMapLayer: the photos as pins on the NAV map (contract 30).
-    contractVersion = 30
+    // ModuleMapLayer (30); photo pins and navigateTo (31).
+    contractVersion = 31
     displayName = "Immich"
     description = "Shows the photos of your own Immich server on the NAV map."
 }
@@ -48,6 +48,10 @@ dependencies {
     compileOnly(libs.androidx.compose.ui)
     compileOnly(libs.androidx.compose.material3)
     compileOnly(libs.androidx.compose.foundation)
+
+    // ExoPlayer plays the videos in place. The app ships no media3, so this copy is the module's
+    // own: `implementation`, packed into the module's dex by moduleJar, as the Dashcam does.
+    implementation("androidx.media3:media3-exoplayer:1.9.2")
 
     // android.jar's org.json is a stub that throws on the JVM, so the tests bring the real one.
     // The Compose compiler wants the runtime on the test classpath too.

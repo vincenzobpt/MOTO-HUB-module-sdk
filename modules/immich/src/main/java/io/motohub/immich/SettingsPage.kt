@@ -27,6 +27,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ComposableTarget
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +47,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.motohub.android.module.ModuleUi
 import io.motohub.android.module.MotoHubModuleHost
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.text.NumberFormat
 
 /** The module's page under Modules: is it connected, to what, how many photos are on the map. */
@@ -58,8 +61,21 @@ internal fun SettingsPage(host: MotoHubModuleHost, server: ImmichServer, onBack:
     var testProblem by remember { mutableStateOf<String?>(null) }
     var tested by remember { mutableStateOf(false) }
     var busy by remember { mutableStateOf(false) }
+    // The filter changed and the server is being asked which photos it lets through.
+    var counting by remember { mutableStateOf(false) }
     // Bumped when work on another thread ends, so what is read from the server is read again.
     var version by remember { mutableIntStateOf(0) }
+
+    // Opening the page is a good moment for the cheap check for new photos.
+    LaunchedEffect(Unit) {
+        if (server.configured && server.base != null) {
+            withContext(Dispatchers.IO) {
+                server.update()
+                server.shown()
+            }
+            version++
+        }
+    }
 
     host.ui.Backdrop(onBack) {
         version.let { }
@@ -73,7 +89,7 @@ internal fun SettingsPage(host: MotoHubModuleHost, server: ImmichServer, onBack:
                 Txt("Immich", 26.sp, Ink.Text, FontWeight.Bold, Modifier, 1)
             }
             Spacer(Modifier.height(14.dp))
-            Hero(server, busy)
+            Hero(server, busy || counting)
 
             Eyebrow("Server", Modifier)
             Column(Modifier.fillMaxWidth().card().padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
@@ -118,7 +134,7 @@ internal fun SettingsPage(host: MotoHubModuleHost, server: ImmichServer, onBack:
             Eyebrow("Photos on the map", Modifier)
             Column(Modifier.fillMaxWidth().card().padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Txt(
-                    "Every photo that carries a position becomes a pin on the NAV map. " +
+                    "Every photo that carries a position becomes a pin on the NAV map; new ones come in by themselves. " +
                         "Switch them on or off there: Layers, Immich photos.",
                     14.sp, Ink.Muted, FontWeight.Normal, Modifier, 4
                 )
@@ -131,17 +147,33 @@ internal fun SettingsPage(host: MotoHubModuleHost, server: ImmichServer, onBack:
                     busy = true
                     Thread {
                         server.refresh()
+                        server.shown()
                         busy = false
                         version++
                     }.start()
                 }
             }
 
+            Eyebrow("What the map shows", Modifier)
+            MapFilterCard(server) {
+                counting = true
+                version++
+                Thread {
+                    server.shown()
+                    counting = false
+                    version++
+                }.start()
+            }
+
             Eyebrow("On this phone", Modifier)
             Row(Modifier.fillMaxWidth().card().padding(18.dp), verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Txt("Saved images", 16.sp, Ink.Text, FontWeight.SemiBold, Modifier, 1)
-                    Txt(Words.bytes(server.imageCacheBytes()) + " kept so photos open at once", 13.sp, Ink.Muted, FontWeight.Normal, Modifier, 2)
+                    Txt(
+                        Words.bytes(server.imageCacheBytes()) + " of " + Words.bytes(ImmichServer.IMAGE_CACHE_BYTES) +
+                            " kept so photos open at once; the oldest go first",
+                        13.sp, Ink.Muted, FontWeight.Normal, Modifier, 2
+                    )
                 }
                 Spacer(Modifier.width(12.dp))
                 Box(
@@ -164,6 +196,8 @@ internal fun SettingsPage(host: MotoHubModuleHost, server: ImmichServer, onBack:
 private fun Hero(server: ImmichServer, busy: Boolean) {
     val who = server.identity
     val held = server.held()
+    val shown = server.shownCount()
+    val filtered = !server.filter.everything
     val connected = server.configured && who != null
     Column(
         Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp))
@@ -184,16 +218,18 @@ private fun Hero(server: ImmichServer, busy: Boolean) {
             Txt(
                 when {
                     busy -> "…"
-                    held == null -> "—"
-                    else -> NumberFormat.getIntegerInstance().format(held.size)
+                    held == null || shown == null -> "—"
+                    else -> NumberFormat.getIntegerInstance().format(shown)
                 },
                 40.sp, Color.White, FontWeight.Bold, Modifier, 1
             )
             Spacer(Modifier.width(10.dp))
             Column(Modifier.padding(bottom = 7.dp)) {
                 Txt("photos on the map", 14.sp, Color(0xE6FFFFFF), FontWeight.SemiBold, Modifier, 1)
-                if (held != null && server.lastRefresh > 0) {
-                    Txt("updated " + updated(server.lastRefresh), 12.sp, Color(0xB3FFFFFF), FontWeight.Normal, Modifier, 1)
+                val of = if (held != null && filtered) "of " + NumberFormat.getIntegerInstance().format(held.size) else null
+                val at = if (held != null && server.lastRefresh > 0) "updated " + updated(server.lastRefresh) else null
+                listOfNotNull(of, at).joinToString(" · ").takeIf { it.isNotEmpty() }?.let {
+                    Txt(it, 12.sp, Color(0xB3FFFFFF), FontWeight.Normal, Modifier, 2)
                 }
             }
         }

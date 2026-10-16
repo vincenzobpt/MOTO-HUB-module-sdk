@@ -56,6 +56,8 @@ internal fun InfoSheet(
     id: String,
     d: PhotoDetails?,
     problem: String?,
+    sharing: Boolean,
+    onShare: () -> Unit,
     onClose: () -> Unit
 ) {
     BoxWithConstraints(Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
@@ -89,10 +91,22 @@ internal fun InfoSheet(
                 }
                 if (d != null) Body(host, d)
                 Spacer(Modifier.height(20.dp))
+                val lat = d?.latitude
+                val lon = d?.longitude
+                if (lat != null && lon != null) {
+                    // The app's own route preview: the rider still chooses to start, as for any destination.
+                    MainButton("Navigate here", true, Modifier.fillMaxWidth()) {
+                        runCatching { host.navigateTo(lat, lon, d.place ?: d.fileName ?: "Photo") }
+                    }
+                    Spacer(Modifier.height(10.dp))
+                }
                 server.webUrl(id)?.let { link ->
-                    MainButton("Open in Immich", true, Modifier.fillMaxWidth()) {
-                        runCatching {
-                            host.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        SideButton(if (sharing) "Preparing…" else "Share", !sharing, Modifier.weight(1f), onShare)
+                        SideButton("Open in Immich", true, Modifier.weight(1f)) {
+                            runCatching {
+                                host.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                            }
                         }
                     }
                 }

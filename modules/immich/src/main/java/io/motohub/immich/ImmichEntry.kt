@@ -22,8 +22,8 @@ private class ImmichModule(private val host: MotoHubModuleHost) : MotoHubModule 
     // Must agree with motohubModule { } in build.gradle.kts.
     override val manifest = ModuleManifest(
         id = "immich",
-        version = "0.2.0",
-        contractVersion = 30,
+        version = "0.3.0",
+        contractVersion = 31,
         entryClass = "io.motohub.immich.ImmichEntry",
         displayName = "Immich",
         description = "Shows the photos of your own Immich server on the NAV map."
@@ -54,9 +54,14 @@ private class PhotoMap(private val host: MotoHubModuleHost, private val server: 
     /** The spot whose page is open, or about to be. */
     @Volatile var open: Spot? = null
 
+    // The photos last shown and their index, built again only when they change, not on every pan.
+    @Volatile private var index: Pair<List<Marker>, MarkerIndex>? = null
+
     override fun pinsNear(latitude: Double, longitude: Double, radiusMeters: Int, limit: Int): Array<ModuleMapLayerPin> {
         if (!server.configured) return emptyArray()
-        val found = Markers.near(server.markers(), latitude, longitude, radiusMeters, limit)
+        val shown = server.shown()
+        val photos = index?.takeIf { it.first === shown }?.second ?: MarkerIndex(shown).also { index = shown to it }
+        val found = photos.near(latitude, longitude, radiusMeters, limit)
         spots = found.associateBy { it.marker.id }
         return found.map {
             ModuleMapLayerPin(
@@ -69,6 +74,16 @@ private class PhotoMap(private val host: MotoHubModuleHost, private val server: 
             )
         }.toTypedArray()
     }
+
+    /** The pin's photo, for the NAV map's round photo markers (contract 31). Blocking: called off the main thread. */
+    override fun pinImage(pinId: String, sizePx: Int): android.graphics.Bitmap? = runCatching {
+        val bytes = server.image(pinId, ImmichServer.THUMBNAIL) ?: return null
+        val bounds = android.graphics.BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
+        var sample = 1
+        while (minOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= sizePx) sample *= 2
+        android.graphics.BitmapFactory.decodeByteArray(bytes, 0, bytes.size, android.graphics.BitmapFactory.Options().apply { inSampleSize = sample })
+    }.getOrNull()
 
     override fun onPinTap(pinId: String) {
         open = spots[pinId] ?: return
