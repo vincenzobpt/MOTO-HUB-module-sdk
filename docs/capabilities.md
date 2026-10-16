@@ -17,6 +17,7 @@ as the Android Auto module does.
 | [`ModuleAccessoryBridge`](#usb-accessories-moduleaccessoryprobe-and-moduleaccessorybridge) | 10 | diagnostics bridge a USB head unit to Android Auto |
 | [`ModuleExtensions`](#adding-to-another-module-moduleextensions-and-modulebridge) | 22 | it draws the card of the module you add to, or that module asks `host.modules.extensions()` |
 | [`ModuleLiveStatus`](#something-live-modulelivestatus) | 27 | it draws the Ride page |
+| [`ModuleMapLayer`](#pins-on-the-nav-map-modulemaplayer) | 30 | the NAV map settles somewhere new, or the rider taps one of your pins |
 
 Where only one module can serve (the whole-screen projection, navigator), the app takes the
 **first installed** module that answers. That is a deliberate, predictable choice. A dashboard's
@@ -198,6 +199,13 @@ While a projected app is navigating, push `ModuleGuidance` snapshots (maneuver t
 exit, road, distances and times) to the listener. The Ride Dashboard draws them in its own turn
 card. `null` means stop.
 
+From contract 29 a snapshot can also carry the turn after the next one (`thenManeuverType`, same
+vocabulary as `maneuverType`, `-1` when not sent) and the lanes at the next turn (`lanes`, left
+to right, each a `ModuleGuidanceLane(maneuverType, recommended)`). The Navigation widget draws
+them at the foot of its turn card when the card is tall enough. Fill them only with what the
+navigating app sends. A module built for 28 or older keeps linking: the constructor without the
+two fields is still there. A module that fills them declares contract **29** (ADV-SOLO 0.1.44).
+
 ---
 
 ## Projected audio: `ModuleAudio`
@@ -286,6 +294,46 @@ Keep one `MutableStateFlow` and set it from wherever the work starts and stops; 
 do. The app draws the pill itself, the same for every module, so `label` is the only thing you
 choose: the pill already says "live", so do not repeat it. A module that answers
 `ModuleLiveStatus` declares contract **27**, and needs ADV-SOLO 0.1.40 or later.
+
+---
+
+## Pins on the NAV map: `ModuleMapLayer`
+
+For a module that knows **where things are**: photos from the rider's own server, places from a
+service, anything with a position. The app draws your pins on the NAV map in the same style as
+its own, and lists your layer by `title` in the map's layers menu, where the rider switches it
+on and off.
+
+```kotlin
+interface ModuleMapLayer {                         // a capability, since contract 30
+    val title: String                              // the name in the layers menu: "Immich photos"
+    fun pinsNear(latitude: Double, longitude: Double, radiusMeters: Int, limit: Int): Array<ModuleMapLayerPin>
+    fun onPinTap(pinId: String)                    // main thread; usually host.openFeature(...)
+    fun pinImage(pinId: String, sizePx: Int): Bitmap? = null   // contract 31: a photo instead of the symbol
+}
+
+class ModuleMapLayerPin(
+    val id: String,                                // yours, handed back to onPinTap and pinImage
+    val latitude: Double,
+    val longitude: Double,
+    val colorArgb: Int,
+    val symbol: String,                            // one emoji drawn inside the pin: "📷"
+    val label: String                              // beside the pin, or a badge on its photo; "" for none
+)
+```
+
+`pinsNear` is asked each time the map settles somewhere new, on a background thread: it may
+block on the network, and each answer replaces the previous one. Return at most `limit` pins,
+or an empty array. `pinImage` is asked off the main thread too, and the app keeps what it gets,
+so a pin is not asked again while the rider pans; `null` keeps the symbol.
+
+To send the rider to a place, call `host.navigateTo(latitude, longitude, label)` (contract 31):
+the NAV opens with that point as the destination and its route preview on screen. Nothing is
+guided until the rider starts the ride.
+
+A layer declares contract **30**; pictures and `navigateTo` need **31**. Both need ADV-SOLO
+0.1.44 or later. A layer built against 30 has no `pinImage`, and the app draws it with symbols.
+The [Immich module](../modules/immich) is the complete reference.
 
 ---
 

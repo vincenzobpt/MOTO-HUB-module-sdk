@@ -129,6 +129,7 @@ the playback frame, clamped to the new length.
 | Call | Since | |
 |---|---|---|
 | `setLook(ModuleSceneLook(mapStyle, exaggeration, haze, progressiveTrack))` | 12 | `STYLE_SATELLITE` (falls back to the map when the rider has no satellite source), `STYLE_MAP` or `STYLE_NIGHT`; relief multiplier (1 is true scale); haze 0 to 1; a progressive track is drawn only behind the rider. |
+| `setTrackAhead(shown)` | 28 | With a progressive track, whether the track still ahead of the rider shows, faint and dashed. `false` draws only the ridden line. On by default; a whole track ignores it. |
 | `setMarkers(ModuleSceneMarkers(lats, lons, labels, colors))` | 12 | Labelled pins standing on the terrain. Replaces any given before. |
 | `setLens(ModuleSceneLens.*)` | 14 | `STANDARD`, `SPHERE` (a 2:1 equirectangular 360° film, with the metadata players and headsets need) or `PLANET` (the sphere folded into a little planet). The last two draw each frame several times, so they play and export slower. |
 | `setEngine(ModuleSceneEngine.*)` | 14 | `MAPLIBRE`, the app's own engine, or `ARCGIS`: sunlight with shadows, atmosphere, weather and water, with the rider's Esri key when there is one. Switching reloads the scene and keeps the film. |

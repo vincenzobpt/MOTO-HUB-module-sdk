@@ -109,6 +109,7 @@ other way to know your objects are gone.
 | `sights` | Viewpoints, heritage and passes near a road, from OpenStreetMap (contract 22); see [rides-and-scene.md](rides-and-scene.md#sights-near-a-road-modulesights). |
 | `maps` | A flat map the app draws and your module directs (contract 22); see [rides-and-scene.md](rides-and-scene.md#a-flat-map-modulemaphost). |
 | `modules` | Whether another module is installed, opening its features on a ride, and what other modules add to yours (contract 22); see [capabilities.md](capabilities.md#adding-to-another-module-moduleextensions-and-modulebridge). |
+| `navigateTo(latitude, longitude, label)` | Opens the NAV with that point as the destination and its route preview on screen, for the rider to start (contract 31); see [capabilities.md](capabilities.md#pins-on-the-nav-map-modulemaplayer). |
 
 ## Rules that are easy to break
 
@@ -170,5 +171,9 @@ history is in the KDoc of `MotoHubModuleContract`.
 | 25 | `ModuleExportSpec.RENDER_SPREAD`; `ModuleScene.spreadDevices`; `ModuleRenderServer.kind`, `.spreads`; `ModuleExportJob.renderedOnAll`, `spreadProgress`, `ModuleSpreadDevice` (one film drawn by every ready device at once) | 0.1.34 |
 | 26 | `ModuleSceneHost.remoteEditing`; `ModuleRemoteEditing` (`editors`, `watchEditors`, `send`), `ModuleRemoteEdit`, `ModuleRemoteEditState`, `ModuleRemoteEditJob` (a module's project sent to a paired computer and edited there) | 0.1.36 |
 | 27 | `ModuleLiveStatus`, `ModuleLiveState` (a live pill on the Ride page while a module is doing something) | 0.1.40 |
+| 28 | `ModuleScene.setTrackAhead` (a film that shows only the ridden line) | 0.1.42 |
+| 29 | `ModuleGuidance.thenManeuverType`, `.lanes`, `ModuleGuidanceLane` (the turn after the next one and the lanes) | 0.1.44 |
+| 30 | `ModuleMapLayer`, `ModuleMapLayerPin` (pins on the NAV map) | 0.1.44 |
+| 31 | `ModuleMapLayer.pinImage` (a photo instead of the pin's symbol); `host.navigateTo` (the NAV opened on a point) | 0.1.44 |
 
 This repository tags every contract release as `contract-<n>`.
