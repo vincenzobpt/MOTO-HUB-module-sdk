@@ -32,7 +32,7 @@ The contract and tooling are Apache-2.0 so that you can write a module under any
 like, including a closed one. The Android Auto module is AGPL-3.0 because it is derived from
 [headunit-revived](https://github.com/andreknieriem/headunit-revived); its source is published
 here to meet that licence, and each published version of it has a matching tag in this repository.
-The Dashcam, Flyby Route Simulator, Dawarich and Immich modules are AGPL-3.0 by choice, and are tagged the same way.
+The Dashcam, Flyby Route Simulator, Dawarich, Immich and TomTom modules are AGPL-3.0 by choice, and each published version is tagged the same way.
 
 ## Quick start
 
