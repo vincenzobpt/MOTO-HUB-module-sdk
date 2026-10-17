@@ -34,7 +34,7 @@ private class TomTomModule(private val host: MotoHubModuleHost) : MotoHubModule 
     // Must agree with motohubModule { } in build.gradle.kts.
     override val manifest = ModuleManifest(
         id = "tomtom",
-        version = "0.1.0",
+        version = "0.1.3",
         contractVersion = 32,
         entryClass = "io.motohub.tomtom.TomTomEntry",
         displayName = "TomTom",
