@@ -19,7 +19,8 @@ import java.util.concurrent.Semaphore
 sealed interface Answer<out T> {
     class Ok<T>(val value: T) : Answer<T>
     object Exhausted : Answer<Nothing>
-    class Failed(val why: String) : Answer<Nothing>
+    /** [refused]: TomTom said 401/403, the key is not allowed this API. */
+    class Failed(val why: String, val refused: Boolean = false) : Answer<Nothing>
 }
 
 /** The five things the module does; each can be switched off on its page. */
@@ -27,8 +28,11 @@ enum class Feature(val key: String) {
     TRAFFIC("traffic"), PLACES("places"), SEARCH("search"), DRIVE("drive"), ROAD("road")
 }
 
-/** One line of "Check my key": which part, and whether TomTom let it through (its own words if not). */
-class CheckRow(val name: String, val problem: String?)
+/**
+ * One line of "Check my key": which part, and whether TomTom let it through (its own words if not).
+ * [missing]: the product to tick on the key in TomTom's dashboard, when TomTom refused the key for it.
+ */
+class CheckRow(val name: String, val problem: String?, val missing: String? = null)
 
 /**
  * The rider's TomTom: the key, the terms they accepted, which features are on, and every call.
@@ -211,23 +215,23 @@ class TomTomService(private val host: MotoHubModuleHost) {
 
     /** One cheap call per family; each costs one call of its allowance. */
     fun check(): List<CheckRow> {
-        fun row(name: String, a: Answer<*>) = CheckRow(
-            name,
-            when (a) {
-                is Answer.Ok -> null
-                is Answer.Exhausted -> "This month's free allowance is used up."
-                is Answer.Failed -> a.why
-            }
-        )
+        // [product]: the name of the API among the key's products in TomTom's dashboard.
+        fun row(name: String, product: String, a: Answer<*>) = when (a) {
+            is Answer.Ok -> CheckRow(name, null)
+            is Answer.Exhausted -> CheckRow(name, "This month's free allowance is used up.")
+            is Answer.Failed ->
+                if (a.refused) CheckRow(name, "Not allowed for this key: “$product” is not ticked on it.", product)
+                else CheckRow(name, a.why)
+        }
         val rows = listOf(
             row(
-                "Places",
+                "Places", "Search",
                 orbis(Api.DISCOVER, "POST", "/maps/orbis/places/discover", "3", "results(id)", """{"query":"cafe","maxResults":1}""") { it }
             ),
-            row("Traffic", incidents(4.8854, 52.3693, 4.8979, 52.3750)),
-            row("Search", orbis(Api.SUGGEST, "POST", "/maps/orbis/places/suggest", "3", "results(id)", """{"query":"ams","maxResults":1}""") { it }),
-            row("Road info", roadAt(52.37576, 4.61049)),
-            row("Drive times", drive(52.37576, 4.61049, 52.38341, 4.61409))
+            row("Traffic", "Traffic", incidents(4.8854, 52.3693, 4.8979, 52.3750)),
+            row("Search", "Search", orbis(Api.SUGGEST, "POST", "/maps/orbis/places/suggest", "3", "results(id)", """{"query":"ams","maxResults":1}""") { it }),
+            row("Road info", "Reverse Geocoding", roadAt(52.37576, 4.61049)),
+            row("Drive times", "Routing", drive(52.37576, 4.61049, 52.38341, 4.61409))
         )
         lastCheck = rows
         return rows
@@ -271,7 +275,7 @@ class TomTomService(private val host: MotoHubModuleHost) {
                 val code = c.responseCode
                 if (code !in 200..299) {
                     val said = runCatching { c.errorStream.bufferedReader().readText() }.getOrNull()?.let { Parse.errorWords(it) }
-                    return Answer.Failed(listOfNotNull(problem(code), said).joinToString(" "))
+                    return Answer.Failed(listOfNotNull(problem(code), said).joinToString(" "), refused = code == 401 || code == 403)
                 }
                 return Answer.Ok(read(c.inputStream.bufferedReader().readText()))
             } finally {
@@ -302,7 +306,7 @@ class TomTomService(private val host: MotoHubModuleHost) {
     private fun enc(s: String) = URLEncoder.encode(s, "UTF-8")
 
     companion object {
-        const val USER_AGENT = "MOTO-HUB-module-tomtom/0.1.3"
+        const val USER_AGENT = "MOTO-HUB-module-tomtom/0.1.4"
 
         /** Six decimals: about a tenth of a metre, and no locale comma. */
         fun fmt(v: Double): String = String.format(Locale.ROOT, "%.6f", v)

@@ -61,6 +61,7 @@ import java.text.NumberFormat
 
 private const val DEVELOPERS_URL = "https://developer.tomtom.com"
 private const val TERMS_URL = "https://www.tomtom.com/en_gb/thirdpartyproductterms/"
+private const val KEYS_URL = "https://my.tomtom.com/keys"
 
 /** The module's page under Modules: is it set up, what is on, how much of the month is used. */
 @Composable
@@ -115,7 +116,7 @@ internal fun HomePage(host: MotoHubModuleHost, service: TomTomService, onBack: (
             if (!setUp) {
                 Eyebrow("Three steps", Modifier)
                 Steps(host, key, terms, checking, { key = it }, { terms = it }) { check(key, terms) }
-                rows?.let { Eyebrow("Result", Modifier); CheckRows(it) }
+                rows?.let { Eyebrow("Result", Modifier); CheckRows(host, it) }
             } else {
                 Eyebrow("On your NAV", Modifier)
                 Column(Modifier.fillMaxWidth().card()) {
@@ -141,7 +142,7 @@ internal fun HomePage(host: MotoHubModuleHost, service: TomTomService, onBack: (
                             version++
                         }
                     }
-                    rows?.let { CheckRows(it, bare = true) }
+                    rows?.let { CheckRows(host, it, bare = true) }
                 }
             }
 
@@ -367,10 +368,13 @@ private fun UsageCard(usage: Usage) {
     }
 }
 
-/** The result of the check: a line for each part, in TomTom's own words when it said no. */
+/**
+ * The result of the check: a line for each part, in TomTom's own words when it said no, and the
+ * products to tick on the key when TomTom refused it for some parts.
+ */
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
-private fun CheckRows(rows: List<CheckRow>, bare: Boolean = false) {
+private fun CheckRows(host: MotoHubModuleHost, rows: List<CheckRow>, bare: Boolean = false) {
     Column(
         (if (bare) Modifier.fillMaxWidth() else Modifier.fillMaxWidth().card().padding(18.dp)),
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -384,6 +388,38 @@ private fun CheckRows(rows: List<CheckRow>, bare: Boolean = false) {
                 }
             }
         }
+        val missing = rows.mapNotNull { it.missing }.distinct()
+        // Refused for everything: the key itself is wrong, not one product.
+        if (missing.isNotEmpty() && rows.all { it.missing != null }) {
+            Txt(
+                "TomTom refused this key for everything. Check it was copied whole, and that it is still active in your TomTom account.",
+                14.sp, Ink.Gold, FontWeight.Medium, Modifier.padding(top = 4.dp), 4
+            )
+        } else if (missing.isNotEmpty()) {
+            MissingProducts(host, missing)
+        }
+    }
+}
+
+/** What to tick on the key in TomTom's dashboard, and where. */
+@Composable
+@ComposableTarget(ModuleUi.UI_APPLIER)
+private fun MissingProducts(host: MotoHubModuleHost, missing: List<String>) {
+    Column(
+        Modifier.fillMaxWidth().padding(top = 4.dp).card(Ink.PanelHigh, 16.dp).padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Txt("Switch on for your key", 15.sp, Ink.Text, FontWeight.Bold, Modifier, 1)
+        Txt(missing.joinToString("  ·  "), 16.sp, Ink.Gold, FontWeight.Bold, Modifier, 3)
+        listOf(
+            "Open your keys on TomTom.",
+            "Tap “…” next to this key and edit it.",
+            "Tick the products above (or All) and save.",
+            "Come back and tap Check again."
+        ).forEachIndexed { i, step ->
+            Txt("${i + 1}. $step", 14.sp, Ink.Muted, FontWeight.Normal, Modifier, 2)
+        }
+        SideButton("Open my TomTom keys", true, Modifier.fillMaxWidth()) { openLink(host, KEYS_URL) }
     }
 }
 
