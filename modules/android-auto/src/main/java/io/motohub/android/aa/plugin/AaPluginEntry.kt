@@ -49,7 +49,7 @@ private class AndroidAutoModule(private val host: MotoHubModuleHost) : MotoHubMo
 
     override val manifest = ModuleManifest(
         id = "android-auto",
-        version = "0.2.22",
+        version = "0.2.23",
         contractVersion = 29,
         entryClass = AaPluginContract.ENTRY_CLASS,
         displayName = "Android Auto",

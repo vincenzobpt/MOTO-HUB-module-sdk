@@ -22,6 +22,13 @@ import io.motohub.android.module.MotoHubModuleHost
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicBoolean
+
+/**
+ * One external head unit run per process. The page's own `running` flag is forgotten when the
+ * page is left, and runs started on top of a stuck one each held a Bluetooth link to the unit.
+ */
+private val externalRunActive = AtomicBoolean(false)
 
 /**
  * What this module adds to the app's own screens.
@@ -98,7 +105,9 @@ internal class AaFeatures(private val host: MotoHubModuleHost) : ModuleFeatures 
             for (device in bonded) {
                 val name = deviceName(device)
                 host.ui.ActionRow(name, device.address) {
-                    if (!running) {
+                    if (!externalRunActive.compareAndSet(false, true)) {
+                        result = "A run is still in progress. Wait for it to finish, then try again."
+                    } else {
                         running = true
                         result = null
                         logText = ""
@@ -107,22 +116,28 @@ internal class AaFeatures(private val host: MotoHubModuleHost) : ModuleFeatures 
                                 host.log.log("[Extend] $line")
                                 logText += "$line\n"
                             }
-                            val transport = WirelessHeadUnitTransport.connect(host.context, device, sink)
-                            val outcome = try {
-                                if (transport.connection == null) {
-                                    AapPhoneHandshake.Outcome(false, transport.detail)
-                                } else {
-                                    AapPhoneHandshake.run(
-                                        host.context, ModuleIdentity, transport.connection, sink, host,
-                                        listenFirstMs = AapPhoneHandshake.WIRELESS_LISTEN_FIRST_MS
-                                    )
+                            try {
+                                val transport = WirelessHeadUnitTransport.connect(host.context, device, sink)
+                                val outcome = try {
+                                    if (transport.connection == null) {
+                                        AapPhoneHandshake.Outcome(false, transport.detail)
+                                    } else {
+                                        AapPhoneHandshake.run(
+                                            host.context, ModuleIdentity, transport.connection, sink, host,
+                                            listenFirstMs = AapPhoneHandshake.WIRELESS_LISTEN_FIRST_MS
+                                        )
+                                    }
+                                } finally {
+                                    // Each run would otherwise leave its socket open and its Wi-Fi request live.
+                                    transport.close()
                                 }
+                                result = if (outcome.success) "OK: ${outcome.detail}" else "FAIL: ${outcome.detail}"
+                                // The verdict only reached the screen, so a report never said how a run ended.
+                                host.log.log("[Extend] Result: $result")
                             } finally {
-                                // Each run would otherwise leave its socket open and its Wi-Fi request live.
-                                transport.close()
+                                running = false
+                                externalRunActive.set(false)
                             }
-                            result = if (outcome.success) "OK: ${outcome.detail}" else "FAIL: ${outcome.detail}"
-                            running = false
                         }
                     }
                 }

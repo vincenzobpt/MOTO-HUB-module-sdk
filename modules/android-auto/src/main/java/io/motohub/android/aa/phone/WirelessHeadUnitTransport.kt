@@ -37,7 +37,11 @@ object WirelessHeadUnitTransport {
 
     private const val TCP_CONNECT_TIMEOUT_MS = 8_000
     private const val WIFI_JOIN_TIMEOUT_MS = 30_000L
-    private const val RFCOMM_CHANNEL_MAX = 8
+    private const val RFCOMM_SDP_ROUNDS = 3
+    private const val RFCOMM_RETRY_PAUSE_MS = 2_000L
+
+    /** A healthy exchange takes well under a second (0.1-1 s measured on a Carpuride). */
+    private const val WPP_TIMEOUT_MS = 10_000L
     private const val TCP_RETRIES = 5
     private const val TCP_RETRY_BACKOFF_MS = 1_000L
 
@@ -65,7 +69,17 @@ object WirelessHeadUnitTransport {
             val wpp = WppPhoneHandshake(bt.inputStream, bt.outputStream, log)
             val localIp = getLocalIp()
             log("Local IPv4 offered to head unit: ${localIp ?: "(none found)"}")
-            val wppResult = wpp.run(localIp ?: "0.0.0.0")
+            // An RFCOMM read has no timeout: a head unit that stops mid-exchange held this run, and
+            // its Bluetooth link, forever, and the next run met a busy unit (support 7F65-77FA-5586).
+            val wppDone = CountDownLatch(1)
+            Thread {
+                val finished = try { wppDone.await(WPP_TIMEOUT_MS, TimeUnit.MILLISECONDS) } catch (_: InterruptedException) { true }
+                if (!finished) {
+                    log("WPP: no complete exchange in ${WPP_TIMEOUT_MS / 1000}s. Closing the Bluetooth link.")
+                    try { bt.close() } catch (_: Exception) {}
+                }
+            }.apply { isDaemon = true }.start()
+            val wppResult = try { wpp.run(localIp ?: "0.0.0.0") } finally { wppDone.countDown() }
             if (!wppResult.success || wppResult.endpoint == null || wppResult.credentials == null) {
                 return Result(null, "WPP handshake failed: ${wppResult.detail}")
             }
@@ -104,20 +118,18 @@ object WirelessHeadUnitTransport {
 
     private fun connectRfcomm(device: BluetoothDevice, log: (String) -> Unit): BluetoothSocket? {
         log("--- RFCOMM ---")
-        openRfcomm(log, "secure SDP (AA UUID)") { device.createRfcommSocketToServiceRecord(AA_UUID) }?.let { return it }
-        openRfcomm(log, "insecure SDP (AA UUID)") { device.createInsecureRfcommSocketToServiceRecord(AA_UUID) }?.let { return it }
-        for (channel in 1..RFCOMM_CHANNEL_MAX) {
-            openRfcomm(log, "reflection secure channel $channel") {
-                val m = device.javaClass.getMethod("createRfcommSocket", Int::class.javaPrimitiveType)
-                m.invoke(device, channel) as BluetoothSocket
-            }?.let { return it }
+        // Only the Android Auto service, retried: when it is busy, a raw channel number lands on
+        // some other service (channel 1 on a Carpuride), which never speaks WPP.
+        for (round in 1..RFCOMM_SDP_ROUNDS) {
+            if (round > 1) {
+                log("Android Auto service busy or not answering; retrying in ${RFCOMM_RETRY_PAUSE_MS / 1000}s (round $round/$RFCOMM_SDP_ROUNDS).")
+                try { Thread.sleep(RFCOMM_RETRY_PAUSE_MS) } catch (_: InterruptedException) { return null }
+            }
+            openRfcomm(log, "secure SDP (AA UUID)") { device.createRfcommSocketToServiceRecord(AA_UUID) }?.let { return it }
+            openRfcomm(log, "insecure SDP (AA UUID)") { device.createInsecureRfcommSocketToServiceRecord(AA_UUID) }?.let { return it }
         }
-        for (channel in 1..RFCOMM_CHANNEL_MAX) {
-            openRfcomm(log, "reflection insecure channel $channel") {
-                val m = device.javaClass.getMethod("createInsecureRfcommSocket", Int::class.javaPrimitiveType)
-                m.invoke(device, channel) as BluetoothSocket
-            }?.let { return it }
-        }
+        log("The head unit's Android Auto service never accepted the link. If Android Auto on this " +
+            "phone is connected to it, disconnect that first.")
         return null
     }
 
