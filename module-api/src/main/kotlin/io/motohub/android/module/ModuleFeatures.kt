@@ -65,7 +65,15 @@ enum class ModuleFeaturePlacement {
      * module keeps of the rides - its own list of what it made from them. Drawn by the app as a
      * small pill with [ModuleFeature.title].
      */
-    TRIPS_HEADER
+    TRIPS_HEADER,
+
+    /**
+     * A key on the NAV map that opens a panel over it (contract 32), the map still alive above:
+     * for something a rider glances at while the map is open. The app draws the key, a small
+     * pill with [ModuleFeature.title], and the panel's frame; [ModuleFeature.screen] fills it
+     * and its onBack closes it. Phone only, like everything on the NAV map.
+     */
+    NAV_PANEL
 }
 
 /**

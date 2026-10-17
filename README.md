@@ -25,6 +25,7 @@ particular module: it asks for *capabilities* by interface and draws whatever th
 | [`modules/flyby-route-simulator/`](modules/flyby-route-simulator) | The complete source of the Flyby Route Simulator: plans a route and rides it virtually. The reference for rides, routing, places, maps and extensions; see [docs/example-route-simulator.md](docs/example-route-simulator.md). | **AGPL-3.0** |
 | [`modules/dawarich/`](modules/dawarich) | The complete source of the Dawarich module: sends your position to your own [Dawarich](https://dawarich.app) server while you ride, and sends recorded rides on request. | **AGPL-3.0** |
 | [`modules/immich/`](modules/immich) | The complete source of the Immich module: the photos of your own [Immich](https://immich.app) server as pins on the NAV map, opened full screen with everything Immich knows about them. The reference for map layers (contract 30). | **AGPL-3.0** |
+| [`modules/tomtom/`](modules/tomtom) | The complete source of the TomTom module: live traffic, places, search, drive times and road info from the rider's own free TomTom key, on the phone only. The reference for a service's data in the NAV (contract 32). | **AGPL-3.0** |
 | [`docs/`](docs) | The developer guide. | Apache-2.0 |
 
 The contract and tooling are Apache-2.0 so that you can write a module under any licence you
@@ -64,7 +65,7 @@ The full walk-through, including how to start your own module, is in
 
 ## Status
 
-The contract is at **version 31**. It only grows by appending, and the app still loads modules
+The contract is at **version 32**. It only grows by appending, and the app still loads modules
 built against contract 3 or later. Contracts 11 to 14 (rides, the 3D scene, ride and route
 actions, the rider's AI) need ADV-SOLO 0.1.29, contract 15 (draft, real-time and H.265 video
 exports) ADV-SOLO 0.1.30, contract 16 (credits in the film's credit roll) ADV-SOLO 0.1.31,
@@ -77,7 +78,8 @@ contracts 24 (the weather after the rain) and 25 (one film drawn by every ready 
 ADV-SOLO 0.1.34, contract 26 (a project sent to a paired computer and edited there) ADV-SOLO
 0.1.36, contract 27 (a live pill on the Ride page) ADV-SOLO 0.1.40, contract 28 (only the
 ridden line in a film) ADV-SOLO 0.1.42, contracts 29 to 31 (lanes and the turn after in the
-guidance, pins and photos on the NAV map, and a way there) ADV-SOLO 0.1.44; a module
+guidance, pins and photos on the NAV map, and a way there) ADV-SOLO 0.1.44, contract 32 (a
+service's data in the NAV, on the phone only) ADV-SOLO 0.1.45; a module
 that does not use them can keep declaring 10 and run on 0.1.25 and later. See [docs/contract.md](docs/contract.md#versioning).
 
 ## Community

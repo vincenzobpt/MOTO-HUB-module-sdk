@@ -18,6 +18,10 @@ as the Android Auto module does.
 | [`ModuleExtensions`](#adding-to-another-module-moduleextensions-and-modulebridge) | 22 | it draws the card of the module you add to, or that module asks `host.modules.extensions()` |
 | [`ModuleLiveStatus`](#something-live-modulelivestatus) | 27 | it draws the Ride page |
 | [`ModuleMapLayer`](#pins-on-the-nav-map-modulemaplayer) | 30 | the NAV map settles somewhere new, or the rider taps one of your pins |
+| [`ModuleMapOverlay`](#your-data-in-the-nav-phone-only) | 32 | the rider switches your layer on in the NAV map's layers menu |
+| [`ModulePlaceProvider`](#your-data-in-the-nav-phone-only) | 32 | the rider picks your source of place icons and the NAV map settles somewhere new |
+| [`ModuleGeocoder`](#your-data-in-the-nav-phone-only) | 32 | the rider types in the NAV search box or drops a pin |
+| [`ModuleTravelTimes`](#your-data-in-the-nav-phone-only) | 32 | the route preview lists fuel stations |
 
 Where only one module can serve (the whole-screen projection, navigator), the app takes the
 **first installed** module that answers. That is a deliberate, predictable choice. A dashboard's
@@ -58,6 +62,7 @@ class ModuleFeature(
 | `RIDE_ACTION` | On a recorded trip's page, as an action on that ride (contract 14). |
 | `ROUTE_ACTION` | On a route's preview, as an action on that route (contract 14). |
 | `TRIPS_HEADER` | A key with your `title` at the top of Trips (contract 14): the way in to what your module **made from the rides**, its own list of them. Not a status light and not a way to your settings: use [`ModuleLiveStatus`](#something-live-modulelivestatus) and `MODULES` for those. |
+| `NAV_PANEL` | A key with your `title` on the NAV map (contract 32) that opens a panel over the bottom of the map, the map still alive above. The app draws the key and the panel's frame; your `screen` fills it and its `onBack` closes it. For something glanced at while the map is open. Phone only. |
 
 For the last three, `host.openedFor()` says which ride or route; see
 [rides-and-scene.md](rides-and-scene.md#actions-on-one-ride-or-route).
@@ -334,6 +339,64 @@ guided until the rider starts the ride.
 A layer declares contract **30**; pictures and `navigateTo` need **31**. Both need ADV-SOLO
 0.1.44 or later. A layer built against 30 has no `pinImage`, and the app draws it with symbols.
 The [Immich module](../modules/immich) is the complete reference.
+
+---
+
+## Your data in the NAV, phone only
+
+Four capabilities (contract 32) let a module put a service's data into the NAV itself: tiles over
+the map, a source of place icons, search, and drive times. All four are declared in
+`ModuleProviders.kt`.
+
+```kotlin
+interface ModuleMapOverlay {                       // tiles over the NAV map
+    val title: String                              // the switch in the layers menu: "Traffic"
+    val attribution: String                        // a corner of the map while drawn: "© Example"
+    fun tiles(dark: Boolean): Array<ModuleOverlayTiles>   // https URL templates with {z}/{x}/{y}
+}
+
+interface ModulePlaceProvider {                    // "Place icons: <title>" in the layers menu
+    val title: String
+    val attribution: String                        // the foot of a place's sheet
+    fun categories(): Array<String>                // ModulePoiCategory names you answer
+    fun nearby(latitude: Double, longitude: Double, radiusMeters: Int,
+               categories: Array<String>, limit: Int): ModulePoiAnswer
+    fun details(placeId: String): Map<String, String>?   // asked when the sheet opens
+}
+
+interface ModuleGeocoder {                         // before the app's own search
+    val attribution: String
+    fun suggest(query: String, nearLatitude: Double, nearLongitude: Double, limit: Int): ModuleGeocodeResult
+    fun search(query: String, nearLatitude: Double, nearLongitude: Double, limit: Int): ModuleGeocodeResult
+    fun reverse(latitude: Double, longitude: Double): String?
+}
+
+interface ModuleTravelTimes {                      // ranks places the app already has
+    val attribution: String
+    fun secondsTo(fromLatitude: Double, fromLongitude: Double,
+                  toLatitudes: DoubleArray, toLongitudes: DoubleArray): DoubleArray?
+}
+```
+
+**The app's promise.** What these give stays on the phone. The app never shows it on the
+motorcycle's screen (the Ride Dashboard, Android Auto, a projection), never writes it to its own
+storage (recent places, trip names, saved routes) and never lends it to another module. When the
+rider navigates to or saves a place one of these named, the app keeps the coordinates and finds
+its own name for them. Drive times rank places; the NAV's own routing draws and guides the way.
+That is what lets a service whose terms allow its data on a phone, but not in a vehicle, sit
+behind these interfaces. Keep your side of it: hold results in memory only, and show the
+service's attribution string where the terms ask for it.
+
+A place's `tags` use OpenStreetMap's words (`opening_hours`, `phone`, `website`, `addr:street`),
+so the place sheet reads your places as it reads any other. Answers that cannot be given are
+ordinary answers: `ok = false`, `exhausted = true` when the month's allowance is used up (the app
+falls back on its own sources), `null`, an empty array. Every call is made off the main thread.
+
+`ModulePlaces.mapCenter()` (contract 32) gives where the NAV map rests, `[latitude, longitude,
+zoom]`, for a `NAV_PANEL` about what the rider is looking at; the app draws a small ring at the
+map's centre while a panel is open. `ModulePlaces.livePosition()` gives the phone's latest GPS
+fix, at most ten seconds old, for one that follows the rider. These need ADV-SOLO 0.1.45 or later. The
+[TomTom module](../modules/tomtom) is the complete reference.
 
 ---
 

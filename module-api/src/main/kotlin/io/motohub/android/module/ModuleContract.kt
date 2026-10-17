@@ -142,8 +142,12 @@ object MotoHubModuleContract {
      *    flat map draws instead of its symbol - a default method, and a layer built against 30, whose
      *    class has none, reads to the app as a layer without pictures - and MotoHubModuleHost.navigateTo opens the NAV on a point with its route preview,
      *    for the rider to confirm. An append on the app's side; the minimum stays at 3.
+     * 32: a module's data in the NAV, on the phone only. ModuleMapOverlay (tiles over the map),
+     *    ModulePlaceProvider (a source of place icons), ModuleGeocoder (search) and
+     *    ModuleTravelTimes (drive times), new capabilities; ModulePlaces.livePosition (ModuleFix)
+     *    and .mapCenter, default methods; ModuleFeaturePlacement.NAV_PANEL, appended. The minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 31
+    const val CONTRACT_VERSION = 32
 
     /**
      * The oldest contract this app can still run.

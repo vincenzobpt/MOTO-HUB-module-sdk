@@ -24,4 +24,5 @@ include(":modules:android-auto")
 include(":modules:flyby-route-simulator")
 include(":modules:dawarich")
 include(":modules:immich")
+include(":modules:tomtom")
 // Your own module: copy examples/hello-module to modules/<name> and include it here.

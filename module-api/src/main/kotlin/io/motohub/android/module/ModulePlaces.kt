@@ -23,6 +23,22 @@ interface ModulePlaces {
      * not for tracking.
      */
     fun lastKnownPosition(): DoubleArray?
+
+    /**
+     * Where the rider is now (contract 32): the phone's latest GPS fix, at most ten seconds old,
+     * or null when there is none or the location permission is not granted. Never asks for the
+     * permission and never waits; poll it, every few seconds at most, while a screen that needs
+     * it is open.
+     */
+    fun livePosition(): ModuleFix? = null
+
+    /**
+     * What the rider is looking at on the NAV map (contract 32): [latitude, longitude, zoom] of
+     * its centre, where the app draws a small reticle while a [ModuleFeaturePlacement.NAV_PANEL]
+     * is open. Updated each time the map comes to rest; null while the NAV map is not on screen.
+     * Cheap; poll it while a panel is open.
+     */
+    fun mapCenter(): DoubleArray? = null
 }
 
 class ModulePlaceResult(
