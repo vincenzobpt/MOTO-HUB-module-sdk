@@ -48,7 +48,8 @@ internal class AapPhoneSession(
     private val discovery: PhoneDiscovery,
     private val inbox: BlockingQueue<AapMessage>,
     private val readerAlive: () -> Boolean,
-    private val log: (String) -> Unit
+    private val log: (String) -> Unit,
+    private val acklessVideo: Boolean = false
 ) {
     class Outcome(val success: Boolean, val detail: String)
 
@@ -463,7 +464,7 @@ internal class AapPhoneSession(
      */
     private fun awaitWindow(): Boolean {
         synchronized(ackLock) {
-            while (running.get() && projecting && inFlight >= maxUnacked) {
+            while (!acklessVideo && running.get() && projecting && inFlight >= maxUnacked) {
                 val since = SystemClock.elapsedRealtime() - lastAckAt
                 if (since >= ACK_STALL_MS) {
                     log("No ack for ${since}ms with $inFlight in flight: taking the window as cleared.")

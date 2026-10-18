@@ -133,9 +133,11 @@ object AapPhoneHandshake {
             // shape AapTransport has when it dials Google's Android Auto app over a socket. If
             // the unit sent a VERSION_REQUEST of its own, it drives, and we answer as the server.
             val tlsClient: Boolean
+            var unitMajor = 0
             when {
                 first.channel == Channel.ID_CTR && first.type == MSG_VERSION_RESPONSE -> {
                     tlsClient = true
+                    unitMajor = beShort(first.payload, 0, fallback = 0)
                     log("It answered our request: MOTO-HUB drives, so TLS client.")
                 }
                 first.channel == Channel.ID_CTR && first.type == MSG_VERSION_REQUEST -> {
@@ -144,6 +146,7 @@ object AapPhoneHandshake {
                     // named the pair it wants and the status field is the only thing to answer.
                     val major = beShort(first.payload, 0, fallback = 1)
                     val minor = beShort(first.payload, 2, fallback = 1)
+                    unitMajor = major
                     val response = Messages.createRawMessage(
                         Channel.ID_CTR,
                         3,
@@ -315,7 +318,10 @@ object AapPhoneHandshake {
                 discovery = discovered,
                 inbox = inbox,
                 readerAlive = { pump.get() },
-                log = log
+                log = log,
+                // From protocol 6.0 the unit streams video without acking (LIVI, and Gearhead's
+                // own units): waiting on acks that never come stalls the picture at one frame.
+                acklessVideo = unitMajor >= 6
             ).run()
             return Outcome(session.success, "$accepted ${session.detail}")
         } catch (e: Exception) {
