@@ -6,11 +6,13 @@ package io.motohub.android.aa.phone
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.view.MotionEvent
 import android.view.Surface
 import io.motohub.android.aa.AapMessage
 import io.motohub.android.aa.AapSsl
 import io.motohub.android.aa.AccessoryConnection
 import io.motohub.android.module.ModuleDashboardListener
+import io.motohub.android.module.ModuleDashboardPointer
 import io.motohub.android.module.ModuleDashboardSession
 import io.motohub.android.module.MotoHubModuleHost
 import java.util.concurrent.BlockingQueue
@@ -95,6 +97,9 @@ internal class AapPhoneSession(
     private var moved = false
     private var multiTouch = false
     private var lastPinch = 0f
+
+    /** A first-finger gesture is open on the app's pointer: it needs its UP or CANCEL. */
+    private var pointerLive = false
 
     fun run(): Outcome {
         val v = video ?: return Outcome(false, "The head unit offered no video sink.")
@@ -527,6 +532,11 @@ internal class AapPhoneSession(
      * Turned into the dashboard's three gestures: a short touch that did not travel is a tap, one
      * finger travelling is a drag, two are a pinch. Once a second finger has been down the
      * gesture stays a pinch to the end, so lifting one finger does not jump the map.
+     *
+     * When the app's session takes raw touches ([ModuleDashboardPointer]) the first finger goes to
+     * it as it comes and the app decides what is a tap, a drag or a press; the pinch is still
+     * worked out here and sent as a scale, and the second finger cancels the first finger's
+     * gesture so the app never sees half of a pinch as a drag.
      */
     private fun onTouch(touch: ProtoMessage) {
         val config = chosen ?: return
@@ -556,8 +566,13 @@ internal class AapPhoneSession(
                     "raw ${raw?.int(1)},${raw?.int(2)} -> ${x.toInt()},${y.toInt()}."
             )
         }
+        val raw = dashboard as? ModuleDashboardPointer
         when (action) {
             TOUCH_ACTION_DOWN -> {
+                if (raw != null) {
+                    pointerLive = true
+                    onPointer(raw, MotionEvent.ACTION_DOWN, x, y)
+                }
                 downX = x; downY = y; lastX = x; lastY = y
                 downAt = SystemClock.elapsedRealtime()
                 moved = false
@@ -565,6 +580,10 @@ internal class AapPhoneSession(
                 lastPinch = 0f
             }
             TOUCH_ACTION_POINTER_DOWN -> {
+                if (raw != null && pointerLive) {
+                    pointerLive = false
+                    onPointer(raw, MotionEvent.ACTION_CANCEL, lastX, lastY)
+                }
                 multiTouch = true
                 lastPinch = spread(points)
             }
@@ -585,8 +604,9 @@ internal class AapPhoneSession(
                 }
                 !multiTouch -> {
                     val (px, py) = points[0]
+                    if (raw != null && pointerLive) onPointer(raw, MotionEvent.ACTION_MOVE, px, py)
                     if (!moved && hypot(px - downX, py - downY) >= touchSlop) moved = true
-                    if (moved) {
+                    if (moved && raw == null) {
                         // The distance travelled since the last call, as GestureDetector and the
                         // Car App Library both measure it: previous minus current.
                         val dx = lastX - px
@@ -599,13 +619,17 @@ internal class AapPhoneSession(
             }
             TOUCH_ACTION_POINTER_UP -> lastPinch = 0f
             TOUCH_ACTION_UP -> {
-                if (!moved && !multiTouch && SystemClock.elapsedRealtime() - downAt <= TAP_MAX_MS) {
+                if (raw != null && pointerLive) onPointer(raw, MotionEvent.ACTION_UP, x, y)
+                pointerLive = false
+                if (raw == null && !moved && !multiTouch && SystemClock.elapsedRealtime() - downAt <= TAP_MAX_MS) {
                     onDashboard { tap(x, y) }
                 }
                 multiTouch = false
                 lastPinch = 0f
             }
             TOUCH_ACTION_CANCEL -> {
+                if (raw != null && pointerLive) onPointer(raw, MotionEvent.ACTION_CANCEL, x, y)
+                pointerLive = false
                 moved = true // nothing that was cancelled may end as a tap
                 multiTouch = false
                 lastPinch = 0f
@@ -613,32 +637,58 @@ internal class AapPhoneSession(
         }
     }
 
+    /** Main thread, like every dashboard call; the time is when it reached us, the unit sends none. */
+    private fun onPointer(pointer: ModuleDashboardPointer, action: Int, x: Float, y: Float) {
+        val at = SystemClock.uptimeMillis()
+        main.post { pointer.pointer(action, x, y, at) }
+    }
+
+    /**
+     * A head unit key as a handlebar input. The app answers false when the dashboard binds
+     * nothing to it - and an older app does not answer at all - and then the key does what it
+     * always did, [fallback].
+     */
+    private fun onInput(id: String, fallback: ModuleDashboardSession.() -> Unit) {
+        val d = dashboard ?: return
+        main.post { if ((d as? ModuleDashboardPointer)?.input(id) != true) d.fallback() }
+    }
+
     private fun spread(points: List<Pair<Float, Float>>): Float =
         if (points.size < 2) 0f
         else hypot(points[0].first - points[1].first, points[0].second - points[1].second)
 
     /**
-     * The unit's own buttons, as android.view.KeyEvent codes, onto the three verbs the handlebar
-     * already has: sideways cycles the panels, the centre toggles the full-screen map, up and down
-     * toggle the map zoom. Acted on when pressed, so a held key does not fire twice.
+     * The unit's own buttons, as android.view.KeyEvent codes, onto the handlebar's inputs
+     * (previous/next/select/back), which the dashboard may bind to anything. Where it binds
+     * nothing, onto the three verbs the handlebar already had: sideways cycles the panels, the
+     * centre toggles the full-screen map, up and down toggle the map zoom. Acted on when pressed,
+     * so a held key does not fire twice.
      */
     private fun onKeys(keyEvent: ProtoMessage) {
         for (key in keyEvent.messages(1)) {
             if (key.int(2) == 0) continue // released
             when (val keycode = key.int(1)) {
-                KEYCODE_DPAD_LEFT, KEYCODE_DPAD_RIGHT -> onDashboard { cyclePanels() }
-                KEYCODE_DPAD_CENTER, KEYCODE_ENTER -> onDashboard { toggleFullscreenMap() }
-                KEYCODE_DPAD_UP, KEYCODE_DPAD_DOWN -> onDashboard { toggleMapZoom() }
+                KEYCODE_DPAD_LEFT -> onInput(INPUT_PREVIOUS) { cyclePanels() }
+                KEYCODE_DPAD_RIGHT -> onInput(INPUT_NEXT) { cyclePanels() }
+                KEYCODE_DPAD_UP -> onInput(INPUT_PREVIOUS) { toggleMapZoom() }
+                KEYCODE_DPAD_DOWN -> onInput(INPUT_NEXT) { toggleMapZoom() }
+                KEYCODE_DPAD_CENTER, KEYCODE_ENTER -> onInput(INPUT_SELECT) { toggleFullscreenMap() }
+                KEYCODE_BACK -> onInput(INPUT_BACK) { }
                 else -> log("Key $keycode from the head unit has no dashboard action.")
             }
         }
     }
 
-    /** A rotary knob: one panel per turn event, whichever way, as the handlebar's own cycle goes one way. */
+    /**
+     * A rotary knob: next or previous by the direction of the turn. A dashboard that binds neither
+     * still gets one panel per turn event, whichever way, as the handlebar's own cycle goes one way.
+     */
     private fun onRelative(event: ProtoMessage) {
         for (rel in event.messages(1)) {
             // int32 on the wire, so a turn the other way arrives as a ten-byte negative varint.
-            if (rel.int(1) == KEYCODE_ROTARY && rel.int(2) != 0) onDashboard { cyclePanels() }
+            if (rel.int(1) != KEYCODE_ROTARY) continue
+            val delta = rel.int(2)
+            if (delta != 0) onInput(if (delta > 0) INPUT_NEXT else INPUT_PREVIOUS) { cyclePanels() }
         }
     }
 
@@ -991,6 +1041,12 @@ internal class AapPhoneSession(
         /** Panels report a pixel or two past their declared edge; that alone proves nothing. */
         private const val TOUCH_BOUNDS_SLACK = 4
 
+        private const val INPUT_NEXT = "handlebar.next"
+        private const val INPUT_PREVIOUS = "handlebar.previous"
+        private const val INPUT_SELECT = "handlebar.select"
+        private const val INPUT_BACK = "handlebar.back"
+
+        private const val KEYCODE_BACK = 4
         private const val KEYCODE_DPAD_UP = 19
         private const val KEYCODE_DPAD_DOWN = 20
         private const val KEYCODE_DPAD_LEFT = 21
@@ -999,7 +1055,7 @@ internal class AapPhoneSession(
         private const val KEYCODE_ENTER = 66
         private const val KEYCODE_ROTARY = 65536
         private val DEFAULT_KEYCODES = intArrayOf(
-            KEYCODE_DPAD_UP, KEYCODE_DPAD_DOWN, KEYCODE_DPAD_LEFT, KEYCODE_DPAD_RIGHT,
+            KEYCODE_BACK, KEYCODE_DPAD_UP, KEYCODE_DPAD_DOWN, KEYCODE_DPAD_LEFT, KEYCODE_DPAD_RIGHT,
             KEYCODE_DPAD_CENTER, KEYCODE_ENTER, KEYCODE_ROTARY
         )
 

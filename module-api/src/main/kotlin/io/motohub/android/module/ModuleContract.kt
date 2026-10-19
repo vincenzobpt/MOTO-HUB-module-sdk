@@ -146,8 +146,12 @@ object MotoHubModuleContract {
      *    ModulePlaceProvider (a source of place icons), ModuleGeocoder (search) and
      *    ModuleTravelTimes (drive times), new capabilities; ModulePlaces.livePosition (ModuleFix)
      *    and .mapCenter, default methods; ModuleFeaturePlacement.NAV_PANEL, appended. The minimum stays at 3.
+     * 33: raw touch and keys from a head unit. ModuleDashboardPointer, an optional interface that
+     *    the app's dashboard session implements and a module reaches with `as?`: the first finger's
+     *    DOWN/MOVE/UP/CANCEL in surface pixels, and the unit's keys as handlebar inputs. New type
+     *    only; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 32
+    const val CONTRACT_VERSION = 33
 
     /**
      * The oldest contract this app can still run.

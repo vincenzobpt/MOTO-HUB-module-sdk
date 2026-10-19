@@ -173,6 +173,38 @@ interface ModuleDashboardSession {
     fun detach()
 }
 
+/**
+ * What a [ModuleDashboardSession] offers on top of tap/scroll/scale when the app is new enough
+ * to route touches itself. A module reaches it with `as?` on the session it got from
+ * [ModuleDashboardHost.attach]: an app without it simply never matches, and the module keeps
+ * sending the old verbs.
+ *
+ * Separate rather than added to [ModuleDashboardSession] because a method added to an interface
+ * breaks every module compiled before it (AbstractMethodError on the first call), and because
+ * the two ways of reaching the dashboard are exclusive - a module that sends raw touches stops
+ * sending tap and scroll, and the app decides what a gesture is. Pinch stays on
+ * [ModuleDashboardSession.scale], in parallel.
+ */
+interface ModuleDashboardPointer {
+
+    /**
+     * The first finger, as it comes: `MotionEvent.ACTION_DOWN`, `ACTION_MOVE`, `ACTION_UP` or
+     * `ACTION_CANCEL`, in surface pixels. [eventTimeMillis] is in the
+     * `SystemClock.uptimeMillis` timebase, taken when the module received the event. Called on the
+     * main thread, like the rest of the session.
+     */
+    fun pointer(action: Int, x: Float, y: Float, eventTimeMillis: Long)
+
+    /**
+     * A head unit key as a handlebar input: `"handlebar.next"`, `"handlebar.previous"`,
+     * `"handlebar.select"` or `"handlebar.back"`.
+     *
+     * False means the dashboard has nothing bound to it, and the module does what it did before
+     * this existed (cycle the panels, toggle the map).
+     */
+    fun input(id: String): Boolean
+}
+
 /** How a module learns its dashboard is no longer being drawn, whoever decided that. */
 interface ModuleDashboardListener {
     fun onStopped(reason: String)
