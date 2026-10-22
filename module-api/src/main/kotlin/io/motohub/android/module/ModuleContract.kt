@@ -158,8 +158,12 @@ object MotoHubModuleContract {
      * 35: a head unit's arrows. ModuleDashboardArrows, an optional marker on the dashboard session:
      *    its input takes up, down, left and right, which move a touch dashboard's focus that way on
      *    screen. New type only; the minimum stays at 3.
+     * 36: the rider's own Mapbox account. ModuleMapboxAccount, a new capability, hands the 3D POV
+     *    (the trip replay's and the Ride Dashboard's) a Mapbox token; with one the stage is drawn
+     *    by Mapbox GL JS with Mapbox Standard, and each map load is counted back to the module.
+     *    New type only; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 35
+    const val CONTRACT_VERSION = 36
 
     /**
      * The oldest contract this app can still run.

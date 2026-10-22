@@ -25,4 +25,5 @@ include(":modules:flyby-route-simulator")
 include(":modules:dawarich")
 include(":modules:immich")
 include(":modules:tomtom")
+include(":modules:mapopt")
 // Your own module: copy examples/hello-module to modules/<name> and include it here.
