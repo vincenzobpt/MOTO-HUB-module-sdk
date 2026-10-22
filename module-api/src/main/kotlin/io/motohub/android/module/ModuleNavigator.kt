@@ -205,6 +205,15 @@ interface ModuleDashboardPointer {
     fun input(id: String): Boolean
 }
 
+/**
+ * Marks a [ModuleDashboardPointer] whose [ModuleDashboardPointer.input] also takes a D-pad's arrows:
+ * `"handlebar.up"`, `"handlebar.down"`, `"handlebar.left"` and `"handlebar.right"` (contract 35).
+ * On a touch dashboard the focus then moves the way the arrow points instead of along one line;
+ * elsewhere the app reads them as next (down, right) and previous (up, left). A module checks it
+ * with `is` and sends next and previous to an app without it.
+ */
+interface ModuleDashboardArrows
+
 /** How a module learns its dashboard is no longer being drawn, whoever decided that. */
 interface ModuleDashboardListener {
     fun onStopped(reason: String)

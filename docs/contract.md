@@ -132,7 +132,7 @@ These all come from real failures on real motorcycles.
 
 ## Versioning
 
-`MotoHubModuleContract.CONTRACT_VERSION` (currently **32**) is bumped whenever anything in
+`MotoHubModuleContract.CONTRACT_VERSION` (currently **35**) is bumped whenever anything in
 `io.motohub.android.module` changes shape. The contract **only grows by appending**: new
 capabilities, and new members on interfaces the *app* implements. An older module simply does
 not answer a capability it predates, and never calls a host member it does not know.
@@ -176,5 +176,8 @@ history is in the KDoc of `MotoHubModuleContract`.
 | 30 | `ModuleMapLayer`, `ModuleMapLayerPin` (pins on the NAV map) | 0.1.44 |
 | 31 | `ModuleMapLayer.pinImage` (a photo instead of the pin's symbol); `host.navigateTo` (the NAV opened on a point) | 0.1.44 |
 | 32 | `ModuleMapOverlay`, `ModulePlaceProvider`, `ModuleGeocoder`, `ModuleTravelTimes` (a module's data in the NAV, phone only); `ModulePlaces.livePosition`, `ModuleFix`; `ModuleFeaturePlacement.NAV_PANEL` | 0.1.45 |
+| 33 | `ModuleDashboardPointer` (a head unit's raw touches and keys on the dashboard session) | 0.1.46 |
+| 34 | `host.keepAlive` (the app stays in the foreground while a module runs something long, a wireless head unit session above all) | 0.1.47 |
+| 35 | `ModuleDashboardArrows` (a head unit's arrows move a touch dashboard's focus the way they point) | 0.1.47 |
 
 This repository tags every contract release as `contract-<n>`.

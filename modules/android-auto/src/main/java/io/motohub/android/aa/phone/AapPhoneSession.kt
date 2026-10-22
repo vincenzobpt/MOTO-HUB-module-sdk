@@ -11,6 +11,7 @@ import android.view.Surface
 import io.motohub.android.aa.AapMessage
 import io.motohub.android.aa.AapSsl
 import io.motohub.android.aa.AccessoryConnection
+import io.motohub.android.module.ModuleDashboardArrows
 import io.motohub.android.module.ModuleDashboardListener
 import io.motohub.android.module.ModuleDashboardPointer
 import io.motohub.android.module.ModuleDashboardSession
@@ -653,6 +654,8 @@ internal class AapPhoneSession(
         main.post { if ((d as? ModuleDashboardPointer)?.input(id) != true) d.fallback() }
     }
 
+    private fun arrow(arrow: String, linear: String): String = if (dashboard is ModuleDashboardArrows) arrow else linear
+
     private fun spread(points: List<Pair<Float, Float>>): Float =
         if (points.size < 2) 0f
         else hypot(points[0].first - points[1].first, points[0].second - points[1].second)
@@ -663,15 +666,19 @@ internal class AapPhoneSession(
      * nothing, onto the three verbs the handlebar already had: sideways cycles the panels, the
      * centre toggles the full-screen map, up and down toggle the map zoom. Acted on when pressed,
      * so a held key does not fire twice.
+     *
+     * An app that takes arrows ([ModuleDashboardArrows]) gets the arrows themselves, so a touch
+     * dashboard's focus goes the way the key points; an older one gets up and left as previous,
+     * down and right as next.
      */
     private fun onKeys(keyEvent: ProtoMessage) {
         for (key in keyEvent.messages(1)) {
             if (key.int(2) == 0) continue // released
             when (val keycode = key.int(1)) {
-                KEYCODE_DPAD_LEFT -> onInput(INPUT_PREVIOUS) { cyclePanels() }
-                KEYCODE_DPAD_RIGHT -> onInput(INPUT_NEXT) { cyclePanels() }
-                KEYCODE_DPAD_UP -> onInput(INPUT_PREVIOUS) { toggleMapZoom() }
-                KEYCODE_DPAD_DOWN -> onInput(INPUT_NEXT) { toggleMapZoom() }
+                KEYCODE_DPAD_LEFT -> onInput(arrow(INPUT_LEFT, INPUT_PREVIOUS)) { cyclePanels() }
+                KEYCODE_DPAD_RIGHT -> onInput(arrow(INPUT_RIGHT, INPUT_NEXT)) { cyclePanels() }
+                KEYCODE_DPAD_UP -> onInput(arrow(INPUT_UP, INPUT_PREVIOUS)) { toggleMapZoom() }
+                KEYCODE_DPAD_DOWN -> onInput(arrow(INPUT_DOWN, INPUT_NEXT)) { toggleMapZoom() }
                 KEYCODE_DPAD_CENTER, KEYCODE_ENTER -> onInput(INPUT_SELECT) { toggleFullscreenMap() }
                 KEYCODE_BACK -> onInput(INPUT_BACK) { }
                 else -> log("Key $keycode from the head unit has no dashboard action.")
@@ -1045,6 +1052,10 @@ internal class AapPhoneSession(
         private const val INPUT_PREVIOUS = "handlebar.previous"
         private const val INPUT_SELECT = "handlebar.select"
         private const val INPUT_BACK = "handlebar.back"
+        private const val INPUT_UP = "handlebar.up"
+        private const val INPUT_DOWN = "handlebar.down"
+        private const val INPUT_LEFT = "handlebar.left"
+        private const val INPUT_RIGHT = "handlebar.right"
 
         private const val KEYCODE_BACK = 4
         private const val KEYCODE_DPAD_UP = 19

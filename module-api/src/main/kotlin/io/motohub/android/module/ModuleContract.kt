@@ -150,8 +150,16 @@ object MotoHubModuleContract {
      *    the app's dashboard session implements and a module reaches with `as?`: the first finger's
      *    DOWN/MOVE/UP/CANCEL in surface pixels, and the unit's keys as handlebar inputs. New type
      *    only; the minimum stays at 3.
+     * 34: MotoHubModuleHost.keepAlive, so a module running something long from its own page - a
+     *    wireless head unit session above all - keeps the app in the foreground with the screen
+     *    off. Without it the process is "cached" the moment the rider leaves the app, and Android
+     *    kills it for CPU or freezes it within minutes. An append on the app's side; the minimum
+     *    stays at 3.
+     * 35: a head unit's arrows. ModuleDashboardArrows, an optional marker on the dashboard session:
+     *    its input takes up, down, left and right, which move a touch dashboard's focus that way on
+     *    screen. New type only; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 33
+    const val CONTRACT_VERSION = 35
 
     /**
      * The oldest contract this app can still run.
@@ -325,6 +333,17 @@ interface MotoHubModuleHost {
      * the preview as for any destination; nothing is guided until they do. Main thread or not.
      */
     fun navigateTo(latitude: Double, longitude: Double, label: String)
+
+    /**
+     * Keeps the app alive while a module runs something the rider started (contract 34): a
+     * foreground service with the phone's location and a CPU wake lock, shown as an ongoing
+     * notification titled [reason]. Close the handle when the run ends; closing twice is harmless.
+     *
+     * Call it from the rider's tap, on the main thread: Android refuses to start a foreground
+     * service, and above all one with location, once the app is in the background. A refusal
+     * is logged and the handle still closes cleanly - the run goes on, it is just not protected.
+     */
+    fun keepAlive(reason: String): AutoCloseable
 }
 
 /**

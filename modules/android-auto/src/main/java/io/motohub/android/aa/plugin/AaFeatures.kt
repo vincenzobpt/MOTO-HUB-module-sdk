@@ -111,6 +111,9 @@ internal class AaFeatures(private val host: MotoHubModuleHost) : ModuleFeatures 
                         running = true
                         result = null
                         logText = ""
+                        // Taken here, on the tap: Android only lets a foreground app start the
+                        // foreground service, and the rider leaves the app seconds later.
+                        val keepAlive = host.keepAlive("Ride Dashboard on the head unit")
                         CoroutineScope(Dispatchers.IO).launch {
                             val sink: (String) -> Unit = { line ->
                                 host.log.log("[Extend] $line")
@@ -135,6 +138,7 @@ internal class AaFeatures(private val host: MotoHubModuleHost) : ModuleFeatures 
                                 // The verdict only reached the screen, so a report never said how a run ended.
                                 host.log.log("[Extend] Result: $result")
                             } finally {
+                                keepAlive.close()
                                 running = false
                                 externalRunActive.set(false)
                             }

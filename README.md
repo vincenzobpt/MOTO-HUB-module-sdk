@@ -79,7 +79,9 @@ ADV-SOLO 0.1.34, contract 26 (a project sent to a paired computer and edited the
 0.1.36, contract 27 (a live pill on the Ride page) ADV-SOLO 0.1.40, contract 28 (only the
 ridden line in a film) ADV-SOLO 0.1.42, contracts 29 to 31 (lanes and the turn after in the
 guidance, pins and photos on the NAV map, and a way there) ADV-SOLO 0.1.44, contract 32 (a
-service's data in the NAV, on the phone only) ADV-SOLO 0.1.45; a module
+service's data in the NAV, on the phone only) ADV-SOLO 0.1.45, contract 33 (a head unit's
+touches and keys on the dashboard) ADV-SOLO 0.1.46, contracts 34 and 35 (the app kept alive
+while a module runs, and a head unit's arrows) ADV-SOLO 0.1.47; a module
 that does not use them can keep declaring 10 and run on 0.1.25 and later. See [docs/contract.md](docs/contract.md#versioning).
 
 ## Community
