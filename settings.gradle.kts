@@ -26,4 +26,5 @@ include(":modules:dawarich")
 include(":modules:immich")
 include(":modules:tomtom")
 include(":modules:mapopt")
+include(":modules:motion-sensor")
 // Your own module: copy examples/hello-module to modules/<name> and include it here.
