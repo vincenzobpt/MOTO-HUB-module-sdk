@@ -22,6 +22,7 @@ as the Android Auto module does.
 | [`ModulePlaceProvider`](#your-data-in-the-nav-phone-only) | 32 | the rider picks your source of place icons and the NAV map settles somewhere new |
 | [`ModuleGeocoder`](#your-data-in-the-nav-phone-only) | 32 | the rider types in the NAV search box or drops a pin |
 | [`ModuleTravelTimes`](#your-data-in-the-nav-phone-only) | 32 | the route preview lists fuel stations |
+| [`ModuleMapboxAccount`](#the-riders-mapbox-account-modulemapboxaccount) | 36 | a 3D POV opens, or the rider turns on the NAV map's Mapbox switch |
 
 Where only one module can serve (the whole-screen projection, navigator), the app takes the
 **first installed** module that answers. That is a deliberate, predictable choice. A dashboard's
@@ -257,6 +258,38 @@ get from `host.dashboard`:
 - `host.guidance.setListener(...)` delivers `ModuleRideGuidance` for the head unit's own trip
   card.
 
+### Raw touches and keys: `ModuleDashboardPointer` (contract 33) and `ModuleDashboardArrows` (35)
+
+From ADV-SOLO 0.1.46 the session `attach` returns also implements `ModuleDashboardPointer`. Reach
+it with `as?`: an older app never matches, and you keep sending taps and scrolls.
+
+```kotlin
+interface ModuleDashboardPointer {
+    fun pointer(action: Int, x: Float, y: Float, eventTimeMillis: Long)  // first finger, surface pixels
+    fun input(id: String): Boolean   // "handlebar.next", ".previous", ".select", ".back"
+}
+interface ModuleDashboardArrows      // marker, contract 35: input() also takes ".up", ".down", ".left", ".right"
+```
+
+`pointer` takes `MotionEvent.ACTION_DOWN`, `ACTION_MOVE`, `ACTION_UP` and `ACTION_CANCEL` as they
+come, with `eventTimeMillis` in the `SystemClock.uptimeMillis` timebase, on the main thread. A module
+that sends raw touches stops sending `tap` and `scroll`: the app decides what a gesture is. Pinch
+stays on `scale`. `input` returning false means the dashboard has nothing bound to that key; do what
+you did before (cycle the panels, toggle the map).
+
+From ADV-SOLO 0.1.47 the session is also a `ModuleDashboardArrows`. Check with `is`: when it
+matches, send the head unit's arrows as `handlebar.up`, `.down`, `.left` and `.right`, and a touch
+dashboard moves its focus the way the arrow points. Without it, send next and previous.
+
+### Keeping the app alive: `host.keepAlive` (contract 34)
+
+A head unit session, or anything long a module runs from its own page, dies when Android stops a
+background app. `host.keepAlive(reason)` keeps MOTO-HUB in the foreground with a notification
+titled `reason` and returns an `AutoCloseable`: close it when the run ends (closing twice is
+harmless). Call it from the rider's tap, on the main thread, because Android refuses to start a
+foreground service once the app is in the background. A refusal is logged and the handle still
+closes cleanly. Needs ADV-SOLO 0.1.47 or later.
+
 Sideloaded Car App Library apps only appear on a head unit with Android Auto's developer
 "Unknown sources" enabled on the phone. Distribution through the store is a separate matter.
 
@@ -398,6 +431,29 @@ map's centre while a panel is open. `ModulePlaces.livePosition()` gives the phon
 fix, at most ten seconds old, for one that follows the rider. These need ADV-SOLO 0.1.45 or later. The
 [TomTom module](../modules/tomtom) is the complete reference.
 
+
+---
+
+## The rider's Mapbox account: `ModuleMapboxAccount`
+
+Contract 36 lets a module hand the app the rider's own Mapbox token. With one, the 3D POV (the trip
+replay's on the phone and the Ride Dashboard's on the motorcycle's screen) and, from ADV-SOLO
+0.1.48, the NAV map's **Mapbox** switch load Mapbox GL JS from Mapbox's CDN and draw Mapbox
+Standard: terrain, trees, landmarks and light by the hour. Declared in `ModuleMapbox.kt`.
+
+```kotlin
+interface ModuleMapboxAccount {
+    fun accessToken(): String?   // the rider's public "pk." token, or null while not set up or switched off
+    fun countMapLoad()           // a Mapbox map was opened: one billed load, for your meter
+}
+```
+
+Unlike the NAV data above, this is drawn on the TFT too: the token is the rider's, under the
+rider's own Mapbox account and terms. `accessToken` is asked on any thread whenever a map opens, so
+answer from memory, never from the network. Only `pk.` tokens reach the page, and the app masks
+them in its logs. If Mapbox GL JS cannot be reached or the style fails, the page falls back on the
+app's own map. The [MapOpt module](../modules/mapopt) is the complete reference: token check,
+sealed storage, an on/off switch and a monthly meter. Needs ADV-SOLO 0.1.48 or later.
 ---
 
 ## Adding to another module: `ModuleExtensions` and `ModuleBridge`
