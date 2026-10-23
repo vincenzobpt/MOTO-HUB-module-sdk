@@ -26,13 +26,15 @@ particular module: it asks for *capabilities* by interface and draws whatever th
 | [`modules/dawarich/`](modules/dawarich) | The complete source of the Dawarich module: sends your position to your own [Dawarich](https://dawarich.app) server while you ride, and sends recorded rides on request. | **AGPL-3.0** |
 | [`modules/immich/`](modules/immich) | The complete source of the Immich module: the photos of your own [Immich](https://immich.app) server as pins on the NAV map, opened full screen with everything Immich knows about them. The reference for map layers (contract 30). | **AGPL-3.0** |
 | [`modules/tomtom/`](modules/tomtom) | The complete source of the TomTom module: live traffic, places, search, drive times and road info from the rider's own free TomTom key, on the phone only. The reference for a service's data in the NAV (contract 32). | **AGPL-3.0** |
+| [`modules/mapopt/`](modules/mapopt) | The complete source of the MapOpt module: the rider's own Mapbox token for the 3D POV. The reference for a Mapbox account (contract 36). Not in the catalogue yet. | **AGPL-3.0** |
+| [`modules/motion-sensor/`](modules/motion-sensor) | The complete source of the Motion sensor module: diagnostics for the ESP32 motion sensor over Bluetooth. Not in the catalogue yet. | **AGPL-3.0** |
 | [`docs/`](docs) | The developer guide. | Apache-2.0 |
 
 The contract and tooling are Apache-2.0 so that you can write a module under any licence you
 like, including a closed one. The Android Auto module is AGPL-3.0 because it is derived from
 [headunit-revived](https://github.com/andreknieriem/headunit-revived); its source is published
 here to meet that licence, and each published version of it has a matching tag in this repository.
-The Dashcam, Flyby Route Simulator, Dawarich, Immich and TomTom modules are AGPL-3.0 by choice, and each published version is tagged the same way.
+The Dashcam, Flyby Route Simulator, Dawarich, Immich, TomTom, MapOpt and Motion sensor modules are AGPL-3.0 by choice, and each published version is tagged the same way.
 
 ## Quick start
 
@@ -65,7 +67,7 @@ The full walk-through, including how to start your own module, is in
 
 ## Status
 
-The contract is at **version 32**. It only grows by appending, and the app still loads modules
+The contract is at **version 36**. It only grows by appending, and the app still loads modules
 built against contract 3 or later. Contracts 11 to 14 (rides, the 3D scene, ride and route
 actions, the rider's AI) need ADV-SOLO 0.1.29, contract 15 (draft, real-time and H.265 video
 exports) ADV-SOLO 0.1.30, contract 16 (credits in the film's credit roll) ADV-SOLO 0.1.31,
@@ -81,7 +83,8 @@ ridden line in a film) ADV-SOLO 0.1.42, contracts 29 to 31 (lanes and the turn a
 guidance, pins and photos on the NAV map, and a way there) ADV-SOLO 0.1.44, contract 32 (a
 service's data in the NAV, on the phone only) ADV-SOLO 0.1.45, contract 33 (a head unit's
 touches and keys on the dashboard) ADV-SOLO 0.1.46, contracts 34 and 35 (the app kept alive
-while a module runs, and a head unit's arrows) ADV-SOLO 0.1.47; a module
+while a module runs, and a head unit's arrows) ADV-SOLO 0.1.47, contract 36 (the rider's own
+Mapbox account for the 3D POV) ADV-SOLO 0.1.48; a module
 that does not use them can keep declaring 10 and run on 0.1.25 and later. See [docs/contract.md](docs/contract.md#versioning).
 
 ## Community

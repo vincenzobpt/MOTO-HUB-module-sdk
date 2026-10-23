@@ -26,6 +26,9 @@ android {
         minSdk = 34
     }
 
+    // Code shared by the modules in this repository (modules/common): compiled in, not borrowed.
+    sourceSets["main"].java.srcDir("../common/src/main/java")
+
     buildFeatures {
         buildConfig = false
         compose = true

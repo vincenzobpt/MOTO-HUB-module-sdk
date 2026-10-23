@@ -21,6 +21,7 @@ rootProject.name = "MOTO-HUB module SDK"
 include(":module-api")
 include(":examples:hello-module")
 include(":modules:android-auto")
+include(":modules:dashcam")
 include(":modules:flyby-route-simulator")
 include(":modules:dawarich")
 include(":modules:immich")
