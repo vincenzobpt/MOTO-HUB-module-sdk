@@ -26,7 +26,7 @@ particular module: it asks for *capabilities* by interface and draws whatever th
 | [`modules/dawarich/`](modules/dawarich) | The complete source of the Dawarich module: sends your position to your own [Dawarich](https://dawarich.app) server while you ride, and sends recorded rides on request. | **AGPL-3.0** |
 | [`modules/immich/`](modules/immich) | The complete source of the Immich module: the photos of your own [Immich](https://immich.app) server as pins on the NAV map, opened full screen with everything Immich knows about them. The reference for map layers (contract 30). | **AGPL-3.0** |
 | [`modules/tomtom/`](modules/tomtom) | The complete source of the TomTom module: live traffic, places, search, drive times and road info from the rider's own free TomTom key, on the phone only. The reference for a service's data in the NAV (contract 32). | **AGPL-3.0** |
-| [`modules/mapopt/`](modules/mapopt) | The complete source of the MapOpt module: the rider's own Mapbox token for the 3D POV. The reference for a Mapbox account (contract 36). Not in the catalogue yet. | **AGPL-3.0** |
+| [`modules/mapopt/`](modules/mapopt) | The complete source of the MapOpt module: the rider's own Mapbox token for the 3D POV. The reference for a Mapbox account (contract 36). | **AGPL-3.0** |
 | [`modules/motion-sensor/`](modules/motion-sensor) | The complete source of the Motion sensor module: diagnostics for the ESP32 motion sensor over Bluetooth. Not in the catalogue yet. | **AGPL-3.0** |
 | [`docs/`](docs) | The developer guide. | Apache-2.0 |
 

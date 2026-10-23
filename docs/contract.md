@@ -132,7 +132,7 @@ These all come from real failures on real motorcycles.
 
 ## Versioning
 
-`MotoHubModuleContract.CONTRACT_VERSION` (currently **35**) is bumped whenever anything in
+`MotoHubModuleContract.CONTRACT_VERSION` (currently **36**) is bumped whenever anything in
 `io.motohub.android.module` changes shape. The contract **only grows by appending**: new
 capabilities, and new members on interfaces the *app* implements. An older module simply does
 not answer a capability it predates, and never calls a host member it does not know.
@@ -179,5 +179,6 @@ history is in the KDoc of `MotoHubModuleContract`.
 | 33 | `ModuleDashboardPointer` (a head unit's raw touches and keys on the dashboard session) | 0.1.46 |
 | 34 | `host.keepAlive` (the app stays in the foreground while a module runs something long, a wireless head unit session above all) | 0.1.47 |
 | 35 | `ModuleDashboardArrows` (a head unit's arrows move a touch dashboard's focus the way they point) | 0.1.47 |
+| 36 | `ModuleMapboxAccount` (`accessToken`, `countMapLoad`: the rider's own Mapbox token for the 3D maps, and each map load counted back) | 0.1.48 |
 
 This repository tags every contract release as `contract-<n>`.
