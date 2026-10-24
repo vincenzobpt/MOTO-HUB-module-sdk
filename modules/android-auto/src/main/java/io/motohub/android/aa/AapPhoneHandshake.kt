@@ -72,7 +72,8 @@ object AapPhoneHandshake {
 
     private const val REPLY_TIMEOUT_MS = 8_000
 
-    class Outcome(val success: Boolean, val detail: String)
+    /** [endedForGood]: the unit said goodbye or the app ended the dashboard, so nobody redials. */
+    class Outcome(val success: Boolean, val detail: String, val endedForGood: Boolean = false)
 
     /** One AAP frame as it came off the wire, header parsed, payload unread. */
     private class Frame(val channel: Int, val flags: Int, val type: Int, val payload: ByteArray) {
@@ -323,7 +324,7 @@ object AapPhoneHandshake {
                 // own units): waiting on acks that never come stalls the picture at one frame.
                 acklessVideo = unitMajor >= 6
             ).run()
-            return Outcome(session.success, "$accepted ${session.detail}")
+            return Outcome(session.success, "$accepted ${session.detail}", session.endedForGood)
         } catch (e: Exception) {
             return Outcome(false, "Exception during the phone-role handshake: ${e.message}")
         } finally {

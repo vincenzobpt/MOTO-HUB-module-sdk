@@ -54,7 +54,7 @@ internal class AapPhoneSession(
     private val log: (String) -> Unit,
     private val acklessVideo: Boolean = false
 ) {
-    class Outcome(val success: Boolean, val detail: String)
+    class Outcome(val success: Boolean, val detail: String, val endedForGood: Boolean = false)
 
     private val writer: ExecutorService = Executors.newSingleThreadExecutor { r ->
         Thread(r, "aa-phone-writer").apply { isDaemon = true }
@@ -64,6 +64,7 @@ internal class AapPhoneSession(
     private val running = AtomicBoolean(true)
     @Volatile private var endReason: String? = null
     @Volatile private var endedWell = false
+    @Volatile private var endedForGood = false
 
     private val video = discovery.video
     private val input = discovery.input
@@ -160,7 +161,7 @@ internal class AapPhoneSession(
             chosen?.let { append("Video $it; ") }
             append("$framesSent frames sent ($keyFramesSent key), $acksSeen acks.")
         }
-        return Outcome(endedWell, detail)
+        return Outcome(endedWell, detail, endedForGood)
     }
 
     // ---- Incoming ----
@@ -196,7 +197,7 @@ internal class AapPhoneSession(
                 val reason = ProtoMessage.parse(body).int(1)
                 byeByeSeen = true
                 send(CHANNEL_CONTROL, MSG_BYEBYE_RESPONSE, ByteArray(0))
-                end("the head unit ended the session (${byeByeReason(reason)})", well = started)
+                end("the head unit ended the session (${byeByeReason(reason)})", well = started, forGood = true)
             }
             MSG_BYEBYE_RESPONSE -> byeByeSeen = true
             MSG_CHANNEL_CLOSE_NOTIFICATION -> log("The head unit closed a channel on the control channel.")
@@ -384,7 +385,7 @@ internal class AapPhoneSession(
             override fun onStopped(reason: String) {
                 // A refusal arrives here inside attach(), before [dashboard] is set: that is not a
                 // session that ran. A stop after it is the app ending one that did.
-                end("the app stopped the dashboard: $reason", well = dashboard != null)
+                end("the app stopped the dashboard: $reason", well = dashboard != null, forGood = dashboard != null)
             }
         }
         Thread({
@@ -840,10 +841,11 @@ internal class AapPhoneSession(
 
     /** The first reason wins; everything after it is a consequence. */
     @Synchronized
-    private fun end(reason: String, well: Boolean) {
+    private fun end(reason: String, well: Boolean, forGood: Boolean = false) {
         if (!running.get()) return
         endReason = reason
         endedWell = well
+        endedForGood = forGood
         running.set(false)
         log("Ending the session: $reason.")
         synchronized(ackLock) { ackLock.notifyAll() }

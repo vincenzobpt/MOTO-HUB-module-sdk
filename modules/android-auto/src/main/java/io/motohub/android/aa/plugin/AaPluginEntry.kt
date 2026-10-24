@@ -49,7 +49,7 @@ private class AndroidAutoModule(private val host: MotoHubModuleHost) : MotoHubMo
 
     override val manifest = ModuleManifest(
         id = "android-auto",
-        version = "0.2.27",
+        version = "0.2.28",
         contractVersion = 35,
         entryClass = AaPluginContract.ENTRY_CLASS,
         displayName = "Android Auto",
@@ -70,7 +70,15 @@ private class AndroidAutoModule(private val host: MotoHubModuleHost) : MotoHubMo
         else -> null
     }
 
-    override fun release() = receiverCapability.release()
+    init {
+        ExtendRun.resumeIfCutOff(host)
+    }
+
+    override fun release() {
+        // A module loaded in this one's place would otherwise run a second Extend beside it.
+        ExtendRun.stop()
+        receiverCapability.release()
+    }
 }
 
 /**

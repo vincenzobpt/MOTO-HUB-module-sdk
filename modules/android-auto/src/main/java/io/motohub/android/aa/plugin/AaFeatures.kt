@@ -11,24 +11,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import io.motohub.android.aa.AapPhoneHandshake
 import io.motohub.android.aa.AaReceiver
 import io.motohub.android.aa.AaSelfMode
-import io.motohub.android.aa.phone.WirelessHeadUnitTransport
 import io.motohub.android.module.ModuleFeature
 import io.motohub.android.module.ModuleFeaturePlacement
 import io.motohub.android.module.ModuleFeatures
 import io.motohub.android.module.MotoHubModuleHost
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.util.concurrent.atomic.AtomicBoolean
-
-/**
- * One external head unit run per process. The page's own `running` flag is forgotten when the
- * page is left, and runs started on top of a stuck one each held a Bluetooth link to the unit.
- */
-private val externalRunActive = AtomicBoolean(false)
 
 /**
  * What this module adds to the app's own screens.
@@ -80,9 +68,7 @@ internal class AaFeatures(private val host: MotoHubModuleHost) : ModuleFeatures 
 
     @Composable
     private fun ExternalHeadUnitScreen(onBack: () -> Unit) {
-        var running by remember { mutableStateOf(false) }
-        var result by remember { mutableStateOf<String?>(null) }
-        var logText by remember { mutableStateOf("") }
+        var notice by remember { mutableStateOf<String?>(null) }
 
         host.ui.Screen("External head unit", onBack) {
             host.ui.Paragraph(
@@ -105,52 +91,19 @@ internal class AaFeatures(private val host: MotoHubModuleHost) : ModuleFeatures 
             for (device in bonded) {
                 val name = deviceName(device)
                 host.ui.ActionRow(name, device.address) {
-                    if (!externalRunActive.compareAndSet(false, true)) {
-                        result = "A run is still in progress. Wait for it to finish, then try again."
-                    } else {
-                        running = true
-                        result = null
-                        logText = ""
-                        // Taken here, on the tap: Android only lets a foreground app start the
-                        // foreground service, and the rider leaves the app seconds later.
-                        val keepAlive = host.keepAlive("Ride Dashboard on the head unit")
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val sink: (String) -> Unit = { line ->
-                                host.log.log("[Extend] $line")
-                                logText += "$line\n"
-                            }
-                            try {
-                                val transport = WirelessHeadUnitTransport.connect(host.context, device, sink)
-                                val outcome = try {
-                                    if (transport.connection == null) {
-                                        AapPhoneHandshake.Outcome(false, transport.detail)
-                                    } else {
-                                        AapPhoneHandshake.run(
-                                            host.context, ModuleIdentity, transport.connection, sink, host,
-                                            listenFirstMs = AapPhoneHandshake.WIRELESS_LISTEN_FIRST_MS
-                                        )
-                                    }
-                                } finally {
-                                    // Each run would otherwise leave its socket open and its Wi-Fi request live.
-                                    transport.close()
-                                }
-                                result = if (outcome.success) "OK: ${outcome.detail}" else "FAIL: ${outcome.detail}"
-                                // The verdict only reached the screen, so a report never said how a run ended.
-                                host.log.log("[Extend] Result: $result")
-                            } finally {
-                                keepAlive.close()
-                                running = false
-                                externalRunActive.set(false)
-                            }
-                        }
-                    }
+                    notice = if (ExtendRun.start(host, device)) null
+                    else "A run is still in progress. Stop it first, then try again."
                 }
             }
 
             host.ui.SectionLabel("RESULT")
-            if (running) host.ui.Fact("Status", "Running…", technical = false)
-            result?.let { host.ui.Fact("Result", it, technical = false) }
-            if (logText.isNotEmpty()) host.ui.Fact("Log", logText, technical = true)
+            notice?.let { host.ui.Fact("Note", it, technical = false) }
+            if (ExtendRun.running) {
+                host.ui.Fact("Status", "Running… it reconnects by itself if the link drops", technical = false)
+                host.ui.ActionRow("Stop", "End the run and stop reconnecting") { ExtendRun.stop() }
+            }
+            ExtendRun.result?.let { host.ui.Fact("Result", it, technical = false) }
+            if (ExtendRun.logText.isNotEmpty()) host.ui.Fact("Log", ExtendRun.logText, technical = true)
             host.ui.Paragraph("The full log is also saved to diagnostics — send a report from Settings after a run.")
 
             host.ui.SectionLabel("IDENTITY")
