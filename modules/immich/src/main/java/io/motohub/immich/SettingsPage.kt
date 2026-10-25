@@ -210,7 +210,14 @@ private fun Hero(server: ImmichServer, busy: Boolean) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(10.dp).clip(CircleShape).background(if (connected) Ink.Good else Color(0x99FFFFFF)))
             Spacer(Modifier.width(8.dp))
-            Txt(if (connected) "CONNECTED" else "NOT CONNECTED", 12.sp, Color(0xD9FFFFFF), FontWeight.Bold, Modifier, 1)
+            // An address and a key that are saved but not asked yet are neither: the account is only
+            // known after Test connection, so "not connected" would contradict the photos below.
+            val status = when {
+                connected -> "CONNECTED"
+                server.configured -> "NOT CHECKED YET"
+                else -> "NOT CONNECTED"
+            }
+            Txt(status, 12.sp, Color(0xD9FFFFFF), FontWeight.Bold, Modifier, 1)
         }
         Spacer(Modifier.height(10.dp))
         Txt(who?.user ?: "Your Immich", 28.sp, Color.White, FontWeight.Bold, Modifier, 1)
