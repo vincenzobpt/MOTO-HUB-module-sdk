@@ -47,7 +47,15 @@ import io.motohub.android.module.ModuleUi
 internal fun HomePage(controller: DashcamController, open: (Page) -> Unit, back: () -> Unit) {
     val state by controller.state.collectAsState()
     val onBike = remember { controller.motorcycleConnected() }
-    val hasCamera = controller.store.ssid.isNotBlank()
+    val store = controller.store
+    // Back from adding a camera that was never finished: the one in use before is the one shown.
+    remember { store.dropUnfinished() }
+    val hasCamera = store.configured
+    val saved = remember(state.phase) { store.cameras().size }
+    val lan = store.lan
+    val controllable = controller.controllable
+    // The camera's name before it has answered: what it said last time, its address, or its Wi-Fi.
+    val savedName = store.name
     val local = remember(state.phase) { controller.localFiles() }
 
     Column(
@@ -69,7 +77,7 @@ internal fun HomePage(controller: DashcamController, open: (Page) -> Unit, back:
                 Column(Modifier.weight(1f)) {
                     val name = state.identity?.let { listOf(it.maker, it.model).filter(String::isNotBlank).joinToString(" ") }.orEmpty()
                     Text(
-                        name.ifEmpty { if (hasCamera) controller.store.ssid else "No camera yet" },
+                        name.ifEmpty { if (hasCamera) savedName else "No camera yet" },
                         color = Dc.text, fontSize = 26.sp, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis
                     )
                     Text(
@@ -77,14 +85,14 @@ internal fun HomePage(controller: DashcamController, open: (Page) -> Unit, back:
                             state.identity != null -> state.family + (state.identity?.firmware?.takeIf { it.isNotBlank() }?.let { " firmware · $it" } ?: "") +
                                 if (state.experimental) " · experimental" else ""
                             hasCamera -> "Not connected"
-                            else -> "Set up a Wi-Fi dashcam to see it here"
+                            else -> "Set up a Wi-Fi dashcam or an IP camera to see it here"
                         },
                         color = Dc.dim, fontSize = 13.sp, maxLines = 2
                     )
                 }
             }
             val s = state.status
-            if (state.connected && s != null) {
+            if (state.connected && s != null && controllable) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     StatTile(Modifier.weight(1f), "BATTERY", s.batteryPercent?.toString() ?: "–", if (s.batteryPercent != null) "%" else "",
                         (s.batteryPercent ?: 0) / 100f, if ((s.batteryPercent ?: 100) < 20) Dc.rec else Dc.ok)
@@ -103,19 +111,20 @@ internal fun HomePage(controller: DashcamController, open: (Page) -> Unit, back:
         }
 
         when {
+            onBike && lan -> Notice("The phone is connected to the motorcycle, and Android sends the app's connections there. Disconnect from it in the Ride tab to reach a camera on the phone's network.")
             onBike -> Notice("The phone is connected to the motorcycle. Disconnect from it in the Ride tab first: the phone has one Wi-Fi connection, and the camera needs it.")
             state.phase == Phase.FAILED && state.message.isNotEmpty() -> Notice(state.message)
         }
 
         when {
-            !hasCamera -> BigButton("Set up the camera", Ico.CAMERA, !onBike, false) { open(Page.Wifi) }
+            !hasCamera -> BigButton("Set up the camera", Ico.CAMERA, !onBike, false) { open(Page.Setup) }
             state.connected -> BigButton("Open the live view", Ico.PLAY, true, false) { open(Page.Live) }
             state.busy -> BigButton(state.message.ifEmpty { "Connecting…" }, null, false, false) {}
             else -> BigButton("Connect to the camera", Ico.WIFI, !onBike, false) { controller.connect() }
         }
 
         if (hasCamera) {
-            Column {
+            if (controllable) Column {
                 SectionTitle("The camera")
                 Card {
                     NavRow(Ico.SLIDERS, "Camera settings", "Microphone, codec, length of each file", state.connected) { open(Page.Settings) }
@@ -132,12 +141,19 @@ internal fun HomePage(controller: DashcamController, open: (Page) -> Unit, back:
                 Card {
                     Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                        DcIcon(Ico.WIFI, Dc.accent, 22.dp)
+                        DcIcon(if (lan) Ico.NETWORK else Ico.WIFI, Dc.accent, 22.dp)
                         Column(Modifier.weight(1f)) {
-                            Text(controller.store.ssid, color = Dc.text, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
-                            Text(if (state.connected) "${state.address} · Wi-Fi held awake" else "The camera's own Wi-Fi", color = Dc.dim, fontSize = 13.sp)
+                            Text(if (lan) store.lanHost else store.ssid, color = Dc.text, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                            Text(
+                                when {
+                                    lan -> "On the phone's network" + if (store.lanUser.isNotEmpty()) " · login ${store.lanUser}" else ""
+                                    state.connected -> "${state.address} · Wi-Fi held awake"
+                                    else -> "The camera's own Wi-Fi"
+                                },
+                                color = Dc.dim, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis
+                            )
                         }
-                        SmallButton("Change") { open(Page.Wifi) }
+                        SmallButton("Change") { open(Page.Setup) }
                     }
                     if (state.connected) {
                         Hairline()
@@ -146,12 +162,18 @@ internal fun HomePage(controller: DashcamController, open: (Page) -> Unit, back:
                             Text("Disconnect", color = Dc.text2, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
                         }
                     }
+                    Hairline()
+                    NavRow(Ico.CAMERA, "Cameras", if (saved > 1) "$saved set up · switch, add or forget" else "Add another camera", true) {
+                        open(Page.Cameras)
+                    }
                 }
             }
         }
         Spacer(Modifier.height(4.dp))
         Text(
-            "Works when the phone is not connected to the motorcycle - with the dashboard on the phone, for example. " +
+            if (lan) "The camera stays on its network and the phone keeps its own Wi-Fi and internet. " +
+                "Works when the phone is not connected to the motorcycle."
+            else "Works when the phone is not connected to the motorcycle - with the dashboard on the phone, for example. " +
                 "While you watch, the camera stops recording so the picture stays smooth; it records again when you close the live view.",
             color = Dc.dim, fontSize = 13.sp, lineHeight = 19.sp, modifier = Modifier.padding(horizontal = 4.dp)
         )

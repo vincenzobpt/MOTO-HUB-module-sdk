@@ -35,9 +35,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
 }
 
 dependencies {
@@ -48,4 +45,10 @@ dependencies {
     compileOnly(libs.kotlinx.coroutines.android)
     compileOnly(platform(libs.androidx.compose.bom))
     compileOnly(libs.androidx.compose.runtime)
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
 }

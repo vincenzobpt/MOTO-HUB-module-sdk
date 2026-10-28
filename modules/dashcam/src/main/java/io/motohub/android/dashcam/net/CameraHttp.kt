@@ -27,7 +27,9 @@ import java.util.Locale
 class CameraHttp(
     val host: String,
     private val connect: (Socket) -> Unit,
-    private val port: Int = 80
+    private val port: Int = 80,
+    /** The camera's login, answered only when it says 401; the Wi-Fi dashcams never ask. */
+    private val credentials: Credentials? = null
 ) {
     class Response(val code: Int, val headers: Map<String, String>, val body: ByteArray) {
         val text: String get() = String(body, Charsets.UTF_8)
@@ -48,8 +50,14 @@ class CameraHttp(
     }
 
     /** Reads the whole answer. Bodies here are small - JSON, XML, `var x="y";` - except downloads. */
-    fun get(path: String, timeoutMs: Int = 6000): Response {
-        open(path, emptyMap(), timeoutMs).use { s ->
+    fun get(path: String, timeoutMs: Int = 6000): Response = read(open(path, emptyMap(), timeoutMs))
+
+    /** A POST with [body]: ONVIF's SOAP calls, which IP cameras answer on their HTTP port. */
+    fun post(path: String, contentType: String, body: ByteArray, timeoutMs: Int = 6000): Response =
+        read(open(path, mapOf("Content-Type" to contentType), timeoutMs, "POST", body))
+
+    private fun read(stream: Stream): Response {
+        stream.use { s ->
             val body = when {
                 s.headers["transfer-encoding"]?.lowercase(Locale.ROOT)?.contains("chunked") == true -> readChunked(s.body)
                 s.contentLength >= 0 -> readExactly(s.body, s.contentLength.toInt())
@@ -66,21 +74,44 @@ class CameraHttp(
      * Opens [path] and hands back the body unread. [extraHeaders] go out as they are (the video
      * proxy forwards the player's Range). The caller closes the stream.
      */
-    fun open(path: String, extraHeaders: Map<String, String>, timeoutMs: Int = 8000): Stream {
+    fun open(path: String, extraHeaders: Map<String, String>, timeoutMs: Int = 8000, method: String = "GET", body: ByteArray? = null): Stream {
+        val first = exchange(path, extraHeaders, timeoutMs, method, body, null)
+        val challenge = first.headers["www-authenticate"]
+        // No login, or none asked for: the answer as it is, a 401 included - as before logins existed.
+        if (first.code != 401 || credentials == null || challenge == null) return first
+        first.close()
+        val target = if (path.startsWith("/")) path else "/$path"
+        return exchange(path, extraHeaders, timeoutMs, method, body, Authenticator(credentials, challenge).header(method, target))
+    }
+
+    private fun exchange(
+        path: String,
+        extraHeaders: Map<String, String>,
+        timeoutMs: Int,
+        method: String,
+        body: ByteArray?,
+        authorization: String?
+    ): Stream {
         val socket = Socket()
         try {
             connect(socket)
             socket.soTimeout = timeoutMs
             socket.connect(InetSocketAddress(host, port), timeoutMs)
             val request = buildString {
-                append("GET ").append(if (path.startsWith("/")) path else "/$path").append(" HTTP/1.1\r\n")
+                append(method).append(' ').append(if (path.startsWith("/")) path else "/$path").append(" HTTP/1.1\r\n")
                 append("Host: ").append(host).append("\r\n")
                 append("User-Agent: MOTO-HUB-Dashcam\r\n")
                 append("Connection: close\r\n")
                 extraHeaders.forEach { (k, v) -> append(k).append(": ").append(v).append("\r\n") }
+                if (authorization != null) append("Authorization: ").append(authorization).append("\r\n")
+                if (body != null) append("Content-Length: ").append(body.size).append("\r\n")
                 append("\r\n")
             }
-            socket.getOutputStream().apply { write(request.toByteArray(Charsets.ISO_8859_1)); flush() }
+            socket.getOutputStream().apply {
+                write(request.toByteArray(Charsets.ISO_8859_1))
+                if (body != null) write(body)
+                flush()
+            }
             val input = socket.getInputStream().buffered(32 * 1024)
             val status = readLine(input)
             val code = status.split(' ').getOrNull(1)?.toIntOrNull()
@@ -90,7 +121,11 @@ class CameraHttp(
                 val line = readLine(input)
                 if (line.isEmpty()) break
                 val colon = line.indexOf(':')
-                if (colon > 0) headers[line.substring(0, colon).trim().lowercase(Locale.ROOT)] = line.substring(colon + 1).trim()
+                if (colon > 0) {
+                    val key = line.substring(0, colon).trim().lowercase(Locale.ROOT)
+                    val value = line.substring(colon + 1).trim()
+                    if (key != "www-authenticate" || Authenticator.keepChallenge(headers[key], value)) headers[key] = value
+                }
             }
             return Stream(code, headers, input, socket)
         } catch (e: Exception) {

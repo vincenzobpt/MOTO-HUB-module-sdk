@@ -74,7 +74,7 @@ internal object Dc {
 }
 
 /** The few icons the module needs, drawn: a module carries no resources. 24-unit grid, 1.8 stroke. */
-internal enum class Ico { BACK, CHEVRON, PLAY, PAUSE, CAMERA, VIDEO, SLIDERS, PHONE, WIFI, LOCK, DOWNLOAD, TRASH, PHOTO, CARD, CHECK, EXPAND, CLOSE }
+internal enum class Ico { BACK, CHEVRON, PLAY, PAUSE, CAMERA, VIDEO, SLIDERS, PHONE, WIFI, LOCK, DOWNLOAD, TRASH, PHOTO, CARD, CHECK, EXPAND, CLOSE, NETWORK }
 
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
@@ -117,6 +117,7 @@ internal fun DcIcon(icon: Ico, color: Color, size: Dp) {
             Ico.CHECK -> line(5f, 12f, 10f, 17f, 19f, 7f)
             Ico.EXPAND -> { line(4f, 9f, 4f, 4f, 9f, 4f); line(20f, 15f, 20f, 20f, 15f, 20f); line(4f, 4f, 10f, 10f); line(20f, 20f, 14f, 14f) }
             Ico.CLOSE -> { line(6f, 6f, 18f, 18f); line(18f, 6f, 6f, 18f) }
+            Ico.NETWORK -> { ring(12f, 5f, 2.5f); ring(5f, 19f, 2.5f); ring(19f, 19f, 2.5f); line(12f, 7.5f, 12f, 13f); line(6.5f, 17f, 12f, 13f, 17.5f, 17f) }
         }
     }
 }

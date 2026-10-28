@@ -4,7 +4,10 @@
 package io.motohub.android.dashcam.video
 
 import android.util.Base64
+import io.motohub.android.dashcam.net.Authenticator
 import io.motohub.android.dashcam.net.CameraHttp
+import io.motohub.android.dashcam.net.Credentials
+import io.motohub.android.dashcam.net.LoginRequired
 import java.io.BufferedInputStream
 import java.io.Closeable
 import java.io.EOFException
@@ -84,11 +87,15 @@ fun parseSdpVideo(sdp: String, baseUrl: String, decode: (String) -> ByteArray): 
  * TCP rather than UDP because the cameras advertise it, and because a phone on a camera's
  * access point behind its own firewall rarely gets UDP back. Audio is never set up: the camera
  * this was built on sends AAC with an invalid header, and nothing here plays sound anyway.
+ *
+ * [credentials] answer a camera that says 401 (Basic or Digest, as it asks); without them the 401
+ * comes back as the refusal it always was.
  */
 class RtspClient(
     private val url: String,
     private val bind: (Socket) -> Unit,
-    private val log: (String) -> Unit
+    private val log: (String) -> Unit,
+    private val credentials: Credentials? = null
 ) : Closeable {
     private val socket = Socket()
     private lateinit var input: InputStream
@@ -111,29 +118,14 @@ class RtspClient(
 
     private var videoPayloadType = -1
 
+    /** Set by the first 401 when there is a login to answer it with; signs every request after it. */
+    private var authenticator: Authenticator? = null
+
     class Response(val code: Int, val headers: Map<String, String>, val body: String)
 
     /** Connects, describes, sets up the video track and starts it playing. */
     fun start(): VideoTrack {
-        val uri = URI(url)
-        val port = if (uri.port > 0) uri.port else 554
-        bind(socket)
-        socket.connect(InetSocketAddress(uri.host, port), 5000)
-        socket.soTimeout = 8000
-        socket.tcpNoDelay = true
-        input = BufferedInputStream(socket.getInputStream(), 1 shl 16)
-        output = socket.getOutputStream()
-
-        request("OPTIONS", url, "")
-        val describe = request("DESCRIBE", url, "Accept: application/sdp\r\n")
-        if (describe.code != 200) throw IOException("The camera refused DESCRIBE (${describe.code}).")
-        baseUrl = describe.headers["content-base"] ?: url
-        val track = parseSdpVideo(describe.body, baseUrl) { Base64.decode(it, Base64.DEFAULT) }
-        if (track == null) {
-            log("live: DESCRIBE $url answered ${describe.code}, headers ${describe.headers}, SDP: " +
-                describe.body.replace("\r", "").replace("\n", " | ").take(1500))
-            throw IOException("The camera's stream has no H.264 or H.265 video.")
-        }
+        val track = describe() ?: throw IOException("The camera's stream has no H.264 or H.265 video.")
         videoPayloadType = track.payloadType
         val setup = request("SETUP", track.control, "Transport: RTP/AVP/TCP;unicast;interleaved=0-1\r\n")
         if (setup.code != 200) throw IOException("The camera refused SETUP (${setup.code}).")
@@ -146,6 +138,33 @@ class RtspClient(
         }
         val play = request("PLAY", baseUrl, "Session: $session\r\nRange: npt=0.000-\r\n")
         if (play.code != 200) throw IOException("The camera refused PLAY (${play.code}).")
+        return track
+    }
+
+    /**
+     * Connects and asks what is at [url]: its video track, or null when the stream has none. Alone,
+     * it is how an address is tried without playing it; [start] goes on from here.
+     */
+    fun describe(): VideoTrack? {
+        val uri = URI(url)
+        val port = if (uri.port > 0) uri.port else 554
+        bind(socket)
+        socket.connect(InetSocketAddress(uri.host, port), 5000)
+        socket.soTimeout = 8000
+        socket.tcpNoDelay = true
+        input = BufferedInputStream(socket.getInputStream(), 1 shl 16)
+        output = socket.getOutputStream()
+
+        request("OPTIONS", url, "")
+        val describe = request("DESCRIBE", url, "Accept: application/sdp\r\n")
+        if (describe.code == 401) throw LoginRequired(rejected = credentials != null)
+        if (describe.code != 200) throw IOException("The camera refused DESCRIBE (${describe.code}).")
+        baseUrl = describe.headers["content-base"] ?: url
+        val track = parseSdpVideo(describe.body, baseUrl) { Base64.decode(it, Base64.DEFAULT) }
+        if (track == null) {
+            log("live: DESCRIBE $url answered ${describe.code}, headers ${describe.headers}, SDP: " +
+                describe.body.replace("\r", "").replace("\n", " | ").take(1500))
+        }
         return track
     }
 
@@ -198,12 +217,22 @@ class RtspClient(
     }
 
     private fun send(method: String, target: String, extra: String) {
-        val text = "$method $target RTSP/1.0\r\nCSeq: ${cseq++}\r\nUser-Agent: MOTO-HUB-Dashcam\r\n$extra\r\n"
+        val auth = authenticator?.let { "Authorization: ${it.header(method, target)}\r\n" }.orEmpty()
+        val text = "$method $target RTSP/1.0\r\nCSeq: ${cseq++}\r\nUser-Agent: MOTO-HUB-Dashcam\r\n$auth$extra\r\n"
         output.write(text.toByteArray(Charsets.ISO_8859_1))
         output.flush()
     }
 
     private fun request(method: String, target: String, extra: String): Response {
+        val first = exchange(method, target, extra)
+        val challenge = first.headers["www-authenticate"]
+        if (first.code != 401 || credentials == null || challenge == null) return first
+        // A fresh challenge each time: a second 401 may only be the camera renewing its nonce.
+        authenticator = Authenticator(credentials, challenge)
+        return exchange(method, target, extra)
+    }
+
+    private fun exchange(method: String, target: String, extra: String): Response {
         send(method, target, extra)
         while (true) {
             val first = input.read()
@@ -226,7 +255,11 @@ class RtspClient(
             val line = CameraHttp.readLine(input)
             if (line.isEmpty()) break
             val colon = line.indexOf(':')
-            if (colon > 0) headers[line.substring(0, colon).trim().lowercase(Locale.ROOT)] = line.substring(colon + 1).trim()
+            if (colon > 0) {
+                val key = line.substring(0, colon).trim().lowercase(Locale.ROOT)
+                val value = line.substring(colon + 1).trim()
+                if (key != "www-authenticate" || Authenticator.keepChallenge(headers[key], value)) headers[key] = value
+            }
         }
         val length = headers["content-length"]?.toIntOrNull() ?: 0
         val body = if (length > 0) String(CameraHttp.readExactly(input, length), Charsets.UTF_8) else ""

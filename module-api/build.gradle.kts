@@ -22,9 +22,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
 
     buildFeatures {
         compose = true
@@ -38,4 +35,10 @@ dependencies {
     api(libs.androidx.compose.runtime)
     api(libs.kotlinx.coroutines.android)
     api(libs.androidx.car.app)
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
 }

@@ -117,6 +117,7 @@ internal fun WifiPage(controller: DashcamController, back: () -> Unit) {
             color = Dc.dim, fontSize = 13.sp, lineHeight = 19.sp
         )
         BigButton(if (state.busy) "Connecting…" else "Connect", null, !state.busy && !onBike && ssid.isNotBlank(), false) {
+            controller.store.lan = false
             controller.store.ssid = ssid
             controller.store.password = password
             runCatching { controller.store.save() }
@@ -129,7 +130,7 @@ internal fun WifiPage(controller: DashcamController, back: () -> Unit) {
 
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
-private fun Field(label: String, value: String, secret: Boolean, onChange: (String) -> Unit) {
+internal fun Field(label: String, value: String, secret: Boolean, onChange: (String) -> Unit) {
     var shown by remember { mutableStateOf(false) }
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(label, color = Dc.dim, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)

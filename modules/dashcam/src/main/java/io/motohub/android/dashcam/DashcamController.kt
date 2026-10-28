@@ -5,6 +5,9 @@ package io.motohub.android.dashcam
 
 import io.motohub.android.dashcam.net.CameraHttp
 import io.motohub.android.dashcam.net.CameraWifi
+import io.motohub.android.dashcam.net.Credentials
+import io.motohub.android.dashcam.net.LocalNetworks
+import io.motohub.android.dashcam.net.LoginRequired
 import io.motohub.android.dashcam.protocol.Answers
 import io.motohub.android.dashcam.protocol.CameraFile
 import io.motohub.android.dashcam.protocol.CameraIdentity
@@ -14,6 +17,7 @@ import io.motohub.android.dashcam.video.LivePlayer
 import io.motohub.android.module.MotoHubModuleHost
 import java.io.File
 import java.io.IOException
+import java.net.Socket
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -42,6 +46,27 @@ data class DashcamState(
     val busy: Boolean get() = phase == Phase.JOINING || phase == Phase.FINDING
 }
 
+/** The search for cameras on the phone's own network, for the page that shows it. */
+data class ScanState(
+    val running: Boolean = false,
+    val progress: Float = 0f,
+    /** The networks searched, as the rider reads them: "Wi-Fi", "Hotspot". */
+    val networks: List<String> = emptyList(),
+    val found: List<Candidate> = emptyList(),
+    val searched: Boolean = false,
+    /** When the last search ended, so a page reopened a moment later does not search again. */
+    val at: Long = 0L
+)
+
+/** Working out how to show one address: found, wants a login, or the reason it cannot be shown. */
+data class CheckState(
+    val running: Boolean = false,
+    val target: String = "",
+    val message: String = "",
+    val needsLogin: Boolean = false,
+    val done: Boolean = false
+)
+
 /**
  * The one connection to the camera, shared by the module's pages.
  *
@@ -52,6 +77,8 @@ data class DashcamState(
 class DashcamController(private val host: MotoHubModuleHost) {
     val store = DashcamStore(host.storage)
     private val wifi = CameraWifi(host.context)
+    private val networks = LocalNetworks(host.context)
+    private val lanSearch = LanSearch(networks) { log(it) }
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private val _state = MutableStateFlow(DashcamState())
@@ -67,6 +94,18 @@ class DashcamController(private val host: MotoHubModuleHost) {
 
     @Volatile private var protocol: CameraProtocol? = null
     @Volatile private var http: CameraHttp? = null
+
+    /** How this connection's sockets reach the camera: its Wi-Fi, or the phone's own network. */
+    @Volatile private var binder: (Socket) -> Unit = wifi::bind
+
+    /** The phone's address where the camera sees it; some cameras register their client by it. */
+    @Volatile private var phoneAddress: String? = null
+
+    private val _scan = MutableStateFlow(ScanState())
+    val scan: StateFlow<ScanState> = _scan
+
+    private val _check = MutableStateFlow(CheckState())
+    val check: StateFlow<CheckState> = _check
     private var connectJob: Job? = null
     private var heartbeatJob: Job? = null
     private var releaseJob: Job? = null
@@ -128,7 +167,7 @@ class DashcamController(private val host: MotoHubModuleHost) {
         protocol = null
         http = null
         connectJob = scope.launch {
-            if (proto != null && client != null) runCatching { proto.logout(client, wifi.phoneAddress()) }
+            if (proto != null && client != null) runCatching { proto.logout(client, phoneAddress) }
             releaseWifiLock()
             // Only the join this one replaces: a newer reconnect may already be joining.
             wifi.release(joined)
@@ -138,10 +177,20 @@ class DashcamController(private val host: MotoHubModuleHost) {
 
     private suspend fun doConnect() {
         if (motorcycleConnected()) {
-            fail("The phone is connected to the motorcycle. Disconnect from it first: the phone has one Wi-Fi " +
-                "connection, and joining the camera would take it from the bike.")
+            fail(
+                if (store.lan) LAN_ON_BIKE
+                else "The phone is connected to the motorcycle. Disconnect from it first: the phone has one Wi-Fi " +
+                    "connection, and joining the camera would take it from the bike."
+            )
             return
         }
+        // Whose name to keep when it answers: the rider may pick another camera meanwhile.
+        val camera = store.active
+        if (store.lan) {
+            doConnectLan(camera)
+            return
+        }
+        binder = wifi::bind
         val ssid = store.ssid
         if (ssid.isBlank()) {
             fail("Enter the camera's Wi-Fi name first.")
@@ -168,11 +217,45 @@ class DashcamController(private val host: MotoHubModuleHost) {
             return
         }
         val (proto, client, identity) = found
+        onConnected(proto, client, identity, wifi.phoneAddress(), camera)
+    }
+
+    /**
+     * A camera on the phone's own network - its Wi-Fi or the hotspot the camera joined - at the
+     * address found before: nothing to join, only to check that it is still there and as it was.
+     */
+    private suspend fun doConnectLan(camera: String) {
+        val address = store.lanHost
+        if (address.isBlank()) {
+            fail("Find the camera on the network first.")
+            return
+        }
+        _state.value = DashcamState(phase = Phase.FINDING, message = "Looking for the camera at $address…")
+        val found = try {
+            lanSearch.reopen(address, store.lanFamily, store.lanUrl, store.lanOnvif.ifEmpty { null }, store.lanName, lanLogin())
+        } catch (e: Exception) {
+            if (currentCoroutineContext().isActive) fail(e.message ?: "The camera did not answer at $address.")
+            return
+        }
+        if (!currentCoroutineContext().isActive) return
+        val net = networks.forHost(address)
+        val bind = net?.bind ?: {}
+        binder = bind
+        onConnected(found.protocol, CameraHttp(address, bind, 80, lanLogin()), found.identity, net?.phone?.hostAddress, camera)
+    }
+
+    /** The camera's own login, for the IP cameras that ask; null when none was ever given. */
+    private fun lanLogin(): Credentials? =
+        if (store.lanUser.isEmpty() && store.lanPassword.isEmpty()) null else Credentials(store.lanUser, store.lanPassword)
+
+    /** What every connection does once the camera has answered, whichever way it was reached. */
+    private fun onConnected(proto: CameraProtocol, client: CameraHttp, identity: CameraIdentity, phone: String?, camera: String) {
         protocol = proto
         http = client
+        phoneAddress = phone
         log("dashcam: ${proto.family} at ${client.host}, ${identity.maker} ${identity.model} ${identity.firmware}" +
             identity.details.joinToString("") { (k, v) -> ", $k: $v" })
-        runCatching { proto.logon(client, wifi.phoneAddress()) }.onFailure { log("dashcam: logon: ${it.message}") }
+        runCatching { proto.logon(client, phone) }.onFailure { log("dashcam: logon: ${it.message}") }
         // The live view lost the camera before it could switch recording back on.
         if (pausedForLive && livePlayer == null && proto.liveNeedsRecording) {
             log("dashcam: recording was left off by the live view; switching it back on")
@@ -188,6 +271,11 @@ class DashcamController(private val host: MotoHubModuleHost) {
             status = status,
             address = client.host
         )
+        val name = listOf(identity.maker, identity.model).filter(String::isNotBlank).joinToString(" ")
+        if (name.isNotEmpty() && camera == store.active) {
+            store.setLabel(camera, name)
+            runCatching { store.save() }
+        }
         startHeartbeat(proto, client)
         runCatching { wifiLock?.acquire() }.onSuccess { log("dashcam: Wi-Fi held in low-latency mode") }
             .onFailure { log("dashcam: could not hold the Wi-Fi awake: ${it.message}") }
@@ -263,7 +351,7 @@ class DashcamController(private val host: MotoHubModuleHost) {
         protocol = null
         http = null
         scope.launch {
-            if (proto != null && client != null) runCatching { proto.logout(client, wifi.phoneAddress()) }
+            if (proto != null && client != null) runCatching { proto.logout(client, phoneAddress) }
             // Only this connection's join: Connect pressed meanwhile has a new one.
             wifi.release(joined)
         }
@@ -358,8 +446,9 @@ class DashcamController(private val host: MotoHubModuleHost) {
             val client = http ?: throw IOException("Not connected to the camera.")
             proto.prepareLive(client, misses).also { if (misses > 0) log("live: no picture in $misses session(s); trying $it") }
         },
-        bind = wifi::bind,
+        bind = { s -> binder(s) },
         log = ::log,
+        credentials = { if (store.lan) lanLogin() else null },
         onFirstPicture = {
             if (protocol?.liveNeedsRecording == true) {
                 log("live: picture up; switching recording off so the stream is not throttled")
@@ -367,6 +456,101 @@ class DashcamController(private val host: MotoHubModuleHost) {
             }
         }
     )
+
+    /** Whether the camera has buttons, settings and files; a stream-only camera on the network has none. */
+    val controllable: Boolean get() = protocol?.controllable ?: !(store.lan && store.lanFamily.isEmpty())
+
+    // ---------------------------------------------------------------- a camera on the phone's network
+
+    /** Searches the phone's Wi-Fi and hotspot for cameras; the page follows [scan]. */
+    fun search() {
+        if (_scan.value.running) return
+        _scan.value = ScanState(running = true)
+        scope.launch {
+            // On the camera's own Wi-Fi: no place to look, and on most phones it has taken the phone's
+            // own. Let it go, and give the phone's Wi-Fi a moment to come back before looking.
+            val cameraWifi = wifi.network
+            if (wifi.current != null) {
+                disconnect()
+                var waited = 0
+                while (waited < WIFI_RETURN_MS && networks.list().none { it.network != cameraWifi }) {
+                    delay(500)
+                    waited += 500
+                }
+            }
+            val nets = networks.list().filter { it.network == null || it.network != cameraWifi }
+            val kinds = ArrayList<String>()
+            for (n in nets) if (n.kind !in kinds) kinds.add(n.kind)
+            _scan.value = ScanState(running = true, networks = kinds)
+            val found = if (nets.isEmpty() || motorcycleConnected()) emptyList() else {
+                runCatching { lanSearch.search(nets) { p -> _scan.value = _scan.value.copy(progress = p) } }
+                    .onFailure { log("scan: ${it.message}") }.getOrDefault(emptyList())
+            }
+            _scan.value = ScanState(progress = 1f, networks = kinds, found = found, searched = true, at = System.currentTimeMillis())
+        }
+    }
+
+    /**
+     * Works out how to show the camera at [target] (found by the search, or typed), and on success
+     * keeps it and connects to it. [name] is what the search called it, kept when the camera
+     * itself says nothing better.
+     */
+    fun check(target: String, onvif: String?, login: Credentials?, name: String = "") {
+        if (_check.value.running) return
+        _check.value = CheckState(running = true, target = target, message = "Checking $target…")
+        scope.launch {
+            if (motorcycleConnected()) {
+                _check.value = CheckState(target = target, message = LAN_ON_BIKE)
+                return@launch
+            }
+            // The login kept for this camera, if it is the one set up before.
+            val auth = login ?: if (store.lan && Target.parse(target)?.host == store.lanHost) lanLogin() else null
+            try {
+                val found = lanSearch.resolve(target, onvif, auth)
+                val given = auth ?: Target.parse(target)?.login
+                store.lan = true
+                store.lanHost = found.host
+                store.lanFamily = if (found.url.isEmpty()) found.protocol.family else ""
+                store.lanUrl = found.url
+                store.lanOnvif = found.onvif.orEmpty()
+                store.lanName = listOf(found.identity.maker, found.identity.model).filter(String::isNotBlank).joinToString(" ").ifEmpty { name }
+                store.lanUser = given?.user.orEmpty()
+                store.lanPassword = given?.password.orEmpty()
+                runCatching { store.save() }
+                _check.value = CheckState(target = target, done = true)
+                reconnect()
+            } catch (e: LoginRequired) {
+                _check.value = CheckState(target = target, needsLogin = true, message = if (e.rejected) e.message.orEmpty() else "")
+            } catch (e: Exception) {
+                log("scan: $target: ${e.message}")
+                _check.value = CheckState(target = target, message = e.message ?: "Nothing at $target shows a picture.")
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------- several cameras
+
+    /**
+     * Makes [id] the camera in use. One at a time - most cameras take the phone's only Wi-Fi - so
+     * a connection to the one before is left and the new one joined in its place.
+     */
+    fun switchTo(id: String) {
+        if (id == store.active) return
+        store.select(id)
+        runCatching { store.save() }
+        if (_state.value.connected || _state.value.busy) reconnect() else _state.value = DashcamState()
+    }
+
+    /** Forgets camera [id]; leaving it first when it is the one connected. Files saved on the phone stay. */
+    fun removeCamera(id: String) {
+        if (id == store.active) disconnect()
+        store.remove(id)
+        runCatching { store.save() }
+    }
+
+    fun clearCheck() {
+        if (!_check.value.running) _check.value = CheckState()
+    }
 
     /** The camera's HTTP side, for ExoPlayer to read recordings through; null when not connected. */
     fun cameraHttp(): CameraHttp? = http
@@ -454,6 +638,13 @@ class DashcamController(private val host: MotoHubModuleHost) {
 
     fun localFiles(): List<File> =
         store.downloads.listFiles { f -> f.isFile && !f.name.endsWith(".part") }?.sortedByDescending { it.lastModified() }.orEmpty()
+
+    private companion object {
+        const val LAN_ON_BIKE = "The phone is connected to the motorcycle, and Android sends the app's connections " +
+            "there: a camera on the phone's network cannot be reached. Disconnect from the motorcycle first."
+
+        const val WIFI_RETURN_MS = 8_000
+    }
 
     fun release() {
         disconnect()

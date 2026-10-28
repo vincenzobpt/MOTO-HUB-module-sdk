@@ -3,7 +3,7 @@
 
 [versions]
 agp = "8.12.3"
-kotlin = "2.0.21"
+kotlin = "2.4.21"
 composeBom = "2024.09.00"
 carApp = "1.7.0"
 protobuf = "3.25.1"

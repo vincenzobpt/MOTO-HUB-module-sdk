@@ -42,7 +42,12 @@ import kotlinx.coroutines.delay
 /** One screen of the module. The app gives a module one page; the module walks its own screens inside it. */
 internal sealed class Page {
     object Home : Page()
+    object Setup : Page()
+    object Cameras : Page()
     object Wifi : Page()
+    object Lan : Page()
+    object LanManual : Page()
+    class LanLogin(val target: String, val onvif: String?, val name: String) : Page()
     object Settings : Page()
     object Live : Page()
     class Files(val local: Boolean) : Page()
@@ -66,6 +71,8 @@ fun DashcamApp(host: MotoHubModuleHost, controller: DashcamController, startLive
     val back: () -> Unit = {
         if (stack.size > 1) stack = ArrayList(stack.subList(0, stack.size - 1)) else onExit()
     }
+    // A camera found and connected ends the setup screens, however many deep: back to the first.
+    val home: () -> Unit = { stack = listOf(stack[0]) }
     val notice by controller.notice.collectAsState()
 
     DisposableEffect(Unit) {
@@ -84,7 +91,12 @@ fun DashcamApp(host: MotoHubModuleHost, controller: DashcamController, startLive
         Box(Modifier.fillMaxSize().background(Dc.bg)) {
             when (page) {
                 Page.Home -> HomePage(controller, open, back)
+                Page.Setup -> SetupPage(open, back)
+                Page.Cameras -> CamerasPage(controller, open, back)
                 Page.Wifi -> WifiPage(controller, back)
+                Page.Lan -> LanPage(controller, open, home, back)
+                Page.LanManual -> LanManualPage(controller, open, home, back)
+                is Page.LanLogin -> LanLoginPage(controller, page.target, page.onvif, page.name, home, back)
                 Page.Settings -> SettingsPage(controller, back)
                 Page.Live -> LivePage(controller, open, back)
                 is Page.Files -> FilesPage(controller, page.local, open, back)

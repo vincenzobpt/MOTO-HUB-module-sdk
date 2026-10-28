@@ -41,8 +41,8 @@ one to worry about.
 
 ## The linkage check
 
-The plugin reads every method your module's dex references and resolves each one against a real
-MOTO-HUB APK, through superclasses and interfaces, the way the runtime does:
+The plugin reads every method and field your module's dex references and resolves each one
+against a real MOTO-HUB APK, through superclasses and interfaces, the way the runtime does:
 
 ```bash
 ./gradlew :modules:<your-module>:checkModuleLinkage -PmotohubApk=/path/to/ADV-SOLO-x.y.z.apk
@@ -57,6 +57,10 @@ It fails the build on anything unresolved and says why:
 ```
 Lkotlin/collections/ArraysKt;lastOrNull([Ljava/lang/Object;)Ljava/lang/Object;  — the class is in the APK but this method was shrunk out of it
 ```
+
+Fields count too: a Compose `$stable` field a composable reads, if R8 removed it from the app,
+is a `NoSuchFieldError` the first time the page opens. The check has resolved fields since
+ADV-SOLO 0.1.54.
 
 **Run it against every APK version you intend to support**, at least the current release. The
 report is written to `build/reports/module-linkage.txt`.

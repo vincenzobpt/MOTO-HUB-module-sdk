@@ -38,6 +38,10 @@ A module that failed to load is not retried until its file changes. Reinstall it
 
 - **`NoSuchMethodError`** anywhere in your code: a borrowed method that R8 removed from the app.
   Run `checkModuleLinkage`; it would have caught it.
+- **`NoSuchFieldError`**, often `MaterialTheme.$stable`: the same for a field. Run
+  `checkModuleLinkage` from this SDK, which checks fields too.
+- **`NoSuchMethodError` on `kotlin.coroutines.jvm.internal.SpillingKt`** on an app before 0.1.54:
+  the module was built with Kotlin 2.4 but declares a contract below 37. Declare 37.
 - **`AbstractMethodError`** calling into `host.ui` or another contract interface: a default
   argument, or a stale `module-api`. See [contract.md](contract.md#rules-that-are-easy-to-break).
 - **Your page is blank or the app freezes when opening it**: `features()` or the composable is

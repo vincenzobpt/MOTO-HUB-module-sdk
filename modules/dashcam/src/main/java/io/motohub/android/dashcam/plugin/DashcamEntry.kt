@@ -26,11 +26,11 @@ private class DashcamModule(private val host: MotoHubModuleHost) : MotoHubModule
 
     override val manifest = ModuleManifest(
         id = "dashcam",
-        version = "0.4.4",
-        contractVersion = 20,
+        version = "0.5.1",
+        contractVersion = 37,
         entryClass = "io.motohub.android.dashcam.plugin.DashcamEntry",
         displayName = "Dashcam",
-        description = "Shows a Wi-Fi dashcam on the phone - full-screen or in the dashboard's map panel - with its buttons, settings and files."
+        description = "Shows a Wi-Fi dashcam or an IP camera on the phone - full-screen or in the dashboard's map panel - with its buttons, settings and files."
     )
 
     private val controller = DashcamController(host)
@@ -48,7 +48,7 @@ private class DashcamModule(private val host: MotoHubModuleHost) : MotoHubModule
             ModuleFeature(
                 id = DashcamModuleIds.ABOUT,
                 title = "Dashcam",
-                description = "Connect to a Wi-Fi dashcam and watch it full-screen.",
+                description = "Connect to a Wi-Fi dashcam or an IP camera and watch it full-screen.",
                 placement = ModuleFeaturePlacement.MODULES,
                 screen = { onBack -> DashcamApp(host, controller, startLive = false, onExit = onBack) }
             ),

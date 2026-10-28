@@ -46,9 +46,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
 }
 
 dependencies {
@@ -90,3 +87,9 @@ val checkModuleManifestAgrees by tasks.registering {
     }
 }
 tasks.named("moduleManifest") { dependsOn(checkModuleManifestAgrees) }
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+}

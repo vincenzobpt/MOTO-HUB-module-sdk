@@ -180,5 +180,6 @@ history is in the KDoc of `MotoHubModuleContract`.
 | 34 | `host.keepAlive` (the app stays in the foreground while a module runs something long, a wireless head unit session above all) | 0.1.47 |
 | 35 | `ModuleDashboardArrows` (a head unit's arrows move a touch dashboard's focus the way they point) | 0.1.47 |
 | 36 | `ModuleMapboxAccount` (`accessToken`, `countMapLoad`: the rider's own Mapbox token for the 3D maps, and each map load counted back) | 0.1.48 |
+| 37 | Nothing new in the contract's shape: the app is built with Kotlin 2.4 and lends a module that runtime. A module built with Kotlin 2.4 (this SDK) calls into its standard library where an older app has nothing, so it declares 37 to stay off apps before 0.1.54 | 0.1.54 |
 
 This repository tags every contract release as `contract-<n>`.

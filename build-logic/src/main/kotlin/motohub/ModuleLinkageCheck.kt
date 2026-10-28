@@ -48,13 +48,20 @@ import java.io.File
  *
  * ### What it does not check
  *
- * Fields, and classes the module names without calling into. Both fail loudly at load, which is
- * the case the existing rules already cover; methods were the silent ones.
+ * Classes the module names without calling into or reading from. Those fail loudly at load, which
+ * is the case the existing rules already cover.
+ *
+ * Fields used to be on this list too, on the same belief - and it was as wrong for them as it had
+ * been for methods. A field R8 removed from a class that is still here throws NoSuchFieldError
+ * where the module reads it, not at load: after Kotlin 2.4 the app stopped reading
+ * `MaterialTheme.$stable`, R8 removed it, and mapopt 0.2.0 and tomtom 0.1.4 died opening their
+ * first page (2026-10-28). Every field a module reads or writes (`iget`/`iput`/`sget`/`sput`) is
+ * now resolved the same way as its calls.
  *
  * ### The allow list
  *
- * `module-linkage-allowed.txt` beside `proguard-rules.pro` takes one `Lowner;name(args)ret` per
- * line, `#` for comments. It is for a reference that provably cannot be reached — not for one
+ * `module-linkage-allowed.txt` beside `proguard-rules.pro` takes one `Lowner;name(args)ret` or
+ * `Lowner;name:type` per line, `#` for comments. It is for a reference that provably cannot be reached — not for one
  * that is merely believed to be cold. A wrong entry here is a crash on a motorcycle.
  */
 @CacheableTask
@@ -115,7 +122,8 @@ abstract class CheckModuleLinkage : DefaultTask() {
             // Regex(String, Set), the APK's did not, and this check trusted the copy that never
             // loads (NoSuchMethodError on a rider's phone, 2026-10-05).
             val own = uses.keys.filterNot(app::knows).toSet()
-            val borrowed = loadedFrom(Dex.moduleEntry(moduleFile), own, uses).asSequence()
+            val loaded = loadedFrom(Dex.moduleEntry(moduleFile), own, uses)
+            val borrowed = loaded.asSequence()
                 .flatMap { uses.getValue(it).calls.asSequence() }
                 .filter { it.owner !in own }
                 .filterNot { isPlatform(it.owner) }
@@ -125,16 +133,24 @@ abstract class CheckModuleLinkage : DefaultTask() {
                 .distinct()
                 .sortedBy(Dex.MethodRef::toString)
                 .toList()
+            val borrowedFields = loaded.asSequence()
+                .flatMap { uses.getValue(it).fields.asSequence() }
+                .filter { it.owner !in own }
+                .filterNot { isPlatform(it.owner) }
+                .distinct()
+                .sortedBy(Dex.FieldRef::toString)
+                .toList()
 
-            val unresolved = borrowed.filterNot { app.resolves(it) }
-                .filterNot { it.toString() in allowed }
+            val unresolved = borrowed.filterNot { app.resolves(it) }.map { it.owner to it.toString() } +
+                borrowedFields.filterNot { app.resolves(it) }.map { it.owner to it.toString() }
 
             lines.append(moduleFile.name)
                 .append(": ").append(borrowed.size).append(" borrowed method reference(s), ")
-                .append(unresolved.size).append(" unresolved\n")
-            unresolved.forEach { reference ->
-                val reason = if (app.knows(reference.owner)) {
-                    "the class is in the APK but this method was shrunk out of it"
+                .append(borrowedFields.size).append(" field reference(s), ")
+                .append(unresolved.count { it.second !in allowed }).append(" unresolved\n")
+            unresolved.filterNot { it.second in allowed }.forEach { (owner, reference) ->
+                val reason = if (app.knows(owner)) {
+                    "the class is in the APK but this member was shrunk out of it"
                 } else {
                     "the class is not in the APK at all"
                 }
@@ -150,12 +166,12 @@ abstract class CheckModuleLinkage : DefaultTask() {
             throw GradleException(
                 buildString {
                     append(failures.size)
-                    append(" method(s) a module calls are missing from ")
+                    append(" method(s) or field(s) a module uses are missing from ")
                     append(apkFile.name)
                     append(". Loaded modules link against the app's libraries, and R8 shrinks ")
-                    append("what the app itself never calls — so these throw NoSuchMethodError ")
-                    append("on a rider's phone, at whatever moment the module happens to reach ")
-                    append("them.\n\n")
+                    append("what the app itself never uses — so these throw NoSuchMethodError or ")
+                    append("NoSuchFieldError on a rider's phone, at whatever moment the module ")
+                    append("happens to reach them.\n\n")
                     failures.forEach { append("  ").append(it).append('\n') }
                     append(
                         "\nFix the module to stop calling it, or keep it whole in " +
@@ -237,6 +253,31 @@ abstract class CheckModuleLinkage : DefaultTask() {
             }
             return false
         }
+
+        /**
+         * Field resolution the way the runtime does it: the class, the interfaces it declares
+         * (an interface constant is reached through any class that implements it), then up the
+         * superclasses. Object declares no fields, so a chain that reaches it has not found one.
+         */
+        fun resolves(reference: Dex.FieldRef): Boolean {
+            val seen = mutableSetOf<String>()
+            val queue = ArrayDeque(listOf(reference.owner))
+            while (queue.isNotEmpty()) {
+                val descriptor = queue.removeFirst()
+                if (!seen.add(descriptor) || descriptor == OBJECT) continue
+                // As for methods: a java.* ancestor is asked of this JDK, an android.* one
+                // cannot be checked here and is not blamed.
+                if (PLATFORM_PREFIXES.any(descriptor::startsWith)) {
+                    if (platformDeclaresField(descriptor, reference.signature) != false) return true
+                    continue
+                }
+                val definition = classes[descriptor] ?: continue
+                if (reference.signature in definition.fields) return true
+                definition.interfaces.forEach(queue::addLast)
+                definition.superclass?.let(queue::addLast)
+            }
+            return false
+        }
     }
 
     private companion object {
@@ -258,6 +299,23 @@ abstract class CheckModuleLinkage : DefaultTask() {
                 if (type.declaredMethods.any { signatureOf(it) == signature }) return true
                 type.superclass?.let(queue::addLast)
                 type.interfaces.forEach(queue::addLast)
+            }
+            return false
+        }
+
+        /** [platformDeclares] for a field `name:type`: null when this JVM cannot answer. */
+        fun platformDeclaresField(descriptor: String, signature: String): Boolean? {
+            if (!descriptor.startsWith("Ljava/")) return null
+            val name = descriptor.substring(1, descriptor.length - 1).replace('/', '.')
+            val root = runCatching { Class.forName(name, false, null) }.getOrNull() ?: return null
+            val seen = mutableSetOf<Class<*>>()
+            val queue = ArrayDeque<Class<*>>(listOf(root))
+            while (queue.isNotEmpty()) {
+                val type = queue.removeFirst()
+                if (!seen.add(type)) continue
+                if (type.declaredFields.any { "${it.name}:${descriptorOf(it.type)}" == signature }) return true
+                type.interfaces.forEach(queue::addLast)
+                type.superclass?.let(queue::addLast)
             }
             return false
         }

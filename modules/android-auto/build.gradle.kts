@@ -45,9 +45,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
 }
 
 dependencies {
@@ -101,5 +98,11 @@ tasks.named<Zip>("moduleJar") {
     from(file("identity")) {
         include("aa_cert", "aa_identity_data")
         into("motohub")
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
 }

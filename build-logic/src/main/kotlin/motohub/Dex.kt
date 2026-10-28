@@ -11,8 +11,9 @@ import java.util.zip.ZipFile
 /**
  * Just enough of the Dalvik executable format to answer two questions:
  *
- *  - which methods does this dex *define*, and what does each class extend and implement?
- *  - what does each class's code *use*: the methods it invokes and the classes it names?
+ *  - which methods and fields does this dex *define*, and what does each class extend and implement?
+ *  - what does each class's code *use*: the methods it invokes, the fields it reads and writes,
+ *    and the classes it names?
  *
  * Read directly rather than through `dexdump`, so the check runs wherever the build runs and
  * needs nothing from `build-tools` beyond what is already there to build with. The format is
@@ -38,12 +39,18 @@ internal class Dex(bytes: ByteArray) {
         override fun toString(): String = "$owner$signature"
     }
 
-    /** A class this dex defines, with what it inherits from and the methods it carries. */
+    /** One field, named the way this file compares them: `name:type`. */
+    data class FieldRef(val owner: String, val signature: String) {
+        override fun toString(): String = "$owner$signature"
+    }
+
+    /** A class this dex defines, with what it inherits from and the methods and fields it carries. */
     data class ClassDef(
         val descriptor: String,
         val superclass: String?,
         val interfaces: List<String>,
-        val methods: Set<String>
+        val methods: Set<String>,
+        val fields: Set<String>
     )
 
     private fun uleb128(at: Int): Pair<Int, Int> {
@@ -98,6 +105,14 @@ internal class Dex(bytes: ByteArray) {
         return MethodRef(owner, "$name$proto")
     }
 
+    private fun fieldId(index: Int): FieldRef {
+        val at = fieldIdsOff + index * 8
+        val owner = type(buf.getShort(at).toInt() and 0xFFFF)
+        val fieldType = type(buf.getShort(at + 2).toInt() and 0xFFFF)
+        val name = string(buf.getInt(at + 4))
+        return FieldRef(owner, "$name:$fieldType")
+    }
+
     fun classDefs(): List<ClassDef> = (0 until classDefsSize).map { i ->
         val at = classDefsOff + i * 32
         val descriptor = type(buf.getInt(at))
@@ -113,13 +128,18 @@ internal class Dex(bytes: ByteArray) {
             descriptor = descriptor,
             superclass = if (superIdx == NO_INDEX) null else type(superIdx),
             interfaces = interfaces,
-            methods = methodsOf(i).map { (methodIdx, _) -> methodId(methodIdx).signature }.toSet()
+            methods = methodsOf(i).map { (methodIdx, _) -> methodId(methodIdx).signature }.toSet(),
+            fields = fieldsOf(i).map { fieldId(it).signature }.toSet()
         )
     }
 
-    /** What one class's code reaches for: the methods it invokes and every class it names. */
+    /**
+     * What one class's code reaches for: the methods it invokes, the fields it reads and writes,
+     * and every class it names.
+     */
     class Uses {
         val calls = mutableSetOf<MethodRef>()
+        val fields = mutableSetOf<FieldRef>()
         val classes = mutableSetOf<String>()
     }
 
@@ -179,6 +199,29 @@ internal class Dex(bytes: ByteArray) {
         return out
     }
 
+    /** field_idx of each field class_def [index] defines, static then instance. */
+    private fun fieldsOf(index: Int): List<Int> {
+        val classDataOff = buf.getInt(classDefsOff + index * 32 + 24)
+        if (classDataOff == 0) return emptyList()
+        var cursor = classDataOff
+        val (staticFields, a1) = uleb128(cursor); cursor = a1
+        val (instanceFields, a2) = uleb128(cursor); cursor = a2
+        cursor = uleb128(cursor).second      // direct_methods_size
+        cursor = uleb128(cursor).second      // virtual_methods_size
+        val out = mutableListOf<Int>()
+        // Deltas again, and again each of the two lists restarts from zero.
+        listOf(staticFields, instanceFields).forEach { count ->
+            var fieldIdx = 0
+            repeat(count) {
+                val (diff, afterDiff) = uleb128(cursor)
+                fieldIdx += diff
+                cursor = uleb128(afterDiff).second   // access_flags
+                out += fieldIdx
+            }
+        }
+        return out
+    }
+
     /** Walks one code_item's instructions, adding what each one names to [out]. */
     private fun usesIn(codeOff: Int, out: Uses) {
         val insnsSize = buf.getInt(codeOff + 12)
@@ -210,7 +253,11 @@ internal class Dex(bytes: ByteArray) {
                 }
                 // const-class, check-cast, instance-of, new-instance, new-array, filled-new-array*
                 0x1C, 0x1F, 0x20, 0x22, 0x23, 0x24, 0x25 -> out.classes += type(operand)
-                in 0x52..0x6D -> out.classes += type(buf.getShort(fieldIdsOff + operand * 8).toInt() and 0xFFFF)
+                // iget*, iput*, sget*, sput*
+                in 0x52..0x6D -> fieldId(operand).let { field ->
+                    out.fields += field
+                    out.classes += field.owner
+                }
             }
             pc += WIDTHS[opcode]
         }

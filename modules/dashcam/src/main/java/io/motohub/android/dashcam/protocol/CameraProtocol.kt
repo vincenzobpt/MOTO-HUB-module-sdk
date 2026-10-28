@@ -84,6 +84,12 @@ interface CameraProtocol {
      */
     val liveNeedsRecording: Boolean get() = false
 
+    /**
+     * Whether the camera has buttons, settings and a card the phone can reach. Every dashcam family
+     * does; a plain IP camera found on the phone's network offers only its picture ([StreamOnlyCamera]).
+     */
+    val controllable: Boolean get() = true
+
     /** The folders this family keeps files in, in the order a rider expects them. */
     val folders: List<CameraFolder>
 

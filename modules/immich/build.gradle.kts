@@ -39,9 +39,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
 }
 
 dependencies {
@@ -63,4 +60,10 @@ dependencies {
     testImplementation(project(":module-api"))
     testImplementation(libs.junit)
     testImplementation(libs.json)
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
 }

@@ -162,8 +162,13 @@ object MotoHubModuleContract {
      *    (the trip replay's and the Ride Dashboard's) a Mapbox token; with one the stage is drawn
      *    by Mapbox GL JS with Mapbox Standard, and each map load is counted back to the module.
      *    New type only; the minimum stays at 3.
+     * 37: the app is built with Kotlin 2.4, and lends a module that runtime. A module built with
+     *    Kotlin 2.4 calls into its standard library (SpillingKt.nullOutSpilledVariable, for one)
+     *    where an app built with 2.0 has nothing, and fails on its first coroutine there. Nothing
+     *    in the contract's shape changed; the number only keeps such a module off an older app.
+     *    The minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 36
+    const val CONTRACT_VERSION = 37
 
     /**
      * The oldest contract this app can still run.

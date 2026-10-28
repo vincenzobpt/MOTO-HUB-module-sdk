@@ -56,14 +56,19 @@ internal class DashcamProjection(private val controller: DashcamController) : Mo
     }
 
     override fun explainNoConnection(host: MotoHubModuleHost, connectedAtLeastOnce: Boolean): String {
+        val lan = controller.store.lan
         if (controller.motorcycleConnected()) {
-            return "The phone is on the motorcycle's Wi-Fi, and it has only one: the camera needs it. " +
+            return if (lan) "The phone is connected to the motorcycle, and Android sends the app's connections there: " +
+                "the camera on the phone's network cannot be reached. Use it with the dashboard on the phone, without the motorcycle."
+            else "The phone is on the motorcycle's Wi-Fi, and it has only one: the camera needs it. " +
                 "Use the camera with the dashboard on the phone, without the motorcycle."
         }
         val state = controller.state.value
         if (state.phase == Phase.FAILED && state.message.isNotEmpty()) return state.message
         return if (connectedAtLeastOnce) {
             "The camera stopped answering. Is it still on, and close to the phone?"
+        } else if (lan) {
+            "The camera did not answer. Check that it is on and on the same network as the phone (Modules > Dashcam)."
         } else {
             "The camera did not answer. Check that it is on, and its Wi-Fi name and password in Modules > Dashcam."
         }

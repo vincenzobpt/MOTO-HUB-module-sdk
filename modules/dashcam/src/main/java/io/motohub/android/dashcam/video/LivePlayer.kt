@@ -7,6 +7,7 @@ import android.media.MediaCodec
 import android.media.MediaFormat
 import android.os.SystemClock
 import android.view.Surface
+import io.motohub.android.dashcam.net.Credentials
 import java.net.Socket
 import java.nio.ByteBuffer
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,7 +43,9 @@ class LivePlayer(
     private val bind: (Socket) -> Unit,
     private val log: (String) -> Unit,
     /** Called once per RTSP session, when its first picture is on screen. */
-    private val onFirstPicture: () -> Unit = {}
+    private val onFirstPicture: () -> Unit = {},
+    /** The camera's login for its RTSP server, for the IP cameras that ask; none by default. */
+    private val credentials: () -> Credentials? = { null }
 ) {
     private val _state = MutableStateFlow(LiveState())
     val state: StateFlow<LiveState> = _state
@@ -95,7 +98,7 @@ class LivePlayer(
                 val url = prepare(misses)
                 if (!isCurrent(mine)) break
                 _state.value = _state.value.copy(status = "Opening the video…")
-                val rtsp = RtspClient(url, bind, log)
+                val rtsp = RtspClient(url, bind, log, credentials())
                 client = rtsp
                 rtsp.use { play(it, mine) }
                 attempt = 0

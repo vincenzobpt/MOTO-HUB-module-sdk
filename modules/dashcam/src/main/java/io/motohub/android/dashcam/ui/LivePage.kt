@@ -118,15 +118,18 @@ internal fun LivePage(controller: DashcamController, open: (Page) -> Unit, back:
                         Text(if (live.fps > 0) "Live · ${live.fps} fps" else "Live", color = Color(0xFFB8C3CE), fontSize = 13.sp)
                     }
                     val s = state.status
-                    if (s?.recording == true) Pill("Recording", Dc.rec, Color(0x33FF5252), Dc.rec)
-                    else Pill("Recording paused while you watch", Dc.warn, Dc.warnSoft, null)
+                    // A stream-only camera says nothing about recording, battery or card.
+                    if (controller.controllable) {
+                        if (s?.recording == true) Pill("Recording", Dc.rec, Color(0x33FF5252), Dc.rec)
+                        else Pill("Recording paused while you watch", Dc.warn, Dc.warnSoft, null)
+                    }
                     s?.batteryPercent?.let { Pill("$it%", Dc.text, Color(0x1AFFFFFF), if (it < 20) Dc.rec else Dc.ok) }
                     if (s?.cardReady == false) Pill("No SD card", Dc.dangerText, Color(0x33E5484D), null)
                     else s?.cardFreeMb?.let { Pill(formatMb(it), Dc.text, Color(0x1AFFFFFF), Dc.accent) }
                 }
                 Spacer(Modifier.weight(1f))
-                // Controls along the bottom, the shutter in the middle.
-                Row(
+                // Controls along the bottom, the shutter in the middle - for a camera that has them.
+                if (controller.controllable) Row(
                     Modifier.fillMaxWidth().background(Dc.scrim).padding(top = 12.dp, bottom = 14.dp),
                     verticalAlignment = Alignment.Bottom,
                     horizontalArrangement = Arrangement.spacedBy(36.dp, Alignment.CenterHorizontally)
