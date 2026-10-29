@@ -13,7 +13,7 @@ motohubModule {
     version = "0.1.4"
     entryClass = "io.motohub.tomtom.TomTomEntry"
     // Tiles, places, search and drive times in the NAV, and the NAV_PANEL placement (32).
-    contractVersion = 32
+    contractVersion = 37
     displayName = "TomTom"
     description = "Live traffic, places, search and road info from your own free TomTom key — on your phone only."
 }

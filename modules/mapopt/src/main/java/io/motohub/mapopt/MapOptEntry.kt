@@ -27,7 +27,7 @@ private class MapOptModule(private val host: MotoHubModuleHost) : MotoHubModule 
     override val manifest = ModuleManifest(
         id = "mapopt",
         version = "0.2.0",
-        contractVersion = 36,
+        contractVersion = 37,
         entryClass = "io.motohub.mapopt.MapOptEntry",
         displayName = "MapOpt",
         description = "Your own Mapbox token for the 3D POV: Mapbox Standard with terrain, trees, landmarks and light."

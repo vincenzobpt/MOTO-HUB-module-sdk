@@ -23,7 +23,7 @@ private class ImmichModule(private val host: MotoHubModuleHost) : MotoHubModule 
     override val manifest = ModuleManifest(
         id = "immich",
         version = "0.3.0",
-        contractVersion = 31,
+        contractVersion = 37,
         entryClass = "io.motohub.immich.ImmichEntry",
         displayName = "Immich",
         description = "Shows the photos of your own Immich server on the NAV map."

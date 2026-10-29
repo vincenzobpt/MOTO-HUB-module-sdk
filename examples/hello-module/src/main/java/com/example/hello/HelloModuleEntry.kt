@@ -32,7 +32,7 @@ private class HelloModule(private val host: MotoHubModuleHost) : MotoHubModule {
     override val manifest = ModuleManifest(
         id = "hello",
         version = "0.1.0",
-        contractVersion = 10,
+        contractVersion = 37,
         entryClass = "com.example.hello.HelloModuleEntry",
         displayName = "Hello module",
         description = "The smallest useful MOTO-HUB module: one page, one button."

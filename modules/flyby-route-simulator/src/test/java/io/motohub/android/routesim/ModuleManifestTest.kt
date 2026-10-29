@@ -16,8 +16,8 @@ class ModuleManifestTest {
     }
 
     @Test
-    fun manifestIsBuiltAgainstContract22() {
-        assertEquals(22, routeSimulatorManifest.contractVersion)
+    fun manifestIsBuiltAgainstContract37() {
+        assertEquals(37, routeSimulatorManifest.contractVersion)
         assertTrue(routeSimulatorManifest.contractVersion <= MotoHubModuleContract.CONTRACT_VERSION)
         assertTrue(routeSimulatorManifest.isIdSafe)
     }

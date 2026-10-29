@@ -34,7 +34,7 @@ class RouteSimulatorEntry : MotoHubModuleEntry {
 internal val routeSimulatorManifest = ModuleManifest(
     id = "flyby-route-simulator",
     version = "0.1.3",
-    contractVersion = 22,
+    contractVersion = 37,
     entryClass = "io.motohub.android.routesim.plugin.RouteSimulatorEntry",
     displayName = "Flyby Route Simulator",
     description = "Plans a route and rides it virtually, producing a trip the app can play back."

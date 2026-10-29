@@ -13,7 +13,7 @@ motohubModule {
     version = "0.3.0"
     entryClass = "io.motohub.immich.ImmichEntry"
     // ModuleMapLayer (30); photo pins and navigateTo (31).
-    contractVersion = 31
+    contractVersion = 37
     displayName = "Immich"
     description = "Shows the photos of your own Immich server on the NAV map."
 }

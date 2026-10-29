@@ -79,6 +79,14 @@ class MotoHubModulePlugin : Plugin<Project> {
                 if (module.contractVersion.get() < 1) {
                     throw GradleException("motohubModule.contractVersion must be set.")
                 }
+                // This SDK builds with Kotlin 2.4. An app below contract 37 lends an older runtime,
+                // and the module would fail there on its first coroutine; 37 makes those apps refuse it.
+                if (module.contractVersion.get() < 37) {
+                    throw GradleException(
+                        "motohubModule.contractVersion = ${module.contractVersion.get()}: a module built " +
+                            "with this SDK (Kotlin 2.4) must declare 37 or later. See docs/contract.md."
+                    )
+                }
                 output.get().asFile.apply { parentFile.mkdirs() }.writeText(
                     """
                     {

@@ -13,7 +13,7 @@ motohubModule {
     version = "0.2.0"
     entryClass = "io.motohub.mapopt.MapOptEntry"
     // ModuleMapboxAccount (36).
-    contractVersion = 36
+    contractVersion = 37
     displayName = "MapOpt"
     description = "Your own Mapbox token for the 3D POV: Mapbox Standard with terrain, trees, landmarks and light."
 }

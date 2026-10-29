@@ -13,7 +13,7 @@ motohubModule {
     version = "0.1.2"
     entryClass = "io.motohub.motionsensor.MotionSensorEntry"
     // Only ModuleFeatures and host.ui: the oldest contract that has both is enough.
-    contractVersion = 10
+    contractVersion = 37
     displayName = "Motion sensor"
     description = "Diagnostics for the ESP32 motion sensor: lean, pitch and g-forces over Bluetooth."
 }

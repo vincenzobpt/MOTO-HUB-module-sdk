@@ -12,7 +12,7 @@ motohubModule {
     version = "0.1.0"
     entryClass = "com.example.hello.HelloModuleEntry"
     // MotoHubModuleContract.CONTRACT_VERSION of the module-api in this repository.
-    contractVersion = 10
+    contractVersion = 37
     displayName = "Hello module"
     description = "The smallest useful MOTO-HUB module: one page, one button."
 }

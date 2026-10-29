@@ -39,7 +39,7 @@ private class MotionSensorModule(private val host: MotoHubModuleHost) : MotoHubM
     override val manifest = ModuleManifest(
         id = "motion-sensor",
         version = "0.1.2",
-        contractVersion = 10,
+        contractVersion = 37,
         entryClass = "io.motohub.motionsensor.MotionSensorEntry",
         displayName = "Motion sensor",
         description = "Diagnostics for the ESP32 motion sensor: lean, pitch and g-forces over Bluetooth."

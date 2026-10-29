@@ -60,7 +60,7 @@ private class DawarichModule(private val host: MotoHubModuleHost) : MotoHubModul
     override val manifest = ModuleManifest(
         id = "dawarich",
         version = "0.6.0",
-        contractVersion = 27,
+        contractVersion = 37,
         entryClass = "io.motohub.dawarich.DawarichEntry",
         displayName = "Dawarich",
         description = "Sends your position to your own Dawarich server while you ride."

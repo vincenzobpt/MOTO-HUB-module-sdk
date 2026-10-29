@@ -35,7 +35,7 @@ private class TomTomModule(private val host: MotoHubModuleHost) : MotoHubModule 
     override val manifest = ModuleManifest(
         id = "tomtom",
         version = "0.1.4",
-        contractVersion = 32,
+        contractVersion = 37,
         entryClass = "io.motohub.tomtom.TomTomEntry",
         displayName = "TomTom",
         description = "Live traffic, places, search and road info from your own free TomTom key — on your phone only."
