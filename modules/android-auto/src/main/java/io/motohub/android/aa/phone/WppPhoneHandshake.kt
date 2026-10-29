@@ -5,6 +5,7 @@ package io.motohub.android.aa.phone
 
 import com.google.protobuf.CodedInputStream
 import com.google.protobuf.CodedOutputStream
+import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -107,8 +108,15 @@ class WppPhoneHandshake(
         cos.writeInt32(1, status)
         cos.flush()
         val frame = WppFraming.encodeFrame(buf, WppMessageType.CONNECT_STATUS)
-        output.write(frame)
-        output.flush()
+        // The head unit may drop RFCOMM during the up-to-90 s Wi-Fi join; an uncaught Broken pipe
+        // here crashed the whole app (support E67E-6B89-554E).
+        try {
+            output.write(frame)
+            output.flush()
+        } catch (e: IOException) {
+            log("WifiConnectStatus(status=$status) not delivered: the head unit closed Bluetooth (${e.message}).")
+            return
+        }
         log("Sent WifiConnectStatus(status=$status)")
     }
 
