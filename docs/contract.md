@@ -132,7 +132,7 @@ These all come from real failures on real motorcycles.
 
 ## Versioning
 
-`MotoHubModuleContract.CONTRACT_VERSION` (currently **37**) is bumped whenever anything in
+`MotoHubModuleContract.CONTRACT_VERSION` (currently **39**) is bumped whenever anything in
 `io.motohub.android.module` changes shape. The contract **only grows by appending**: new
 capabilities, and new members on interfaces the *app* implements. An older module simply does
 not answer a capability it predates, and never calls a host member it does not know.
@@ -182,5 +182,7 @@ the KDoc of `MotoHubModuleContract`.
 | 35 | `ModuleDashboardArrows` (a head unit's arrows move a touch dashboard's focus the way they point) | 0.1.47 |
 | 36 | `ModuleMapboxAccount` (`accessToken`, `countMapLoad`: the rider's own Mapbox token for the 3D maps, and each map load counted back) | 0.1.48 |
 | 37 | Nothing new in the contract's shape: the app is built with Kotlin 2.4 and lends a module that runtime. A module built with Kotlin 2.4 (this SDK) calls into its standard library where an older app has nothing, so it declares 37 to stay off apps before 0.1.54 | 0.1.54 |
+| 38 | `ModuleDiagnosticReports` (`canSendReports`, `supportId()`, `sendReport`): an optional interface the host implements, reached with `as?` or by name so a module still loads into older apps; the rider's Support ID and the report sent now | 0.1.56 |
+| 39 | Native libraries in a module (`lib/<abi>/` in the jar, unpacked after the signature check and made the module loader's library path); `ModuleSpeechRecognizers`, `ModuleSpeechRecognizer` (offline speech recognition against a small grammar) | 0.1.56 |
 
 This repository tags every contract release as `contract-<n>`.

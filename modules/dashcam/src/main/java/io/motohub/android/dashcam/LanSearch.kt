@@ -5,6 +5,7 @@ package io.motohub.android.dashcam
 
 import io.motohub.android.dashcam.net.CameraHttp
 import io.motohub.android.dashcam.net.Credentials
+import io.motohub.android.dashcam.net.Discovery
 import io.motohub.android.dashcam.net.LocalNet
 import io.motohub.android.dashcam.net.LocalNetworks
 import io.motohub.android.dashcam.net.LoginRequired
@@ -13,12 +14,14 @@ import io.motohub.android.dashcam.protocol.CameraException
 import io.motohub.android.dashcam.protocol.CameraIdentity
 import io.motohub.android.dashcam.protocol.CameraProtocol
 import io.motohub.android.dashcam.protocol.StreamOnlyCamera
+import io.motohub.android.dashcam.video.MjpegReader
 import io.motohub.android.dashcam.video.RtspClient
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.URI
 import java.util.Collections
+import java.util.Locale
 import java.util.concurrent.Callable
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.Executors
@@ -33,7 +36,12 @@ class Candidate(
     /** What was found on it, as the rider reads it: "eeasytech", "ONVIF · RTSP". */
     val services: String,
     /** Its ONVIF device service, when it answered the discovery probe. */
-    val onvif: String?
+    val onvif: String?,
+    /**
+     * What to check when it is picked: the address, or the stream itself when the search already
+     * found it somewhere the address alone would not lead (an MJPEG page, RTSP on an odd port).
+     */
+    val target: String = host
 )
 
 /** A camera ready to connect to: a dashcam family the module speaks, or a stream and nothing else. */
@@ -41,12 +49,12 @@ class Resolved(
     val host: String,
     val protocol: CameraProtocol,
     val identity: CameraIdentity,
-    /** The RTSP address of a stream-only camera, without any login in it; empty for a family. */
+    /** The stream address of a stream-only camera (rtsp:// or MJPEG http://), no login in it; empty for a family. */
     val url: String,
     val onvif: String?
 )
 
-/** What the rider typed: an address, perhaps with a port, or a whole `rtsp://` stream address. */
+/** What the rider typed: an address, perhaps with a port, or a whole `rtsp://` or MJPEG `http://` stream address. */
 class Target(val host: String, val port: Int?, val url: String?, val login: Credentials?) {
     companion object {
         /**
@@ -63,11 +71,14 @@ class Target(val host: String, val port: Int?, val url: String?, val login: Cred
                     Credentials(decode(info.substringBefore(':')), decode(info.substringAfter(':', "")))
                 }
                 val port = u.port.takeIf { it > 0 }
-                if (t.startsWith("http", ignoreCase = true)) return Target(host, port, null, login)
+                val http = t.startsWith("http", ignoreCase = true)
+                val path = u.rawPath.orEmpty()
+                // A web address with no path says only where the camera is; with one, it is an MJPEG stream's.
+                if (http && (path.isEmpty() || path == "/") && u.rawQuery == null) return Target(host, port, null, login)
                 val clean = buildString {
-                    append("rtsp://").append(host)
+                    append(if (http) "http://" else "rtsp://").append(host)
                     if (port != null) append(':').append(port)
-                    append(u.rawPath.orEmpty().ifEmpty { "/" })
+                    append(path.ifEmpty { "/" })
                     u.rawQuery?.let { append('?').append(it) }
                 }
                 return Target(host, port, clean, login)
@@ -86,11 +97,11 @@ class Target(val host: String, val port: Int?, val url: String?, val login: Cred
  * Finding a camera on the network the phone is already on - its Wi-Fi, or the hotspot the camera
  * has joined - and working out how to show it.
  *
- * The search knocks on the usual video and web ports of every address around the phone and asks
- * the network for ONVIF cameras at the same time. What it finds is then asked, in order, whether
- * it is a dashcam family this module speaks (every button then works), an ONVIF camera (which
- * tells where its stream is), or at least an RTSP server with video at one of the addresses
- * cameras commonly use.
+ * The search knocks on the usual video and web ports of every address around the phone and, at the
+ * same time, asks the network for ONVIF cameras and for whatever announces itself over mDNS or
+ * SSDP. What it finds is then asked, in order, whether it is a dashcam family this module speaks
+ * (every button then works), an ONVIF camera (which tells where its stream is), an RTSP server
+ * with video at one of the addresses cameras commonly use, or at least an MJPEG stream over HTTP.
  *
  * Everything blocks: call it off the main thread.
  */
@@ -101,6 +112,7 @@ class LanSearch(private val networks: LocalNetworks, private val log: (String) -
         val pool = Executors.newFixedThreadPool(THREADS)
         try {
             val onvif = pool.submit(Callable { Onvif.discover(nets, ONVIF_WAIT_MS, log) })
+            val announced = pool.submit(Callable { Discovery.listen(nets, ONVIF_WAIT_MS, log) })
             val hits = ConcurrentLinkedQueue<Pair<String, Int>>()
             val knocks = ArrayList<Future<*>>()
             val done = AtomicInteger()
@@ -129,6 +141,26 @@ class LanSearch(private val networks: LocalNetworks, private val log: (String) -
                 if (!ports.containsKey(d.host)) ports[d.host] = ArrayList()
             }
 
+            // What announced itself: its name and RTSP port kept, and the few outside the swept
+            // /24 knocked on now, like every address inside it was.
+            val heard = runCatching { announced.get() }.getOrDefault(emptyList())
+            val heardNames = HashMap<String, String>()
+            val rtspAt = HashMap<String, Int>()
+            val upnp = HashMap<String, String>()
+            val outside = ConcurrentLinkedQueue<Pair<String, Int>>()
+            val late = ArrayList<Future<*>>()
+            for (h in heard) {
+                if (h.name.isNotBlank()) heardNames[h.host] = h.name
+                h.rtspPort?.let { rtspAt[h.host] = it }
+                h.location?.let { upnp[h.host] = it }
+                if (where.containsKey(h.host) || ports.containsKey(h.host)) continue
+                ports[h.host] = ArrayList()
+                val bind = networks.bindFor(h.host)
+                for (port in SWEEP_PORTS) late.add(pool.submit(Runnable { if (knock(bind, h.host, port, KNOCK_MS)) outside.add(h.host to port) }))
+            }
+            for (k in late) k.get()
+            for ((host, port) in outside) ports[host]?.add(port)
+
             // Who answers on port 80 may be a dashcam of a family spoken here; asked in parallel.
             val families = HashMap<String, Future<Pair<CameraProtocol, CameraIdentity>?>>()
             for ((host, open) in ports) {
@@ -136,18 +168,54 @@ class LanSearch(private val networks: LocalNetworks, private val log: (String) -
                 val bind = where[host]?.bind ?: networks.bindFor(host)
                 families[host] = pool.submit(Callable { detectFamily(CameraHttp(host, bind)) })
             }
+            val familyOf = HashMap<String, Pair<CameraProtocol, CameraIdentity>>()
+            for ((host, f) in families) runCatching { f.get() }.getOrNull()?.let { familyOf[host] = it }
 
-            // Families first (every button works), then ONVIF, then bare RTSP; by address within each.
-            val ranked = listOf(ArrayList<Candidate>(), ArrayList<Candidate>(), ArrayList<Candidate>())
+            // A web server and nothing else may still be a camera: one serving MJPEG at the usual addresses.
+            val mjpeg = HashMap<String, Future<String?>>()
             for ((host, open) in ports) {
-                val family = families[host]?.let { runCatching { it.get() }.getOrNull() }
+                if (familyOf.containsKey(host) || onvifByHost.containsKey(host) || rtspAt.containsKey(host)) continue
+                if (open.any { it in RTSP_PORTS }) continue
+                val web = MJPEG_PORTS.filter { it in open }
+                if (web.isEmpty()) continue
+                val bind = where[host]?.bind ?: networks.bindFor(host)
+                mjpeg[host] = pool.submit(Callable { mjpegGuesses(host, web).firstOrNull { tryMjpeg(it, bind, null, quiet = true) } })
+            }
+
+            // Families first (every button works), then ONVIF, then bare RTSP, then MJPEG; by address within each.
+            val ranked = listOf(ArrayList<Candidate>(), ArrayList<Candidate>(), ArrayList<Candidate>(), ArrayList<Candidate>())
+            val unnamed = HashMap<Candidate, Future<String?>>()
+            for ((host, open) in ports) {
+                val family = familyOf[host]
                 val xaddr = onvifByHost[host]
-                val rtsp = open.any { it in RTSP_PORTS }
-                if (family == null && xaddr == null && !rtsp) continue
+                val rtspPort = rtspAt[host]
+                val rtsp = open.any { it in RTSP_PORTS } || rtspPort != null
+                val stream = if (family == null && xaddr == null && !rtsp) mjpeg[host]?.let { runCatching { it.get() }.getOrNull() } else null
+                if (family == null && xaddr == null && !rtsp && stream == null) continue
                 val identityName = family?.second?.let { listOf(it.maker, it.model).filter(String::isNotBlank).joinToString(" ") }.orEmpty()
-                val name = identityName.ifEmpty { onvifNames[host].orEmpty() }.ifEmpty { "Camera" }
-                val services = listOfNotNull(family?.first?.family, if (xaddr != null) "ONVIF" else null, if (rtsp) "RTSP" else null).joinToString(" · ")
-                ranked[if (family != null) 0 else if (xaddr != null) 1 else 2].add(Candidate(host, name, services, xaddr))
+                val name = identityName.ifEmpty { onvifNames[host].orEmpty() }.ifEmpty { heardNames[host].orEmpty() }
+                val services = listOfNotNull(
+                    family?.first?.family, if (xaddr != null) "ONVIF" else null, if (rtsp) "RTSP" else null, if (stream != null) "MJPEG" else null
+                ).joinToString(" · ")
+                // RTSP heard of only on a port of its own: checked there, where the usual ports would miss it.
+                val target = when {
+                    stream != null -> stream
+                    family == null && xaddr == null && rtspPort != null && open.none { it in RTSP_PORTS } -> "$host:$rtspPort"
+                    else -> host
+                }
+                val candidate = Candidate(host, name.ifEmpty { "Camera" }, services, xaddr, target)
+                ranked[if (family != null) 0 else if (xaddr != null) 1 else if (rtsp) 2 else 3].add(candidate)
+                val location = upnp[host]
+                if (name.isEmpty() && location != null) {
+                    val bind = where[host]?.bind ?: networks.bindFor(host)
+                    unnamed[candidate] = pool.submit(Callable { Discovery.describe(location, bind) })
+                }
+            }
+            // A camera that said nothing better about itself goes by the name in its UPnP description.
+            for (group in ranked) for (i in 0 until group.size) {
+                val c = group[i]
+                val described = unnamed[c]?.let { runCatching { it.get() }.getOrNull() } ?: continue
+                group[i] = Candidate(c.host, described, c.services, c.onvif, c.target)
             }
             val byAddress = Comparator<Candidate> { a, b -> Integer.compareUnsigned(address(a.host), address(b.host)) }
             val out = ArrayList<Candidate>()
@@ -155,7 +223,7 @@ class LanSearch(private val networks: LocalNetworks, private val log: (String) -
                 Collections.sort(group, byAddress)
                 out.addAll(group)
             }
-            log("scan: ${nets.joinToString { it.label }}: ${hits.size} open ports, ${devices.size} ONVIF, ${out.size} camera(s)" +
+            log("scan: ${nets.joinToString { it.label }}: ${hits.size} open ports, ${devices.size} ONVIF, ${heard.size} announced, ${out.size} camera(s)" +
                 out.joinToString("") { "; ${it.host} ${it.services}" })
             return out
         } finally {
@@ -177,8 +245,11 @@ class LanSearch(private val networks: LocalNetworks, private val log: (String) -
         val auth = login ?: target.login
 
         target.url?.let { url ->
-            if (!tryStream(url, bind, auth)) throw CameraException("There is no H.264 or H.265 video at ${safe(url)}.")
-            return Resolved(host, StreamOnlyCamera(url, "RTSP"), streamIdentity("", url), url, null)
+            val mjpeg = isMjpeg(url)
+            if (!tryUrl(url, bind, auth)) {
+                throw CameraException(if (mjpeg) "There is no MJPEG video at ${safe(url)}." else "There is no H.264 or H.265 video at ${safe(url)}.")
+            }
+            return Resolved(host, StreamOnlyCamera(url, if (mjpeg) "MJPEG" else "RTSP"), streamIdentity("", url), url, null)
         }
 
         if ((target.port == null || target.port == 80) && knock(bind, host, 80, 1500)) {
@@ -214,20 +285,23 @@ class LanSearch(private val networks: LocalNetworks, private val log: (String) -
 
         // RTSP at the addresses cameras commonly use.
         val rtspPorts = if (target.port != null && target.port !in ONVIF_PORTS) listOf(target.port) else RTSP_PORTS
+        val guesses = ArrayList<String>()
         for (port in rtspPorts) {
             if (!knock(bind, host, port, 1500)) continue
-            for (path in RTSP_PATHS) {
-                val url = "rtsp://$host${if (port == 554) "" else ":$port"}$path"
-                if (tryStream(url, bind, auth)) {
-                    log("scan: $host streams at ${safe(url)}")
-                    return Resolved(host, StreamOnlyCamera(url, "RTSP"), streamIdentity("", url), url, null)
-                }
-            }
+            for (path in RTSP_PATHS) guesses.add("rtsp://$host${if (port == 554) "" else ":$port"}$path")
+        }
+        // Then MJPEG over HTTP, at the web ports that answer: after RTSP, whose H.264 looks better.
+        val webPorts = ArrayList<Int>()
+        for (port in if (target.port != null) listOf(target.port) else MJPEG_PORTS) if (knock(bind, host, port, 1500)) webPorts.add(port)
+        guesses.addAll(mjpegGuesses(host, webPorts))
+        firstPlaying(guesses) { tryUrl(it, bind, auth) }?.let { url ->
+            log("scan: $host streams at ${safe(url)}")
+            return Resolved(host, StreamOnlyCamera(url, if (isMjpeg(url)) "MJPEG" else "RTSP"), streamIdentity("", url), url, null)
         }
         onvifLogin?.let { throw it }
         throw CameraException(
             "Nothing at $host shows a picture this module can play. If the camera's manual gives a stream " +
-                "address (rtsp://…), type that instead."
+                "address (rtsp://… or http://…), type that instead."
         )
     }
 
@@ -244,8 +318,8 @@ class LanSearch(private val networks: LocalNetworks, private val log: (String) -
                 ?: throw CameraException("The camera did not answer at $host. If it has a new address, find it again under Change.")
             return Resolved(host, proto, identity, "", null)
         }
-        val family = if (onvif != null) "ONVIF" else "RTSP"
-        if (url.isNotEmpty() && tryStream(url, bind, login)) return Resolved(host, StreamOnlyCamera(url, family), streamIdentity(name, url), url, onvif)
+        val family = if (onvif != null) "ONVIF" else if (isMjpeg(url)) "MJPEG" else "RTSP"
+        if (url.isNotEmpty() && tryUrl(url, bind, login)) return Resolved(host, StreamOnlyCamera(url, family), streamIdentity(name, url), url, onvif)
         if (onvif != null) {
             val u = runCatching { URI(onvif) }.getOrNull()
             if (u != null) {
@@ -268,13 +342,51 @@ class LanSearch(private val networks: LocalNetworks, private val log: (String) -
         return null
     }
 
-    /** True when [url] describes a video track; a login asked for and missing or wrong is thrown. */
+    /**
+     * True when [url] describes a video track; a login asked for and missing or wrong is thrown.
+     * Every miss is logged with its reason: in a rider's report it is the only trace of a camera
+     * that answers on its video port and still shows nothing.
+     */
     private fun tryStream(url: String, bind: (Socket) -> Unit, login: Credentials?): Boolean = try {
-        RtspClient(url, bind, {}, login).use { it.describe() != null }
+        // The client logs the SDP of a stream without H.264 or H.265 (an MJPEG camera, say).
+        RtspClient(url, bind, { log(safe(it)) }, login).use { it.describe() != null }
     } catch (e: LoginRequired) {
+        log("scan: ${safe(url)}: ${e.message}")
         throw e
     } catch (e: Exception) {
-        false // refused, closed, timed out, or an address that is not one
+        // Refused, closed, timed out, or an address that is not one.
+        log("scan: ${safe(url)}: ${e.message ?: e.javaClass.simpleName}")
+        false
+    }
+
+    /** [tryStream] or [tryMjpeg], by the address's scheme. */
+    private fun tryUrl(url: String, bind: (Socket) -> Unit, login: Credentials?): Boolean =
+        if (isMjpeg(url)) tryMjpeg(url, bind, login) else tryStream(url, bind, login)
+
+    /**
+     * True when [url] serves MJPEG and a whole picture arrives from it; a login asked for and
+     * missing or wrong is thrown. [quiet] keeps the misses out of the log: the search tries a
+     * dozen addresses on every web server around the phone.
+     */
+    private fun tryMjpeg(url: String, bind: (Socket) -> Unit, login: Credentials?, quiet: Boolean = false): Boolean = try {
+        val u = URI(url)
+        val path = u.rawPath.orEmpty().ifEmpty { "/" } + (u.rawQuery?.let { "?$it" } ?: "")
+        CameraHttp(u.host, bind, if (u.port > 0) u.port else 80, login).open(path, emptyMap(), 3000).use { s ->
+            if (s.code == 401) throw LoginRequired(rejected = login != null)
+            val type = s.headers["content-type"].orEmpty()
+            val plays = s.code in 200..299 && type.lowercase(Locale.ROOT).startsWith("multipart/") &&
+                MjpegReader(s.body).next().isNotEmpty()
+            if (!plays && !quiet) log("scan: ${safe(url)}: HTTP ${s.code}, ${type.ifEmpty { "no content type" }}")
+            plays
+        }
+    } catch (e: LoginRequired) {
+        if (quiet) false else {
+            log("scan: ${safe(url)}: ${e.message}")
+            throw e
+        }
+    } catch (e: Exception) {
+        if (!quiet) log("scan: ${safe(url)}: ${e.message ?: e.javaClass.simpleName}")
+        false
     }
 
     private fun streamIdentity(name: String, url: String) =
@@ -291,8 +403,28 @@ class LanSearch(private val networks: LocalNetworks, private val log: (String) -
         /** Where IP cameras keep their ONVIF service, when not on 80. */
         val ONVIF_PORTS = listOf(80, 8080, 8000, 8899)
 
-        /** Knocked on at every address: video, and the web ports the families and ONVIF answer on. */
-        private val SWEEP_PORTS = listOf(554, 8554, 80, 8080)
+        /** Knocked on at every address: video, and the web ports the families, ONVIF and MJPEG answer on. */
+        private val SWEEP_PORTS = listOf(554, 8554, 80, 8080, 81)
+
+        /** Where MJPEG streams are served: 81 first, the ESP32-CAM's. */
+        val MJPEG_PORTS = listOf(81, 8080, 80)
+
+        /**
+         * MJPEG addresses common across makers: ESP32-CAM, phone webcam apps, mjpg-streamer, Axis,
+         * and the CGI names cheap IP cameras share.
+         */
+        val MJPEG_PATHS = listOf(
+            "/stream", "/video", "/?action=stream", "/mjpg/video.mjpg", "/videostream.cgi", "/video.mjpg", "/mjpeg", "/mjpeg.cgi"
+        )
+
+        fun isMjpeg(url: String) = url.startsWith("http://", ignoreCase = true)
+
+        /** Every MJPEG address to try at [host] on the web [ports], in order. */
+        internal fun mjpegGuesses(host: String, ports: List<Int>): List<String> {
+            val out = ArrayList<String>()
+            for (port in ports) for (path in MJPEG_PATHS) out.add("http://$host${if (port == 80) "" else ":$port"}$path")
+            return out
+        }
 
         /**
          * Stream addresses common across makers, the generic ones first. Tried only when the camera
@@ -302,8 +434,29 @@ class LanSearch(private val networks: LocalNetworks, private val log: (String) -
             "/", "/live", "/stream1", "/h264", "/live.sdp", "/stream", "/ch0", "/11", "/1", "/0",
             "/live/ch00_0", "/av0_0", "/onvif1", "/Streaming/Channels/101", "/cam/realmonitor?channel=1&subtype=0",
             "/videoMain", "/live/main", "/media/video1", "/h264_stream", "/unicast",
+            // Reolink (old and new firmware), older Hikvision and Ezviz, Uniview, Eufy.
+            "/h264Preview_01_main", "/Preview_01_main", "/h264/ch1/main/av_stream", "/unicast/c1/s0/live", "/live0",
             "/livestream/1", "/xxx.mov", "/liveRTSP/av4"
         )
+
+        /**
+         * The first of [urls] that [plays]. A login turned down at one of them does not end the
+         * search: some cameras answer 401 at an address they do not have, right login or not. Only
+         * when none plays is the refusal thrown, since then the login may well be what is wrong.
+         */
+        internal fun firstPlaying(urls: List<String>, plays: (String) -> Boolean): String? {
+            var refused: LoginRequired? = null
+            for (url in urls) {
+                try {
+                    if (plays(url)) return url
+                } catch (e: LoginRequired) {
+                    if (!e.rejected) throw e // no login given yet: ask for one at once
+                    refused = e
+                }
+            }
+            refused?.let { throw it }
+            return null
+        }
 
         private val SECRET = Pattern.compile("((?:pass(?:word)?|pwd|passwd)=)[^&_]*", Pattern.CASE_INSENSITIVE)
 

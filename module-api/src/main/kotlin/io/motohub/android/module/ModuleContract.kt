@@ -167,8 +167,17 @@ object MotoHubModuleContract {
      *    where an app built with 2.0 has nothing, and fails on its first coroutine there. Nothing
      *    in the contract's shape changed; the number only keeps such a module off an older app.
      *    The minimum stays at 3.
+     * 38: the app's diagnostics report. ModuleDiagnosticReports, an optional interface the app's
+     *    host implements and a module reaches with `as?` - or by name first, to keep loading into
+     *    older apps: the rider's Support ID, and the report sent now, as "Send diagnostics now"
+     *    sends it. New type only; the minimum stays at 3.
+     * 39: native code in a module, and speech. A module jar may carry native libraries under
+     *    `lib/<abi>/`; the app unpacks them after the signature check and makes them the module loader's library path,
+     *    so System.loadLibrary from the module finds its own. ModuleSpeechRecognizers, a new
+     *    capability, is the offline recogniser voice control listens for "Hey Motohub" with.
+     *    New type only; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 37
+    const val CONTRACT_VERSION = 39
 
     /**
      * The oldest contract this app can still run.

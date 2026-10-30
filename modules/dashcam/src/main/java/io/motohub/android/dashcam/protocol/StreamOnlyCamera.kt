@@ -22,13 +22,13 @@ class StreamOnlyCamera(private val url: String, override val family: String) : C
     override val defaultHosts: List<String> = emptyList()
     override val folders: List<CameraFolder> = emptyList()
 
-    private val rtspPort = runCatching { URI(url).port }.getOrDefault(-1).takeIf { it > 0 } ?: 554
+    private val streamPort = runCatching { URI(url).port }.getOrDefault(-1).takeIf { it > 0 } ?: if (url.startsWith("http", ignoreCase = true)) 80 else 554
 
     override fun detect(http: CameraHttp): CameraIdentity? = null
 
     /** The stream's port still answering is all a camera like this can say about being there. */
     override fun heartbeat(http: CameraHttp) {
-        if (!http.reachable(rtspPort)) throw IOException("The camera's video port does not answer.")
+        if (!http.reachable(streamPort)) throw IOException("The camera's video port does not answer.")
     }
 
     override fun prepareLive(http: CameraHttp): String = url

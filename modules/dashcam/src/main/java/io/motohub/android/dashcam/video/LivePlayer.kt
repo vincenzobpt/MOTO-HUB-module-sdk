@@ -3,12 +3,20 @@
 // Part of MOTO-HUB. Free software under the GNU AGPL v3; see LICENSE.
 package io.motohub.android.dashcam.video
 
+import android.graphics.BitmapFactory
+import android.graphics.Rect
 import android.media.MediaCodec
 import android.media.MediaFormat
 import android.os.SystemClock
 import android.view.Surface
+import io.motohub.android.dashcam.net.CameraHttp
 import io.motohub.android.dashcam.net.Credentials
+import io.motohub.android.dashcam.net.LoginRequired
+import java.io.Closeable
+import java.io.IOException
+import java.net.DatagramSocket
 import java.net.Socket
+import java.net.URI
 import java.nio.ByteBuffer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -45,7 +53,9 @@ class LivePlayer(
     /** Called once per RTSP session, when its first picture is on screen. */
     private val onFirstPicture: () -> Unit = {},
     /** The camera's login for its RTSP server, for the IP cameras that ask; none by default. */
-    private val credentials: () -> Credentials? = { null }
+    private val credentials: () -> Credentials? = { null },
+    /** Binds the sockets RTP arrives on when a camera will only send it over UDP. */
+    private val bindUdp: (DatagramSocket) -> Unit = {}
 ) {
     private val _state = MutableStateFlow(LiveState())
     val state: StateFlow<LiveState> = _state
@@ -53,7 +63,8 @@ class LivePlayer(
     @Volatile private var surface: Surface? = null
     @Volatile private var surfaceVersion = 0
     @Volatile private var running = false
-    @Volatile private var client: RtspClient? = null
+    /** The open connection - RTSP, or the HTTP of an MJPEG stream - closed by [stop] to end a blocked read. */
+    @Volatile private var client: Closeable? = null
     private var thread: Thread? = null
 
     /**
@@ -66,6 +77,14 @@ class LivePlayer(
     /** Whether the current session has put a picture on screen. */
     @Volatile private var pictured = false
 
+    /** Whether any session since [start] has: false for long means a camera whose video never came. */
+    @Volatile var everPictured = false
+        private set
+
+    /** The address the last session asked for, for the probe that follows a live view without a picture. */
+    @Volatile var lastUrl: String? = null
+        private set
+
     fun setSurface(s: Surface?) {
         surface = s
         surfaceVersion++
@@ -74,6 +93,7 @@ class LivePlayer(
     fun start() {
         if (running) return
         running = true
+        everPictured = false
         val mine = ++generation
         thread = Thread({ loop(mine) }, "dashcam-live").apply { start() }
     }
@@ -96,11 +116,16 @@ class LivePlayer(
             try {
                 _state.value = _state.value.copy(status = if (attempt == 0) "Asking the camera for its picture…" else "Reconnecting…", playing = false)
                 val url = prepare(misses)
+                lastUrl = url
                 if (!isCurrent(mine)) break
                 _state.value = _state.value.copy(status = "Opening the video…")
-                val rtsp = RtspClient(url, bind, log, credentials())
-                client = rtsp
-                rtsp.use { play(it, mine) }
+                if (url.startsWith("http", ignoreCase = true)) {
+                    playMjpeg(url, mine)
+                } else {
+                    val rtsp = RtspClient(url, bind, log, credentials(), bindUdp)
+                    client = rtsp
+                    rtsp.use { play(it, mine) }
+                }
                 attempt = 0
             } catch (e: Exception) {
                 if (!isCurrent(mine)) break
@@ -175,6 +200,59 @@ class LivePlayer(
             }) { packet, length -> depacketizer.onRtp(packet, length) }
         } finally {
             decoder.release()
+        }
+    }
+
+    /**
+     * An MJPEG stream over HTTP: each JPEG decoded and drawn straight onto the surface. No decoder
+     * to configure and no timestamps to schedule by - a picture is shown the moment it is whole.
+     */
+    private fun playMjpeg(url: String, mine: Int) {
+        val u = URI(url)
+        val login = credentials()
+        val path = u.rawPath.orEmpty().ifEmpty { "/" } + (u.rawQuery?.let { "?$it" } ?: "")
+        val stream = CameraHttp(u.host, bind, if (u.port > 0) u.port else 80, login).open(path, emptyMap(), 8000)
+        client = stream
+        stream.use { s ->
+            if (s.code == 401) throw LoginRequired(rejected = login != null)
+            if (s.code !in 200..299) throw IOException("The camera refused its video (HTTP ${s.code}).")
+            log("live: MJPEG from ${u.host}${u.rawPath.orEmpty()}, ${s.headers["content-type"].orEmpty()}")
+            _state.value = _state.value.copy(status = "Waiting for the first picture…", codec = null)
+            val reader = MjpegReader(s.body)
+            val whole = Rect()
+            var windowStart = SystemClock.elapsedRealtime()
+            var windowFrames = 0
+            while (isCurrent(mine)) {
+                val jpeg = reader.next()
+                val bitmap = BitmapFactory.decodeByteArray(jpeg, 0, jpeg.size) ?: continue
+                try {
+                    val target = surface
+                    if (target != null && target.isValid) {
+                        // Stretched to the whole surface: the page sizes it to the picture's own shape.
+                        val canvas = try { target.lockCanvas(null) } catch (_: Exception) { null }
+                        if (canvas != null) {
+                            whole.set(0, 0, canvas.width, canvas.height)
+                            canvas.drawBitmap(bitmap, null, whole, null)
+                            target.unlockCanvasAndPost(canvas)
+                        }
+                    }
+                    if (!pictured) {
+                        pictured = true
+                        everPictured = true
+                        _state.value = _state.value.copy(status = "", playing = true, width = bitmap.width, height = bitmap.height)
+                        onFirstPicture()
+                    }
+                } finally {
+                    bitmap.recycle()
+                }
+                windowFrames++
+                val now = SystemClock.elapsedRealtime()
+                if (now - windowStart >= 1000) {
+                    _state.value = _state.value.copy(status = "", playing = true, fps = windowFrames)
+                    windowFrames = 0
+                    windowStart = now
+                }
+            }
         }
     }
 
@@ -324,6 +402,7 @@ class LivePlayer(
                         if (!announced) {
                             announced = true
                             pictured = true
+                            everPictured = true
                             onFirstPicture()
                         }
                     }

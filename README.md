@@ -67,7 +67,7 @@ The full walk-through, including how to start your own module, is in
 
 ## Status
 
-The contract is at **version 37**. It only grows by appending, and the app still loads modules
+The contract is at **version 39**. It only grows by appending, and the app still loads modules
 built against contract 3 or later. Contracts 11 to 14 (rides, the 3D scene, ride and route
 actions, the rider's AI) need ADV-SOLO 0.1.29, contract 15 (draft, real-time and H.265 video
 exports) ADV-SOLO 0.1.30, contract 16 (credits in the film's credit roll) ADV-SOLO 0.1.31,
@@ -85,7 +85,8 @@ service's data in the NAV, on the phone only) ADV-SOLO 0.1.45, contract 33 (a he
 touches and keys on the dashboard) ADV-SOLO 0.1.46, contracts 34 and 35 (the app kept alive
 while a module runs, and a head unit's arrows) ADV-SOLO 0.1.47, contract 36 (the rider's own
 Mapbox account for the 3D POV) ADV-SOLO 0.1.48, contract 37 (the Kotlin 2.4 runtime) ADV-SOLO
-0.1.54. This SDK builds with Kotlin 2.4, so a module built here declares **37 or later**; a
+0.1.54, contract 38 (the app's diagnostics report, for a module's "Send report") and 39 (native code in
+a module, and offline speech recognition) ADV-SOLO 0.1.56. This SDK builds with Kotlin 2.4, so a module built here declares **37 or later**; a
 module built with Kotlin 2.0 that uses none of the newer calls can keep declaring 10 and run on
 0.1.25 and later. See [docs/contract.md](docs/contract.md#versioning).
 

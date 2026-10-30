@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.motohub.android.dashcam.DashcamController
+import io.motohub.android.dashcam.ReportOrigin
 import io.motohub.android.dashcam.Phase
 import io.motohub.android.module.ModuleUi
 
@@ -115,6 +116,7 @@ internal fun HomePage(controller: DashcamController, open: (Page) -> Unit, back:
             onBike -> Notice("The phone is connected to the motorcycle. Disconnect from it in the Ride tab first: the phone has one Wi-Fi connection, and the camera needs it.")
             state.phase == Phase.FAILED && state.message.isNotEmpty() -> Notice(state.message)
         }
+        ReportCard(controller, ReportOrigin.CAMERA_WIFI)
 
         when {
             !hasCamera -> BigButton("Set up the camera", Ico.CAMERA, !onBike, false) { open(Page.Setup) }

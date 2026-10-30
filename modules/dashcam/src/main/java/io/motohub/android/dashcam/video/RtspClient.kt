@@ -14,8 +14,11 @@ import java.io.EOFException
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.net.DatagramPacket
+import java.net.DatagramSocket
 import java.net.InetSocketAddress
 import java.net.Socket
+import java.net.SocketTimeoutException
 import java.net.URI
 import java.util.Locale
 
@@ -90,12 +93,16 @@ fun parseSdpVideo(sdp: String, baseUrl: String, decode: (String) -> ByteArray): 
  *
  * [credentials] answer a camera that says 401 (Basic or Digest, as it asks); without them the 401
  * comes back as the refusal it always was.
+ *
+ * A camera that refuses RTP over TCP is asked for it over UDP instead, when [bindUdp] is given:
+ * only after the TCP SETUP has failed, so a camera that interleaves is never asked anything new.
  */
 class RtspClient(
     private val url: String,
     private val bind: (Socket) -> Unit,
     private val log: (String) -> Unit,
-    private val credentials: Credentials? = null
+    private val credentials: Credentials? = null,
+    private val bindUdp: ((DatagramSocket) -> Unit)? = null
 ) : Closeable {
     private val socket = Socket()
     private lateinit var input: InputStream
@@ -121,16 +128,22 @@ class RtspClient(
     /** Set by the first 401 when there is a login to answer it with; signs every request after it. */
     private var authenticator: Authenticator? = null
 
+    /** Where RTP and RTCP arrive when the camera sends them over UDP; null while they are interleaved. */
+    private var rtpSocket: DatagramSocket? = null
+    private var rtcpSocket: DatagramSocket? = null
+
     class Response(val code: Int, val headers: Map<String, String>, val body: String)
 
     /** Connects, describes, sets up the video track and starts it playing. */
     fun start(): VideoTrack {
         val track = describe() ?: throw IOException("The camera's stream has no H.264 or H.265 video.")
         videoPayloadType = track.payloadType
-        val setup = request("SETUP", track.control, "Transport: RTP/AVP/TCP;unicast;interleaved=0-1\r\n")
-        if (setup.code != 200) throw IOException("The camera refused SETUP (${setup.code}).")
+        var setup = request("SETUP", track.control, "Transport: RTP/AVP/TCP;unicast;interleaved=0-1\r\n")
+        if (setup.code != 200) {
+            setup = setupUdp(track.control, setup.code) ?: throw IOException("The camera refused SETUP (${setup.code}).")
+        }
         transport = setup.headers["transport"].orEmpty()
-        Regex("interleaved=(\\d+)").find(transport)?.groupValues?.get(1)?.toIntOrNull()?.let { videoChannel = it }
+        if (rtpSocket == null) Regex("interleaved=(\\d+)").find(transport)?.groupValues?.get(1)?.toIntOrNull()?.let { videoChannel = it }
         setup.headers["session"]?.split(';')?.let { parts ->
             session = parts[0].trim()
             parts.drop(1).map { it.trim() }.firstOrNull { it.startsWith("timeout=") }
@@ -169,10 +182,54 @@ class RtspClient(
     }
 
     /**
+     * SETUP again asking for RTP over UDP, after the camera turned down TCP with [tcpCode]: two
+     * sockets bound to the camera's network, an even port and the next for RTCP as RFC 3550 asks.
+     * Null when there is no way to bind them or the camera refuses this too.
+     */
+    private fun setupUdp(control: String, tcpCode: Int): Response? {
+        val binder = bindUdp ?: return null
+        for (attempt in 0 until 8) {
+            val rtp = DatagramSocket(null as java.net.SocketAddress?)
+            val rtcp = DatagramSocket(null as java.net.SocketAddress?)
+            try {
+                binder(rtp)
+                binder(rtcp)
+                rtp.bind(InetSocketAddress(0))
+                // An odd port, or its neighbour taken: another pair. The last tries take any two.
+                if (rtp.localPort % 2 != 0 && attempt < 6) throw IOException("odd port")
+                rtcp.bind(InetSocketAddress(if (attempt < 6) rtp.localPort + 1 else 0))
+            } catch (_: Exception) {
+                rtp.close()
+                rtcp.close()
+                continue
+            }
+            log("live: SETUP over TCP refused (${tcpCode}); asking for UDP on ports ${rtp.localPort}-${rtcp.localPort}")
+            val answer = try {
+                request("SETUP", control, "Transport: RTP/AVP;unicast;client_port=${rtp.localPort}-${rtcp.localPort}\r\n")
+            } catch (_: IOException) {
+                rtp.close()
+                rtcp.close()
+                throw IOException("The camera refused SETUP over TCP ($tcpCode), then closed the connection asking for UDP.")
+            }
+            if (answer.code != 200) {
+                rtp.close()
+                rtcp.close()
+                throw IOException("The camera refused SETUP over TCP ($tcpCode) and over UDP (${answer.code}).")
+            }
+            rtpSocket = rtp
+            rtcpSocket = rtcp
+            videoChannel = 0
+            return answer
+        }
+        return null
+    }
+
+    /**
      * Reads interleaved packets until [isActive] says stop or the camera hangs up, handing each
      * RTP packet of channel 0 (video) to [onRtp]. Keeps the session alive on its own.
      */
     fun pump(isActive: () -> Boolean, onPacket: (channel: Int, length: Int) -> Unit = { _, _ -> }, onRtp: (ByteArray, Int) -> Unit) {
+        rtpSocket?.let { return pumpUdp(it, isActive, onPacket, onRtp) }
         val buffer = ByteArray(65_536 + 4)
         var lastKeepAlive = System.currentTimeMillis()
         var videoSeen = false
@@ -206,6 +263,38 @@ class RtspClient(
                 'R'.code -> readResponse('R') // the answer to a keep-alive
                 else -> Unit // stray byte between frames: resynchronise on the next '$'
             }
+        }
+    }
+
+    /**
+     * [pump] for RTP over UDP: datagrams from the camera on [socket], and on the RTSP connection
+     * only the keep-alives and their answers - nothing else arrives there now.
+     */
+    private fun pumpUdp(socket: DatagramSocket, isActive: () -> Boolean, onPacket: (Int, Int) -> Unit, onRtp: (ByteArray, Int) -> Unit) {
+        val buffer = ByteArray(65_536)
+        val packet = DatagramPacket(buffer, buffer.size)
+        val camera = URI(url).host
+        socket.soTimeout = 1000
+        var lastKeepAlive = System.currentTimeMillis()
+        var lastData = lastKeepAlive
+        while (isActive()) {
+            val now = System.currentTimeMillis()
+            if (now - lastKeepAlive > keepAliveMs) {
+                exchange("OPTIONS", baseUrl, "Session: $session\r\n")
+                lastKeepAlive = now
+            }
+            try {
+                packet.setLength(buffer.size)
+                socket.receive(packet)
+            } catch (_: SocketTimeoutException) {
+                if (System.currentTimeMillis() - lastData > UDP_SILENCE_MS) throw EOFException("The camera stopped sending video over UDP.")
+                continue
+            }
+            // Only the camera's own datagrams: anything else on the port is not this stream.
+            if (packet.address?.hostAddress != camera) continue
+            lastData = System.currentTimeMillis()
+            onPacket(0, packet.length)
+            if (isVideoRtp(buffer, packet.length)) onRtp(buffer, packet.length)
         }
     }
 
@@ -280,5 +369,12 @@ class RtspClient(
             if (session != null) send("TEARDOWN", baseUrl, "Session: $session\r\n")
         } catch (_: Exception) { }
         try { socket.close() } catch (_: IOException) { }
+        rtpSocket?.close()
+        rtcpSocket?.close()
+    }
+
+    private companion object {
+        /** How long a UDP stream may stay silent before it counts as dropped: a datagram lost is not an end. */
+        const val UDP_SILENCE_MS = 8000L
     }
 }

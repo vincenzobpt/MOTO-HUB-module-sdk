@@ -8,6 +8,10 @@ import io.motohub.android.dashcam.net.CameraWifi
 import io.motohub.android.dashcam.net.Credentials
 import io.motohub.android.dashcam.net.LocalNetworks
 import io.motohub.android.dashcam.net.LoginRequired
+import io.motohub.android.dashcam.probe.CameraProbe
+import io.motohub.android.dashcam.probe.Redact
+import io.motohub.android.dashcam.probe.Reports
+import io.motohub.android.dashcam.protocol.CameraException
 import io.motohub.android.dashcam.protocol.Answers
 import io.motohub.android.dashcam.protocol.CameraFile
 import io.motohub.android.dashcam.protocol.CameraIdentity
@@ -17,7 +21,9 @@ import io.motohub.android.dashcam.video.LivePlayer
 import io.motohub.android.module.MotoHubModuleHost
 import java.io.File
 import java.io.IOException
+import java.net.DatagramSocket
 import java.net.Socket
+import java.util.Collections
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -59,6 +65,23 @@ data class ScanState(
 )
 
 /** Working out how to show one address: found, wants a login, or the reason it cannot be shown. */
+/** Where the camera that could not be shown was: the page that offers its report shows it. */
+enum class ReportOrigin { CAMERA_WIFI, PHONE_NETWORK, LIVE }
+
+enum class ReportPhase { NONE, PROBING, READY, SENDING, SENT, NOT_SENT }
+
+/**
+ * The probe of a camera this module could not show, and the report that carries it to us.
+ * [canSend] when the app sends reports for modules (contract 38) and has a collector; otherwise
+ * the page says how to send one from Diagnostics by hand.
+ */
+data class ReportState(
+    val phase: ReportPhase = ReportPhase.NONE,
+    val origin: ReportOrigin? = null,
+    val canSend: Boolean = false,
+    val supportId: String = ""
+)
+
 data class CheckState(
     val running: Boolean = false,
     val target: String = "",
@@ -98,6 +121,9 @@ class DashcamController(private val host: MotoHubModuleHost) {
     /** How this connection's sockets reach the camera: its Wi-Fi, or the phone's own network. */
     @Volatile private var binder: (Socket) -> Unit = wifi::bind
 
+    /** The same for the UDP sockets of a camera that sends its RTP over UDP only; none on the hotspot. */
+    @Volatile private var udpBinder: (DatagramSocket) -> Unit = { d -> wifi.network?.bindSocket(d) }
+
     /** The phone's address where the camera sees it; some cameras register their client by it. */
     @Volatile private var phoneAddress: String? = null
 
@@ -106,6 +132,11 @@ class DashcamController(private val host: MotoHubModuleHost) {
 
     private val _check = MutableStateFlow(CheckState())
     val check: StateFlow<CheckState> = _check
+
+    private val reports = Reports.of(host)
+    private val _report = MutableStateFlow(ReportState())
+    val report: StateFlow<ReportState> = _report
+    private var liveWatch: Job? = null
     private var connectJob: Job? = null
     private var heartbeatJob: Job? = null
     private var releaseJob: Job? = null
@@ -154,6 +185,7 @@ class DashcamController(private val host: MotoHubModuleHost) {
 
     fun connect() {
         if (_state.value.busy || _state.value.connected) return
+        _report.value = ReportState()
         connectJob = scope.launch { doConnect() }
     }
 
@@ -191,6 +223,7 @@ class DashcamController(private val host: MotoHubModuleHost) {
             return
         }
         binder = wifi::bind
+        udpBinder = { d -> wifi.network?.bindSocket(d) }
         val ssid = store.ssid
         if (ssid.isBlank()) {
             fail("Enter the camera's Wi-Fi name first.")
@@ -211,9 +244,19 @@ class DashcamController(private val host: MotoHubModuleHost) {
         // Disconnected or replaced while looking: the Wi-Fi and the state belong to whoever came next.
         if (!currentCoroutineContext().isActive) return
         if (found == null) {
+            _state.value = _state.value.copy(phase = Phase.FINDING, message = "Studying the camera…")
+            probeOnce("wifi:$ssid", ReportOrigin.CAMERA_WIFI) {
+                val gateway = wifi.gateway()
+                if (gateway == null) log("probe: the camera's Wi-Fi gives no gateway address to ask")
+                else CameraProbe(::log).run(
+                    gateway, wifi::bind, "not recognised on its own Wi-Fi",
+                    context = "Wi-Fi \"${Redact.ssid(ssid)}\", phone at ${wifi.phoneAddress()}"
+                )
+            }
+            if (!currentCoroutineContext().isActive) return
             wifi.release(joined)
             fail("The phone joined \"$ssid\" but did not recognise the camera on it. It may run a firmware this " +
-                "module does not speak yet: send a report from Diagnostics and say which camera it is.")
+                "module does not speak yet.")
             return
         }
         val (proto, client, identity) = found
@@ -241,6 +284,7 @@ class DashcamController(private val host: MotoHubModuleHost) {
         val net = networks.forHost(address)
         val bind = net?.bind ?: {}
         binder = bind
+        udpBinder = { d -> net?.network?.bindSocket(d) }
         onConnected(found.protocol, CameraHttp(address, bind, 80, lanLogin()), found.identity, net?.phone?.hostAddress, camera)
     }
 
@@ -250,6 +294,7 @@ class DashcamController(private val host: MotoHubModuleHost) {
 
     /** What every connection does once the camera has answered, whichever way it was reached. */
     private fun onConnected(proto: CameraProtocol, client: CameraHttp, identity: CameraIdentity, phone: String?, camera: String) {
+        if (_report.value.origin != ReportOrigin.LIVE) _report.value = ReportState()
         protocol = proto
         http = client
         phoneAddress = phone
@@ -416,10 +461,38 @@ class DashcamController(private val host: MotoHubModuleHost) {
 
     /** Starts the stream once connected; every viewer asks, the first one to do so starts it. */
     @Synchronized
-    fun startLive() { if (viewers.isNotEmpty()) livePlayer?.start() }
+    fun startLive() {
+        if (viewers.isEmpty()) return
+        val player = livePlayer ?: return
+        player.start()
+        watchLive(player)
+    }
 
     @Synchronized
-    fun pauseLive() { livePlayer?.stop() }
+    fun pauseLive() {
+        liveWatch?.cancel()
+        livePlayer?.stop()
+    }
+
+    /**
+     * A camera whose family answered but whose video never came: after [NO_PICTURE_MS] of a live
+     * view with no picture, the probe asks it what its video side says, and the page offers the report.
+     */
+    private fun watchLive(player: LivePlayer) {
+        liveWatch?.cancel()
+        liveWatch = scope.launch {
+            delay(NO_PICTURE_MS)
+            val proto = protocol
+            val client = http
+            if (livePlayer !== player || player.everPictured || proto == null || client == null) return@launch
+            probeOnce("live:${client.host}", ReportOrigin.LIVE) {
+                CameraProbe(::log).run(
+                    client.host, binder, "no picture in ${NO_PICTURE_MS / 1000} s of live view", player.lastUrl,
+                    "family ${proto.family}${if (proto.experimental) " (experimental)" else ""}"
+                )
+            }
+        }
+    }
 
     @Synchronized
     fun closeLive(viewer: LiveViewer) {
@@ -430,6 +503,8 @@ class DashcamController(private val host: MotoHubModuleHost) {
             player.setSurface(next.surface)
             return
         }
+        liveWatch?.cancel()
+        if (_report.value.origin == ReportOrigin.LIVE) _report.value = ReportState()
         player.stop()
         livePlayer = null
         // The last viewer gone: a camera whose recording the live picture paused records again.
@@ -449,6 +524,7 @@ class DashcamController(private val host: MotoHubModuleHost) {
         bind = { s -> binder(s) },
         log = ::log,
         credentials = { if (store.lan) lanLogin() else null },
+        bindUdp = { d -> udpBinder(d) },
         onFirstPicture = {
             if (protocol?.liveNeedsRecording == true) {
                 log("live: picture up; switching recording off so the stream is not throttled")
@@ -497,6 +573,7 @@ class DashcamController(private val host: MotoHubModuleHost) {
      */
     fun check(target: String, onvif: String?, login: Credentials?, name: String = "") {
         if (_check.value.running) return
+        _report.value = ReportState()
         _check.value = CheckState(running = true, target = target, message = "Checking $target…")
         scope.launch {
             if (motorcycleConnected()) {
@@ -523,8 +600,42 @@ class DashcamController(private val host: MotoHubModuleHost) {
                 _check.value = CheckState(target = target, needsLogin = true, message = if (e.rejected) e.message.orEmpty() else "")
             } catch (e: Exception) {
                 log("scan: $target: ${e.message}")
+                val host = Target.parse(target)?.host
+                // Something answered there and showed nothing this module can play: worth a probe.
+                if (e is CameraException && host != null) {
+                    probeOnce("lan:$host", ReportOrigin.PHONE_NETWORK) {
+                        CameraProbe(::log).run(host, networks.bindFor(host), "nothing shown on the phone's network", context = "checked as $target")
+                    }
+                }
                 _check.value = CheckState(target = target, message = e.message ?: "Nothing at $target shows a picture.")
             }
+        }
+    }
+
+    // ---------------------------------------------------------------- the report of a camera not shown
+
+    /**
+     * Runs [work] - a probe - the first time camera [key] fails since the app started, then offers
+     * the report. Once per app start rather than once ever: the log keeps only its last events,
+     * and a report sent days later would no longer carry a probe made the first time.
+     */
+    private fun probeOnce(key: String, origin: ReportOrigin, work: () -> Unit) {
+        if (PROBED.add(key)) {
+            _report.value = ReportState(ReportPhase.PROBING, origin)
+            runCatching(work).onFailure { log("probe: stopped: ${it.message}") }
+        }
+        _report.value = ReportState(ReportPhase.READY, origin, canSend = reports?.canSend == true)
+    }
+
+    /** Sends the report through the app, [model] - what the rider typed, if anything - written above it. */
+    fun sendReport(model: String) {
+        val r = reports ?: return
+        val current = _report.value
+        if (current.phase != ReportPhase.READY && current.phase != ReportPhase.NOT_SENT) return
+        model.trim().takeIf { it.isNotEmpty() }?.let { log("dashcam: the rider says the camera is: ${it.take(80)}") }
+        _report.value = current.copy(phase = ReportPhase.SENDING)
+        r.send("dashcam: a camera it could not show (${current.origin?.name?.lowercase(java.util.Locale.ROOT)})") { sent ->
+            _report.value = _report.value.copy(phase = if (sent) ReportPhase.SENT else ReportPhase.NOT_SENT, supportId = r.supportId())
         }
     }
 
@@ -644,6 +755,12 @@ class DashcamController(private val host: MotoHubModuleHost) {
             "there: a camera on the phone's network cannot be reached. Disconnect from the motorcycle first."
 
         const val WIFI_RETURN_MS = 8_000
+
+        /** How long a live view may show nothing before the camera is probed. */
+        const val NO_PICTURE_MS = 20_000L
+
+        /** The cameras probed since the app started, by how they were reached: once each. */
+        val PROBED: MutableSet<String> = Collections.synchronizedSet(HashSet())
     }
 
     fun release() {

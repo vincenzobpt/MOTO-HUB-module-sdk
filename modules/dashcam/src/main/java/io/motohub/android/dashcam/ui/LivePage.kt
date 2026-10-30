@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import io.motohub.android.dashcam.DashcamController
+import io.motohub.android.dashcam.ReportOrigin
 import io.motohub.android.module.ModuleUi
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -100,6 +102,7 @@ internal fun LivePage(controller: DashcamController, open: (Page) -> Unit, back:
                     if (!state.connected) state.message.ifEmpty { "Connecting to the camera…" } else live.status.ifEmpty { "Opening the video…" },
                     color = Dc.dim, fontSize = 16.sp
                 )
+                ReportCard(controller, ReportOrigin.LIVE, Modifier.widthIn(max = 440.dp).padding(top = 8.dp))
             }
         }
 

@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import io.motohub.android.dashcam.Candidate
 import io.motohub.android.dashcam.CheckState
 import io.motohub.android.dashcam.DashcamController
+import io.motohub.android.dashcam.ReportOrigin
 import io.motohub.android.dashcam.Target
 import io.motohub.android.dashcam.net.Credentials
 import io.motohub.android.module.ModuleUi
@@ -152,14 +153,17 @@ internal fun LanPage(controller: DashcamController, open: (Page) -> Unit, home: 
             Card {
                 scan.found.forEachIndexed { i, c ->
                     if (i > 0) Hairline()
-                    CandidateRow(c, check.running && check.target == c.host, !check.running) {
+                    CandidateRow(c, check.running && check.target == c.target, !check.running) {
                         picked = c
-                        controller.check(c.host, c.onvif, null, c.name)
+                        controller.check(c.target, c.onvif, null, c.name)
                     }
                 }
             }
         }
-        if (picked != null) CheckStatus(check)
+        if (picked != null) {
+            CheckStatus(check)
+            ReportCard(controller, ReportOrigin.PHONE_NETWORK)
+        }
 
         Card {
             NavRow(Ico.SLIDERS, "Enter the address yourself", "An IP address, or the stream address from the manual", !check.running) {
@@ -217,9 +221,12 @@ internal fun LanManualPage(controller: DashcamController, open: (Page) -> Unit, 
         )
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Field("Address", address, false) { address = it }
-            Text("Like 192.168.1.50, 192.168.1.50:8554 or rtsp://192.168.1.50/stream1", color = Dc.dim, fontSize = 13.sp)
+            Text("Like 192.168.1.50, rtsp://192.168.1.50/stream1 or http://192.168.1.50:81/stream", color = Dc.dim, fontSize = 13.sp)
         }
-        if (asked) CheckStatus(check)
+        if (asked) {
+            CheckStatus(check)
+            ReportCard(controller, ReportOrigin.PHONE_NETWORK)
+        }
         BigButton(if (check.running) "Checking…" else "Check and connect", null, !check.running && address.isNotBlank(), false) {
             asked = true
             controller.check(address.trim(), null, null)
@@ -264,7 +271,10 @@ internal fun LanLoginPage(controller: DashcamController, target: String, onvif: 
             Field("User name", user, false) { user = it }
             Field("Password", password, true) { password = it }
         }
-        if (asked) CheckStatus(check)
+        if (asked) {
+            CheckStatus(check)
+            ReportCard(controller, ReportOrigin.PHONE_NETWORK)
+        }
         BigButton(if (check.running) "Checking…" else "Sign in", Ico.LOCK, !check.running && user.isNotBlank(), false) {
             asked = true
             controller.check(target, onvif, Credentials(user.trim(), password), name)

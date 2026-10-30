@@ -5,9 +5,11 @@ package io.motohub.android.dashcam.net
 
 import io.motohub.android.dashcam.LanSearch
 import io.motohub.android.dashcam.Target
+import java.io.ByteArrayOutputStream
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -106,5 +108,67 @@ class LanParsingTest {
     fun `a password in a stream address is masked for the log`() {
         assertEquals("rtsp://h/live?user=admin&password=***&ch=1", LanSearch.safe("rtsp://h/live?user=admin&password=s3cret&ch=1"))
         assertEquals("rtsp://h/user=admin_password=***_channel=1", LanSearch.safe("rtsp://h/user=admin_password=x_channel=1"))
+    }
+
+    @Test
+    fun `a login turned down at a guessed address does not end the search`() {
+        val urls = listOf("rtsp://h/", "rtsp://h/stream1", "rtsp://h/live")
+        // 401 at the addresses the camera does not have, a picture at its own.
+        assertEquals("rtsp://h/stream1", LanSearch.firstPlaying(urls) { if (it.endsWith("/stream1")) true else throw LoginRequired(rejected = true) })
+        assertNull(LanSearch.firstPlaying(urls) { false })
+        // Turned down everywhere: then the login is what is wrong.
+        val wrong = assertThrows(LoginRequired::class.java) { LanSearch.firstPlaying(urls) { throw LoginRequired(rejected = true) } }
+        assertTrue(wrong.rejected)
+        // No login given yet: asked for at the first address, nothing more tried.
+        val tried = ArrayList<String>()
+        val ask = assertThrows(LoginRequired::class.java) { LanSearch.firstPlaying(urls) { tried.add(it); throw LoginRequired(rejected = false) } }
+        assertFalse(ask.rejected)
+        assertEquals(listOf("rtsp://h/"), tried)
+    }
+
+    @Test
+    fun `a web address with a path is an mjpeg stream, without one only the camera's address`() {
+        val esp = Target.parse("http://192.168.4.1:81/stream")!!
+        assertEquals("http://192.168.4.1:81/stream", esp.url)
+        assertEquals(81, esp.port)
+        assertEquals("http://10.0.0.5/?action=stream", Target.parse("http://10.0.0.5/?action=stream")!!.url)
+        val bare = Target.parse("http://192.168.1.50:8080/")!!
+        assertNull(bare.url)
+        assertEquals(8080, bare.port)
+        assertTrue(LanSearch.isMjpeg(esp.url!!))
+        assertFalse(LanSearch.isMjpeg("rtsp://192.168.1.50/stream1"))
+        assertEquals(listOf("http://h:81/stream", "http://h:81/video"), LanSearch.mjpegGuesses("h", listOf(81, 80)).take(2))
+        assertEquals("http://h/stream", LanSearch.mjpegGuesses("h", listOf(80)).first())
+    }
+
+    @Test
+    fun `ssdp answers give the device description`() {
+        val answer = "HTTP/1.1 200 OK\r\nCACHE-CONTROL: max-age=1800\r\nLOCATION: http://192.168.1.64:49152/rootDesc.xml\r\nST: upnp:rootdevice\r\n\r\n"
+        assertEquals("http://192.168.1.64:49152/rootDesc.xml", Discovery.parseSsdp(answer))
+        assertNull(Discovery.parseSsdp("M-SEARCH * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\n\r\n"))
+    }
+
+    @Test
+    fun `an mdns answer gives the camera's name and its rtsp port`() {
+        val query = Discovery.mdnsQuery(listOf("_rtsp._tcp.local"))
+        assertEquals(1, query[5].toInt())
+        // PTR _rtsp._tcp.local -> "Garage Cam._rtsp._tcp.local", then its SRV on 8554; names compressed.
+        val m = ByteArrayOutputStream()
+        fun w(vararg v: Int) = v.forEach { m.write(it) }
+        fun label(s: String) { m.write(s.length); m.write(s.toByteArray()) }
+        w(0, 0, 0x84, 0, 0, 0, 0, 2, 0, 0, 0, 0)
+        val service = m.size()
+        label("_rtsp"); label("_tcp"); label("local"); w(0)
+        w(0, 12, 0, 1, 0, 0, 0, 120, 0, 1 + "Garage Cam".length + 2)
+        val instance = m.size()
+        label("Garage Cam"); w(0xC0, service)
+        w(0xC0, instance, 0, 33, 0x80, 1, 0, 0, 0, 120, 0, 8)
+        w(0, 0, 0, 0, 0x21, 0x6A, 0xC0, service)
+        val bytes = m.toByteArray()
+        val answer = Discovery.parseMdns(bytes, bytes.size)!!
+        assertEquals("Garage Cam", answer.name)
+        assertEquals(8554, answer.rtspPort)
+        // A question is not an answer.
+        assertNull(Discovery.parseMdns(query, query.size))
     }
 }
