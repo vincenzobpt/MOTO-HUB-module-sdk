@@ -74,4 +74,38 @@ class ProbeTest {
         assertEquals("dashcam: test", asked)
         assertNull(Reports.of(Any()))
     }
+
+    @Test
+    fun `an RTSP server that hangs up is still asked every way, each on its own connection`() {
+        // Like the HidviCam camera of report 436C-A2EA-DCDA: 400 to OPTIONS, silence and a hang-up to DESCRIBE.
+        val server = java.net.ServerSocket(0, 8, java.net.InetAddress.getByName("127.0.0.1"))
+        val requests = java.util.Collections.synchronizedList(ArrayList<String>())
+        val serving = Thread {
+            try {
+                while (true) server.accept().use { c ->
+                    val input = c.getInputStream().buffered()
+                    val first = io.motohub.android.dashcam.net.CameraHttp.readLine(input)
+                    requests.add(first)
+                    // The whole request read before hanging up: unread bytes would turn the close into a reset.
+                    while (io.motohub.android.dashcam.net.CameraHttp.readLine(input).isNotEmpty()) { }
+                    if (first.startsWith("OPTIONS")) {
+                        c.getOutputStream().write("RTSP/1.0 400 Bad Request\r\nServer: Hopeway RealServer/V1.0\r\n\r\n".toByteArray())
+                    }
+                }
+            } catch (_: Exception) {
+            }
+        }.apply { isDaemon = true; start() }
+        val lines = ArrayList<String>()
+        CameraProbe { lines.add(it) }.rtsp({}, "rtsp://127.0.0.1:${server.localPort}/")
+        server.close()
+        serving.join(2000)
+
+        assertEquals(lines.toString(), 4, lines.size)
+        assertEquals(4, requests.size)
+        assertTrue(lines[0], lines[0].contains("OPTIONS -> RTSP/1.0 400 Bad Request, server \"Hopeway RealServer/V1.0\""))
+        assertTrue(lines[1], lines[1].startsWith("probe: rtsp * OPTIONS"))
+        assertTrue(lines[2], lines[2].contains("DESCRIBE -> closed with no answer"))
+        assertTrue(lines[3], lines[3].contains("DESCRIBE (bare) -> closed with no answer"))
+        assertEquals("ab.c", CameraProbe.printable("ab\u0001c"))
+    }
 }

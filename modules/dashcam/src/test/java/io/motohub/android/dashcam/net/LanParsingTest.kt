@@ -171,4 +171,27 @@ class LanParsingTest {
         // A question is not an answer.
         assertNull(Discovery.parseMdns(query, query.size))
     }
+
+    @Test
+    fun `a HidviCam server is named as one, every other server is not`() {
+        assertTrue(LanSearch.lockedStream("Hopeway RealServer/V1.0").orEmpty().contains("HidviCam"))
+        assertNull(LanSearch.lockedStream("Hipcam RealServer/V1.0"))
+        assertNull(LanSearch.lockedStream("GStreamer RTSP server"))
+    }
+
+    @Test
+    fun `the address suggested for the camera is the first of the phone's subnet`() {
+        val phone = java.net.InetAddress.getByName("192.168.188.186") as java.net.Inet4Address
+        assertEquals("192.168.188.1", LocalNetworks.firstHost(phone, 24))
+        assertEquals("172.20.10.1", LocalNetworks.firstHost(java.net.InetAddress.getByName("172.20.10.2") as java.net.Inet4Address, 28))
+    }
+
+    @Test
+    fun `stream addresses are tried in order, paced apart`() {
+        val tried = ArrayList<String>()
+        val start = System.nanoTime()
+        assertNull(LanSearch.firstPlaying(listOf("a", "b", "c"), 30) { tried.add(it); false })
+        assertEquals(listOf("a", "b", "c"), tried)
+        assertTrue((System.nanoTime() - start) / 1_000_000 >= 60)
+    }
 }

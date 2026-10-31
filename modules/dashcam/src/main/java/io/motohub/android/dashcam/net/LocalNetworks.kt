@@ -95,7 +95,16 @@ class LocalNetworks(context: Context) {
      */
     fun bindFor(host: String): (Socket) -> Unit = forHost(host)?.bind ?: {}
 
+    /** The network on which [host] is the phone's own address - typed, by mistake, for the camera's. */
+    fun ownedBy(host: String): LocalNet? = list().firstOrNull { it.phone.hostAddress == host }
+
     companion object {
+        /** The first address of the subnet [phone] is on: where a camera's own Wi-Fi, and most routers, sit. */
+        fun firstHost(phone: Inet4Address, prefix: Int): String {
+            val p = prefix.coerceIn(8, 30)
+            return toText((toInt(phone) and (-1 shl (32 - p))) or 1)
+        }
+
         /** [host] as an IPv4 address when it is written as one; never a DNS lookup. */
         fun literal(host: String): Inet4Address? {
             val parts = host.split('.')

@@ -124,40 +124,68 @@ class CameraProbe(private val log: (String) -> Unit) {
         }
     }
 
-    /** OPTIONS and DESCRIBE at [url]: what the RTSP server says it does, and the stream it describes. */
-    private fun rtsp(bind: (Socket) -> Unit, url: String) {
-        val safe = LanSearch.safe(url)
+    /**
+     * What the RTSP server at [url] answers, asked several ways: OPTIONS as clients send it, for
+     * the whole server (`*`) and with the port written out, then DESCRIBE with and without the
+     * usual headers. Each on a connection of its own - a server that turns one request down often
+     * hangs up, and the next would never be asked. A server that answered `400` to everything but
+     * one form is told apart this way.
+     */
+    internal fun rtsp(bind: (Socket) -> Unit, url: String) {
+        val uri = runCatching { java.net.URI(url) }.getOrNull()
+        val host = uri?.host
+        if (host == null) {
+            line("rtsp ${LanSearch.safe(url)} -> not an address")
+            return
+        }
+        val port = if (uri.port > 0) uri.port else 554
+        val withPort = "rtsp://$host:$port${uri.rawPath.orEmpty().ifEmpty { "/" }}${uri.rawQuery?.let { "?$it" }.orEmpty()}"
+        ask(bind, host, port, "OPTIONS", url, AGENT)
+        ask(bind, host, port, "OPTIONS", "*", AGENT)
+        if (withPort != url) ask(bind, host, port, "OPTIONS", withPort, AGENT)
+        ask(bind, host, port, "DESCRIBE", url, AGENT + "Accept: application/sdp\r\n")
+        ask(bind, host, port, "DESCRIBE", url, "")
+    }
+
+    /** One RTSP request on a fresh connection, and one line of what came back - or of how it did not. */
+    private fun ask(bind: (Socket) -> Unit, host: String, port: Int, method: String, target: String, headers: String) {
+        val what = "rtsp ${LanSearch.safe(target)} $method${if (headers.isEmpty()) " (bare)" else ""}"
         try {
-            val uri = java.net.URI(url)
             Socket().use { s ->
                 bind(s)
-                s.connect(InetSocketAddress(uri.host, if (uri.port > 0) uri.port else 554), 2500)
+                s.connect(InetSocketAddress(host, port), 2500)
                 s.soTimeout = 3000
-                val input = s.getInputStream().buffered()
-                val output = s.getOutputStream()
-                fun ask(method: String, cseq: Int, extra: String): Triple<String, Map<String, String>, String> {
-                    output.write("$method $url RTSP/1.0\r\nCSeq: $cseq\r\nUser-Agent: MOTO-HUB-Dashcam\r\n$extra\r\n".toByteArray(Charsets.ISO_8859_1))
-                    output.flush()
-                    val status = CameraHttp.readLine(input)
-                    val headers = HashMap<String, String>()
-                    while (true) {
-                        val h = CameraHttp.readLine(input)
-                        if (h.isEmpty()) break
-                        val colon = h.indexOf(':')
-                        if (colon > 0) headers[h.substring(0, colon).trim().lowercase(Locale.ROOT)] = h.substring(colon + 1).trim()
-                    }
-                    val length = headers["content-length"]?.toIntOrNull() ?: 0
-                    val body = if (length in 1..BODY_BYTES) String(CameraHttp.readExactly(input, length), Charsets.UTF_8) else ""
-                    return Triple(status, headers, body)
+                s.getOutputStream().apply {
+                    write("$method $target RTSP/1.0\r\nCSeq: 1\r\n$headers\r\n".toByteArray(Charsets.ISO_8859_1))
+                    flush()
                 }
-                val (optionsStatus, options, _) = ask("OPTIONS", 1, "")
-                line("rtsp $safe OPTIONS -> $optionsStatus${options["server"]?.let { ", server \"$it\"" }.orEmpty()}${options["public"]?.let { ", does $it" }.orEmpty()}")
-                val (status, headers, sdp) = ask("DESCRIBE", 2, "Accept: application/sdp\r\n")
-                val auth = headers["www-authenticate"]?.let { ", asks for ${it.substringBefore(' ')}" }.orEmpty()
-                line("rtsp $safe DESCRIBE -> $status$auth${if (sdp.isEmpty()) "" else ": " + sdpSummary(sdp)}")
+                val input = s.getInputStream().buffered()
+                val status = try {
+                    CameraHttp.readLine(input)
+                } catch (_: java.io.EOFException) {
+                    line("$what -> closed with no answer")
+                    return
+                }
+                if (!status.startsWith("RTSP/")) {
+                    line("$what -> not RTSP: \"${printable(status)}\"")
+                    return
+                }
+                val answer = HashMap<String, String>()
+                while (true) {
+                    val h = CameraHttp.readLine(input)
+                    if (h.isEmpty()) break
+                    val colon = h.indexOf(':')
+                    if (colon > 0) answer[h.substring(0, colon).trim().lowercase(Locale.ROOT)] = h.substring(colon + 1).trim()
+                }
+                val length = answer["content-length"]?.toIntOrNull() ?: 0
+                val body = if (length in 1..BODY_BYTES) String(CameraHttp.readExactly(input, length), Charsets.UTF_8) else ""
+                val server = answer["server"]?.let { ", server \"$it\"" }.orEmpty()
+                val does = answer["public"]?.let { ", does $it" }.orEmpty()
+                val auth = answer["www-authenticate"]?.let { ", asks for ${it.substringBefore(' ')}" }.orEmpty()
+                line("$what -> $status$server$does$auth${if (body.isEmpty()) "" else ": " + sdpSummary(body)}")
             }
         } catch (e: Exception) {
-            line("rtsp $safe -> ${e.message ?: e.javaClass.simpleName}")
+            line("$what -> ${e.message ?: e.javaClass.simpleName}")
         }
     }
 
@@ -204,6 +232,18 @@ class CameraProbe(private val log: (String) -> Unit) {
         private const val MAX_LINES = 60
         private const val MAX_CHARS = 1500
         private const val BODY_BYTES = 4096
+
+        private const val AGENT = "User-Agent: MOTO-HUB-Dashcam\r\n"
+
+        /** The first bytes of an answer that is not RTSP, readable in one line: anything else is a dot. */
+        internal fun printable(text: String): String {
+            val out = StringBuilder()
+            for (c in text) {
+                if (out.length >= 80) break
+                out.append(if (c.code in 32..126) c else '.')
+            }
+            return out.toString()
+        }
 
         private val WHITESPACE = Pattern.compile("\\s+")
         private val TITLE = Pattern.compile("<title[^>]*>([^<]*)</title>", Pattern.CASE_INSENSITIVE)

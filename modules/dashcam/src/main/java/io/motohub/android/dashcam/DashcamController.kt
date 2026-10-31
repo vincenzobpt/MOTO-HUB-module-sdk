@@ -254,9 +254,10 @@ class DashcamController(private val host: MotoHubModuleHost) {
                 )
             }
             if (!currentCoroutineContext().isActive) return
+            val locked = wifi.gateway()?.let { g -> LanSearch.rtspServer(wifi::bind, g, 554) }?.let { LanSearch.lockedStream(it) }
             wifi.release(joined)
-            fail("The phone joined \"$ssid\" but did not recognise the camera on it. It may run a firmware this " +
-                "module does not speak yet.")
+            fail(locked ?: ("The phone joined \"$ssid\" but did not recognise the camera on it. It may run a firmware this " +
+                "module does not speak yet."))
             return
         }
         val (proto, client, identity) = found
@@ -544,12 +545,13 @@ class DashcamController(private val host: MotoHubModuleHost) {
         _scan.value = ScanState(running = true)
         scope.launch {
             // On the camera's own Wi-Fi: no place to look, and on most phones it has taken the phone's
-            // own. Let it go, and give the phone's Wi-Fi a moment to come back before looking.
-            val cameraWifi = wifi.network
+            // own. Let it go, and give the phone's Wi-Fi a moment to come back before looking. One the
+            // rider joined in Android's settings stays when let go, and is searched like any other.
+            val cameraWifi = if (wifi.borrowed) null else wifi.network
             if (wifi.current != null) {
                 disconnect()
                 var waited = 0
-                while (waited < WIFI_RETURN_MS && networks.list().none { it.network != cameraWifi }) {
+                while (cameraWifi != null && waited < WIFI_RETURN_MS && networks.list().none { it.network != cameraWifi }) {
                     delay(500)
                     waited += 500
                 }
@@ -578,6 +580,16 @@ class DashcamController(private val host: MotoHubModuleHost) {
         scope.launch {
             if (motorcycleConnected()) {
                 _check.value = CheckState(target = target, message = LAN_ON_BIKE)
+                return@launch
+            }
+            // The phone's own address, taken for the camera's: nothing to check, and no probe of the phone.
+            val typed = Target.parse(target)?.host
+            val own = typed?.let { networks.ownedBy(it) }
+            if (typed != null && own != null) {
+                val message = "$typed is this phone's own address. The camera has another one on the same network: " +
+                    "on a camera's own Wi-Fi it is usually ${LocalNetworks.firstHost(own.phone, own.prefix)}."
+                log("scan: $target: $message")
+                _check.value = CheckState(target = target, message = message)
                 return@launch
             }
             // The login kept for this camera, if it is the one set up before.

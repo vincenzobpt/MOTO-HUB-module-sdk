@@ -223,8 +223,18 @@ class LanSearch(private val networks: LocalNetworks, private val log: (String) -
                 Collections.sort(group, byAddress)
                 out.addAll(group)
             }
+            // What answered and was not taken for a camera: in a report, the only trace of a camera
+            // the rider says is there and the search passed by.
+            val others = StringBuilder()
+            var listed = 0
+            for ((host, open) in ports) {
+                if (open.isEmpty() || out.any { it.host == host }) continue
+                if (listed++ == MAX_OTHERS) { others.append(", …"); break }
+                Collections.sort(open)
+                others.append(if (others.isEmpty()) "; also open: " else ", ").append(host).append(':').append(open.joinToString("/"))
+            }
             log("scan: ${nets.joinToString { it.label }}: ${hits.size} open ports, ${devices.size} ONVIF, ${heard.size} announced, ${out.size} camera(s)" +
-                out.joinToString("") { "; ${it.host} ${it.services}" })
+                out.joinToString("") { "; ${it.host} ${it.services}" } + others)
             return out
         } finally {
             pool.shutdownNow()
@@ -288,13 +298,19 @@ class LanSearch(private val networks: LocalNetworks, private val log: (String) -
         val guesses = ArrayList<String>()
         for (port in rtspPorts) {
             if (!knock(bind, host, port, 1500)) continue
+            rtspServer(bind, host, port)?.let { server ->
+                lockedStream(server)?.let {
+                    log("scan: $host:$port RTSP server \"$server\"")
+                    throw CameraException(it)
+                }
+            }
             for (path in RTSP_PATHS) guesses.add("rtsp://$host${if (port == 554) "" else ":$port"}$path")
         }
         // Then MJPEG over HTTP, at the web ports that answer: after RTSP, whose H.264 looks better.
         val webPorts = ArrayList<Int>()
         for (port in if (target.port != null) listOf(target.port) else MJPEG_PORTS) if (knock(bind, host, port, 1500)) webPorts.add(port)
         guesses.addAll(mjpegGuesses(host, webPorts))
-        firstPlaying(guesses) { tryUrl(it, bind, auth) }?.let { url ->
+        firstPlaying(guesses, PATH_GAP_MS) { tryUrl(it, bind, auth) }?.let { url ->
             log("scan: $host streams at ${safe(url)}")
             return Resolved(host, StreamOnlyCamera(url, if (isMjpeg(url)) "MJPEG" else "RTSP"), streamIdentity("", url), url, null)
         }
@@ -440,13 +456,25 @@ class LanSearch(private val networks: LocalNetworks, private val log: (String) -
         )
 
         /**
-         * The first of [urls] that [plays]. A login turned down at one of them does not end the
-         * search: some cameras answer 401 at an address they do not have, right login or not. Only
-         * when none plays is the refusal thrown, since then the login may well be what is wrong.
+         * Between two stream addresses tried on one camera. Thirty connections in a second and a half
+         * had a camera answer some of them with a reset: a small one can hold few at a time.
          */
-        internal fun firstPlaying(urls: List<String>, plays: (String) -> Boolean): String? {
+        private const val PATH_GAP_MS = 80L
+
+        /** At most this many addresses that answered but are not cameras go into the search's log line. */
+        private const val MAX_OTHERS = 20
+
+        /**
+         * The first of [urls] that [plays], [gapMs] apart. A login turned down at one of them does
+         * not end the search: some cameras answer 401 at an address they do not have, right login
+         * or not. Only when none plays is the refusal thrown, since then the login may well be
+         * what is wrong.
+         */
+        internal fun firstPlaying(urls: List<String>, gapMs: Long = 0, plays: (String) -> Boolean): String? {
             var refused: LoginRequired? = null
+            var tried = 0
             for (url in urls) {
+                if (tried++ > 0 && gapMs > 0) Thread.sleep(gapMs)
                 try {
                     if (plays(url)) return url
                 } catch (e: LoginRequired) {
@@ -462,6 +490,47 @@ class LanSearch(private val networks: LocalNetworks, private val log: (String) -
 
         /** [url] fit for the log and the screen: a password some cameras put in the query is masked. */
         fun safe(url: String): String = SECRET.matcher(url).replaceAll("$1***")
+
+        /**
+         * Why the camera behind RTSP server [server] cannot be shown, for the servers whose stream
+         * address is made by the maker's own app and no other; null for every other server.
+         */
+        fun lockedStream(server: String): String? = when {
+            // HidviCam builds the address natively from the camera's id and the account's keys (seen in its APK, v2.5.32).
+            server.contains("Hopeway", ignoreCase = true) ->
+                "This is a HidviCam (Hopeway) camera. Its video address is made by the HidviCam app from keys of " +
+                    "its own, so no other app can open it: this module cannot show it."
+            else -> null
+        }
+
+        /**
+         * What the RTSP server at [host]:[port] calls itself, from one OPTIONS: a server that turns
+         * the request down usually still names itself. Null when it says nothing or does not answer.
+         */
+        fun rtspServer(bind: (Socket) -> Unit, host: String, port: Int): String? {
+            var server: String? = null
+            try {
+                Socket().use { s ->
+                    bind(s)
+                    s.connect(InetSocketAddress(host, port), 1500)
+                    s.soTimeout = 2000
+                    s.getOutputStream().apply {
+                        write("OPTIONS rtsp://$host:$port/ RTSP/1.0\r\nCSeq: 1\r\nUser-Agent: MOTO-HUB-Dashcam\r\n\r\n".toByteArray(Charsets.ISO_8859_1))
+                        flush()
+                    }
+                    val input = s.getInputStream().buffered()
+                    if (!CameraHttp.readLine(input).startsWith("RTSP/")) return null
+                    while (true) {
+                        val h = CameraHttp.readLine(input)
+                        if (h.isEmpty()) break
+                        if (h.startsWith("server:", ignoreCase = true)) server = h.substring(7).trim()
+                    }
+                }
+            } catch (_: IOException) {
+                // Closed or cut off: whatever name came before it is still the server's.
+            }
+            return server
+        }
 
         fun knock(bind: (Socket) -> Unit, host: String, port: Int, timeoutMs: Int): Boolean = try {
             Socket().use { s ->

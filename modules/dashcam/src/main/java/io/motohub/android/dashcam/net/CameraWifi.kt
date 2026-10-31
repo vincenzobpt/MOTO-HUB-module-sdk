@@ -8,7 +8,9 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import android.net.wifi.WifiManager
 import android.net.wifi.WifiNetworkSpecifier
+import android.os.SystemClock
 import java.net.Inet4Address
 import java.net.Socket
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -30,10 +32,19 @@ import kotlin.coroutines.resumeWithException
  */
 class CameraWifi(context: Context) {
     private val connectivity = context.getSystemService(ConnectivityManager::class.java)
+    private val wifiManager = context.applicationContext.getSystemService(WifiManager::class.java)
     private var callback: ConnectivityManager.NetworkCallback? = null
 
     @Volatile
     var network: Network? = null
+        private set
+
+    /**
+     * True when [network] is a Wi-Fi the rider joined in Android's settings: the module only uses
+     * it, and letting go of it leaves the phone on it.
+     */
+    @Volatile
+    var borrowed: Boolean = false
         private set
 
     /**
@@ -42,6 +53,10 @@ class CameraWifi(context: Context) {
      */
     suspend fun join(ssid: String, password: String, onLost: () -> Unit): Network {
         release()
+        // Already on it, joined in Android's settings: asking again fails on some phones (a Samsung
+        // on Android 16 did, 20 times in a row), and there is nothing to join.
+        connectedTo(ssid)?.let { return watch(it, onLost) }
+        val started = SystemClock.elapsedRealtime()
         val specifier = WifiNetworkSpecifier.Builder().setSsid(ssid).apply {
             if (password.isNotEmpty()) setWpa2Passphrase(password)
         }.build()
@@ -67,10 +82,7 @@ class CameraWifi(context: Context) {
 
                     override fun onUnavailable() {
                         if (cont.isActive) cont.resumeWithException(
-                            IllegalStateException(
-                                "The phone could not join \"$ssid\". Check that the camera is on, the name and " +
-                                    "password are right, and that you allowed the connection when Android asked."
-                            )
+                            IllegalStateException(joinFailure(ssid, (SystemClock.elapsedRealtime() - started) / 1000))
                         )
                     }
                 }
@@ -89,6 +101,63 @@ class CameraWifi(context: Context) {
                 cont.invokeOnCancellation { release(cb) }
             }
         }
+    }
+
+    /**
+     * The Wi-Fi network the phone is on now, when it is [ssid]. Null when it is not, or when the
+     * app may not read the name (no location permission: Android then says "<unknown ssid>").
+     */
+    @Suppress("DEPRECATION") // connectionInfo: the one read that names the joined Wi-Fi without a callback.
+    private fun connectedTo(ssid: String): Network? {
+        val name = runCatching { wifiManager.connectionInfo?.ssid }.getOrNull() ?: return null
+        val bare = if (name.length >= 2 && name.startsWith('"') && name.endsWith('"')) name.substring(1, name.length - 1) else name
+        if (bare != ssid) return null
+        // shortcut: the first Wi-Fi network is taken as that one; a phone on two Wi-Fi at once is not told apart.
+        return connectivity.allNetworks.firstOrNull { connectivity.getNetworkCapabilities(it)?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true }
+    }
+
+    /** Uses [n], joined by the rider, and only listens for it to go away: releasing it disconnects nothing. */
+    private fun watch(n: Network, onLost: () -> Unit): Network {
+        val cb = object : ConnectivityManager.NetworkCallback() {
+            override fun onLost(lost: Network) {
+                if (lost == network) {
+                    network = null
+                    onLost()
+                }
+            }
+        }
+        val request = NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .build()
+        synchronized(this) {
+            callback = cb
+            network = n
+            borrowed = true
+        }
+        connectivity.registerNetworkCallback(request, cb)
+        return n
+    }
+
+    /**
+     * Why the join failed, as far as Android lets anyone tell: it says only "unavailable", so the
+     * time it took and whether the camera's Wi-Fi is in the phone's last scan are what is left.
+     */
+    private fun joinFailure(ssid: String, seconds: Long): String {
+        val why = if (seconds < JOIN_TIMEOUT_MS / 1000 - 5) {
+            "Android gave up after $seconds s - the connection was declined when Android asked, or the phone does not see the camera."
+        } else {
+            "Android found no way onto it in ${JOIN_TIMEOUT_MS / 1000} s - the password may be wrong."
+        }
+        @Suppress("DEPRECATION") // ScanResult.SSID: wifiSsid is API 33, the module runs on older phones too.
+        val seen = runCatching { wifiManager.scanResults.any { it.SSID == ssid } }.getOrNull()
+        val nearby = when (seen) {
+            true -> " \"$ssid\" is in range."
+            false -> " The phone's last Wi-Fi scan does not list \"$ssid\"."
+            null -> ""
+        }
+        return "The phone could not join \"$ssid\": $why$nearby Check that the camera is on and the name and password are " +
+            "right - or join \"$ssid\" in Android's Wi-Fi settings and try again."
     }
 
     /** Binds a socket to the camera's network, so it never leaves through mobile data. */
@@ -127,6 +196,7 @@ class CameraWifi(context: Context) {
         }
         callback = null
         network = null
+        borrowed = false
     }
 
     private companion object {
