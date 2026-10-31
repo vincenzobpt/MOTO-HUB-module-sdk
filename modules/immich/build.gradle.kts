@@ -10,7 +10,7 @@ plugins {
 
 motohubModule {
     id = "immich"
-    version = "0.3.0"
+    version = "0.3.1"
     entryClass = "io.motohub.immich.ImmichEntry"
     // ModuleMapLayer (30); photo pins and navigateTo (31).
     contractVersion = 37
