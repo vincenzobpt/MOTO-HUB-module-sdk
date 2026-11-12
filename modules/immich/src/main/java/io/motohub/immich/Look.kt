@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -60,6 +61,58 @@ internal object Ink {
     val Good = Color(0xFF3DDC97)
     val Bad = Color(0xFFFF6B6B)
     val Gold = Color(0xFFFFC94D)
+}
+
+/**
+ * Where each child of a wrapping row goes: x and y per child, then the width and height of the
+ * whole, in one array. A child that does not fit on the line starts the next one.
+ */
+internal fun flowSpots(widths: IntArray, heights: IntArray, maxWidth: Int, gap: Int): IntArray {
+    val out = IntArray(widths.size * 2 + 2)
+    var x = 0
+    var y = 0
+    var lineHeight = 0
+    var width = 0
+    for (i in widths.indices) {
+        if (x > 0 && x + widths[i] > maxWidth) {
+            x = 0
+            y += lineHeight + gap
+            lineHeight = 0
+        }
+        out[i * 2] = x
+        out[i * 2 + 1] = y
+        x += widths[i]
+        if (x > width) width = x
+        x += gap
+        if (heights[i] > lineHeight) lineHeight = heights[i]
+    }
+    out[widths.size * 2] = width
+    out[widths.size * 2 + 1] = y + lineHeight
+    return out
+}
+
+/**
+ * Chips left to right, wrapping, 8 dp apart both ways. The module's own rather than Compose's
+ * FlowRow: that one was experimental and its 1.7 signature is gone from 1.11, so Immich 0.3.2
+ * could not open these rows on an app carrying the newer Compose - and one built against 1.11
+ * could not on an older app. Layout is stable in both.
+ */
+@Composable
+@ComposableTarget(ModuleUi.UI_APPLIER)
+internal fun Flow(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Layout(content, modifier) { measurables, constraints ->
+        val placeables = measurables.map { it.measure(constraints.copy(minWidth = 0, minHeight = 0)) }
+        val spots = flowSpots(
+            IntArray(placeables.size) { placeables[it].width },
+            IntArray(placeables.size) { placeables[it].height },
+            constraints.maxWidth,
+            8.dp.roundToPx()
+        )
+        val n = placeables.size
+        layout(spots[n * 2].coerceIn(constraints.minWidth, constraints.maxWidth), spots[n * 2 + 1]) {
+            for (i in 0 until n) placeables[i].place(spots[i * 2], spots[i * 2 + 1])
+        }
+    }
 }
 
 @Composable

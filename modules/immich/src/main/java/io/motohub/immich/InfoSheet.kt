@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,7 +47,6 @@ import java.util.Locale
 /** Everything Immich knows about the open photo, over the lower part of it. A drag down or ✕ puts it away. */
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
-@OptIn(ExperimentalLayoutApi::class)
 internal fun InfoSheet(
     host: MotoHubModuleHost,
     server: ImmichServer,
@@ -117,7 +114,6 @@ internal fun InfoSheet(
 
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
-@OptIn(ExperimentalLayoutApi::class)
 private fun Header(d: PhotoDetails?, onClose: () -> Unit) {
     Row(Modifier.fillMaxWidth().padding(top = 6.dp), verticalAlignment = Alignment.Top) {
         Column(Modifier.weight(1f)) {
@@ -140,7 +136,7 @@ private fun Header(d: PhotoDetails?, onClose: () -> Unit) {
         "In the trash".takeIf { d.trashed }
     )
     if (badges.isNotEmpty()) {
-        FlowRow(Modifier.padding(top = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Flow(Modifier.padding(top = 12.dp)) {
             badges.forEach { Chip(it, if (it.startsWith("★") || it.startsWith("♥")) Ink.Gold else Ink.Text, Ink.PanelHigh) }
         }
     }
@@ -151,7 +147,6 @@ private fun Header(d: PhotoDetails?, onClose: () -> Unit) {
 
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
-@OptIn(ExperimentalLayoutApi::class)
 private fun Body(host: MotoHubModuleHost, d: PhotoDetails) {
     val lat = d.latitude
     val lon = d.longitude
@@ -226,10 +221,9 @@ private fun Body(host: MotoHubModuleHost, d: PhotoDetails) {
 
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
-@OptIn(ExperimentalLayoutApi::class)
 private fun Chips(title: String, values: List<String>) {
     Eyebrow(title, Modifier)
-    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Flow {
         values.forEach { Chip(it, Ink.Text, Ink.PanelHigh) }
     }
 }

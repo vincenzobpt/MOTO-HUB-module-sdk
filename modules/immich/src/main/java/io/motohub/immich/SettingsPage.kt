@@ -8,8 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -248,11 +246,10 @@ private fun Hero(server: ImmichServer, busy: Boolean) {
 
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
-@OptIn(ExperimentalLayoutApi::class)
 private fun KeyHelp() {
     Column(Modifier.fillMaxWidth().card().padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Txt("Make it in Immich: Account settings, API keys, New API key. Give it these permissions:", 14.sp, Ink.Muted, FontWeight.Normal, Modifier, 4)
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Flow {
             listOf("map.read", "asset.read", "asset.view", "album.read", "user.read").forEach { Chip(it, Ink.Accent, Ink.PanelHigh) }
         }
         Txt("MOTO-HUB only reads: it never changes your library. The key stays on this phone, sealed.", 13.sp, Ink.Faint, FontWeight.Normal, Modifier, 3)

@@ -8,8 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,7 +39,6 @@ import java.text.NumberFormat
 /** "What the map shows": favourites only, when, which album. One choice per row; [onChange] after each. */
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
-@OptIn(ExperimentalLayoutApi::class)
 internal fun MapFilterCard(server: ImmichServer, onChange: () -> Unit) {
     var f by remember { mutableStateOf(server.filter) }
     var years by remember { mutableStateOf<List<Int>>(emptyList()) }
@@ -82,7 +79,7 @@ internal fun MapFilterCard(server: ImmichServer, onChange: () -> Unit) {
         Rule()
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Txt("When", 16.sp, Ink.Text, FontWeight.SemiBold, Modifier, 1)
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Flow {
                 Pick("Any time", f.period == MapFilter.ANY_TIME) { choose(f.copy(period = MapFilter.ANY_TIME)) }
                 Pick("Last 12 months", f.period == MapFilter.RECENT) { choose(f.copy(period = MapFilter.RECENT)) }
                 years.forEach { y -> Pick(y.toString(), f.period == y.toString()) { choose(f.copy(period = y.toString())) } }
