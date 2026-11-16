@@ -21,18 +21,20 @@ import javax.net.ssl.SSLEngine
 import javax.net.ssl.X509ExtendedKeyManager
 import javax.net.ssl.X509KeyManager
 
-class SingleKeyKeyManager(certificate: X509Certificate, privateKey: PrivateKey) : X509ExtendedKeyManager() {
+class SingleKeyKeyManager(chain: Array<X509Certificate>, privateKey: PrivateKey) : X509ExtendedKeyManager() {
 
     constructor(identity: AaIdentityProvider) :
-        this(createCertificate(identity), createPrivateKey(identity))
+        this(createCertificateChain(identity), createPrivateKey(identity))
 
     private val delegate: X509KeyManager
 
     init {
         val ks = KeyStore.getInstance(KeyStore.getDefaultType())
         ks.load(null)
-        ks.setCertificateEntry(DEFAULT_ALIAS, certificate)
-        ks.setKeyEntry(DEFAULT_ALIAS, privateKey, charArrayOf(), arrayOf(certificate))
+        // chain[0] is the leaf; a strict head unit (e.g. Chigee) refuses a leaf whose issuer it
+        // cannot build to a trusted root, so present whatever CA certs the identity carries too.
+        ks.setCertificateEntry(DEFAULT_ALIAS, chain[0])
+        ks.setKeyEntry(DEFAULT_ALIAS, privateKey, charArrayOf(), chain)
 
         val kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
         kmf.init(ks, charArrayOf())
@@ -72,10 +74,15 @@ class SingleKeyKeyManager(certificate: X509Certificate, privateKey: PrivateKey) 
         // The identity is the app's, staged into its own resources at build time; this only
         // borrows it. Whether it is there at all is the host's question to answer - see
         // AaIdentityProvider.isAvailable - so nothing here looks for a resource by name.
-        private fun createCertificate(identity: AaIdentityProvider): X509Certificate =
+        // Reads every certificate in the identity's cert stream, leaf first. A head-unit identity
+        // is a single cert (chain of one, unchanged behaviour); a phone identity is the leaf plus
+        // the Google Automotive Link CA, which a strict head unit needs to verify the leaf.
+        private fun createCertificateChain(identity: AaIdentityProvider): Array<X509Certificate> =
             identity.openCertificate().use { certStream ->
                 CertificateFactory.getInstance("X.509")
-                    .generateCertificate(certStream) as X509Certificate
+                    .generateCertificates(certStream)
+                    .map { it as X509Certificate }
+                    .toTypedArray()
             }
 
         private fun createPrivateKey(identity: AaIdentityProvider): PrivateKey {

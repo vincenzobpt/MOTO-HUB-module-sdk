@@ -384,8 +384,10 @@ internal class AapPhoneSession(
         val listener = object : ModuleDashboardListener {
             override fun onStopped(reason: String) {
                 // A refusal arrives here inside attach(), before [dashboard] is set: that is not a
-                // session that ran. A stop after it is the app ending one that did.
-                end("the app stopped the dashboard: $reason", well = dashboard != null, forGood = dashboard != null)
+                // session that ran. A stop after it is the app ending one that did. Both are for
+                // good: a redial meets the same refusal, and every redial on a head unit that makes
+                // a new network asks the rider to confirm a Wi-Fi join (rider E67E, 2026-11-13).
+                end("the app stopped the dashboard: $reason", well = dashboard != null, forGood = true)
             }
         }
         Thread({

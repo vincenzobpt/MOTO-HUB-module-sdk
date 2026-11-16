@@ -113,6 +113,13 @@ object AaSelfMode {
             }
         }
 
+        // On a release that has closed self-mode, the entry points below are a formality and the
+        // rider's own step is the only way in: say it now, not after ~20 s of "Waiting for Android
+        // Auto to answer (n/5)" (rider video, Keeway, 2026-11-13). The attempts still run, quietly,
+        // so they cannot overwrite the step; a connection replaces it with "starting up" as before.
+        val stepFirst = AndroidAutoSelfModeHelp.isKnownBrokenVersion(version)
+        if (stepFirst) onProgress(AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STEP.asDetail())
+
         val discovered = discoverStartupComponents(context)
         if (discovered.isEmpty()) {
             log("[AA] Android Auto exports no wireless-startup component on this device.")
@@ -159,7 +166,7 @@ object AaSelfMode {
             if (isConnected()) return
             // The rider sees this in the session card and the preview screen: several seconds of
             // apparent inactivity is otherwise indistinguishable from a hang.
-            onProgress(ModuleSessionDetail("Asking Android Auto to start (${index + 1}/${attempts.size})…"))
+            if (!stepFirst) onProgress(ModuleSessionDetail("Asking Android Auto to start (${index + 1}/${attempts.size})…"))
             val dispatched = when (attempt.kind) {
                 ComponentKind.ACTIVITY -> startActivityComponent(context, attempt.className, extras, log)
                 ComponentKind.RECEIVER -> sendReceiverBroadcast(context, attempt.className, extras, log)
@@ -167,7 +174,7 @@ object AaSelfMode {
             }
             if (!dispatched) return@forEachIndexed
             accepted = true
-            onProgress(ModuleSessionDetail("Waiting for Android Auto to answer (${index + 1}/${attempts.size})…"))
+            if (!stepFirst) onProgress(ModuleSessionDetail("Waiting for Android Auto to answer (${index + 1}/${attempts.size})…"))
             if (awaitConnection(isConnected)) {
                 log("[AA] Android Auto connected after ${attempt.describe()}.")
                 onProgress(ModuleSessionDetail("Android Auto is starting up…"))

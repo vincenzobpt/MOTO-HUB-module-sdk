@@ -34,3 +34,29 @@ internal object ModuleIdentity : AaIdentityProvider {
     private fun open(name: String): InputStream? =
         ModuleIdentity::class.java.classLoader?.getResourceAsStream(name)
 }
+
+/**
+ * The phone identity, carried by this module when built with it.
+ *
+ * Unlike [ModuleIdentity] (a head-unit certificate), this is a phone certificate (O=CarService)
+ * plus its Google Automotive Link CA. In the phone role a strict head unit, such as the Chigee
+ * AIO-5 Lite, completes TLS and then rejects a head-unit certificate at AUTH_COMPLETE; it accepts
+ * a phone certificate chained to the CA it trusts. Optional: absent, the phone role falls back to
+ * the head-unit identity, exactly as before.
+ */
+internal object PhoneIdentity : AaIdentityProvider {
+
+    private const val CERTIFICATE = "motohub/aa_phone_cert"
+    private const val IDENTITY = "motohub/aa_phone_identity_data"
+
+    override fun isAvailable(): Boolean = open(CERTIFICATE) != null && open(IDENTITY) != null
+
+    override fun openCertificate(): InputStream =
+        open(CERTIFICATE) ?: error("This Android Auto module was built without its phone identity.")
+
+    override fun openIdentityData(): InputStream =
+        open(IDENTITY) ?: error("This Android Auto module was built without its phone identity.")
+
+    private fun open(name: String): InputStream? =
+        PhoneIdentity::class.java.classLoader?.getResourceAsStream(name)
+}

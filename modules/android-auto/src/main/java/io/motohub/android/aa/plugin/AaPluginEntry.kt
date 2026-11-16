@@ -49,7 +49,7 @@ private class AndroidAutoModule(private val host: MotoHubModuleHost) : MotoHubMo
 
     override val manifest = ModuleManifest(
         id = "android-auto",
-        version = "0.2.30",
+        version = "0.2.31",
         contractVersion = 37,
         entryClass = AaPluginContract.ENTRY_CLASS,
         displayName = "Android Auto",
@@ -112,6 +112,7 @@ private class AaModule : ModuleProjection, ModuleNavigation, ModuleAccessoryProb
     ) = AaSelfMode.trigger(
         context = host.context,
         dashboardNetwork = host.dashboardNetwork(),
+        port = AaReceiver.listeningPort,
         // The host used to pass this in, which meant the host had to know what "connected" means
         // for Android Auto. It never did know; it only forwarded an answer from here.
         isConnected = { AaReceiver.hasAndroidAutoConnectedSinceStart() },

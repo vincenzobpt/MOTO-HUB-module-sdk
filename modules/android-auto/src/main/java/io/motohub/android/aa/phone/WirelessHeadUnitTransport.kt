@@ -40,8 +40,10 @@ object WirelessHeadUnitTransport {
     private const val RFCOMM_SDP_ROUNDS = 3
     private const val RFCOMM_RETRY_PAUSE_MS = 2_000L
 
-    /** A healthy exchange takes well under a second (0.1-1 s measured on a Carpuride). */
-    private const val WPP_TIMEOUT_MS = 10_000L
+    /** A healthy exchange takes well under a second (0.1-1 s measured on a Carpuride). A Chigee
+     *  AIO-5 Lite chatters between two BT identities (LT Link / CHIGEE After Market) before it
+     *  sends its credentials, sometimes past 10s (support 49ae1fa6). */
+    private const val WPP_TIMEOUT_MS = 25_000L
     private const val TCP_RETRIES = 5
     private const val TCP_RETRY_BACKOFF_MS = 1_000L
 

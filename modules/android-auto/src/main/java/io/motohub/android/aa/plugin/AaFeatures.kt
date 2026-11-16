@@ -175,7 +175,7 @@ internal class AaFeatures(private val host: MotoHubModuleHost) : ModuleFeatures 
                 "Both are fixed and local to this phone. Only one session can hold them, which is why " +
                     "starting a second one stops the first instead of failing to bind."
             )
-            host.ui.Fact("Receiver", AaReceiver.PORT.toString(), technical = true)
+            host.ui.Fact("Receiver", AaReceiver.listeningPort.toString(), technical = true)
             host.ui.Fact("Head unit server", AaReceiver.HEAD_UNIT_SERVER_PORT.toString(), technical = true)
 
             host.ui.SectionLabel("THIS MODULE")

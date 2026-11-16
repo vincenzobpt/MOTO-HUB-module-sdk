@@ -7,6 +7,7 @@ import android.content.Context
 import android.os.SystemClock
 import io.motohub.android.aa.phone.AapPhoneSession
 import io.motohub.android.aa.phone.PhoneDiscovery
+import io.motohub.android.aa.plugin.PhoneIdentity
 import io.motohub.android.aa.proto.Control
 import io.motohub.android.aaplugin.AaIdentityProvider
 import io.motohub.android.module.MotoHubModuleHost
@@ -198,15 +199,18 @@ object AapPhoneHandshake {
                 )
             }
 
-            // Either way MOTO-HUB presents a certificate - AAP is mutually authenticated - and
-            // the one it has is a head-unit identity being used as a phone's. That is precisely
-            // the question this probe exists to answer: a unit that checks the role, or checks
-            // against Google's root at all, will reject it here and say so.
+            // MOTO-HUB presents a certificate - AAP is mutually authenticated. A head unit that
+            // only completes TLS accepts the head-unit identity (ModuleIdentity); a strict unit
+            // (Chigee AIO-5 Lite) rejects it at AUTH_COMPLETE and needs a phone certificate
+            // chained to Google's CA, which PhoneIdentity carries when the module was built with
+            // it. Prefer the phone identity in this role; fall back to the head-unit one.
             // In server mode (head unit drives) mirror gearslip's proven TLS stack: platform
             // provider, TLS 1.2 pinned, peer certificate requested. Conscrypt as a TLS server
             // threw "Failure in SSL library" on this unit's ClientHello (2026-10-08).
+            val handshakeIdentity = if (PhoneIdentity.isAvailable()) PhoneIdentity else identity
+            log("Presenting the ${if (PhoneIdentity.isAvailable()) "phone" else "head-unit"} certificate.")
             val ssl = AapSslContext(
-                SingleKeyKeyManager(identity),
+                SingleKeyKeyManager(handshakeIdentity),
                 useClientMode = tlsClient,
                 usePlatformProvider = !tlsClient,
                 pinnedProtocols = if (tlsClient) null else arrayOf("TLSv1.2"),
