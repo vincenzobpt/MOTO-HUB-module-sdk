@@ -23,6 +23,8 @@ as the Android Auto module does.
 | [`ModuleGeocoder`](#your-data-in-the-nav-phone-only) | 32 | the rider types in the NAV search box or drops a pin |
 | [`ModuleTravelTimes`](#your-data-in-the-nav-phone-only) | 32 | the route preview lists fuel stations |
 | [`ModuleMapboxAccount`](#the-riders-mapbox-account-modulemapboxaccount) | 36 | a 3D POV opens, or the rider turns on the NAV map's Mapbox switch |
+| `ModuleSpeechRecognizers` | 39 | voice control starts listening for "Hey Motohub"; it opens the offline recogniser from your model folder. Native libraries in the module jar under `lib/<abi>/` are on the loader's library path |
+| `ModuleVoiceBrain` | 40 | voice control needs its languages, the wake and yes/no words, or the meaning of a request. The app keeps the microphone, speech services, panel and actions (`ModuleVoiceHost`) |
 
 Where only one module can serve (the whole-screen projection, navigator), the app takes the
 **first installed** module that answers. That is a deliberate, predictable choice. A dashboard's
@@ -332,6 +334,45 @@ Keep one `MutableStateFlow` and set it from wherever the work starts and stops; 
 do. The app draws the pill itself, the same for every module, so `label` is the only thing you
 choose: the pill already says "live", so do not repeat it. A module that answers
 `ModuleLiveStatus` declares contract **27**, and needs ADV-SOLO 0.1.40 or later.
+
+---
+
+## A motion sensor on the motorcycle: `ModuleMotionSource`
+
+For a module that reads an IMU **fixed to the motorcycle** - over Bluetooth, USB, anything. While
+it streams, MOTO-HUB records lean, g-forces and yaw rate from it in every trip instead of from the
+phone, switches the phone's motion sensors off (its barometer stays), and the Ride Dashboard's
+lean, pitch, g-force and compass widgets show it. When the stream stops for a second and a half
+the phone takes over by itself; each record in the trip says which source it came from.
+
+```kotlin
+interface ModuleMotionSource {                     // a capability, since contract 43
+    fun addMotionListener(listener: ModuleMotionListener)
+    fun removeMotionListener(listener: ModuleMotionListener)
+}
+
+fun interface ModuleMotionListener { fun onMotion(sample: ModuleMotionSample) }
+
+class ModuleMotionSample(
+    val elapsedRealtimeNanos: Long,                // SystemClock.elapsedRealtimeNanos()
+    val leanDegrees: Float,                        // + right
+    val pitchDegrees: Float,                       // + nose up
+    val forwardG: Float, val leftG: Float, val upG: Float,   // specific force: 0, 0, +1 at rest
+    val rollRateRadiansPerSecond: Float,           // right-hand about forward: + leaning right
+    val pitchRateRadiansPerSecond: Float,          // right-hand about left: + nose DOWN
+    val yawRateRadiansPerSecond: Float,            // right-hand about up: + turning left
+    val magneticHeadingDegrees: Float? = null,
+    val zeroed: Boolean = false                    // the rider zeroed it upright
+)
+```
+
+The axes are the **motorcycle's** (x forward, y left, z up): undo the way your sensor is mounted
+before you call the listener, with your own switches or a zero if the sensor cannot know. Send
+what the sensor measures, gravity included; the app takes gravity out and turns the vector to the
+road itself, so every source reaches a trip the same way. Call the listener from any thread, as
+often as the sensor reports (20 Hz is plenty), and never let it throw back into your code. A
+module that answers `ModuleMotionSource` declares contract **43**. The WT9011 module in
+[`modules/wt9011`](../modules/wt9011) is a complete example.
 
 ---
 

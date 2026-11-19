@@ -176,8 +176,25 @@ object MotoHubModuleContract {
      *    so System.loadLibrary from the module finds its own. ModuleSpeechRecognizers, a new
      *    capability, is the offline recogniser voice control listens for "Hey Motohub" with.
      *    New type only; the minimum stays at 3.
+     * 40: voice control's mind in a module. ModuleVoiceBrain, a new capability: the languages, the
+     *    wake and yes/no words, what a request means and what to answer, while the app keeps the
+     *    microphone, the speech services, the panel and the actions (ModuleVoiceHost). New types
+     *    only, and ModuleAi.complete with a timeout - one attempt, no retry, for a rider waiting
+     *    on an answer; an append on the app's side. The minimum stays at 3.
+     * 41: voice control moves around MOTO-HUB itself. ModuleVoiceHost.pages, the app's own screens
+     *    (its tabs and every numbered Settings entry) the brain may open with
+     *    ModuleVoiceActions.PAGE_OPEN, and VOICE_MARK_WRONG, which marks the last request in the
+     *    app's voice journal for review. New members only; the minimum stays at 3.
+     * 42: the Compose a module borrows from the app goes from 1.7 to 1.11 (BOM 2026.06.00, Material3
+     *    1.4). Nothing in the contract's shape changed; the number only keeps a module compiled
+     *    against the newer Compose off an app that still carries the older one. The minimum stays
+     *    at 3: a module built against Compose 1.7 runs on 1.11.
+     * 43: a motion sensor on the motorcycle. ModuleMotionSource, a new capability, streams lean,
+     *    pitch, specific force and angular rate in the motorcycle's frame (ModuleMotionSample);
+     *    while it streams, the trip's sensor log and the Ride Dashboard use it instead of the
+     *    phone's sensors. New types only; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 39
+    const val CONTRACT_VERSION = 43
 
     /**
      * The oldest contract this app can still run.
@@ -377,6 +394,14 @@ interface ModuleAi {
      * call it off the main thread. [json] asks for a JSON object where the server honours it.
      */
     fun complete(system: String, user: String, maxTokens: Int, json: Boolean): String
+
+    /**
+     * [complete] for a caller that cannot wait: one attempt, no retry, failing after
+     * [timeoutMillis] (contract 40). The plain [complete] reads for up to 150 s and asks again
+     * when the provider is busy, right for a film's direction and wrong for a rider on the bike
+     * who spoke a request a few seconds ago.
+     */
+    fun complete(system: String, user: String, maxTokens: Int, json: Boolean, timeoutMillis: Int): String
 }
 
 /**

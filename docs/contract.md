@@ -132,7 +132,7 @@ These all come from real failures on real motorcycles.
 
 ## Versioning
 
-`MotoHubModuleContract.CONTRACT_VERSION` (currently **39**) is bumped whenever anything in
+`MotoHubModuleContract.CONTRACT_VERSION` (currently **43**) is bumped whenever anything in
 `io.motohub.android.module` changes shape. The contract **only grows by appending**: new
 capabilities, and new members on interfaces the *app* implements. An older module simply does
 not answer a capability it predates, and never calls a host member it does not know.
@@ -184,5 +184,9 @@ the KDoc of `MotoHubModuleContract`.
 | 37 | Nothing new in the contract's shape: the app is built with Kotlin 2.4 and lends a module that runtime. A module built with Kotlin 2.4 (this SDK) calls into its standard library where an older app has nothing, so it declares 37 to stay off apps before 0.1.54 | 0.1.54 |
 | 38 | `ModuleDiagnosticReports` (`canSendReports`, `supportId()`, `sendReport`): an optional interface the host implements, reached with `as?` or by name so a module still loads into older apps; the rider's Support ID and the report sent now | 0.1.56 |
 | 39 | Native libraries in a module (`lib/<abi>/` in the jar, unpacked after the signature check and made the module loader's library path); `ModuleSpeechRecognizers`, `ModuleSpeechRecognizer` (offline speech recognition against a small grammar) | 0.1.56 |
+| 40 | `ModuleVoiceBrain`, `ModuleVoiceHost` (voice control's languages, wake and yes/no words and the meaning of a request in a module; the app keeps the microphone, speech services, panel and actions); `ModuleAi.complete` with a timeout | 0.1.58 |
+| 41 | `ModuleVoiceHost.pages`, `ModuleVoicePage`; `ModuleVoiceActions.PAGE_OPEN`, `VOICE_MARK_WRONG` (voice control moves around MOTO-HUB's own screens) | 0.1.58 |
+| 42 | Nothing new in the contract's shape: the Compose a module borrows from the app goes from 1.7 to 1.11 | 0.1.67 |
+| 43 | `ModuleMotionSource`, `ModuleMotionListener`, `ModuleMotionSample` (a motion sensor on the motorcycle: trips and the Ride Dashboard use it instead of the phone's sensors) | 0.1.72 |
 
 This repository tags every contract release as `contract-<n>`.
