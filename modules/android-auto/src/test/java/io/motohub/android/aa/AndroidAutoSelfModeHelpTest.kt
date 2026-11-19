@@ -122,6 +122,14 @@ class AndroidAutoSelfModeHelpTest {
     }
 
     @Test
+    fun `a stuck head unit server is told to restart it, not to start Android Auto again`() {
+        // A rider's case: "start Android Auto again" sent the rider back into the same stuck server.
+        val message = AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STUCK_MESSAGE
+        assertTrue(message.contains("\"Stop head unit server\""))
+        assertTrue(message.contains("Force stop"))
+    }
+
+    @Test
     fun `an unreadable version is never flagged`() {
         // Guessing "broken" from a version we cannot parse would scare users off a working setup.
         assertFalse(AndroidAutoSelfModeHelp.isKnownBrokenVersion(null))

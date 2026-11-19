@@ -49,7 +49,7 @@ private class AndroidAutoModule(private val host: MotoHubModuleHost) : MotoHubMo
 
     override val manifest = ModuleManifest(
         id = "android-auto",
-        version = "0.2.31",
+        version = "0.2.32",
         contractVersion = 37,
         entryClass = AaPluginContract.ENTRY_CLASS,
         displayName = "Android Auto",
@@ -96,6 +96,8 @@ private class AaModule : ModuleProjection, ModuleNavigation, ModuleAccessoryProb
         ModuleReceiver(host, spec)
 
     override fun explainNoConnection(host: MotoHubModuleHost, connectedAtLeastOnce: Boolean): String = when {
+        connectedAtLeastOnce && AaReceiver.hasConnectedViaHeadUnitServerSinceStart() ->
+            AndroidAutoSelfModeHelp.HEAD_UNIT_SERVER_STUCK_MESSAGE
         connectedAtLeastOnce ->
             "Android Auto connected without delivering video. The session was closed; start " +
                 "Android Auto again."

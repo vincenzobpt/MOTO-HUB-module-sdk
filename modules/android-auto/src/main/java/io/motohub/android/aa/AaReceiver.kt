@@ -81,6 +81,17 @@ class AaReceiver(
         fun hasAndroidAutoConnectedSinceStart(): Boolean = androidAutoConnectedSinceStart
 
         /**
+         * Whether that connection came through Android Auto's head unit server on :5277, the one
+         * path whose stuck state the rider can clear by hand (stop and start the server, or
+         * force-stop Android Auto). 2026-11-18: AA 18.0 set up every channel 31 times
+         * and never started the video, then stopped answering the version request at all.
+         */
+        @Volatile
+        private var headUnitServerConnectedSinceStart = false
+
+        fun hasConnectedViaHeadUnitServerSinceStart(): Boolean = headUnitServerConnectedSinceStart
+
+        /**
          * The loopback port the listener actually holds: [PORT], or a free one when another app
          * on the phone already holds [PORT] (WB-49). Self-mode tells Android Auto to dial this one.
          */
@@ -237,6 +248,7 @@ class AaReceiver(
         running = true
         androidAutoConnected = false
         androidAutoConnectedSinceStart = false
+        headUnitServerConnectedSinceStart = false
         AaLog.sink = log
         ConscryptInitializer.initialize()
 
@@ -385,6 +397,7 @@ class AaReceiver(
             log("[AA] <<< connected to Android Auto's head unit server on :$HEAD_UNIT_SERVER_PORT")
             androidAutoConnected = true
             androidAutoConnectedSinceStart = true
+            headUnitServerConnectedSinceStart = true
             val started = runSession(socket)
             // Deliberately NOT a return. A session that ends - Android Auto restarting, the phone
             // going to sleep, the bike's Wi-Fi taking the process route down with it - leaves this
