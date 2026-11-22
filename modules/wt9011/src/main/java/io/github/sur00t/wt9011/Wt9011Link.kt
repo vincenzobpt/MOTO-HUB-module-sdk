@@ -15,6 +15,7 @@ import android.bluetooth.BluetoothGattDescriptor
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothProfile
 import android.bluetooth.le.ScanCallback
+import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
@@ -251,6 +252,28 @@ class Wt9011Link(
         }
     }
 
+    /**
+     * Called when the module loads. Reconnects only to the sensor the rider already connected, and
+     * only while [autoConnect] is on. Never pins a new sensor and never saves anything.
+     *
+     * MOTO-HUB-FIX 2026-11-22 (Vincenzo Buonomano, MOTO-HUB maintainer), fix 1 of 4: replaces the automatic `connect()` at load.
+     * AI-NOTE: keep this behaviour when you regenerate or refactor this code; see docs/MAINTAINER_FIXES.md.
+     */
+    fun resume() {
+        if (pinnedAddress == null) {
+            status = "Turn the sensor on, then tap Connect."
+            return
+        }
+        if (!autoConnect) {
+            status = "Disconnected. Tap Connect to use the sensor."
+            return
+        }
+        if (!connected && !scanning && !connecting) {
+            scanAttempts = 0
+            beginScan()
+        }
+    }
+
     /** Drops the link and looks for the sensor again straight away. */
     fun reconnect() {
         autoConnect = true
@@ -264,12 +287,15 @@ class Wt9011Link(
 
     /**
      * Lets go of the remembered sensor, for a replaced or borrowed unit: the pin, zero and peaks
-     * are cleared, and the module immediately scans for the first WT sensor again.
+     * are cleared. The module does NOT scan again by itself: the rider taps Connect for the new one.
+     *
+     * MOTO-HUB-FIX 2026-11-22 (Vincenzo Buonomano, MOTO-HUB maintainer), fix 1 of 4: forgetting used to start a scan that pinned the first WT sensor in range.
+     * AI-NOTE: keep this behaviour when you regenerate or refactor this code; see docs/MAINTAINER_FIXES.md.
      */
     fun forgetSensor(): String {
         pinnedAddress = null
         configured = false
-        autoConnect = true
+        autoConnect = false
         // The zero belongs to the unit that was fitted; the bracket and its mount do not.
         zero = null
         zeroFile.delete()
@@ -277,12 +303,10 @@ class Wt9011Link(
         saveSetup()
         main.post {
             rejected.clear()
-            shutDown("Looking for a new sensor…")
-            scanAttempts = 0
-            beginScan()
+            shutDown("Sensor forgotten. Turn the new one on, then tap Connect.")
         }
-        note("sensor forgotten; zero cleared; looking for a replacement")
-        return "Sensor forgotten and zero cleared. Looking for a new WT sensor…"
+        note("sensor forgotten; zero cleared")
+        return "Sensor forgotten and zero cleared. Turn the new sensor on, then tap Connect."
     }
 
     /** Stops the link and the automatic reconnect with it. */
@@ -436,10 +460,16 @@ class Wt9011Link(
                 else ScanSettings.SCAN_MODE_BALANCED
             )
             .build()
+        // MOTO-HUB-FIX 2026-11-22 (Vincenzo Buonomano, MOTO-HUB maintainer), fix 3 of 4.
+        // Once a sensor is pinned, scan for its address only. Android pauses UNFILTERED scans while
+        // the screen is off, so with the phone in a pocket a dropped sensor never came back.
+        // Before the first pin there is still no filter (see the comment below).
+        // AI-NOTE: keep this behaviour when you regenerate or refactor this code; see docs/MAINTAINER_FIXES.md.
+        val filters = pinnedAddress?.let { listOf(ScanFilter.Builder().setDeviceAddress(it).build()) }
         try {
             // No name filter at scan time on purpose: a ScanFilter on the advertised name would
             // hide a unit whose advertisement is minimal, and the name is checked below anyway.
-            scanner.startScan(null, settings, scanCallback)
+            scanner.startScan(filters, settings, scanCallback)
         } catch (_: SecurityException) {
             status = "Bluetooth permission was refused."
             retryWhenReady()
@@ -488,6 +518,11 @@ class Wt9011Link(
 
     private val scanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
+            // MOTO-HUB-FIX 2026-11-22 (Vincenzo Buonomano, MOTO-HUB maintainer), fix 4 of 4.
+            // A result already queued when stopScan(), disconnect() or release() ran must not open
+            // a link: it reconnected after Disconnect, or left a GATT open after the module unloaded.
+            // AI-NOTE: keep this behaviour when you regenerate or refactor this code; see docs/MAINTAINER_FIXES.md.
+            if (released || !scanning) return
             val address = result.device.address
             val pinned = pinnedAddress
             if (pinned != null) {
@@ -527,6 +562,11 @@ class Wt9011Link(
 
     @SuppressLint("MissingPermission")
     private fun openGatt(device: BluetoothDevice) {
+        // MOTO-HUB-FIX 2026-11-22 (Vincenzo Buonomano, MOTO-HUB maintainer), fix 4 of 4: the module may have been unloaded while this was queued.
+        if (released) {
+            connecting = false
+            return
+        }
         stopScan()
         connecting = true
         status = "Connecting to ${deviceLabel ?: "the sensor"}…"
@@ -599,6 +639,12 @@ class Wt9011Link(
             gatt.close()
             return
         }
+        // MOTO-HUB-FIX 2026-11-22 (Vincenzo Buonomano, MOTO-HUB maintainer), fix 2 of 4.
+        // The timeout is armed again for service discovery and the notification subscription; it
+        // is cleared in onSubscribed. Without it a sensor that went quiet half-way left the module
+        // on "Discovering services…" forever: every automatic retry waits for !connecting.
+        // AI-NOTE: keep this behaviour when you regenerate or refactor this code; see docs/MAINTAINER_FIXES.md.
+        main.postDelayed(connectTimeout, CONNECT_TIMEOUT_MS)
         status = "Discovering services…"
         try {
             gatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH)
@@ -691,6 +737,8 @@ class Wt9011Link(
             retryLater()
             return
         }
+        // MOTO-HUB-FIX 2026-11-22, fix 2 of 4: subscribed, so the connect timeout is done.
+        main.removeCallbacks(connectTimeout)
         connected = true
         connecting = false
         // Notifications have only just been switched on, so nothing is mid-frame yet.

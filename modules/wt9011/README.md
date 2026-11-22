@@ -77,15 +77,16 @@ The bracket is the calibration, so it has to be right before the sensor is bolte
   keep the harness a hand-width from it, and route the wires away from the phase cables.
 - **Rigid.** A bracket that flexes reads as lean. The sensor must not move relative to the frame.
 
-## First install: automatic connect, configure once
+## First install: connect once, configure once
 
-The module starts scanning for a WT sensor as soon as it is loaded, and keeps retrying while it is
-running. The first sensor whose name starts with `WT` is **remembered by address**: from then on the
-module only ever talks to that sensor and never touches anything else - not another rider's
-WitMotion at a meeting. Because the first scan is automatic, keep other WT units out of range on the
-first install. **Forget this sensor** clears the pin and immediately scans for a replacement.
-A manual **Disconnect** stops the search for the current session; the next time the module is
-loaded it looks again.
+Nothing happens until the rider taps **Connect** the first time. That connection takes the first
+sensor whose name starts with `WT` and **remembers its address**: from then on the module only ever
+talks to that sensor, reconnects to it by itself, and never touches anything else - not another
+rider's WitMotion at a meeting. **Forget this sensor** lets go of it; tap **Connect** for the new
+one. A manual **Disconnect** is remembered until the next **Connect**.
+
+Maintainer changes on top of sur00t's version are listed in
+[`docs/MAINTAINER_FIXES.md`](docs/MAINTAINER_FIXES.md).
 
 The sensor keeps its settings across power cycles, so the setup block runs **once per install**
 (on that first connection), again when the mounting direction changes between flat and on-edge, again

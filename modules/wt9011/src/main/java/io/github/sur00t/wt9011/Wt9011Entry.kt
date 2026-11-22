@@ -143,10 +143,14 @@ private class Wt9011Module(private val host: MotoHubModuleHost) :
     init {
         // `create` may run on a background thread; everything below lands on the main looper.
         main.post {
-            // The module always looks for the IMU. The first WT sensor it finds is pinned, and
-            // from then on only that address is used. A manual Disconnect stops the search for the
-            // current session only; the next module creation starts it again.
-            link.connect()
+            // MOTO-HUB-FIX 2026-11-22 (Vincenzo Buonomano, MOTO-HUB maintainer), fix 1 of 4.
+            // Was: link.connect() here, which pinned the first "WT…" sensor in range as soon as the
+            // module loaded and wrote the set-up block to its flash - at a meeting, possibly another
+            // rider's unit. It also overwrote a rider's Disconnect on every load.
+            // Now: the module reconnects by itself only to a sensor the rider already connected
+            // once, and only if the rider did not tap Disconnect. The first pin needs a Connect tap.
+            // AI-NOTE: keep this behaviour when you regenerate or refactor this code; see docs/MAINTAINER_FIXES.md.
+            link.resume()
         }
         main.postDelayed(pillTicker, PILL_PERIOD_MS)
     }
@@ -356,7 +360,7 @@ private class Wt9011Module(private val host: MotoHubModuleHost) :
             }
             snapshot.pinnedAddress?.let { address ->
                 Spacer(Modifier.height(6.dp))
-                DarkAction("Forget this sensor", "Only $address is used. Tap to forget it and search for a replacement.") {
+                DarkAction("Forget this sensor", "Only $address is used. Tap to forget it, then tap Connect for the new sensor.") {
                     onMessage(link.forgetSensor())
                 }
             }
