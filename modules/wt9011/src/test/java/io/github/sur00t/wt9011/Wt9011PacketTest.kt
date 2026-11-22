@@ -122,29 +122,26 @@ class Wt9011PacketTest {
     }
 
     @Test
-    fun appliesTheAxisCandidateWithoutLosingTheOtherField() {
-        // Which wire field is lean depends on Wt9011Axes.LEAN_IS_PITCH; whichever it is, lean and
-        // nose must come from different fields or T2 and T3 can never be told apart on the bench.
+    fun defaultMountTakesLeanFromPitchAndNoseFromRoll() {
+        // The documented default: long axis forward, printed +X to the bike's right. Lean is the
+        // Pitch field (bytes 16-17) and nose is Roll (14-15); if these ever swap, T2/T3 catch it.
         val frame = dataFrame(roll = toRaw(20f), pitch = toRaw(-8f))
         val raw = decodeSample(frame, seq = 0, sensorMillis = 0L)!!.raw
         val packet = decodeSample(frame, seq = 0, sensorMillis = 0L)!!.packet
 
-        val expectedLean = if (Wt9011Axes.LEAN_IS_PITCH) raw.pitchDeg else raw.rollDeg
-        val expectedNose = if (Wt9011Axes.LEAN_IS_PITCH) raw.rollDeg else raw.pitchDeg
-        assertEquals(expectedLean * Wt9011Axes.LEAN_SIGN, packet.leanDeg, 0.001f)
-        assertEquals(expectedNose * Wt9011Axes.PITCH_SIGN, packet.pitchDeg, 0.001f)
+        assertEquals(raw.pitchDeg * Wt9011Axes.LEAN_SIGN, packet.leanDeg, 0.001f)
+        assertEquals(raw.rollDeg * Wt9011Axes.PITCH_SIGN, packet.pitchDeg, 0.001f)
         assertTrue("lean and nose must not be the same channel", packet.leanDeg != packet.pitchDeg)
     }
 
     @Test
-    fun mapsForwardAndRightGravityPerAxisCandidate() {
+    fun mapsForwardAndRightGravityForTheDefaultMount() {
         val frame = dataFrame(ax = toRawG(0.5f), ay = toRawG(0.25f), az = toRawG(1f))
         val packet = decodeSample(frame, seq = 0, sensorMillis = 0L)!!.packet
 
-        val expectedForward = if (Wt9011Axes.LEAN_IS_PITCH) 0.25f else 0.5f
-        val expectedRight = if (Wt9011Axes.LEAN_IS_PITCH) 0.5f else -0.25f
-        assertEquals(expectedForward * Wt9011Axes.ACC_SIGN, packet.longG, 0.001f)
-        assertEquals(expectedRight * Wt9011Axes.ACC_SIGN, packet.latG, 0.001f)
+        // Default mount: printed +Y (AY) is forward, printed +X (AX) is right.
+        assertEquals(0.25f * Wt9011Axes.ACC_SIGN, packet.longG, 0.001f)
+        assertEquals(0.5f * Wt9011Axes.ACC_SIGN, packet.latG, 0.001f)
         assertEquals(1f * Wt9011Axes.ACC_SIGN, packet.vertG, 0.001f)
     }
 
@@ -178,9 +175,9 @@ class Wt9011PacketTest {
     @Test
     fun parserCountsSequencesAcrossChunks() {
         val parser = Wt9011FrameParser()
-        val first = parser.feed(dataFrame(roll = toRaw(1f)), 1_000L)
-        val second = parser.feed(dataFrame(roll = toRaw(2f)), 1_050L)
-        val third = parser.feed(dataFrame(roll = toRaw(3f)), 1_100L)
+        val first = parser.feed(dataFrame(pitch = toRaw(1f)), 1_000L)
+        val second = parser.feed(dataFrame(pitch = toRaw(2f)), 1_050L)
+        val third = parser.feed(dataFrame(pitch = toRaw(3f)), 1_100L)
 
         val samples = (first + second + third).map { (it as Wt9011Frame.Sample).sample }
         assertEquals(3, samples.size)
@@ -191,7 +188,7 @@ class Wt9011PacketTest {
     @Test
     fun parserReassemblesAFrameSplitAcrossNotifications() {
         val parser = Wt9011FrameParser()
-        val frame = dataFrame(roll = toRaw(12.5f))
+        val frame = dataFrame(pitch = toRaw(12.5f))
         val head = parser.feed(frame.copyOfRange(0, 7), 1_000L)
         val tail = parser.feed(frame.copyOfRange(7, frame.size), 1_010L)
 
@@ -204,7 +201,7 @@ class Wt9011PacketTest {
     @Test
     fun parserDeliversTwoFramesFromOneNotification() {
         val parser = Wt9011FrameParser()
-        val chunk = dataFrame(roll = toRaw(1f)) + dataFrame(roll = toRaw(2f))
+        val chunk = dataFrame(pitch = toRaw(1f)) + dataFrame(pitch = toRaw(2f))
         val frames = parser.feed(chunk, 1_000L)
 
         assertEquals(2, frames.size)
@@ -215,7 +212,7 @@ class Wt9011PacketTest {
     @Test
     fun parserResynchronisesAfterGarbage() {
         val parser = Wt9011FrameParser()
-        val chunk = byteArrayOf(0x00, 0x42, 0x7F) + dataFrame(roll = toRaw(9f))
+        val chunk = byteArrayOf(0x00, 0x42, 0x7F) + dataFrame(pitch = toRaw(9f))
         val frames = parser.feed(chunk, 1_000L)
 
         assertEquals(1, frames.size)
@@ -227,7 +224,7 @@ class Wt9011PacketTest {
         // A truncated frame followed by a whole one: 55 55 61 ... The vendor's own SDK drops two
         // bytes here (a `&&` where `||` was meant) and swallows the next header; this must not.
         val parser = Wt9011FrameParser()
-        val chunk = byteArrayOf(Wt9011Protocol.HEADER.toByte()) + dataFrame(roll = toRaw(45f))
+        val chunk = byteArrayOf(Wt9011Protocol.HEADER.toByte()) + dataFrame(pitch = toRaw(45f))
         val frames = parser.feed(chunk, 1_000L)
 
         assertEquals(1, frames.size)
@@ -238,7 +235,7 @@ class Wt9011PacketTest {
     fun parserHandsRegisterRepliesOutAsTheyArrive() {
         val parser = Wt9011FrameParser()
         val reply = registerFrame(Wt9011Protocol.REG_BATTERY, 399, 0, 0, 0, 0, 0, 0, 0)
-        val chunk = dataFrame(roll = toRaw(3f)) + reply + dataFrame(roll = toRaw(4f))
+        val chunk = dataFrame(pitch = toRaw(3f)) + reply + dataFrame(pitch = toRaw(4f))
         val frames = parser.feed(chunk, 1_000L)
 
         assertEquals(3, frames.size)
@@ -337,30 +334,211 @@ class Wt9011PacketTest {
         assertNull(zeroRefusal(sampleOf(vertG = 1f)))
     }
 
-    // ---- mounting switches --------------------------------------------------------------------
+    // ---- directional peaks ----------------------------------------------------------------
 
     @Test
-    fun mountingSwitchesFlipTheirOwnPairOnly() {
-        val packet = sampleOf(leanDeg = 10f, pitchDeg = 5f, yawDeg = 30f, longG = 0.1f, latG = 0.2f, vertG = 0.9f)
-        val defaults = Mounting.NONE.apply(packet)
-        assertEquals(10f, defaults.leanDeg, 0.001f)
+    fun peaksTrackDirectionalMaximaAtEverySample() {
+        val peaks = Peaks()
+        peaks.add(sampleOf(leanDeg = -10f, latG = -0.3f, longG = 0.2f))
+        peaks.add(sampleOf(leanDeg = 5f, latG = 0.4f, longG = -0.5f))
+        peaks.add(sampleOf(leanDeg = 20f, latG = 0.1f, longG = 0.1f))
 
-        val nose = Mounting(flipNose = true, flipSide = false).apply(packet)
-        assertEquals(10f, nose.leanDeg, 0.001f)
-        assertEquals(-5f, nose.pitchDeg, 0.001f)
-        assertEquals(-0.1f, nose.longG, 0.001f)
-        assertEquals(0.2f, nose.latG, 0.001f)
+        assertEquals(10f, peaks.maxLeftLean, 1e-4f)
+        assertEquals(20f, peaks.maxRightLean, 1e-4f)
+        assertEquals(0.3f, peaks.maxLeftG, 1e-4f)
+        assertEquals(0.4f, peaks.maxRightG, 1e-4f)
+        assertEquals(0.2f, peaks.maxAccel, 1e-4f)
+        assertEquals(0.5f, peaks.maxBrake, 1e-4f)
 
-        val side = Mounting(flipNose = false, flipSide = true).apply(packet)
-        assertEquals(-10f, side.leanDeg, 0.001f)
-        assertEquals(5f, side.pitchDeg, 0.001f)
-        assertEquals(0.1f, side.longG, 0.001f)
-        assertEquals(-0.2f, side.latG, 0.001f)
+        // A snapshot is independent of the live tracker.
+        val copy = peaks.copyOf()
+        peaks.reset()
+        assertEquals(10f, copy.maxLeftLean, 1e-4f)
+        assertEquals(0.4f, copy.maxRightG, 1e-4f)
 
-        // Bearing and vertical g describe the world, not the bracket: flipping must not touch them.
-        assertEquals(30f, side.yawDeg, 0.001f)
-        assertEquals(0.9f, side.vertG, 0.001f)
+        assertEquals(0f, peaks.maxLeftLean, 0f)
+        assertEquals(0f, peaks.maxRightLean, 0f)
+        assertEquals(0f, peaks.maxLeftG, 0f)
+        assertEquals(0f, peaks.maxRightG, 0f)
+        assertEquals(0f, peaks.maxAccel, 0f)
+        assertEquals(0f, peaks.maxBrake, 0f)
     }
+
+    // ---- eight flat mounts --------------------------------------------------------------------
+
+    @Test
+    fun mountRotationsMapAllEightFlatOrientations() {
+        val packet = sampleOf(
+            leanDeg = 10f,
+            pitchDeg = 5f,
+            yawDeg = 30f,
+            longG = 0.1f,
+            latG = 0.2f,
+            vertG = 0.9f
+        ).copy(rollRate = 0.11f, pitchRate = 0.22f, yawRate = 0.33f)
+
+        val expectations = listOf(
+            MountExpect(MountPosition(MountYaw.FRONT, MountFace.UP), 10f, 5f, 0.1f, 0.2f, 0.11f, 0.22f, 30f, 0.33f),
+            MountExpect(MountPosition(MountYaw.RIGHT, MountFace.UP), -5f, 10f, -0.2f, 0.1f, 0.22f, -0.11f, -60f, 0.33f),
+            MountExpect(MountPosition(MountYaw.BACK, MountFace.UP), -10f, -5f, -0.1f, -0.2f, -0.11f, -0.22f, -150f, 0.33f),
+            MountExpect(MountPosition(MountYaw.LEFT, MountFace.UP), 5f, -10f, 0.2f, -0.1f, -0.22f, 0.11f, 120f, 0.33f),
+            MountExpect(MountPosition(MountYaw.FRONT, MountFace.DOWN), 10f, -5f, 0.1f, -0.2f, 0.11f, -0.22f, 150f, -0.33f),
+            MountExpect(MountPosition(MountYaw.RIGHT, MountFace.DOWN), 5f, 10f, 0.2f, 0.1f, -0.22f, -0.11f, 60f, -0.33f),
+            MountExpect(MountPosition(MountYaw.BACK, MountFace.DOWN), -10f, 5f, -0.1f, 0.2f, -0.11f, 0.22f, -30f, -0.33f),
+            MountExpect(MountPosition(MountYaw.LEFT, MountFace.DOWN), -5f, -10f, -0.2f, -0.1f, 0.22f, 0.11f, -120f, -0.33f)
+        )
+
+        for (expected in expectations) {
+            val actual = expected.position.apply(packet)
+            val tag = expected.position.toString()
+            assertEquals("$tag lean", expected.leanDeg, actual.leanDeg, 1e-4f)
+            assertEquals("$tag nose", expected.pitchDeg, actual.pitchDeg, 1e-4f)
+            assertEquals("$tag forward g", expected.longG, actual.longG, 1e-4f)
+            assertEquals("$tag lateral g", expected.latG, actual.latG, 1e-4f)
+            assertEquals(
+                "$tag vertical g",
+                if (expected.position.face == MountFace.DOWN) -0.9f else 0.9f,
+                actual.vertG,
+                1e-4f
+            )
+            assertEquals("$tag roll rate", expected.rollRate, actual.rollRate, 1e-4f)
+            assertEquals("$tag pitch rate", expected.pitchRate, actual.pitchRate, 1e-4f)
+            assertEquals("$tag yaw rate", expected.yawRate, actual.yawRate, 1e-4f)
+            assertEquals(
+                "$tag heading",
+                wrap180(expected.yawDeg + Wt9011Axes.YAW_OFFSET_DEG),
+                actual.yawDeg,
+                1e-4f
+            )
+        }
+    }
+
+    @Test
+    fun defaultMountIsLabelUpLongAxisForward() {
+        assertEquals(MountPosition(MountYaw.FRONT, MountFace.UP), MountPosition.DEFAULT)
+        assertTrue(MountPosition.DEFAULT.isDefault)
+        assertTrue(!MountPosition(MountYaw.RIGHT, MountFace.UP).isDefault)
+        assertTrue(!MountPosition(MountYaw.FRONT, MountFace.DOWN).isDefault)
+    }
+
+    @Test
+    fun zeroCapturedAfterTheMountLevelsEveryOrientation() {
+        // The zero belongs to the frame the mount defines: the screen zeros the already-mounted
+        // packet, and the same mount keeps applying afterwards. A face-down mount must still end
+        // with +1 g up, which is what the vertical-g negation in MountPosition is for.
+        val atRest = sampleOf(leanDeg = 3f, pitchDeg = -2f, longG = 0.02f, latG = -0.01f, vertG = 1f)
+
+        for (yaw in MountYaw.values()) {
+            for (face in MountFace.values()) {
+                val position = MountPosition(yaw, face)
+                val mounted = position.apply(atRest)
+                val zero = Zero.of(mounted, takenAt = 0L)!!
+                val zeroed = zero.apply(mounted)
+                assertEquals("$yaw/$face lean", 0f, zeroed.leanDeg, 0.02f)
+                assertEquals("$yaw/$face nose", 0f, zeroed.pitchDeg, 0.02f)
+                assertEquals("$yaw/$face forward g", 0f, zeroed.longG, 0.02f)
+                assertEquals("$yaw/$face lateral g", 0f, zeroed.latG, 0.02f)
+                assertEquals("$yaw/$face vertical g", 1f, zeroed.vertG, 0.02f)
+            }
+        }
+    }
+
+    /** One row of the eight-orientation table. */
+    private data class MountExpect(
+        val position: MountPosition,
+        val leanDeg: Float,
+        val pitchDeg: Float,
+        val longG: Float,
+        val latG: Float,
+        val rollRate: Float,
+        val pitchRate: Float,
+        val yawDeg: Float,
+        val yawRate: Float
+    )
+
+    // ---- four on-edge mounts ------------------------------------------------------------------
+
+    @Test
+    fun verticalMountsMapTheFourLabelDirections() {
+        // The packet is what the firmware sends in vertical mode: angles, accelerometer and gyro
+        // are all in the same virtual flat frame (the firmware has already put +Y on its +Z).
+        val packet = sampleOf(
+            leanDeg = 10f,
+            pitchDeg = 5f,
+            yawDeg = 30f,
+            longG = 0.1f,
+            latG = 0.2f,
+            vertG = 0.9f
+        ).copy(rollRate = 0.11f, pitchRate = 0.22f, yawRate = 0.33f)
+
+        val expectations = listOf(
+            VerticalExpect(MountYaw.FRONT, -10f, -5f, -0.1f, -0.2f, -0.11f, -0.22f, 0.33f, -150f),
+            VerticalExpect(MountYaw.RIGHT, 5f, -10f, 0.2f, -0.1f, -0.22f, 0.11f, 0.33f, 120f),
+            VerticalExpect(MountYaw.BACK, 10f, 5f, 0.1f, 0.2f, 0.11f, 0.22f, 0.33f, 30f),
+            VerticalExpect(MountYaw.LEFT, -5f, 10f, -0.2f, 0.1f, 0.22f, -0.11f, 0.33f, -60f)
+        )
+
+        for (expected in expectations) {
+            val position = MountPosition(expected.yaw, MountFace.UP, MountPlane.VERTICAL)
+            val actual = position.apply(packet)
+            val tag = "vertical ${expected.yaw}"
+            assertEquals("$tag lean", expected.leanDeg, actual.leanDeg, 1e-4f)
+            assertEquals("$tag nose", expected.pitchDeg, actual.pitchDeg, 1e-4f)
+            assertEquals("$tag forward g", expected.longG, actual.longG, 1e-4f)
+            assertEquals("$tag lateral g", expected.latG, actual.latG, 1e-4f)
+            assertEquals("$tag vertical g", 0.9f, actual.vertG, 1e-4f)
+            assertEquals("$tag roll rate", expected.rollRate, actual.rollRate, 1e-4f)
+            assertEquals("$tag pitch rate", expected.pitchRate, actual.pitchRate, 1e-4f)
+            assertEquals("$tag yaw rate", expected.yawRate, actual.yawRate, 1e-4f)
+            assertEquals("$tag heading", expected.yawDeg, actual.yawDeg, 1e-4f)
+        }
+    }
+
+    @Test
+    fun zeroCapturedAfterAMountLevelsEveryOnEdgeOrientation() {
+        // In vertical mode the firmware has already put the sensor's +Y on its virtual +Z, so an
+        // upright bike arrives as vertG = 1, not as longG = 1. Every label direction must preserve
+        // that vertical axis; the old physical assumption is what made ZERO refuse with
+        // "vertical axis reads -0.01 g".
+        val atRest = sampleOf(leanDeg = 0f, pitchDeg = 0f, longG = 0f, latG = 0f, vertG = 1f)
+
+        for (yaw in MountYaw.values()) {
+            val position = MountPosition(yaw, MountFace.UP, MountPlane.VERTICAL)
+            val mounted = position.apply(atRest)
+            assertEquals("$yaw vertical g", 1f, mounted.vertG, 0.001f)
+            assertEquals("$yaw lean", 0f, mounted.leanDeg, 0.001f)
+            assertEquals("$yaw nose", 0f, mounted.pitchDeg, 0.001f)
+            assertNull("$yaw refusal", zeroRefusal(mounted))
+            val zero = Zero.of(mounted, takenAt = 0L)!!
+            val zeroed = zero.apply(mounted)
+            assertEquals("$yaw zeroed lean", 0f, zeroed.leanDeg, 0.01f)
+            assertEquals("$yaw zeroed nose", 0f, zeroed.pitchDeg, 0.01f)
+            assertEquals("$yaw zeroed vertical g", 1f, zeroed.vertG, 0.01f)
+        }
+    }
+
+    @Test
+    fun onEdgeMountsHaveNoLabelUpOrDownChoice() {
+        assertTrue(
+            "an on-edge mount cannot also be label-down",
+            runCatching {
+                MountPosition(MountYaw.FRONT, MountFace.DOWN, MountPlane.VERTICAL)
+            }.isFailure
+        )
+    }
+
+    /** One row of the four on-edge directions. */
+    private data class VerticalExpect(
+        val yaw: MountYaw,
+        val leanDeg: Float,
+        val pitchDeg: Float,
+        val longG: Float,
+        val latG: Float,
+        val rollRate: Float,
+        val pitchRate: Float,
+        val yawRate: Float,
+        val yawDeg: Float
+    )
 
     // ---- angles -------------------------------------------------------------------------------
 
@@ -395,12 +573,18 @@ class Wt9011PacketTest {
         assertEquals(7, setup.size)
         assertEquals(Wt9011Protocol.unlock().toList(), setup[0].toList())
         assertEquals(Wt9011Protocol.outputAccelGyroAngle().toList(), setup[1].toList())
-        assertEquals(Wt9011Protocol.rate20Hz().toList(), setup[2].toList())
-        assertEquals(Wt9011Protocol.bandwidth42Hz().toList(), setup[3].toList())
+        assertEquals(Wt9011Protocol.rate100Hz().toList(), setup[2].toList())
+        assertEquals(Wt9011Protocol.bandwidth256Hz().toList(), setup[3].toList())
         assertEquals(Wt9011Protocol.algorithm9Axis().toList(), setup[4].toList())
         assertEquals(Wt9011Protocol.installHorizontal().toList(), setup[5].toList())
         assertEquals(Wt9011Protocol.save().toList(), setup[6].toList())
         assertTrue("the save must come last", setup.all { it.size <= 20 })
+
+        // An on-edge mount writes the vertical installation direction instead.
+        val onEdge = Wt9011Protocol.setup(vertical = true)
+        assertEquals(7, onEdge.size)
+        assertEquals(Wt9011Protocol.installVertical().toList(), onEdge[5].toList())
+        assertEquals(Wt9011Protocol.save().toList(), onEdge[6].toList())
     }
 
     @Test
@@ -408,10 +592,14 @@ class Wt9011PacketTest {
         assertEquals(listOf(0xFF, 0xAA, 0x69, 0x88, 0xB5), bytes(Wt9011Protocol.unlock()))
         assertEquals(listOf(0xFF, 0xAA, 0x96, 0x00, 0x00), bytes(Wt9011Protocol.outputAccelGyroAngle()))
         assertEquals(listOf(0xFF, 0xAA, 0x03, 0x07, 0x00), bytes(Wt9011Protocol.rate20Hz()))
+        assertEquals(listOf(0xFF, 0xAA, 0x03, 0x09, 0x00), bytes(Wt9011Protocol.rate100Hz()))
         assertEquals(listOf(0xFF, 0xAA, 0x03, 0x06, 0x00), bytes(Wt9011Protocol.rate10Hz()))
         assertEquals(listOf(0xFF, 0xAA, 0x1F, 0x03, 0x00), bytes(Wt9011Protocol.bandwidth42Hz()))
+        assertEquals(listOf(0xFF, 0xAA, 0x1F, 0x01, 0x00), bytes(Wt9011Protocol.bandwidth188Hz()))
+        assertEquals(listOf(0xFF, 0xAA, 0x1F, 0x00, 0x00), bytes(Wt9011Protocol.bandwidth256Hz()))
         assertEquals(listOf(0xFF, 0xAA, 0x24, 0x00, 0x00), bytes(Wt9011Protocol.algorithm9Axis()))
         assertEquals(listOf(0xFF, 0xAA, 0x23, 0x00, 0x00), bytes(Wt9011Protocol.installHorizontal()))
+        assertEquals(listOf(0xFF, 0xAA, 0x23, 0x01, 0x00), bytes(Wt9011Protocol.installVertical()))
         assertEquals(listOf(0xFF, 0xAA, 0x00, 0x00, 0x00), bytes(Wt9011Protocol.save()))
         // A register read names the register low byte first, and 0x64 is one byte.
         assertEquals(listOf(0xFF, 0xAA, 0x27, 0x64, 0x00), bytes(Wt9011Protocol.readRegister(0x64)))
@@ -478,24 +666,11 @@ class Wt9011PacketTest {
         assertEquals(30f, sample.raw.wz, 0.1f)
 
         val toRad = (Math.PI / 180.0).toFloat()
-        val forward = if (Wt9011Axes.LEAN_IS_PITCH) sample.raw.wy else sample.raw.wx
-        val left = if (Wt9011Axes.LEAN_IS_PITCH) -sample.raw.wx else sample.raw.wy
-        assertEquals(forward * toRad * Wt9011Axes.GYRO_SIGN, sample.packet.rollRate, 1e-4f)
-        assertEquals(left * toRad * Wt9011Axes.GYRO_SIGN, sample.packet.pitchRate, 1e-4f)
+        // Default mount: forward is printed +Y (WY). The left axis is -printed +X, so the
+        // left-axis rate is -WX; pitchRate is positive nose-down, which is exactly that.
+        assertEquals(sample.raw.wy * toRad * Wt9011Axes.GYRO_SIGN, sample.packet.rollRate, 1e-4f)
+        assertEquals(-sample.raw.wx * toRad * Wt9011Axes.GYRO_SIGN, sample.packet.pitchRate, 1e-4f)
         assertEquals(sample.raw.wz * toRad * Wt9011Axes.GYRO_SIGN, sample.packet.yawRate, 1e-4f)
-    }
-
-    @Test
-    fun theSwitchesFlipTheRatesWithTheirAnglesAndLeaveTheYawRate() {
-        val packet = sampleOf(leanDeg = 10f, pitchDeg = 5f).copy(rollRate = 0.1f, pitchRate = 0.2f, yawRate = 0.3f)
-        val side = packet.oriented(flipNose = false, flipSide = true)
-        assertEquals(-0.1f, side.rollRate, 1e-6f)
-        assertEquals(0.2f, side.pitchRate, 1e-6f)
-        assertEquals(0.3f, side.yawRate, 1e-6f)
-        val nose = packet.oriented(flipNose = true, flipSide = false)
-        assertEquals(0.1f, nose.rollRate, 1e-6f)
-        assertEquals(-0.2f, nose.pitchRate, 1e-6f)
-        assertEquals(0.3f, nose.yawRate, 1e-6f)
     }
 
     @Test

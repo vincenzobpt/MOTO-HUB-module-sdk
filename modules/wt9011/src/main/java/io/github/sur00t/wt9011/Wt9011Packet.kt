@@ -87,13 +87,20 @@ object Wt9011Protocol {
      * seconds of the unlock. See doc §5.4: this is flash-backed on the device, so it runs once per
      * install, not on every connection.
      */
-    fun setup(): List<ByteArray> = listOf(
+    /**
+     * The settings block, in the order the device expects.
+     *
+     * [vertical] selects the installation direction. The sensor's own vertical mode requires the
+     * printed +Y arrow to point up, so it is written only for an on-edge mount; every flat mount
+     * keeps the default horizontal mode.
+     */
+    fun setup(vertical: Boolean = false): List<ByteArray> = listOf(
         unlock(),
         outputAccelGyroAngle(),
-        rate20Hz(),
-        bandwidth42Hz(),
+        rate100Hz(),
+        bandwidth256Hz(),
         algorithm9Axis(),
-        installHorizontal(),
+        if (vertical) installVertical() else installHorizontal(),
         save()
     )
 
@@ -106,17 +113,32 @@ object Wt9011Protocol {
     /** `FF AA 03 07 00` - 20 Hz output rate. */
     fun rate20Hz(): ByteArray = cmd(0xFF, 0xAA, 0x03, 0x07, 0x00)
 
+    /** `FF AA 03 09 00` - 100 Hz output rate, used by the setup block. */
+    fun rate100Hz(): ByteArray = cmd(0xFF, 0xAA, 0x03, 0x09, 0x00)
+
     /** `FF AA 03 06 00` - 10 Hz output rate, the device's own default. */
     fun rate10Hz(): ByteArray = cmd(0xFF, 0xAA, 0x03, 0x06, 0x00)
 
     /** `FF AA 1F 03 00` - 42 Hz bandwidth, at least twice the output rate. */
     fun bandwidth42Hz(): ByteArray = cmd(0xFF, 0xAA, 0x1F, 0x03, 0x00)
 
+    /** `FF AA 1F 01 00` - 188 Hz bandwidth (reference; below 2× the 100 Hz output rate). */
+    fun bandwidth188Hz(): ByteArray = cmd(0xFF, 0xAA, 0x1F, 0x01, 0x00)
+
+    /** `FF AA 1F 00 00` - 256 Hz bandwidth, at least twice the 100 Hz output rate. */
+    fun bandwidth256Hz(): ByteArray = cmd(0xFF, 0xAA, 0x1F, 0x00, 0x00)
+
     /** `FF AA 24 00 00` - 9-axis fusion, the only mode that gives an absolute heading. */
     fun algorithm9Axis(): ByteArray = cmd(0xFF, 0xAA, 0x24, 0x00, 0x00)
 
-    /** `FF AA 23 00 00` - horizontal install (Z up). The vertical path is never used here. */
+    /** `FF AA 23 00 00` - horizontal install (Z up), the flat bracket. */
     fun installHorizontal(): ByteArray = cmd(0xFF, 0xAA, 0x23, 0x00, 0x00)
+
+    /**
+     * `FF AA 23 01 00` - vertical install. WitMotion requires the printed **+Y** arrow to point
+     * up; the board then stands on its edge with the label face horizontal.
+     */
+    fun installVertical(): ByteArray = cmd(0xFF, 0xAA, 0x23, 0x01, 0x00)
 
     /** `FF AA 00 00 00` - save to flash. */
     fun save(): ByteArray = cmd(0xFF, 0xAA, 0x00, 0x00, 0x00)
@@ -132,28 +154,17 @@ object Wt9011Protocol {
 }
 
 /**
- * The sign and axis constants nobody can settle from a datasheet.
+ * The empirical signs for the default mount.
  *
- * ⚠ Every one of these is EMPIRICAL. The datasheet's axis diagram is
- * left-handed, so the mapping below is one of two right-handed readings, and only the bench tests
- * T1-T5 say which one this bracket is. They are constants, not settings, so a single reflash
- * checks them all - and the rider-facing switches (`mounting.properties`) stay switches.
+ * The default mount is the one in the docs: the sensor lies flat, label up, its long axis pointing
+ * forward, printed +X to the bike's right and printed +Y to the bike's front. That makes lean the
+ * Pitch field (bytes 16-17) and nose the Roll field (bytes 14-15); forward g is AY and rightward g
+ * is AX. [MountPosition] rotates this default frame to the rider's actual bracket.
  *
- * One boolean drives the whole triad, which is what makes this a one-line fix:
- *
- * - `LEAN_IS_PITCH = false` (candidate B): +X forward, +Y left, lean is the Roll field (bytes
- *   14-15), nose up/down is the Pitch field (bytes 16-17). Forward g = AX, rightwards = -AY.
- * - `LEAN_IS_PITCH = true` (candidate A): +Y forward, +X right, lean is the Pitch field, nose
- *   up/down is the Roll field. Forward g = AY, rightwards = AX.
- *
- * T1 settles the up axis (`AZ ≈ +1.000 g` with the bike upright), T2 the lean field and its sign,
- * T3 the nose sign, T5 the g signs. If T2 shows the lean field is the other one, flip
- * [LEAN_IS_PITCH]; do not flip [LEAN_SIGN] to compensate, or T5 goes with it.
+ * ⚠ Every sign here is EMPIRICAL. The vendor's axis diagram and its two apps disagree about which
+ * way is forward, so the bench tests T1-T6 settle the signs; the mount picker settles orientation.
  */
 object Wt9011Axes {
-    /** Which field is lean. See the class comment; one line to change for candidate A. */
-    const val LEAN_IS_PITCH: Boolean = false
-
     /** Degrees, + = lean right. Flip if T2 shows a right lean reading negative. */
     const val LEAN_SIGN: Float = 1f
 
@@ -164,9 +175,9 @@ object Wt9011Axes {
     const val YAW_SIGN: Float = 1f
 
     /**
-     * Degrees added to the heading, for a bracket whose forward axis does not point where the
-     * bike's nose does. T4 measures it: point the bike at magnetic north and set the number that
-     * makes the screen read 0. A bracket fitted backwards is 180.
+     * Degrees added to the heading, for a fixed sensor heading bias. T4 measures it: point the
+     * sensor's printed +Y at magnetic north and set the number that makes the screen read 0.
+     * A bracket whose long axis points elsewhere is a [MountPosition] choice, not this constant.
      */
     const val YAW_OFFSET_DEG: Float = 0f
 
@@ -232,17 +243,170 @@ fun batteryPercentOf(raw: Int): Int {
     return percent.toInt().coerceIn(0, 100)
 }
 
+/** Which way the sensor's long axis (printed +Y, the logo end) points. */
+enum class MountYaw(val label: String) {
+    FRONT("Front"),
+    RIGHT("Right"),
+    BACK("Back"),
+    LEFT("Left")
+}
+
+/** Which face of the sensor points away from the bike. */
+enum class MountFace(val label: String) {
+    UP("Label up"),
+    DOWN("Label down")
+}
+
+/** The plane the sensor is fitted in. */
+enum class MountPlane(val label: String) {
+    /** Lying on its large face: the sensor's own +Z is vertical (up or down). */
+    FLAT("Flat"),
+    /** Standing on its edge: the printed +Y arrow points up, the label face is horizontal. */
+    VERTICAL("On edge")
+}
+
 /**
- * The rider's two switches, the same pair the app-side motion sensor screen writes.
+ * Where the rider bolted the sensor.
  *
- * Kept as switches rather than folded into the sign constants because which way round the bracket
- * ended up is a fitting decision, and a rider should not need a reflash to fix it.
+ * [MountPlane.FLAT] is the original model: [yaw] is the direction of the printed +Y (the long
+ * axis), and [face] says whether the label looks up or down. All eight quarter turns keep the
+ * sensor's +Z vertical.
+ *
+ * [MountPlane.VERTICAL] is WitMotion's documented vertical installation: the board stands on its
+ * edge with the printed +Y arrow up, so the label face points horizontally at [yaw]. [face] is
+ * unused there and must stay [MountFace.UP]. The device must also be in its vertical installation
+ * mode; [Wt9011Protocol.setup] writes that when this mount is selected.
+ *
+ * The module always decodes in [DEFAULT] - label up, long axis forward, printed +X to the bike's
+ * right - and rotates the result here. The zero is captured after this rotation and tagged with
+ * the mount, because the frame changes with it; changing the mount therefore clears the zero.
  */
-class Mounting(val flipNose: Boolean, val flipSide: Boolean) {
-    fun apply(packet: Packet): Packet = packet.oriented(flipNose, flipSide)
+data class MountPosition(
+    val yaw: MountYaw = MountYaw.FRONT,
+    val face: MountFace = MountFace.UP,
+    val plane: MountPlane = MountPlane.FLAT
+) {
+    init {
+        require(plane == MountPlane.FLAT || face == MountFace.UP) {
+            "an on-edge mount has no label-up/label-down choice"
+        }
+    }
+
+    fun apply(packet: Packet): Packet = when (plane) {
+        MountPlane.FLAT -> applyFlat(packet)
+        MountPlane.VERTICAL -> applyVertical(packet)
+    }
+
+    private fun applyFlat(packet: Packet): Packet {
+        val down = face == MountFace.DOWN
+        val rotated = when {
+            !down -> when (yaw) {
+                MountYaw.FRONT -> packet
+                MountYaw.RIGHT -> packet.copy(
+                    leanDeg = -packet.pitchDeg,
+                    pitchDeg = packet.leanDeg,
+                    longG = -packet.latG,
+                    latG = packet.longG,
+                    rollRate = packet.pitchRate,
+                    pitchRate = -packet.rollRate
+                )
+                MountYaw.BACK -> packet.copy(
+                    leanDeg = -packet.leanDeg,
+                    pitchDeg = -packet.pitchDeg,
+                    longG = -packet.longG,
+                    latG = -packet.latG,
+                    rollRate = -packet.rollRate,
+                    pitchRate = -packet.pitchRate
+                )
+                MountYaw.LEFT -> packet.copy(
+                    leanDeg = packet.pitchDeg,
+                    pitchDeg = -packet.leanDeg,
+                    longG = packet.latG,
+                    latG = -packet.longG,
+                    rollRate = -packet.pitchRate,
+                    pitchRate = packet.rollRate
+                )
+            }
+            else -> when (yaw) {
+                MountYaw.FRONT -> packet.copy(
+                    pitchDeg = -packet.pitchDeg,
+                    latG = -packet.latG,
+                    pitchRate = -packet.pitchRate
+                )
+                MountYaw.RIGHT -> packet.copy(
+                    leanDeg = packet.pitchDeg,
+                    pitchDeg = packet.leanDeg,
+                    longG = packet.latG,
+                    latG = packet.longG,
+                    rollRate = -packet.pitchRate,
+                    pitchRate = -packet.rollRate
+                )
+                MountYaw.BACK -> packet.copy(
+                    leanDeg = -packet.leanDeg,
+                    longG = -packet.longG,
+                    rollRate = -packet.rollRate,
+                    pitchRate = packet.pitchRate
+                )
+                MountYaw.LEFT -> packet.copy(
+                    leanDeg = -packet.pitchDeg,
+                    pitchDeg = -packet.leanDeg,
+                    longG = -packet.latG,
+                    latG = -packet.longG,
+                    rollRate = packet.pitchRate,
+                    pitchRate = packet.rollRate
+                )
+            }
+        }
+        val mountOffset = if (down) 180f - 90f * yaw.ordinal else -90f * yaw.ordinal
+        return rotated.copy(
+            // The accelerometer's up axis points at the road when the label faces down.
+            vertG = if (down) -rotated.vertG else rotated.vertG,
+            yawRate = if (down) -rotated.yawRate else rotated.yawRate,
+            yawDeg = wrap180(
+                rotated.yawDeg * (if (down) -1f else 1f) +
+                    Wt9011Axes.YAW_OFFSET_DEG + mountOffset
+            )
+        )
+    }
+
+    /**
+     * The on-edge frame.
+     *
+     * WitMotion's vertical installation tells the firmware that the printed +Y is the up axis.
+     * The whole packet - angles, accelerometer and gyro - then arrives in a virtual flat frame:
+     * its +Z is the sensor's +Y, and its +Y points opposite the label face. The four label
+     * directions therefore map to the four flat yaw values turned through 180 degrees, and the
+     * same flat quarter-turn mapping applies to every channel.
+     *
+     * The device must actually be in its vertical installation mode; the module writes that when
+     * this mount is selected. The printed +Y arrow, not the USB connector, is the one that must
+     * point up.
+     */
+    private fun applyVertical(packet: Packet): Packet {
+        val virtual = when (yaw) {
+            MountYaw.FRONT -> MountYaw.BACK
+            MountYaw.RIGHT -> MountYaw.LEFT
+            MountYaw.BACK -> MountYaw.FRONT
+            MountYaw.LEFT -> MountYaw.RIGHT
+        }
+        // Re-use the flat mapping: the vertical-mode packet is already in that virtual flat frame.
+        return MountPosition(yaw = virtual, face = MountFace.UP, plane = MountPlane.FLAT).apply(packet)
+    }
+
+    /** Rider-facing one-liner: "Front · Label up" or "Right · On edge". */
+    val label: String
+        get() = if (plane == MountPlane.VERTICAL) {
+            "${yaw.label} · ${plane.label.lowercase(Locale.ROOT)}"
+        } else {
+            "${yaw.label} · ${face.label}"
+        }
+
+    val isDefault: Boolean
+        get() = plane == MountPlane.FLAT && yaw == MountYaw.FRONT && face == MountFace.UP
 
     companion object {
-        val NONE = Mounting(flipNose = false, flipSide = false)
+        /** Label up, long axis forward: the mount the docs and the wire mapping assume. */
+        val DEFAULT = MountPosition()
     }
 }
 
@@ -316,7 +480,7 @@ class Zero(
         const val MIN_TOTAL_G = 0.7f
         const val MAX_TOTAL_G = 1.3f
 
-        /** Upright means gravity is on the vertical axis; below this the bracket is not Z-up. */
+        /** Upright means gravity is on the bike's vertical axis; below this the mounted bracket is off. */
         const val MIN_UPRIGHT_G = 0.5f
 
         fun totalG(packet: Packet): Float = sqrt(
@@ -363,6 +527,63 @@ fun zeroRefusal(packet: Packet): String? {
 }
 
 /**
+ * Directional maxima since the last reset, in the mounted and zeroed bike frame.
+ *
+ * The screen refreshes at 10 Hz but the sensor streams at 100 Hz. Tracking here, on every decoded
+ * sample, means a pothole or a hard brake between two screen refreshes still counts toward MAX L,
+ * MAX R, ACCEL and BRAKE.
+ */
+class Peaks {
+    @Volatile var maxLeftLean: Float = 0f
+        private set
+    @Volatile var maxRightLean: Float = 0f
+        private set
+    @Volatile var maxLeftG: Float = 0f
+        private set
+    @Volatile var maxRightG: Float = 0f
+        private set
+    @Volatile var maxAccel: Float = 0f
+        private set
+    @Volatile var maxBrake: Float = 0f
+        private set
+
+    /** Adds one already-mounted, already-zeroed packet. */
+    fun add(packet: Packet) {
+        if (packet.leanDeg >= 0f) {
+            maxRightLean = maxOf(maxRightLean, packet.leanDeg)
+        } else {
+            maxLeftLean = maxOf(maxLeftLean, -packet.leanDeg)
+        }
+        if (packet.latG >= 0f) {
+            maxRightG = maxOf(maxRightG, packet.latG)
+        } else {
+            maxLeftG = maxOf(maxLeftG, -packet.latG)
+        }
+        maxAccel = maxOf(maxAccel, packet.longG)
+        maxBrake = maxOf(maxBrake, -packet.longG)
+    }
+
+    fun reset() {
+        maxLeftLean = 0f
+        maxRightLean = 0f
+        maxLeftG = 0f
+        maxRightG = 0f
+        maxAccel = 0f
+        maxBrake = 0f
+    }
+
+    /** An immutable copy for a snapshot, so the screen cannot see a half-updated set. */
+    fun copyOf(): Peaks = Peaks().also {
+        it.maxLeftLean = maxLeftLean
+        it.maxRightLean = maxRightLean
+        it.maxLeftG = maxLeftG
+        it.maxRightG = maxRightG
+        it.maxAccel = maxAccel
+        it.maxBrake = maxBrake
+    }
+}
+
+/**
  * One frame off the wire: either a data sample or the device's answer to a register read.
  *
  * Both travel on the same notification characteristic, and their order is whatever the device
@@ -403,13 +624,8 @@ fun decodeSample(frame: ByteArray, seq: Int, sensorMillis: Long): Wt9011Sample? 
         yawDeg = readInt16(frame, 18) * Wt9011Protocol.ANGLE_SCALE
     )
 
-    val leanField = if (Wt9011Axes.LEAN_IS_PITCH) raw.pitchDeg else raw.rollDeg
-    val noseField = if (Wt9011Axes.LEAN_IS_PITCH) raw.rollDeg else raw.pitchDeg
-    val forwardAxis = if (Wt9011Axes.LEAN_IS_PITCH) raw.ay else raw.ax
-    val rightAxis = if (Wt9011Axes.LEAN_IS_PITCH) raw.ax else -raw.ay
-    // The gyro shares the accelerometer's axes: the same mapping, about forward, left and up.
-    val forwardRate = if (Wt9011Axes.LEAN_IS_PITCH) raw.wy else raw.wx
-    val leftRate = if (Wt9011Axes.LEAN_IS_PITCH) -raw.wx else raw.wy
+    // The default mount: printed +Y is the bike's nose, +X is its right, +Z is up. MountPosition
+    // rotates this result to the rider's actual bracket.
     val gyro = Wt9011Axes.GYRO_SIGN * DEGREES_TO_RADIANS
 
     return Wt9011Sample(
@@ -417,14 +633,14 @@ fun decodeSample(frame: ByteArray, seq: Int, sensorMillis: Long): Wt9011Sample? 
         packet = Packet(
             seq = seq,
             sensorMillis = sensorMillis,
-            leanDeg = leanField * Wt9011Axes.LEAN_SIGN,
-            pitchDeg = noseField * Wt9011Axes.PITCH_SIGN,
-            yawDeg = wrap180(raw.yawDeg * Wt9011Axes.YAW_SIGN + Wt9011Axes.YAW_OFFSET_DEG),
-            longG = forwardAxis * Wt9011Axes.ACC_SIGN,
-            latG = rightAxis * Wt9011Axes.ACC_SIGN,
+            leanDeg = raw.pitchDeg * Wt9011Axes.LEAN_SIGN,
+            pitchDeg = raw.rollDeg * Wt9011Axes.PITCH_SIGN,
+            yawDeg = wrap180(raw.yawDeg * Wt9011Axes.YAW_SIGN),
+            longG = raw.ay * Wt9011Axes.ACC_SIGN,
+            latG = raw.ax * Wt9011Axes.ACC_SIGN,
             vertG = raw.az * Wt9011Axes.ACC_SIGN,
-            rollRate = forwardRate * gyro,
-            pitchRate = leftRate * gyro,
+            rollRate = raw.wy * gyro,
+            pitchRate = -raw.wx * gyro,
             yawRate = raw.wz * gyro
         )
     )

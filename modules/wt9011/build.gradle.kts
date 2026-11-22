@@ -11,7 +11,7 @@ plugins {
 
 motohubModule {
     id = "wt9011"
-    version = "0.2.0"
+    version = "0.3.0"
     entryClass = "io.github.sur00t.wt9011.Wt9011Entry"
     // ModuleMotionSource, which hands every sample to MOTO-HUB, arrived with contract 43.
     contractVersion = 43
@@ -44,6 +44,9 @@ dependencies {
     compileOnly(libs.kotlinx.coroutines.android)
     compileOnly(platform(libs.androidx.compose.bom))
     compileOnly(libs.androidx.compose.runtime)
+    compileOnly(libs.androidx.compose.ui)
+    compileOnly(libs.androidx.compose.foundation)
+    compileOnly(libs.androidx.compose.material3)
 
     // The Compose compiler wants the runtime on the test classpath too.
     testImplementation(platform(libs.androidx.compose.bom))

@@ -5,10 +5,11 @@
 package io.github.sur00t.wt9011
 
 /**
- * One sample in the motorcycle's terms, after the axis constants in `Wt9011Axes`.
+ * One sample in motorcycle terms, after the axis constants in `Wt9011Axes`.
  *
- * Started from the model of MOTO-HUB's motion-sensor module, so [Zero] and [oriented] work the
- * same way there and here. What leaves this module is a
+ * The decoder produces it in the documented default frame (+Y forward, +X right, +Z up);
+ * [MountPosition] rotates it to the rider's actual bracket, and [Zero] then removes the captured
+ * tilt. What leaves this module is a
  * [io.motohub.android.module.ModuleMotionSample]; this class is how it gets there.
  */
 data class Packet(
@@ -18,9 +19,9 @@ data class Packet(
     val sensorMillis: Long,
     /** Degrees, + = right. */
     val leanDeg: Float,
-    /** Degrees, + = nose up once [oriented] agrees with the mounting. */
+    /** Degrees, + = nose up. */
     val pitchDeg: Float,
-    /** Degrees, magnetic bearing of the motorcycle's nose, -180…180. */
+    /** Degrees, magnetic bearing of the packet's forward axis, -180…180. */
     val yawDeg: Float,
     /** g, + = forward. Gravity included: the sensor reads specific force. */
     val longG: Float,
@@ -34,22 +35,4 @@ data class Packet(
     val pitchRate: Float = 0f,
     /** Radians per second about up, right-hand: + = turning left. */
     val yawRate: Float = 0f
-) {
-    /**
-     * The rider's two switches: nothing on the sensor can know how the bracket sits on the bike.
-     * Each flips one axis and everything measured about or along it; the yaw rate is about up,
-     * which neither switch touches.
-     */
-    fun oriented(flipNose: Boolean, flipSide: Boolean): Packet {
-        val n = if (flipNose) -1f else 1f
-        val s = if (flipSide) -1f else 1f
-        return copy(
-            leanDeg = leanDeg * s,
-            pitchDeg = pitchDeg * n,
-            longG = longG * n,
-            latG = latG * s,
-            rollRate = rollRate * s,
-            pitchRate = pitchRate * n
-        )
-    }
-}
+)

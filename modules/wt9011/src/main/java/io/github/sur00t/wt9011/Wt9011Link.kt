@@ -55,18 +55,19 @@ import kotlin.math.abs
  *   replies are matched by flag and echoed register, and retried a few times, never assumed.
  *
  * Configuration is flash-backed on the device and costs it about a second of silence, so the
- * set-up block runs once per install and is verified afterwards instead of being
- * repeated on every connection. Per connection the only mandatory step is reading the output-content
- * register, and even that is only repaired when it says something other than accelerometer + gyro +
- * angle.
+ * set-up block runs once per install - and again when the flat/on-edge mounting direction changes -
+ * and is verified afterwards instead of being repeated on every connection. Per connection the only
+ * mandatory step is reading the output-content register, and even that is only repaired when it
+ * says something other than accelerometer + gyro + angle.
  *
- * Every sample, with the rider's zero and mounting applied, goes to MOTO-HUB through the motion
+ * Every sample, with the rider's zero and mount applied, goes to MOTO-HUB through the motion
  * listeners (contract 43): the app records it in the trip and draws it on the Ride Dashboard in
  * place of the phone's own sensors. Nothing is kept on the phone by this module.
  *
- * The module only ever talks to one sensor: the first one the rider connects is remembered by its
- * address, and from then on nothing else is touched - not another rider's WitMotion at a meeting,
- * not anything else whose name starts with WT. Nothing connects by itself before that first tap.
+ * The module only ever talks to one sensor: the first WT sensor it finds at startup is remembered
+ * by its address, and from then on nothing else is touched - not another rider's WitMotion at a
+ * meeting, not anything else whose name starts with WT. The search starts as soon as the module is
+ * created; a manual Disconnect stops the current session only.
  *
  * Everything below the public surface runs on the main looper; the GATT callbacks arrive on a
  * binder thread and reach the state through `@Volatile` fields, which is what the screen reads.
@@ -85,10 +86,13 @@ class Wt9011Link(
     private var commandCharacteristic: BluetoothGattCharacteristic? = null
     private var scanning = false
     private var connecting = false
+    /** The module is unloading; scheduled retries must not reopen the link. */
+    @Volatile private var released = false
     private var scanAttempts = 0
     private var lastReconnectAt = 0L
     private var subscribedAt = 0L
     private var outputContentFixes = 0
+    private var setupInFlight = false
 
     /** Only ever touched from the GATT callback thread after a connection is up. */
     private val parser = Wt9011FrameParser()
@@ -112,7 +116,7 @@ class Wt9011Link(
         private set
     @Volatile var zero: Zero? = null
         private set
-    @Volatile var mounting: Mounting = Mounting.NONE
+    @Volatile var mountPosition: MountPosition = MountPosition.DEFAULT
         private set
     @Volatile var packetsPerSecond: Int = 0
         private set
@@ -144,12 +148,15 @@ class Wt9011Link(
 
     private val motionListeners = CopyOnWriteArrayList<ModuleMotionListener>()
 
+    /** Maxima over every sample, not just the screen's 10 Hz polls. */
+    private val peaks = Peaks()
+
     private val recent = ArrayDeque<String>()
     private val clock = SimpleDateFormat("HH:mm:ss", Locale.ROOT)
 
     init {
         // Files first: the screen may be drawn before the first frame arrives, and the rider's
-        // mounting switches have to be right at that point.
+        // mount has to be right at that point.
         loadStoredState()
     }
 
@@ -171,6 +178,7 @@ class Wt9011Link(
             deviceLabel = deviceLabel,
             raw = raw,
             ride = ride,
+            peaks = peaks.copyOf(),
             packetsPerSecond = packetsPerSecond,
             frameAgeMs = age,
             batteryPercent = batteryPercent,
@@ -178,7 +186,7 @@ class Wt9011Link(
             temperatureC = temperatureC,
             outputContent = outputContent,
             zero = zero,
-            mounting = mounting,
+            mountPosition = mountPosition,
             configured = configured,
             displacementSuspected = displacementSuspected,
             autoConnect = autoConnect,
@@ -188,8 +196,9 @@ class Wt9011Link(
         )
     }
 
-    /** What the rider sees and MOTO-HUB records: the zero first, in the sensor's frame, then the switches. */
-    private fun rideOf(packet: Packet): Packet = mounting.apply(zero?.apply(packet) ?: packet)
+    /** What the rider sees and MOTO-HUB records: the mount first, then the zero in that frame. */
+    private fun rideOf(packet: Packet): Packet =
+        zero?.apply(mountPosition.apply(packet)) ?: mountPosition.apply(packet)
 
     private fun emptySnapshot() = Wt9011Snapshot(
         status = status,
@@ -197,6 +206,7 @@ class Wt9011Link(
         deviceLabel = deviceLabel,
         raw = raw,
         ride = null,
+        peaks = Peaks(),
         packetsPerSecond = packetsPerSecond,
         frameAgeMs = -1L,
         batteryPercent = batteryPercent,
@@ -204,7 +214,7 @@ class Wt9011Link(
         temperatureC = temperatureC,
         outputContent = outputContent,
         zero = zero,
-        mounting = mounting,
+        mountPosition = mountPosition,
         configured = configured,
         displacementSuspected = displacementSuspected,
         autoConnect = autoConnect,
@@ -253,20 +263,26 @@ class Wt9011Link(
     }
 
     /**
-     * Lets go of the remembered sensor, for a replaced or borrowed unit: the next Connect takes
-     * the first WT sensor it finds again, and configures it.
+     * Lets go of the remembered sensor, for a replaced or borrowed unit: the pin, zero and peaks
+     * are cleared, and the module immediately scans for the first WT sensor again.
      */
     fun forgetSensor(): String {
         pinnedAddress = null
         configured = false
-        autoConnect = false
+        autoConnect = true
+        // The zero belongs to the unit that was fitted; the bracket and its mount do not.
+        zero = null
+        zeroFile.delete()
+        peaks.reset()
         saveSetup()
         main.post {
             rejected.clear()
-            shutDown("No sensor remembered")
+            shutDown("Looking for a new sensor…")
+            scanAttempts = 0
+            beginScan()
         }
-        note("sensor forgotten")
-        return "Sensor forgotten. Turn the new one on and tap Connect."
+        note("sensor forgotten; zero cleared; looking for a replacement")
+        return "Sensor forgotten and zero cleared. Looking for a new WT sensor…"
     }
 
     /** Stops the link and the automatic reconnect with it. */
@@ -278,13 +294,20 @@ class Wt9011Link(
 
     /** Captures the current attitude as zero. Returns a message for the screen either way. */
     fun captureZero(): String {
+        if (!connected) return "No link - connect the sensor first."
         val packet = latest ?: return "No sample yet - is the sensor streaming?"
-        val refusal = zeroRefusal(packet)
+        val age = if (lastFrameAt > 0L) SystemClock.elapsedRealtime() - lastFrameAt else -1L
+        if (age < 0L || age > ZERO_MAX_AGE_MS) {
+            return "No fresh sample - wait for the sensor to stream before zeroing."
+        }
+        val mounted = mountPosition.apply(packet)
+        val refusal = zeroRefusal(mounted)
         if (refusal != null) return refusal
-        val captured = Zero.of(packet, System.currentTimeMillis())
+        val captured = Zero.of(mounted, System.currentTimeMillis())
             ?: return "That sample cannot be a zero - try again when the bike is still."
         zero = captured
         saveZero(captured)
+        peaks.reset()
         note("zero captured: lean %.2f°, pitch %.2f°".format(Locale.ROOT, captured.leanDeg, captured.pitchDeg))
         return String.format(
             Locale.ROOT,
@@ -297,15 +320,52 @@ class Wt9011Link(
     fun clearZero(): String {
         zero = null
         zeroFile.delete()
+        peaks.reset()
         note("zero cleared")
         return "Zero cleared - readings are the sensor's own again."
     }
 
-    /** The rider's two switches. Persisted, because they are a fitting decision, not a session one. */
-    fun setMounting(flipNose: Boolean, flipSide: Boolean) {
-        mounting = Mounting(flipNose = flipNose, flipSide = flipSide)
+    /** Clears the directional peaks; the screen's Reset peaks button. */
+    fun resetPeaks(): String {
+        peaks.reset()
+        note("peaks reset")
+        return "Peaks reset."
+    }
+
+    /**
+     * The rider's mount: which way the sensor points, which face is outward, and whether it lies
+     * flat or stands on its edge. Persisted, because it is a fitting decision, not a session one.
+     *
+     * A captured zero belongs to the frame the mount defines, so changing the mount throws it
+     * away. A change between flat and on-edge also changes the sensor's own installation direction,
+     * which is a flash-backed setting: the module rewrites it now when the link is up, or on the
+     * next connection otherwise.
+     */
+    fun setMountPosition(position: MountPosition): MountChange {
+        if (position == mountPosition) return MountChange(zeroCleared = false, directionChanged = false)
+        val directionChanged = position.plane != mountPosition.plane
+        mountPosition = position
         saveMounting()
-        note("mounting: nose flipped = $flipNose, side flipped = $flipSide")
+        val cleared = zero != null
+        if (cleared) {
+            zero = null
+            zeroFile.delete()
+            note("mount changed; zero cleared")
+        }
+        note("mount: ${position.label.lowercase(Locale.ROOT)}")
+        peaks.reset()
+        if (directionChanged) {
+            if (connected) {
+                note("installation direction -> ${position.plane.name.lowercase(Locale.ROOT)}; rewriting the settings")
+                runSetupBlock { readOutputContent() }
+            } else {
+                // The next connection sees the flag and runs the whole block with the new direction.
+                configured = false
+                saveSetup()
+                note("installation direction -> ${position.plane.name.lowercase(Locale.ROOT)}; it is written on the next connection")
+            }
+        }
+        return MountChange(zeroCleared = cleared, directionChanged = directionChanged)
     }
 
     /**
@@ -335,6 +395,7 @@ class Wt9011Link(
      * that records a decision.
      */
     fun release() {
+        released = true
         motionListeners.clear()
         main.post { shutDown("Idle") }
     }
@@ -345,23 +406,27 @@ class Wt9011Link(
 
     @SuppressLint("MissingPermission")
     private fun beginScan() {
-        if (scanning || connecting || connected) return
+        if (released || scanning || connecting || connected) return
         val adapter = adapter()
         if (adapter == null) {
             status = "This phone reports no Bluetooth adapter."
+            retryWhenReady()
             return
         }
         if (!hasPermissions()) {
             status = "Bluetooth permission is not granted to MOTO-HUB."
+            retryWhenReady()
             return
         }
         if (!adapter.isEnabled) {
             status = "Bluetooth is off."
+            retryWhenReady()
             return
         }
         val scanner = adapter.bluetoothLeScanner
         if (scanner == null) {
             status = "This phone has no BLE scanner."
+            retryWhenReady()
             return
         }
         // Fast while the sensor has only just gone; gentler once it has been away a while.
@@ -377,6 +442,7 @@ class Wt9011Link(
             scanner.startScan(null, settings, scanCallback)
         } catch (_: SecurityException) {
             status = "Bluetooth permission was refused."
+            retryWhenReady()
             return
         }
         scanning = true
@@ -445,6 +511,7 @@ class Wt9011Link(
                 main.removeCallbacks(scanTimeout)
                 status = "Scan failed (code $errorCode)."
                 note("scan failed: $errorCode")
+                retryWhenReady()
             }
         }
     }
@@ -646,9 +713,31 @@ class Wt9011Link(
         if (configured) {
             readOutputContent()
             scheduleDiagnostics()
+            requestMtuSoon()
         } else {
-            runSetupBlock { readOutputContent() }
+            runSetupBlock {
+                readOutputContent()
+                requestMtuSoon()
+            }
         }
+    }
+
+    /**
+     * Asks for a larger ATT MTU after the setup block and the first register read have gone out.
+     * Requesting it before discoverServices() suppresses onServicesDiscovered on some Android
+     * stacks, and issuing it alongside the setup writes can make the first write fail.
+     */
+    @SuppressLint("MissingPermission")
+    private fun requestMtuSoon() {
+        main.postDelayed({
+            val current = gatt ?: return@postDelayed
+            if (!connected) return@postDelayed
+            try {
+                current.requestMtu(247)
+            } catch (_: SecurityException) {
+                // The link works with the default MTU; it is only slower at high rates.
+            }
+        }, MTU_DELAY_MS)
     }
 
     private fun onLinkLost(gatt: BluetoothGatt?, status: Int) {
@@ -687,15 +776,23 @@ class Wt9011Link(
         status = message
     }
 
-    /** One automatic retry window after a drop, so a flaky link does not spin forever. */
-    private fun retryLater() {
-        if (!autoConnect) return
-        val now = SystemClock.elapsedRealtime()
-        if (now - lastReconnectAt < RECONNECT_DELAY_MS) return
-        lastReconnectAt = now
+    /** If the adapter/permission is not ready yet, keep trying while the rider wants a link. */
+    private fun retryWhenReady() {
+        if (released || !autoConnect) return
         main.postDelayed({
             if (autoConnect && !connected && !scanning && !connecting) beginScan()
-        }, RECONNECT_DELAY_MS)
+        }, IDLE_RETRY_MS)
+    }
+
+    /** One automatic retry window after a drop, so a flaky link does not spin forever. */
+    private fun retryLater() {
+        if (released || !autoConnect) return
+        val now = SystemClock.elapsedRealtime()
+        val wait = (RECONNECT_DELAY_MS - (now - lastReconnectAt)).coerceAtLeast(0L)
+        lastReconnectAt = now + wait
+        main.postDelayed({
+            if (autoConnect && !connected && !scanning && !connecting) beginScan()
+        }, wait)
     }
 
     // ---------------------------------------------------------------------------------------
@@ -736,8 +833,13 @@ class Wt9011Link(
             }
         } else {
             lowGSince = 0L
+            // If gravity comes back (a repaired output-content register, or the unit simply
+            // stopped sending displacement), stop warning.
+            displacementSuspected = false
         }
-        if (motionListeners.isNotEmpty()) publish(rideOf(p), nowNanos)
+        val ride = rideOf(p)
+        peaks.add(ride)
+        if (motionListeners.isNotEmpty()) publish(ride, nowNanos)
     }
 
     /** Hands one sample to MOTO-HUB in the contract's frame: x forward, y left, z up. */
@@ -824,16 +926,29 @@ class Wt9011Link(
 
     @SuppressLint("MissingPermission")
     private fun runSetupBlock(then: () -> Unit) {
-        val commands = Wt9011Protocol.setup()
+        if (setupInFlight) {
+            // Two settings sequences must never interleave. The next connection redoes the block
+            // with whatever mount is selected then.
+            configured = false
+            saveSetup()
+            note("set-up already running; the new installation direction waits for the next connection")
+            return
+        }
+        setupInFlight = true
+        val plane = mountPosition.plane
+        val commands = Wt9011Protocol.setup(vertical = plane == MountPlane.VERTICAL)
         writeSequence(commands, WRITE_GAP_MS) { complete ->
+            setupInFlight = false
             // Only a block that went out whole counts: a dropped link or a refused write leaves
-            // the sensor half set up, and the next connection has to try again.
-            if (complete) {
-                configured = true
-                saveSetup()
+            // the sensor half set up, and the next connection has to try again. If the mount
+            // changed while the block was in flight, the direction just written is stale.
+            val applied = complete && mountPosition.plane == plane
+            configured = applied
+            saveSetup()
+            if (applied) {
                 note("set-up done; verifying the output content")
             } else {
-                note("set-up incomplete; it runs again on the next connection")
+                note("set-up incomplete or stale; it runs again on the next connection")
             }
             then()
             scheduleDiagnostics()
@@ -940,7 +1055,7 @@ class Wt9011Link(
     // ---------------------------------------------------------------------------------------
 
     private fun note(line: String) {
-        val stamped = "${clock.format(Date())} $line"
+        val stamped = synchronized(clock) { "${clock.format(Date())} $line" }
         synchronized(recent) {
             recent.addLast(stamped)
             while (recent.size > RECENT_LINES) recent.removeFirst()
@@ -949,13 +1064,39 @@ class Wt9011Link(
     }
 
     private fun loadStoredState() {
-        zero = readProperties(zeroFile)?.let { properties ->
-            val lean = properties.getProperty("leanDeg")?.toFloatOrNull()
-            val pitch = properties.getProperty("pitchDeg")?.toFloatOrNull()
-            val forward = properties.getProperty("forwardG")?.toFloatOrNull()
-            val lateral = properties.getProperty("lateralG")?.toFloatOrNull()
-            val up = properties.getProperty("upG")?.toFloatOrNull()
-            val takenAt = properties.getProperty("takenAt")?.toLongOrNull()
+        mountPosition = readProperties(mountingFile)?.let { properties ->
+            if (properties.getProperty("model") == STORAGE_MODEL) {
+                val plane = properties.getProperty("plane")
+                    ?.let { runCatching { MountPlane.valueOf(it) }.getOrNull() }
+                    ?: MountPlane.FLAT
+                val yaw = properties.getProperty("yaw")
+                    ?.let { runCatching { MountYaw.valueOf(it) }.getOrNull() }
+                    ?: MountYaw.FRONT
+                val face = properties.getProperty("face")
+                    ?.let { runCatching { MountFace.valueOf(it) }.getOrNull() }
+                    ?: MountFace.UP
+                // An on-edge mount has no label-up/label-down choice; a stale file must not throw.
+                MountPosition(
+                    yaw = yaw,
+                    face = if (plane == MountPlane.VERTICAL) MountFace.UP else face,
+                    plane = plane
+                )
+            } else {
+                note("mount reset to default: long axis forward, label up")
+                MountPosition.DEFAULT
+            }
+        } ?: MountPosition.DEFAULT
+
+        val zeroProperties = readProperties(zeroFile)
+        val sameModel = zeroProperties?.getProperty("model") == STORAGE_MODEL
+        val sameMount = zeroProperties?.getProperty("mount") == mountTag()
+        zero = if (zeroProperties != null && sameModel && sameMount) {
+            val lean = zeroProperties.getProperty("leanDeg")?.toFloatOrNull()
+            val pitch = zeroProperties.getProperty("pitchDeg")?.toFloatOrNull()
+            val forward = zeroProperties.getProperty("forwardG")?.toFloatOrNull()
+            val lateral = zeroProperties.getProperty("lateralG")?.toFloatOrNull()
+            val up = zeroProperties.getProperty("upG")?.toFloatOrNull()
+            val takenAt = zeroProperties.getProperty("takenAt")?.toLongOrNull()
             if (lean != null && pitch != null && forward != null && lateral != null &&
                 up != null && takenAt != null
             ) {
@@ -963,24 +1104,34 @@ class Wt9011Link(
             } else {
                 null
             }
+        } else {
+            if (zeroProperties != null) {
+                zeroFile.delete()
+                note("zero cleared: the axis model or mount changed; capture it again with the bike upright")
+            }
+            null
         }
-        mounting = readProperties(mountingFile)?.let { properties ->
-            Mounting(
-                flipNose = properties.getProperty("flipNose")?.toBooleanStrictOrNull() ?: false,
-                flipSide = properties.getProperty("flipSide")?.toBooleanStrictOrNull() ?: false
-            )
-        } ?: Mounting.NONE
         readProperties(setupFile)?.let { properties ->
-            configured = properties.getProperty("configured")?.toBooleanStrictOrNull() ?: false
+            val storedConfigured = properties.getProperty("configured")?.toBooleanStrictOrNull() ?: false
+            val storedModel = properties.getProperty("setupModel")
+            configured = storedConfigured && storedModel == SETUP_MODEL
+            if (storedConfigured && storedModel != SETUP_MODEL) {
+                note("set-up recipe changed; the sensor is configured again on the next connection")
+            }
             autoConnect = properties.getProperty("autoConnect")?.toBooleanStrictOrNull() ?: true
             pinnedAddress = properties.getProperty("deviceAddress")?.takeIf { it.isNotBlank() }
         }
     }
 
+    private fun mountTag(): String =
+        "${mountPosition.plane.name}/${mountPosition.yaw.name}/${mountPosition.face.name}"
+
     private fun saveZero(zero: Zero) {
         writeProperties(
             zeroFile,
             Properties().apply {
+                setProperty("model", STORAGE_MODEL)
+                setProperty("mount", mountTag())
                 setProperty("leanDeg", zero.leanDeg.toString())
                 setProperty("pitchDeg", zero.pitchDeg.toString())
                 setProperty("forwardG", zero.forwardG.toString())
@@ -992,12 +1143,14 @@ class Wt9011Link(
     }
 
     private fun saveMounting() {
-        val current = mounting
+        val current = mountPosition
         writeProperties(
             mountingFile,
             Properties().apply {
-                setProperty("flipNose", current.flipNose.toString())
-                setProperty("flipSide", current.flipSide.toString())
+                setProperty("model", STORAGE_MODEL)
+                setProperty("plane", current.plane.name)
+                setProperty("yaw", current.yaw.name)
+                setProperty("face", current.face.name)
             }
         )
     }
@@ -1006,6 +1159,7 @@ class Wt9011Link(
         writeProperties(
             setupFile,
             Properties().apply {
+                setProperty("setupModel", SETUP_MODEL)
                 setProperty("configured", configured.toString())
                 setProperty("autoConnect", autoConnect.toString())
                 pinnedAddress?.let { setProperty("deviceAddress", it) }
@@ -1033,6 +1187,9 @@ class Wt9011Link(
     }
 
     private companion object {
+        const val STORAGE_MODEL = "2"
+        /** Bump when the setup recipe changes so an upgraded module reconfigures the sensor. */
+        const val SETUP_MODEL = "2"
         const val SCAN_TIMEOUT_MS = 15_000L
         const val CONNECT_TIMEOUT_MS = 15_000L
         const val MAX_SCAN_ATTEMPTS = 3
@@ -1041,6 +1198,8 @@ class Wt9011Link(
         const val WATCHDOG_MS = 250L
         const val STALE_TEARDOWN_MS = 2_000L
         const val WRITE_GAP_MS = 150L
+        const val MTU_DELAY_MS = 700L
+        const val ZERO_MAX_AGE_MS = 1_000L
         const val REGISTER_TIMEOUT_MS = 200L
         const val REGISTER_TRIES = 3
         const val DIAGNOSTICS_PERIOD_MS = 30_000L
@@ -1056,8 +1215,10 @@ class Wt9011Snapshot(
     val deviceLabel: String?,
     /** The last frame's raw channels, before any of the sign constants: what the bench tests read. */
     val raw: Wt9011Raw?,
-    /** The ride model: zero and mounting applied. */
+    /** The ride model: zero and mount applied. */
     val ride: Packet?,
+    /** Directional peaks at the sensor's full rate, not the screen's poll rate. */
+    val peaks: Peaks,
     val packetsPerSecond: Int,
     val frameAgeMs: Long,
     val batteryPercent: Int?,
@@ -1065,7 +1226,7 @@ class Wt9011Snapshot(
     val temperatureC: Float?,
     val outputContent: Int?,
     val zero: Zero?,
-    val mounting: Mounting,
+    val mountPosition: MountPosition,
     val configured: Boolean,
     val displacementSuspected: Boolean,
     val autoConnect: Boolean,
@@ -1073,4 +1234,12 @@ class Wt9011Snapshot(
     val recent: List<String>,
     /** The remembered sensor's address, or null before the first connection. */
     val pinnedAddress: String?
+)
+
+/** What changed when the rider picked a different mount. */
+class MountChange(
+    /** A captured zero belonged to the old frame and was thrown away. */
+    val zeroCleared: Boolean,
+    /** Flat vs on-edge changed, so the sensor's installation direction has to be rewritten. */
+    val directionChanged: Boolean
 )
