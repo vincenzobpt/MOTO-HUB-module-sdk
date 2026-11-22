@@ -17,7 +17,7 @@ as the Android Auto module does.
 | [`ModuleAccessoryBridge`](#usb-accessories-moduleaccessoryprobe-and-moduleaccessorybridge) | 10 | diagnostics bridge a USB head unit to Android Auto |
 | [`ModuleExtensions`](#adding-to-another-module-moduleextensions-and-modulebridge) | 22 | it draws the card of the module you add to, or that module asks `host.modules.extensions()` |
 | [`ModuleLiveStatus`](#something-live-modulelivestatus) | 27 | it draws the Ride page |
-| [`ModuleMapLayer`](#pins-on-the-nav-map-modulemaplayer) | 30 | the NAV map settles somewhere new, or the rider taps one of your pins |
+| [`ModuleMapLayer`](#pins-on-the-nav-map-modulemaplayer) | 30 | the NAV map settles somewhere new, every `refreshSeconds` while it shows your layer (44), or the rider taps one of your pins |
 | [`ModuleMapOverlay`](#your-data-in-the-nav-phone-only) | 32 | the rider switches your layer on in the NAV map's layers menu |
 | [`ModulePlaceProvider`](#your-data-in-the-nav-phone-only) | 32 | the rider picks your source of place icons and the NAV map settles somewhere new |
 | [`ModuleGeocoder`](#your-data-in-the-nav-phone-only) | 32 | the rider types in the NAV search box or drops a pin |
@@ -389,6 +389,8 @@ interface ModuleMapLayer {                         // a capability, since contra
     fun pinsNear(latitude: Double, longitude: Double, radiusMeters: Int, limit: Int): Array<ModuleMapLayerPin>
     fun onPinTap(pinId: String)                    // main thread; usually host.openFeature(...)
     fun pinImage(pinId: String, sizePx: Int): Bitmap? = null   // contract 31: a photo instead of the symbol
+    val refreshSeconds: Int get() = 0              // contract 44: above 0, pinsNear is asked again on that period
+    val live: Boolean get() = false                // contract 45: people/things that move, drawn on top
 }
 
 class ModuleMapLayerPin(
@@ -405,6 +407,18 @@ class ModuleMapLayerPin(
 block on the network, and each answer replaces the previous one. Return at most `limit` pins,
 or an empty array. `pinImage` is asked off the main thread too, and the app keeps what it gets,
 so a pin is not asked again while the rider pans; `null` keeps the symbol.
+
+Pins that move on their own - the other riders of a group ride - set `refreshSeconds` above 0
+(contract 44): while the map shows the layer, `pinsNear` is asked again every that many seconds,
+not only when the map settles. The app reads it once, when the map opens. Keep it at a few
+seconds or more, and answer from memory: the call runs on every period.
+
+Such pins are people, not photos: set `live = true` (contract 45) and the flat map draws them
+above everything else, never grouped with places or photos and never hidden by a collision, each
+as its `pinImage` (a round avatar) or its coloured pin, with the `label` beside it. To show the
+rider one of them, `host.showOnMap(latitude, longitude)` opens the NAV centred there, with no
+destination. A feature with `ModuleFeaturePlacement.NAV_MENU` is listed first in the NAV's app
+menu (the grid button beside the microphone), the way back to a module during a ride.
 
 To send the rider to a place, call `host.navigateTo(latitude, longitude, label)` (contract 31):
 the NAV opens with that point as the destination and its route preview on screen. Nothing is

@@ -73,7 +73,15 @@ enum class ModuleFeaturePlacement {
      * pill with [ModuleFeature.title], and the panel's frame; [ModuleFeature.screen] fills it
      * and its onBack closes it. Phone only, like everything on the NAV map.
      */
-    NAV_PANEL
+    NAV_PANEL,
+
+    /**
+     * An entry in the NAV's app menu (contract 45), the key beside the search bar's microphone:
+     * listed first, above Places, Rides and Plan a ride, with [ModuleFeature.title] and
+     * [ModuleFeature.description]. A tap opens [ModuleFeature.screen] full-screen, as a feature
+     * opened from Modules, and its onBack returns to the NAV.
+     */
+    NAV_MENU
 }
 
 /**

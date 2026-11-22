@@ -33,6 +33,23 @@ interface ModuleMapLayer {
      * it gets, so the same pin is not asked again while the rider pans.
      */
     fun pinImage(pinId: String, sizePx: Int): android.graphics.Bitmap? = null
+
+    /**
+     * Above 0, the app asks [pinsNear] again every this many seconds while the map shows the layer
+     * (contract 44), for pins that move on their own: riders of a group ride. 0, the default, asks
+     * only when the map settles somewhere new. Read once, when the map opens.
+     */
+    val refreshSeconds: Int get() = 0
+
+    /**
+     * True for pins that are people or things that move, riders of a group ride (contract 45).
+     * The flat NAV map draws them above everything else, never grouped with places or photos and
+     * never hidden by a collision: each one is its [pinImage] (a round avatar) or, without one,
+     * its coloured pin with its [ModuleMapLayerPin.symbol], and its [ModuleMapLayerPin.label]
+     * beside it as a place's name. The 3D map draws them as places, ungrouped; Real 3D shows
+     * no pins. False, the default, keeps the photo layer Immich is. Read once, when the map opens.
+     */
+    val live: Boolean get() = false
 }
 
 class ModuleMapLayerPin(
@@ -43,6 +60,9 @@ class ModuleMapLayerPin(
     val colorArgb: Int,
     /** One emoji drawn inside the pin: "📷". */
     val symbol: String,
-    /** Drawn beside the pin on the flat map, or as a small badge on its photo (contract 31); empty for none. */
+    /**
+     * Drawn beside the pin on the flat map, or as a small badge on its photo (contract 31); a
+     * [ModuleMapLayer.live] layer's always beside it (contract 45). Empty for none.
+     */
     val label: String
 )

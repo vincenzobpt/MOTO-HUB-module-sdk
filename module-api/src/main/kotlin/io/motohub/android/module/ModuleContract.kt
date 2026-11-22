@@ -193,8 +193,19 @@ object MotoHubModuleContract {
      *    pitch, specific force and angular rate in the motorcycle's frame (ModuleMotionSample);
      *    while it streams, the trip's sensor log and the Ride Dashboard use it instead of the
      *    phone's sensors. New types only; the minimum stays at 3.
+     * 44: pins that move. ModuleMapLayer.refreshSeconds: a layer above 0 is asked for its pins
+     *    again on that period while the NAV map shows it, not only when the map settles somewhere
+     *    new - riders of a group ride, say. A new member with a default; a layer built against an
+     *    older contract keeps 0. The minimum stays at 3.
+     * 45: people on the map. ModuleMapLayer.live: a live layer's pins (riders of a group ride) are
+     *    drawn on the flat NAV map above everything else, never grouped with places or photos and
+     *    never hidden by a collision, each with its picture and its name beside it.
+     *    MotoHubModuleHost.showOnMap opens the NAV centred on a point, with no destination and no
+     *    preview. ModuleFeaturePlacement.NAV_MENU lists a feature first in the NAV's app menu.
+     *    New members with defaults, an append on the app's side and an appended placement; a
+     *    layer built against an older contract is not live. The minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 43
+    const val CONTRACT_VERSION = 45
 
     /**
      * The oldest contract this app can still run.
@@ -379,6 +390,13 @@ interface MotoHubModuleHost {
      * is logged and the handle still closes cleanly - the run goes on, it is just not protected.
      */
     fun keepAlive(reason: String): AutoCloseable
+
+    /**
+     * Opens the NAV with its map centred on ([latitude], [longitude]) at street level (contract
+     * 45): no destination, no route preview, nothing routed - the rider only looks, a rider of a
+     * group ride, say. The module's page over the tabs makes way. Main thread or not.
+     */
+    fun showOnMap(latitude: Double, longitude: Double)
 }
 
 /**

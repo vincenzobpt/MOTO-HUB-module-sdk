@@ -132,7 +132,7 @@ These all come from real failures on real motorcycles.
 
 ## Versioning
 
-`MotoHubModuleContract.CONTRACT_VERSION` (currently **43**) is bumped whenever anything in
+`MotoHubModuleContract.CONTRACT_VERSION` (currently **45**) is bumped whenever anything in
 `io.motohub.android.module` changes shape. The contract **only grows by appending**: new
 capabilities, and new members on interfaces the *app* implements. An older module simply does
 not answer a capability it predates, and never calls a host member it does not know.
@@ -188,5 +188,7 @@ the KDoc of `MotoHubModuleContract`.
 | 41 | `ModuleVoiceHost.pages`, `ModuleVoicePage`; `ModuleVoiceActions.PAGE_OPEN`, `VOICE_MARK_WRONG` (voice control moves around MOTO-HUB's own screens) | 0.1.58 |
 | 42 | Nothing new in the contract's shape: the Compose a module borrows from the app goes from 1.7 to 1.11 | 0.1.67 |
 | 43 | `ModuleMotionSource`, `ModuleMotionListener`, `ModuleMotionSample` (a motion sensor on the motorcycle: trips and the Ride Dashboard use it instead of the phone's sensors) | 0.1.72 |
+| 44 | `ModuleMapLayer.refreshSeconds` (NAV map pins that move on their own: asked again on that period, not only when the map settles) | 0.1.73 |
+| 45 | `ModuleMapLayer.live` (pins of people or things that move, drawn above everything, never grouped or hidden, name beside them); `host.showOnMap(latitude, longitude)` (the NAV map centred on a point, no destination); `ModuleFeaturePlacement.NAV_MENU` (a feature listed first in the NAV's app menu) | 0.1.73 |
 
 This repository tags every contract release as `contract-<n>`.
