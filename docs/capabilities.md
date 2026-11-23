@@ -17,6 +17,7 @@ as the Android Auto module does.
 | [`ModuleAccessoryBridge`](#usb-accessories-moduleaccessoryprobe-and-moduleaccessorybridge) | 10 | diagnostics bridge a USB head unit to Android Auto |
 | [`ModuleExtensions`](#adding-to-another-module-moduleextensions-and-modulebridge) | 22 | it draws the card of the module you add to, or that module asks `host.modules.extensions()` |
 | [`ModuleLiveStatus`](#something-live-modulelivestatus) | 27 | it draws the Ride page |
+| [`ModuleRideShortcut`](#a-shortcut-on-the-ride-page-modulerideshortcut) | 46 | it draws the Ride page: about every second while it shows |
 | [`ModuleMapLayer`](#pins-on-the-nav-map-modulemaplayer) | 30 | the NAV map settles somewhere new, every `refreshSeconds` while it shows your layer (44), or the rider taps one of your pins |
 | [`ModuleMapOverlay`](#your-data-in-the-nav-phone-only) | 32 | the rider switches your layer on in the NAV map's layers menu |
 | [`ModulePlaceProvider`](#your-data-in-the-nav-phone-only) | 32 | the rider picks your source of place icons and the NAV map settles somewhere new |
@@ -337,6 +338,39 @@ choose: the pill already says "live", so do not repeat it. A module that answers
 
 ---
 
+## A shortcut on the Ride page: `ModuleRideShortcut`
+
+For a module the rider **goes back to while riding**: a group ride's rooms, say. The app puts
+one card under Connect, beside "Hey Motohub" when the Voice module is installed and the whole
+width otherwise, never taller than the Connect card. A tap opens `featureId` full-screen, as a
+feature opened from Modules. Nothing shows while `shown()` is false.
+
+```kotlin
+interface ModuleRideShortcut {                     // a capability, since contract 46
+    val featureId: String                          // one of your features, opened on a tap
+    fun shown(): Boolean                           // false hides the card
+    fun title(): String                            // "Go to your Paddock"
+    fun subtitle(): String                         // "Riding with Sunday group", "3 rooms"
+    fun badge(): Int = 0                           // unread messages, on the icon ("99+" above 99)
+    fun alert(): String? = null                    // "Luca: Stop": in place of the subtitle, in amber
+    fun alertUrgent(): Boolean = false             // an emergency: the alert in red, its mark pulsing
+    fun liveSinceMillis(): Long = 0                // > 0: sharing the position since then (epoch ms)
+    fun icon(sizePx: Int): Bitmap? = null          // square; null draws a generic module glyph
+}
+```
+
+The app asks every member but `icon` about once a second while the Ride page is in front (there
+is a timer), on the main thread: answer from fields you already hold, never from disk or the
+network. `icon` is asked once, off the main thread, and kept until your module's version
+changes. The app draws the badge, the alert mark, the timer ("Sharing · 12:34", "1:05:12" past
+an hour) and a soft glow while `liveSinceMillis` is above 0, all over your static icon; your
+title, subtitle and alert are shown as you wrote them. A member that throws gets its default
+(`shown` that throws hides the card). When several modules answer, the first by id that is
+shown wins. A module that answers `ModuleRideShortcut` declares contract **46**, and needs the
+ADV-SOLO 0.1.73.
+
+---
+
 ## A motion sensor on the motorcycle: `ModuleMotionSource`
 
 For a module that reads an IMU **fixed to the motorcycle** - over Bluetooth, USB, anything. While
@@ -415,7 +449,11 @@ seconds or more, and answer from memory: the call runs on every period.
 
 Such pins are people, not photos: set `live = true` (contract 45) and the flat map draws them
 above everything else, never grouped with places or photos and never hidden by a collision, each
-as its `pinImage` (a round avatar) or its coloured pin, with the `label` beside it. To show the
+as its `pinImage` (a round avatar) or its coloured pin, with the `label` beside it. The Ride
+Dashboard's maps on the motorcycle's screen draw live pins too, since ADV-SOLO 0.1.73: the flat,
+MapLibre and 3D POV maps and the north-up mini map show each as a dot in `colorArgb`
+with its `label`, asking `pinsNear` around the rider every few seconds while the layer is on in
+the layers menu, so `pinsNear` may be called from two places at once. To show the
 rider one of them, `host.showOnMap(latitude, longitude)` opens the NAV centred there, with no
 destination. A feature with `ModuleFeaturePlacement.NAV_MENU` is listed first in the NAV's app
 menu (the grid button beside the microphone), the way back to a module during a ride.

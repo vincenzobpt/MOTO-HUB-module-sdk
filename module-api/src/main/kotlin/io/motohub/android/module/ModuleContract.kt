@@ -204,8 +204,18 @@ object MotoHubModuleContract {
      *    preview. ModuleFeaturePlacement.NAV_MENU lists a feature first in the NAV's app menu.
      *    New members with defaults, an append on the app's side and an appended placement; a
      *    layer built against an older contract is not live. The minimum stays at 3.
+     * 46: a module's shortcut on the Ride page. ModuleRideShortcut, a new capability: under
+     *    Connect, beside "Hey Motohub", while the module has something to go back to (a group
+     *    ride's rooms), with its title, subtitle, unread badge, a live alert (red when urgent) and
+     *    a running timer with a glow while it shares the rider's position. A tap opens one of its
+     *    features. New type only, every member past the first four with a default; the minimum
+     *    stays at 3.
+     * 47: a voice call from the pocket. MotoHubModuleHost.keepAliveWithMicrophone, the keep-alive of
+     *    contract 34 that also holds the microphone, so a module's call or radio goes on with the
+     *    screen off. An append on the app's side: an older app answers it with AbstractMethodError
+     *    (catch LinkageError and fall back to keepAlive). The minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 45
+    const val CONTRACT_VERSION = 47
 
     /**
      * The oldest contract this app can still run.
@@ -397,6 +407,14 @@ interface MotoHubModuleHost {
      * group ride, say. The module's page over the tabs makes way. Main thread or not.
      */
     fun showOnMap(latitude: Double, longitude: Double)
+
+    /**
+     * [keepAlive] that also holds the microphone (contract 47): Android lets an app record with the
+     * screen off only from a foreground service of type microphone, started while the app is in
+     * front. Call it from the rider's tap, like [keepAlive]; without the microphone permission it
+     * is a plain [keepAlive]. Nothing is recorded by it: the module opens the microphone itself.
+     */
+    fun keepAliveWithMicrophone(reason: String): AutoCloseable
 }
 
 /**

@@ -47,7 +47,10 @@ interface ModuleMapLayer {
      * never hidden by a collision: each one is its [pinImage] (a round avatar) or, without one,
      * its coloured pin with its [ModuleMapLayerPin.symbol], and its [ModuleMapLayerPin.label]
      * beside it as a place's name. The 3D map draws them as places, ungrouped; Real 3D shows
-     * no pins. False, the default, keeps the photo layer Immich is. Read once, when the map opens.
+     * no pins. The Ride Dashboard's maps on the motorcycle's screen draw them too (the flat,
+     * MapLibre and 3D POV maps and the north-up mini map): a dot in [ModuleMapLayerPin.colorArgb]
+     * with its label, asked every few seconds around the rider while the layer is on in the
+     * layers menu. False, the default, keeps the photo layer Immich is. Read once, when the map opens.
      */
     val live: Boolean get() = false
 }
