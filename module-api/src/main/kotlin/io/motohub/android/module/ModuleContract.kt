@@ -214,8 +214,13 @@ object MotoHubModuleContract {
      *    contract 34 that also holds the microphone, so a module's call or radio goes on with the
      *    screen off. An append on the app's side: an older app answers it with AbstractMethodError
      *    (catch LinkageError and fall back to keepAlive). The minimum stays at 3.
+     * 48: a group ride on the rider's own dashboard. ModuleGroupRide, a new capability: the riding
+     *    room's name, state and riders (distance, speed), its latest messages, and sendQuick for the
+     *    one-tap messages (Stop, Fuel, Help...) a dashboard button sends. The app draws it as the
+     *    Paddock card of a dash; the module owns the room and the chat. New types only; the minimum
+     *    stays at 3.
      */
-    const val CONTRACT_VERSION = 47
+    const val CONTRACT_VERSION = 48
 
     /**
      * The oldest contract this app can still run.

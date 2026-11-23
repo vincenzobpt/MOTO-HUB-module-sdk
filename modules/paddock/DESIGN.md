@@ -163,6 +163,19 @@ Rooms are listed newest `lastActivity` first.
 - Positions: `host.places.livePosition()` every 10 s while a room is open → `send_position`.
 - `host.keepAlive("Paddock: riding with your room")` from the create/join tap, closed on leave/close.
 
+## 5b. Group ride on the dashboard (contract 48)
+
+`GroupRideLink` answers `ModuleGroupRide` (by name, lazily, so the module still loads on an app
+before 48). After every poll the engine builds a `GroupRideSnapshot` of the room I **ride** with:
+its name, `online`, the number of connected relays (read every 10 s), the other riders (speed from
+their last position, straight-line distance from my fix, ahead/behind from my bearing only while I
+move above 1 m/s, seconds since their last fix; nearest first) and the last 8 chat messages (read
+every 2 s with `chat`, never marking anything read; the room's own events left out). With no riding
+room the snapshot says `riding = false`; with the engine not running it is null. `snapshot()` only
+returns that value, so the dashboard's render thread never waits. `sendQuick(kind)` sends one of the
+quick messages to the riding room (Share my spot and Emergency carry my position, as in the chat) and
+returns null, or a short sentence saying why not.
+
 ## 6. Privacy — what we say, and why it is true
 
 - No account, no email, no phone number: the rider ID is a key pair made on the phone.

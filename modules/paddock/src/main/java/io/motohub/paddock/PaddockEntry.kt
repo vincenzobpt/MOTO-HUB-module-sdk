@@ -38,6 +38,9 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
     // By lazy: its class implements ModuleRideShortcut (contract 46), which an older app lacks.
     private val rideShortcut by lazy { io.motohub.paddock.map.RideShortcut(host.storage, engine, FEATURE) }
 
+    // By lazy, by name: ModuleGroupRide is contract 48, which an older app lacks.
+    private val groupRide by lazy { io.motohub.paddock.engine.GroupRideLink(engine) }
+
     private val features = object : ModuleFeatures {
         override fun features() = listOfNotNull(
             ModuleFeature(
@@ -78,7 +81,11 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
         ModuleFeatures::class.java -> features as T
         ModuleMapLayer::class.java -> riders as T
         // By name: naming ModuleRideShortcut::class here would fail on an app before contract 46.
-        else -> if (type.name == RIDE_SHORTCUT) rideShortcut as T else null
+        else -> when (type.name) {
+            RIDE_SHORTCUT -> rideShortcut as T
+            GROUP_RIDE -> groupRide as T
+            else -> null
+        }
     }
 
     override fun release() {
@@ -90,5 +97,6 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
         const val FEATURE = "paddock"
         const val NAV_FEATURE = "paddock-nav"
         const val RIDE_SHORTCUT = "io.motohub.android.module.ModuleRideShortcut"
+        const val GROUP_RIDE = "io.motohub.android.module.ModuleGroupRide"
     }
 }

@@ -184,9 +184,63 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
             }
             if (riding) sendPositionIfDue(module)
             chatRoom?.let { room -> refreshChat(module, room, (next.room(room)?.unread ?: 0) > 0) }
+            updateGroupRide(module, next)
         } catch (t: Throwable) {
             log("poll failed: ${t.javaClass.simpleName}")
         }
+    }
+
+    /** What MOTO-HUB's dashboards show of the room I ride with (contract 48); built after each poll, read from any thread. */
+    @Volatile internal var groupRide: io.motohub.android.module.GroupRideSnapshot? = null
+    private var rideChat: List<ChatMessage> = emptyList()
+    private var rideChatRoom: String? = null
+    private var rideChatAt = 0L
+    private var rideRelaysAt = 0L
+
+    /** On the Python thread. Reads the chat without marking it read, at most every 2 s; the relays every 10 s. */
+    private fun updateGroupRide(module: PyObject, state: PaddockState) {
+        if (state.stage != EngineStage.RUNNING) {
+            groupRide = null
+            return
+        }
+        val now = System.currentTimeMillis()
+        val room = state.riding
+        if (room == null) {
+            groupRide = io.motohub.android.module.GroupRideSnapshot(
+                state.rooms.firstOrNull()?.name.orEmpty(), false, state.online, 0, emptyList(), emptyList(), now
+            )
+            return
+        }
+        val tick = SystemClock.elapsedRealtime()
+        if (room.id != rideChatRoom || tick - rideChatAt >= GROUP_CHAT_MILLIS) {
+            rideChatRoom = room.id
+            rideChatAt = tick
+            rideChat = StateJson.chat(JSONObject(module.callAttr("chat", room.id, 0L, GROUP_CHAT_LIMIT).toString()))
+        }
+        if (tick - rideRelaysAt >= GROUP_RELAYS_MILLIS) {
+            rideRelaysAt = tick
+            refreshRelays()
+        }
+        val fix = latestFix
+        val me = if (fix != null) fix.latitude to fix.longitude else myPosition()
+        groupRide = io.motohub.android.module.GroupRideSnapshot(
+            room = room.name, riding = true, online = state.online, relays = _relays.value.connected.size,
+            members = GroupRideBuild.members(
+                room, me?.first, me?.second,
+                fix?.takeIf { it.hasBearing() }?.bearing?.toDouble(), fix?.takeIf { it.hasSpeed() }?.speed?.toDouble(), now / 1000
+            ),
+            messages = GroupRideBuild.messages(rideChat), atMillis = now
+        )
+    }
+
+    /** A dashboard button's quick message to the room I ride with; null when it went, else why not. */
+    internal fun sendQuickToRiding(kind: String): String? {
+        val quick = QuickKind.of(kind) ?: return "Unknown message."
+        val state = _state.value
+        if (state.stage != EngineStage.RUNNING) return "Paddock is not running."
+        val room = state.riding ?: return "Start a ride with a room in Paddock first."
+        sendQuick(room.id, quick)
+        return null
     }
 
     /** Someone came into a room, or I was let in: worth a notification, not only a toast. */
@@ -666,6 +720,9 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
         const val POLL_MILLIS = 1000L
         const val POSITION_MILLIS = 10_000L
         const val CHAT_PAGE = 60
+        const val GROUP_CHAT_LIMIT = 8L
+        const val GROUP_CHAT_MILLIS = 2_000L
+        const val GROUP_RELAYS_MILLIS = 10_000L
         const val MAX_TEXT = 2000
         const val LOCATION_MILLIS = 5_000L
         /** An older fix is not sent: the room would see a rider standing still who is not. */
