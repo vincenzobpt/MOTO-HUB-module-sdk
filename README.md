@@ -29,6 +29,7 @@ particular module: it asks for *capabilities* by interface and draws whatever th
 | [`modules/mapopt/`](modules/mapopt) | The complete source of the MapOpt module: the rider's own Mapbox token for the 3D POV. The reference for a Mapbox account (contract 36). | **AGPL-3.0** |
 | [`modules/motion-sensor/`](modules/motion-sensor) | The complete source of the Motion sensor module: diagnostics for the ESP32 motion sensor over Bluetooth. Not in the catalogue yet. | **AGPL-3.0** |
 | [`modules/wt9011/`](modules/wt9011) | The complete source of the WT9011 IMU module by [sur00t](https://github.com/sur00t): a WitMotion WT9011DCL over Bluetooth, streaming lean and g-forces into MOTO-HUB's trips and Ride Dashboard (contract 43). In the catalogue. | **AGPL-3.0** |
+| [`modules/paddock/`](modules/paddock) | The complete source of Paddock: ride together, privately. Rooms opened with a QR code or a link, everyone live on the NAV map and on the motorcycle's maps, room chat and quick messages, messages kept for a rider who is offline, and voice calls to a room-mate, end to end encrypted over [Reticulum](https://reticulum.network) with no account and no server. Carries its own CPython (contract 39); the reference for live map pins, the NAV menu, the Ride page shortcut and a call with the screen off (contracts 44-47). Bundles Reticulum and LXMF under the Reticulum License; see its NOTICE.md. In the catalogue. | **MPL-2.0** |
 | [`docs/`](docs) | The developer guide. | Apache-2.0 |
 
 The contract and tooling are Apache-2.0 so that you can write a module under any licence you

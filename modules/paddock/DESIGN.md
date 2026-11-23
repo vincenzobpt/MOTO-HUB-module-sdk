@@ -129,7 +129,7 @@ Possessing the link = invited. Show it only to people you ride with.
     "createdAt": 1795254000, "lastActivity": 1795254296,
     "unread": 2,
     "last": null | {"from": "<hash>", "name": "Luca", "kind": "text" | "quick", "text": "Fuel", "at": 1795254296000},
-    "members": [{"hash": "…", "name": "Vincenzo", "color": "#FF7A1A", "bike": "CFMOTO 800MT",
+    "members": [{"hash": "…", "name": "Alex", "color": "#FF7A1A", "bike": "Tracer 9",
                  "isMe": false, "isLeader": true,
                  "lat": 45.1, "lon": 9.2, "speed": 12.5, "bearing": 270.0, "fixAt": 1795254295,
                  "heardAt": 1795254296}]
