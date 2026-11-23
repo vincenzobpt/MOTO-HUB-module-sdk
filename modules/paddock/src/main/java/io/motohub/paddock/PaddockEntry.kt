@@ -25,7 +25,7 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
     // Must agree with motohubModule { } in build.gradle.kts.
     override val manifest = ModuleManifest(
         id = "paddock",
-        version = "0.5.12",
+        version = "0.5.13",
         contractVersion = 39,
         entryClass = "io.motohub.paddock.PaddockEntry",
         displayName = "Paddock",
