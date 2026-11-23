@@ -29,4 +29,5 @@ include(":modules:tomtom")
 include(":modules:mapopt")
 include(":modules:motion-sensor")
 include(":modules:wt9011")
+include(":modules:paddock")
 // Your own module: copy examples/hello-module to modules/<name> and include it here.

@@ -1,0 +1,3 @@
+# Contract 45. Called only inside `catch (_: LinkageError)` in PaddockEngine.showOnMap, which falls
+# back to navigateTo (contract 31) on an app before 45.
+Lio/motohub/android/module/MotoHubModuleHost;showOnMap(DD)V
