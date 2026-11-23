@@ -4,6 +4,8 @@
 // of the MPL was not distributed with this file, you can obtain one at https://mozilla.org/MPL/2.0/.
 package io.motohub.paddock.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -44,6 +46,7 @@ import io.motohub.paddock.engine.QuickKind
 import io.motohub.paddock.engine.Room
 import io.motohub.paddock.engine.RoomPhase
 import io.motohub.paddock.qr.QrImage
+import kotlinx.coroutines.delay
 
 /**
  * One room, a permanent group. Joining, it says who is being asked. Open, the main thing is the
@@ -254,6 +257,7 @@ private fun ActiveRoom(
                     Txt("Your position is shared every 10 s, also when this page is closed.", Ty.SMALL, P.text2)
                 }
             }
+            BackgroundLocationNotice()
             Spacer(Modifier.height(12.dp))
             SecondaryButton("Stop ride", PI.CLOSE, onClick = onStop)
         }
@@ -478,4 +482,42 @@ private fun QuickShortcut(icon: PI, tint: Color, label: String, modifier: Modifi
         PIcon(icon, tint, 22.dp)
         Txt(label, Ty.SMALL_STRONG, P.text, maxLines = 1)
     }
+}
+
+/**
+ * While riding: without "All the time" Android stops giving MOTO-HUB the position once the phone is locked or another app
+ * is in front, and the room stops seeing the rider. Said here, with the button that asks Android; gone once allowed.
+ */
+@Composable
+@ComposableTarget(ModuleUi.UI_APPLIER)
+private fun BackgroundLocationNotice() {
+    val context = LocalContext.current
+    fun allowed() = context.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+    var missing by remember { mutableStateOf(!allowed()) }
+    // The answer is given on Android's own page: read again while this is on screen.
+    LaunchedEffect(Unit) {
+        while (missing) { delay(1_500); missing = !allowed() }
+    }
+    if (!missing) return
+    Spacer(Modifier.height(12.dp))
+    Column(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(S.cardRadius)).background(P.warnSoft).padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Txt("Your position stops when the phone is locked", Ty.HEADING, P.warn)
+        Txt(
+            "Android gives MOTO-HUB your location only while the app is open. Allow location \"All the time\" so the " +
+                "room keeps seeing you with the phone in your pocket.",
+            Ty.SMALL, P.text2
+        )
+        SecondaryButton("Allow all the time", PI.LOCK) {
+            context.findActivity()?.requestPermissions(arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION), 4713)
+        }
+    }
+}
+
+private tailrec fun android.content.Context.findActivity(): android.app.Activity? = when (this) {
+    is android.app.Activity -> this
+    is android.content.ContextWrapper -> baseContext.findActivity()
+    else -> null
 }
