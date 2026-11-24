@@ -179,7 +179,10 @@ returns null, or a short sentence saying why not.
 ## 6. Privacy — what we say, and why it is true
 
 - No account, no email, no phone number: the rider ID is a key pair made on the phone.
-- MOTO-HUB runs no server for Paddock and receives nothing.
+- MOTO-HUB runs one service for Paddock, a doorbell (`motohub-push`, contract 51): a rider whose
+  message or call cannot get through rings the other rider's phone through Firebase Cloud Messaging.
+  It carries the push token, "msg" or "call", the random room id and a 16-hex prefix of the sender's
+  id - no names, no text, no positions - and stores nothing. Tokens travel only inside the rooms.
 - Names, bikes and positions only travel inside encrypted LXMF messages to the room's members.
 - The public Reticulum relay forwards encrypted packets it cannot read. It does see the phone's
   IP address and that some traffic flows, like any internet service — the privacy page says so.

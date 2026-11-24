@@ -208,6 +208,7 @@ fun PaddockApp(
             }
             // A call covers every screen until it ends; the room is still there underneath.
             state.call?.let { CallScreen(controller, it) }
+            FullScreenAsk(controller, profile != null && state.call == null, slot)
             Toast(toast) { toast = null }
         }
     }
@@ -248,4 +249,42 @@ private tailrec fun Context.findActivity(): Activity? = when (this) {
     is Activity -> this
     is ContextWrapper -> baseContext.findActivity()
     else -> null
+}
+
+/**
+ * Asked each time Paddock opens while Android keeps calls from lighting the screen: a rider calling
+ * this phone in a pocket or on a locked phone would otherwise only get a line in the notifications.
+ * "Allow" opens the system page; the ask goes away as soon as the switch is on.
+ */
+@Composable
+@ComposableTarget(ModuleUi.UI_APPLIER)
+private fun FullScreenAsk(controller: PaddockController, eligible: Boolean, slot: BackSlot) {
+    val context = LocalContext.current
+    var allowed by remember { mutableStateOf(controller.fullScreenCallsAllowed()) }
+    var dismissed by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        while (true) { allowed = controller.fullScreenCallsAllowed(); delay(2000) }
+    }
+    ConfirmSheet(
+        visible = eligible && !allowed && !dismissed,
+        slot = slot,
+        icon = PI.CALL,
+        danger = false,
+        title = "Let calls ring like a phone call",
+        body = "When a rider of your rooms calls you, Paddock rings your phone and shows the call on the whole " +
+            "screen, also when it is locked or in your pocket. Android blocks that for MOTO-HUB now, so a call " +
+            "would only be a small notification you may not see.\n\nTap Allow, then turn on full-screen notifications for MOTO-HUB.",
+        confirm = "Allow",
+        onDismiss = { dismissed = true },
+        onConfirm = {
+            dismissed = true
+            runCatching {
+                context.startActivity(
+                    android.content.Intent(android.provider.Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT,
+                        android.net.Uri.parse("package:" + context.packageName))
+                        .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
+            }
+        }
+    )
 }

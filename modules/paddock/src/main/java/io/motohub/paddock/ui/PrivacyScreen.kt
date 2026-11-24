@@ -26,8 +26,8 @@ internal fun PrivacyScreen(onBack: () -> Unit) {
         Txt("Your rides stay between your riders", Ty.TITLE, P.text)
         Spacer(Modifier.height(10.dp))
         Txt(
-            "Paddock has no account, and MOTO-HUB runs no server for it. The riders' phones send each other " +
-                "end-to-end encrypted messages through a public Reticulum relay.",
+            "Paddock has no account. The riders' phones send each other end-to-end encrypted messages through " +
+                "a public Reticulum relay. MOTO-HUB's only part is a doorbell for riders whose app is in the background.",
             Ty.BODY, P.text2
         )
         Spacer(Modifier.height(20.dp))
@@ -41,7 +41,13 @@ internal fun PrivacyScreen(onBack: () -> Unit) {
             "On this phone: your rider ID, your profile, the relay you chose, and your rooms with their riders. A MOTO-HUB " +
                 "backup file (.mhb) you make includes your rider ID too. When you leave a room or its leader " +
                 "deletes it, Paddock deletes it with its riders' names, bikes and positions; Reticulum's routing cache keeps only " +
-                "their Paddock addresses (random codes, no names) until you forget your rider ID. MOTO-HUB runs no server for Paddock and receives nothing."
+                "their Paddock addresses (random codes, no names) until you forget your rider ID."
+        )
+        InfoBlock(
+            PI.PHONES, P.ok, P.okSoft, "The doorbell",
+            "When a rider of your room cannot be reached because MOTO-HUB is in the background on their phone, " +
+                "MOTO-HUB's push service asks Google to ring it: \"a message\" or \"a call\", with a random room code. " +
+                "No names, no text, no positions, and it keeps nothing. Your phone's push code goes only to the riders of your rooms."
         )
         InfoBlock(
             PI.RELAY, P.ok, P.okSoft, "What the relay sees",

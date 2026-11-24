@@ -19,6 +19,10 @@ import RNS.vendor.umsgpack as msgpack
 OFFER, RINGING, ACCEPT, DECLINE, BUSY, BYE, MUTE, MEDIA = 1, 2, 3, 4, 5, 6, 7, 16
 RING_TIMEOUT_S, ANSWER_TIMEOUT_S, CONNECT_TIMEOUT_S = 10, 45, 60
 ANNOUNCE_DELAY_S, PATH_WAIT_S, PATH_ASK_EVERY_S = 6, 30, 8
+# No link after WAKE_AFTER_S: the callee's phone is rung through the push service (contract 51) and
+# the call keeps trying for WOKEN_RING_S - long enough to see the notification, open MOTO-HUB and
+# let Paddock reconnect - dialling again every REDIAL_S.
+WAKE_AFTER_S, WOKEN_RING_S, REDIAL_S = 4, 90, 5
 INBOX_MAX = 100  # ~4 s of 40 ms packets: Kotlin drains every 20 ms, more means it stalled
 
 _clock = threading.RLock()
@@ -26,11 +30,12 @@ _v = {"dest": None, "call": None, "inbox": collections.deque(maxlen=INBOX_MAX), 
 _eng = {}
 
 
-def init(g, member_of):
+def init(g, member_of, wake=None):
     """Called by the engine's start(), after RNS is up. member_of(identity_hash_hex) gives
-    (name, room id) for a rider who shares a room with me, or None."""
+    (name, room id) for a rider who shares a room with me, or None. wake(identity_hash_hex, room id)
+    rings that rider's phone and says whether it could (they shared a push token)."""
     RNS = g["RNS"]
-    _eng.update(g=g, RNS=RNS, member_of=member_of)
+    _eng.update(g=g, RNS=RNS, member_of=member_of, wake=wake or (lambda *a: False))
     dest = RNS.Destination(g["ident"], RNS.Destination.IN, RNS.Destination.SINGLE, "paddock", "voice")
     dest.set_link_established_callback(_inbound_link)
     _v["dest"] = dest
@@ -96,8 +101,10 @@ def _send_ctl(link, kind, body=None):
 
 # ---------------------------------------------------------------- outgoing
 
-def call(peer_key_hex, name, room_id):
-    """Ring a room-mate. Returns an error text, or "" when the call is on its way."""
+def call(peer_key_hex, name, room_id, callback=False):
+    """Ring a room-mate. Returns an error text, or "" when the call is on its way.
+    callback: I was rung by this rider's call through the push service and tapped it: my link
+    becomes their call (they take it without ringing me again), see _identified."""
     RNS, g = _eng["RNS"], _eng["g"]
     with _clock:
         if _v["call"] is not None:
@@ -108,20 +115,42 @@ def call(peer_key_hex, name, room_id):
         except Exception:
             return "This rider's key is not valid."
         c = _new_call("out", ident.hash.hex(), name, room_id)
+        c["ident"] = ident
+        c["callback"] = bool(callback)
         _v["call"] = c
     threading.Thread(target=_dial, args=(c, ident), daemon=True).start()
     return ""
+
+
+def _maybe_wake(c):
+    """Out of _clock (the engine's wake takes no lock of ours, but stay clear): ring the callee's
+    phone once, when the call has had no answer from the network for WAKE_AFTER_S."""
+    if c["dir"] != "out" or c.get("woken") is not None or c["state"] != "calling" or c.get("callback"):
+        return
+    if time.time() - c["started"] < WAKE_AFTER_S:
+        return
+    try:
+        c["woken"] = bool(_eng["wake"](c["peer"], c["room"]))
+    except Exception as e:
+        print("voice wake failed: %r" % (e,))
+        c["woken"] = False
+
+
+def _ring_limit(c):
+    return WOKEN_RING_S if c.get("woken") else RING_TIMEOUT_S + 20
 
 
 def _dial(c, ident):
     RNS, g = _eng["RNS"], _eng["g"]
     dest_hash = RNS.Destination.hash(ident, "paddock", "voice")
     if not RNS.Transport.has_path(dest_hash):
-        # Ask again now and then: one request can be dropped by a busy relay.
-        until, asked = time.time() + PATH_WAIT_S, 0
-        while not RNS.Transport.has_path(dest_hash) and time.time() < until:
+        # Ask again now and then: one request can be dropped by a busy relay. A rung callee gets
+        # until the end of the ring to come back online.
+        asked = 0
+        while not RNS.Transport.has_path(dest_hash) and time.time() < c["started"] + max(PATH_WAIT_S, _ring_limit(c)):
             if c["state"] == "ended":
                 return
+            _maybe_wake(c)
             if time.time() - asked >= PATH_ASK_EVERY_S:
                 RNS.Transport.request_path(dest_hash)
                 asked = time.time()
@@ -137,13 +166,16 @@ def _dial(c, ident):
                         closed_callback=lambda l: _closed(c, l))
         link.set_packet_callback(lambda data, packet: _on_packet(c, data))
         c["link"] = link
+        if c.get("watched"):
+            return  # a redial: the first dial's watcher is still on it
+        c["watched"] = True
     threading.Thread(target=_watch, args=(c,), daemon=True).start()
 
 
 def _out_established(c, link):
     with _clock:
-        if c["state"] == "ended":
-            link.teardown()
+        if c["state"] == "ended" or c["link"] is not link:
+            link.teardown()  # ended, or the callee's call-back became the call meanwhile
             return
         link.identify(_eng["g"]["ident"])
         prof = _eng["g"]["profile"]
@@ -154,11 +186,12 @@ def _watch(c):
     """Timeouts while the call is not connected yet."""
     while True:
         time.sleep(0.5)
+        _maybe_wake(c)
         with _clock:
             if c["state"] in ("ended", "connected"):
                 return
             age = time.time() - c["started"]
-            if c["state"] == "calling" and age > RING_TIMEOUT_S + 20:
+            if c["state"] == "calling" and age > _ring_limit(c):
                 _end(c, "%s did not answer the network." % c["name"])
                 return
             if c["state"] == "ringing_out" and age > ANSWER_TIMEOUT_S + 20:
@@ -196,6 +229,19 @@ def _identified(link, identity):
         if who is None:
             # Not a room-mate: no ring, no answer, nothing learnt about me.
             link.teardown()
+            return
+        cur = _v["call"]
+        if (cur is not None and cur["dir"] == "out" and cur["peer"] == identity.hash.hex()
+                and cur["state"] in ("calling", "ringing_out")):
+            # The rider I am calling, calling me: they were rung through the push service and tapped
+            # it, so this link is my call and they have answered.
+            old = cur["link"]
+            cur["link"] = link
+            cur["state"], cur["connectedAt"] = "connected", time.time()
+            _send_ctl(link, ACCEPT)
+            _event("call_connected", "%s answered." % cur["name"])
+            if old is not None and old is not link:
+                threading.Thread(target=_teardown_later, args=(old,), daemon=True).start()
             return
         if _v["call"] is not None:
             _send_ctl(link, BUSY)
@@ -276,9 +322,25 @@ def _on_packet(c, data, link=None):
 
 def _closed(c, link):
     with _clock:
+        if c is not None and c["link"] is not link:
+            return  # an old link of this call (a redial, or replaced by the callee's call-back)
+        if (c is not None and c["dir"] == "out" and c["state"] == "calling" and c.get("woken")
+                and time.time() - c["started"] < WOKEN_RING_S - REDIAL_S):
+            # The callee's MOTO-HUB was asleep (old path, relays parked): dial again while their
+            # phone rings, until they open it or the ring ends.
+            c["link"] = None
+            threading.Timer(REDIAL_S, _redial, args=(c,)).start()
+            return
         if c is not None and c["state"] != "ended":
             _end(c, "The call was lost." if c["state"] == "connected" else
                  "%s cannot be reached." % c["name"], tell=False)
+
+
+def _redial(c):
+    if c["state"] != "calling":
+        return
+    _eng["RNS"].Transport.request_path(_eng["RNS"].Destination.hash(c["ident"], "paddock", "voice"))
+    _dial(c, c["ident"])
 
 
 def send(packet):

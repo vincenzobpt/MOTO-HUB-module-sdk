@@ -25,11 +25,11 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
     // Must agree with motohubModule { } in build.gradle.kts.
     override val manifest = ModuleManifest(
         id = "paddock",
-        version = "0.5.21",
+        version = "0.5.22",
         contractVersion = 39,
         entryClass = "io.motohub.paddock.PaddockEntry",
         displayName = "Paddock",
-        description = "Ride together, privately: a QR to open a room, everyone on the NAV map. No account, no server."
+        description = "Ride together, privately: a QR to open a room, everyone on the NAV map. No account."
     )
 
     private val engine = PaddockEngine(host)
@@ -40,6 +40,9 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
 
     // By lazy, by name: ModuleGroupRide is contract 48, which an older app lacks.
     private val groupRide by lazy { io.motohub.paddock.engine.GroupRideLink(engine) }
+
+    // By lazy, by name: ModulePushReceiver is contract 51, which an older app lacks.
+    private val pushReceiver by lazy { io.motohub.paddock.engine.PushReceiver(host.storage, engine.notifier) }
 
     // By lazy, by name: ModuleStatus is contract 50, which an older app lacks.
     private val statusLink = lazy { io.motohub.paddock.engine.StatusLink(engine) }
@@ -114,6 +117,7 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
             RIDE_SHORTCUT -> rideShortcut as T
             GROUP_RIDE -> groupRide as T
             STATUS -> statusLink.value as T
+            PUSH_RECEIVER -> pushReceiver as T
             else -> null
         }
     }
@@ -133,5 +137,6 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
         const val CHAT_FEATURE_PREFIX = "chat:"
         const val STATUS = "io.motohub.android.module.ModuleStatus"
         const val GROUP_RIDE = "io.motohub.android.module.ModuleGroupRide"
+        const val PUSH_RECEIVER = "io.motohub.android.module.ModulePushReceiver"
     }
 }

@@ -100,6 +100,68 @@ internal class Notifier(private val context: Context) {
         runCatching { manager?.cancel(messageId(roomId)) }
     }
 
+    /**
+     * A push said [name] wrote in [roomId] (contract 51): the message itself comes over Reticulum once
+     * Paddock reconnects, and replaces this notification (same id) with its text.
+     */
+    fun postWakeMessage(roomId: String, roomName: String, name: String): Boolean {
+        if (manager == null) return false
+        postMessages(roomId, roomName, "$name sent you a message. Open it to read it.", 0, urgent = false)
+        return true
+    }
+
+    /**
+     * A push said [name] is calling from [roomId]: it rings like a call and opens the room, where
+     * Paddock reconnects and the caller, still dialling, gets through; the real ringing notification
+     * then takes this one's place (same id as VoiceCall's). Gone by itself when the caller gives up.
+     */
+    fun postWakeCall(roomId: String, roomName: String, name: String): Boolean {
+        val manager = manager ?: return false
+        return runCatching {
+            // Its own channel, with the phone's ringtone: woken by a push, Paddock cannot play a ringtone
+            // itself (VoiceCall's channel is silent because VoiceCall rings on its own).
+            manager.createNotificationChannel(
+                NotificationChannel(RING_CHANNEL, "Paddock incoming calls", NotificationManager.IMPORTANCE_HIGH).apply {
+                    description = "Rings when a rider of your Paddock rooms calls while MOTO-HUB is in the background"
+                    setSound(
+                        android.media.RingtoneManager.getDefaultUri(android.media.RingtoneManager.TYPE_RINGTONE),
+                        android.media.AudioAttributes.Builder()
+                            .setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                            .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                            .build()
+                    )
+                    enableVibration(true)
+                    vibrationPattern = longArrayOf(0, 800, 600, 800, 600)
+                    lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                }
+            )
+            val icon = context.resources.getIdentifier("ic_notification", "drawable", context.packageName)
+                .takeIf { it != 0 } ?: android.R.drawable.sym_call_incoming
+            fun page(code: Int, overLock: Boolean) = context.packageManager.getLaunchIntentForPackage(context.packageName)?.let {
+                it.putExtra(EXTRA_MODULE_ID, "paddock").putExtra(EXTRA_FEATURE_ID, "room:$roomId")
+                    .putExtra(EXTRA_SHOW_WHEN_LOCKED, overLock)
+                    .addFlags(android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                PendingIntent.getActivity(context, code, it, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+            }
+            val n = Notification.Builder(context, RING_CHANNEL)
+                .setSmallIcon(icon)
+                .setContentTitle("$name is calling")
+                .setContentText("Paddock · $roomName. Open to answer.")
+                .setCategory(Notification.CATEGORY_CALL)
+                .setAutoCancel(true)
+                .setTimeoutAfter(WAKE_CALL_MILLIS)
+                .apply {
+                    page(WAKE_CALL_ID + 1, false)?.let { setContentIntent(it) }
+                    page(WAKE_CALL_ID + 2, true)?.let { setFullScreenIntent(it, true) }
+                }
+                .build()
+            // Rings again and again, like a phone call, until tapped, replaced or timed out.
+            n.flags = n.flags or Notification.FLAG_INSISTENT
+            manager.notify(WAKE_CALL_ID, n)
+            true
+        }.getOrDefault(false)
+    }
+
     private var messagesCreated = false
 
     private fun messageId(roomId: String) = MESSAGES_BASE_ID + (roomId.hashCode() and 0x3FF)
@@ -111,5 +173,11 @@ internal class Notifier(private val context: Context) {
         const val BASE_ID = 47_100
         const val EXTRA_MODULE_ID = "io.motohub.android.extra.OPEN_MODULE_ID"
         const val EXTRA_FEATURE_ID = "io.motohub.android.extra.OPEN_MODULE_FEATURE_ID"
+        const val EXTRA_SHOW_WHEN_LOCKED = "io.motohub.android.extra.SHOW_WHEN_LOCKED"
+        // VoiceCall's notification id: the call it shows replaces the push's ringing.
+        const val RING_CHANNEL = "paddock_ring"
+        const val WAKE_CALL_ID = 47_090
+        // The caller keeps dialling 90 s (paddock_voice.WOKEN_RING_S).
+        const val WAKE_CALL_MILLIS = 90_000L
     }
 }

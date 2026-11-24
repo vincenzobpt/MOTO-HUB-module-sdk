@@ -10,3 +10,7 @@ Lio/motohub/android/module/ModuleStatusLevel;ATTENTION:Lio/motohub/android/modul
 Lio/motohub/android/module/ModuleStatusLevel;CONNECTING:Lio/motohub/android/module/ModuleStatusLevel;
 Lio/motohub/android/module/ModuleStatusLevel;OFF:Lio/motohub/android/module/ModuleStatusLevel;
 Lio/motohub/android/module/ModuleStatusLevel;READY:Lio/motohub/android/module/ModuleStatusLevel;
+
+# Contract 51. pushToken only inside `catch (_: LinkageError)` in engine/Push.token; ModulePushReceiver
+# only in engine/PushReceiver, built when the app asks for it by class name (an app at 51 or later).
+Lio/motohub/android/module/MotoHubModuleHost;pushToken()Ljava/lang/String;

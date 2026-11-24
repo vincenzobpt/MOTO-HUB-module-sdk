@@ -31,7 +31,10 @@ _g = {"started": False, "events": [], "rooms": {}, "riding": None, "profile": No
       # Leaders of rooms I am joining, and those of them just heard announcing (an RNS thread adds).
       "awaited": frozenset(), "back": collections.deque(),
       # Relays connected (set_online); while off, the ones to connect again.
-      "net_on": True, "parked": []}
+      "net_on": True, "parked": [],
+      # Push doorbell (MOTO-HUB contract 51): my FCM token, wakes for Kotlin to send, and the riders
+      # I rang (hash -> (room id, time)) so their return is noticed at once.
+      "push_token": "", "wakes": collections.deque(), "rung": {}, "woke_at": {}}
 # Announce-handler threads touch only the propagation-node list, under this small lock (never _lock).
 _pn_lock = threading.Lock()
 
@@ -47,6 +50,16 @@ CHAT_MAX_TEXT, CHAT_KEEP = 2000, 1000
 PN_EVAL_S, FETCH_FIRST_S, FETCH_MIN_GAP_S, FETCH_EVERY_S = 300, 8, 120, 600
 MAX_PNS = 20
 PENDING_S, RESEND_GAP_S, RESEND_MAX, RETRY_EVERY_S = 45, 30, 50, 300
+# A message not delivered after WAKE_AFTER_S rings the rider's phone (once per WAKE_GAP_S per rider);
+# a rung rider is watched for RUNG_KEEP_S so their return sends what waits at once.
+WAKE_AFTER_S, WAKE_GAP_S, RUNG_KEEP_S = 15, 180, 900
+# Rung, or back in front: the mailbox is asked every FETCH_FAST_S for a while (a message may still be
+# passing between propagation nodes) instead of every 2-10 min.
+FETCH_FAST_S, FETCH_FAST_PUSH_S, FETCH_FAST_WOKE_S = 15, 300, 120
+# A message of mine not delivered yet keeps the relays up this long after it was written, so the rider
+# I rang can fetch it from me (paddock_sync) even if I put the phone away at once.
+HOLD_FOR_OUTBOX_S = 600
+_TOKEN = re.compile(r"^[A-Za-z0-9_:\-]{20,4096}$")
 QUICK = {"stop": "Stop", "fuel": "Fuel", "slow": "Slow down", "wait": "Wait for me",
          "photo": "Photo stop", "spot": "Share my spot", "emergency": "Emergency"}
 # Room events that also appear in that room's conversation (closed / join_failed: the room is gone).
@@ -158,10 +171,15 @@ def _dest_hash_of_key(key_hex):
 
 def _profile_entry():
     p = _g["profile"]
-    return {"name": p["name"], "color": p["color"], "bike": p["bike"]}
+    return {"name": p["name"], "color": p["color"], "bike": p["bike"], "pt": _g["push_token"]}
 
 
-def _member(hash_, key, name, color, bike):
+def _pt(v):
+    """A push token as received, or "" (older Paddocks send none)."""
+    return v if isinstance(v, str) and _TOKEN.match(v) else ""
+
+
+def _member(hash_, key, name, color, bike, pt=""):
     # Every member's key is made known to Reticulum at once: LXMF validates a sender's signature
     # only for a remembered identity, and would otherwise drop their positions until we had
     # written to them first.
@@ -172,7 +190,7 @@ def _member(hash_, key, name, color, bike):
             pass
     return {"hash": hash_, "key": key, "name": _clean(name, 40, "Rider"), "color": _color(color),
             "bike": _clean(bike, 60), "lat": None, "lon": None, "speed": None, "bearing": None,
-            "fixAt": None, "heardAt": None}
+            "fixAt": None, "heardAt": None, "pt": _pt(pt)}
 
 
 def _remember(dest_hash, public_key):
@@ -191,7 +209,7 @@ def _save_room(room):
             "iAmLeader": room["iAmLeader"], "state": room["state"], "createdAt": room["createdAt"],
             "lastActivity": room["lastActivity"], "readRx": room["readRx"],
             "relays": [list(r) for r in room.get("relays", [])],
-            "members": [{k: m[k] for k in ("hash", "key", "name", "color", "bike")}
+            "members": [{k: m.get(k, "") for k in ("hash", "key", "name", "color", "bike", "pt")}
                         for m in room["members"].values()]}
     os.makedirs(_path("rooms"), exist_ok=True)
     p = _room_file(room["id"])
@@ -261,7 +279,7 @@ def _others(room):
 def _roster_payload(room):
     return {"n": room["name"], "l": room["leader"], "x": _fmt_relays(room.get("relays") or _live_relays()),
             "m": [{"d": m["hash"], "k": m["key"], "name": m["name"], "color": m["color"],
-                   "bike": m["bike"]} for m in room["members"].values()]}
+                   "bike": m["bike"], "pt": m.get("pt", "")} for m in room["members"].values()]}
 
 
 def _broadcast_roster(room):
@@ -289,6 +307,8 @@ def _announce():
     _g["dest"].announce()
     if "voice" in _g:
         _g["voice"].announce()
+    if "sync" in _g:
+        _g["sync"].announce()
     _g["last_announce"] = _now()
 
 
@@ -468,7 +488,8 @@ def start(storage, node_host, node_port, name, color, bike):
         import LXMF
         import paddock_telemeter
         import paddock_voice
-        _g.update(RNS=RNS, LXMF=LXMF, tele=paddock_telemeter, voice=paddock_voice)
+        import paddock_sync
+        _g.update(RNS=RNS, LXMF=LXMF, tele=paddock_telemeter, voice=paddock_voice, sync=paddock_sync)
         if str(node_host) != "auto":
             _g["node"] = "%s:%d" % (node_host, int(node_port))
         import RNS.Stamps
@@ -496,7 +517,8 @@ def start(storage, node_host, node_port, name, color, bike):
         RNS.Transport.register_announce_handler(_BackHandler())
         _g.update(router=router, dest=dest, ident=ident, my_hash=dest.hash.hex(),
                   key=ident.get_public_key().hex(), since=_now())
-        paddock_voice.init(_g, _member_by_identity)
+        paddock_voice.init(_g, _member_by_identity, _wake_call)
+        paddock_sync.init(_g, _sync_pending, _sync_delivered, _sync_ingest)
         _announce()
         _migrate_v01()
         _restore_rooms()
@@ -766,11 +788,14 @@ def poll():
                                "riding": None, "rooms": [], "events": []})
         _tick()
         events, _g["events"] = _g["events"], []
+        wakes = []
+        while _g["wakes"]:
+            wakes.append(_g["wakes"].popleft())
         call, call_events = _g["voice"].state()
         return json.dumps({"me": {"hash": _g["my_hash"], "online": _online(), "node": _g["node"],
                                   "since": _g["since"]},
                            "riding": _g["riding"], "rooms": _rooms_json(), "events": events + call_events,
-                           "call": call})
+                           "call": call, "wakes": wakes, "holding": _holding()})
 
 
 # ---------------------------------------------------------------- voice (paddock_voice.py)
@@ -802,6 +827,20 @@ def voice_call(room_id, member_hash):
             return json.dumps({"ok": False, "error": "This rider is not in the room."})
         key, name = m["key"], m["name"]
     err = _g["voice"].call(key, name, room_id)
+    return json.dumps({"ok": not err, "error": err})
+
+
+def voice_callback(room_id, sender_prefix):
+    """I tapped a call push from sender_prefix: call them back; their Paddock takes my link as the
+    answer to the call it is still dialling (paddock_voice._identified)."""
+    with _lock:
+        room = _g["rooms"].get(room_id)
+        m = next((m for m in _others(room) if m["hash"].startswith(sender_prefix)), None) if room else None
+        if not _g["started"] or m is None:
+            return json.dumps({"ok": False, "error": "This rider is not in the room any more."})
+        key, name = m["key"], m["name"]
+        _announce()
+    err = _g["voice"].call(key, name, room_id, callback=True)
     return json.dumps({"ok": not err, "error": err})
 
 
@@ -846,6 +885,10 @@ def set_online(on):
         _g["net_on"] = on
         R = _g["RNS"].Reticulum
         if not on:
+            # Leaving with a message on its way: its riders are rung now, the chat timers stop here.
+            for rid, i, h in list(_g["pend"]):
+                if rid in _g["rooms"]:
+                    _wake(_g["rooms"][rid], h, "msg")
             # Discovery would connect relays again on its own: no slots while parked.
             _g["autoconnect_max"] = R.max_autoconnected_interfaces()
             R._Reticulum__autoconnect_discovered_interfaces = 0
@@ -865,6 +908,146 @@ def set_online(on):
     print("relays back: %d" % len(parked))
 
 
+def _holding():
+    """Under _lock: a message of mine still on its way, written less than HOLD_FOR_OUTBOX_S ago."""
+    since = _ms() - HOLD_FOR_OUTBOX_S * 1000
+    for room in _g["rooms"].values():
+        for e in reversed(room["chat"]):
+            if e["at"] < since:
+                break
+            if e["mine"] and e.get("rc") and any(v in ("pending", "waiting", "mailbox") for v in e["rc"].values()):
+                return True
+    return False
+
+
+# ---------------------------------------------------------------- push doorbell (contract 51)
+
+def set_push_token(token):
+    """This phone's FCM token from MOTO-HUB ("" without one). A new one goes to every room the way a
+    profile change does, so the riders can ring this phone while MOTO-HUB is in the background."""
+    token = _pt(token)
+    with _lock:
+        if not _g["started"] or token == _g["push_token"]:
+            return
+        _g["push_token"] = token
+        for room in _g["rooms"].values():
+            me = room["members"].get(_g["my_hash"])
+            if me:
+                me["pt"] = token
+            if room["iAmLeader"]:
+                _broadcast_roster(room)
+            elif room["state"] == "active":
+                leader = room["members"][room["leader"]]
+                _send(room, leader["hash"], leader["key"], "hello", _profile_entry())
+            _save_room(room)
+
+
+def _wake(room, h, kind):
+    """Under _lock (or from a voice thread, lock-free reads only): ring rider h's phone, at most once
+    per WAKE_GAP_S for messages. Kotlin sends the queued wakes to the push service."""
+    m = room["members"].get(h)
+    t = time.time()
+    if not m or not m.get("pt") or h == _g.get("my_hash"):
+        return False
+    if kind == "msg" and t - _g["woke_at"].get(h, 0) < WAKE_GAP_S:
+        return True
+    _g["woke_at"][h] = t
+    _g["rung"][h] = (room["id"], _now())
+    _g["wakes"].append({"t": m["pt"], "k": kind, "r": room["id"], "f": _g["my_hash"][:16], "to": h})
+    return True
+
+
+def _wake_call(identity_hash_hex, room_id):
+    """For paddock_voice: ring the phone of the rider I am calling. No _lock (voice holds _clock)."""
+    room = _g["rooms"].get(room_id)
+    if not room:
+        return False
+    for h, m in list(room["members"].items()):
+        try:
+            if _g["RNS"].Identity.truncated_hash(bytes.fromhex(m["key"])).hex() == identity_hash_hex:
+                return _wake(room, h, "call")
+        except Exception:
+            pass
+    return False
+
+
+def push_gone(member_hash):
+    """The push service says this rider's token is dead (MOTO-HUB removed, token rotated)."""
+    with _lock:
+        for room in _g["rooms"].values():
+            m = room["members"].get(member_hash)
+            if m:
+                m["pt"] = ""
+                _save_room(room)
+
+
+def here(room_id, sender_prefix):
+    """I was rung by sender_prefix (a push) and MOTO-HUB is open: tell them, so what waits for me comes
+    now (any message from me makes them resend) instead of at their next 5-minute retry."""
+    with _lock:
+        room = _g["rooms"].get(room_id)
+        if not _g["started"] or not room or room["state"] != "active":
+            return
+        _announce()
+        _g["last_fetch"] = 0
+        _g["fetch_fast_until"] = _now() + FETCH_FAST_PUSH_S
+        for m in _others(room):
+            if not sender_prefix or m["hash"].startswith(sender_prefix):
+                _send(room, m["hash"], m["key"], "here")  # older senders: makes them resend
+                _g["sync"].pull(m["key"], room["id"])  # newer: fetch it from them now
+
+
+def _sync_member(room, identity_hex):
+    RNS = _g["RNS"]
+    for h, m in room["members"].items():
+        try:
+            if h != _g["my_hash"] and RNS.Identity.truncated_hash(bytes.fromhex(m["key"])).hex() == identity_hex:
+                return h
+        except Exception:
+            pass
+    return None
+
+
+def _sync_pending(identity_hex, rid):
+    """paddock_sync, sender's side: my chat messages still on their way to this rider (None: not one)."""
+    with _lock:
+        room = _g["rooms"].get(rid)
+        h = _sync_member(room, identity_hex) if room and room["state"] == "active" else None
+        if h is None:
+            return None
+        out = []
+        for e in room["chat"]:
+            if e["mine"] and e.get("rc") and e["rc"].get(h) in ("pending", "waiting", "mailbox", "failed"):
+                kind, d = _chat_body(e)
+                out.append(dict(d, t=kind))
+        return out[-RESEND_MAX:]
+
+
+def _sync_delivered(identity_hex, rid, ids):
+    with _lock:
+        room = _g["rooms"].get(rid)
+        h = _sync_member(room, identity_hex) if room else None
+        if h is not None:
+            for i in ids:
+                _g["dlq"].append((rid, i, h, "link", "delivered"))
+
+
+def _sync_ingest(key_hex, rid, entries):
+    """paddock_sync, rung rider's side: what the sender handed me, as if it came by LXMF."""
+    with _lock:
+        room = _g["rooms"].get(rid)
+        if not room:
+            return
+        src = next((h for h, m in room["members"].items() if m["key"] == key_hex and h != _g["my_hash"]), None)
+        if src is None:
+            return
+        sender = room["members"][src]
+        sender["heardAt"] = _now()
+        for e in entries[:RESEND_MAX]:
+            if isinstance(e, dict) and e.get("t") in ("msg", "quick"):
+                _on_chat(room, sender, src, e["t"], e)
+
+
 def woke():
     """MOTO-HUB came back to the front: say we are here and read the mailbox now."""
     with _lock:
@@ -872,6 +1055,7 @@ def woke():
             return
         _announce()
         _g["last_fetch"] = 0
+        _g["fetch_fast_until"] = max(_g.get("fetch_fast_until", 0), _now() + FETCH_FAST_WOKE_S)
         for room in _g["rooms"].values():
             if room["state"] == "joining":
                 _send_join(room)
@@ -979,14 +1163,23 @@ def _tick():
         _g["last_pn_eval"] = now
         _pick_pn()
     joining = any(r["state"] == "joining" for r in _g["rooms"].values())
-    _g["awaited"] = frozenset(r["leader"] for r in _g["rooms"].values() if r["state"] == "joining")
+    for h, (_, at) in list(_g["rung"].items()):
+        if now - at > RUNG_KEEP_S:
+            del _g["rung"][h]
+    _g["awaited"] = frozenset([r["leader"] for r in _g["rooms"].values() if r["state"] == "joining"]
+                              + list(_g["rung"]))
     back = set()
     while _g["back"]:
         back.add(_g["back"].popleft())
     for room in _g["rooms"].values():
         if room["state"] == "joining" and room["leader"] in back:
             _send_join(room)  # the leader's MOTO-HUB just opened: ask now, the path is fresh
-    _maybe_fetch(FETCH_JOINING_S if joining else FETCH_EVERY_S)
+    for h in back & set(_g["rung"]):
+        rid = _g["rung"][h][0]
+        if rid in _g["rooms"]:
+            _resend(_g["rooms"][rid], h)  # a rider I rang is back: what waits goes now
+    _maybe_fetch(FETCH_FAST_S if now < _g.get("fetch_fast_until", 0) else
+                 FETCH_JOINING_S if joining else FETCH_EVERY_S)
     _chat_timers(now)
     for room in list(_g["rooms"].values()):
         if room["state"] != "joining":
@@ -1018,6 +1211,7 @@ def _load_room(d):
     for m in d["members"]:
         if _hexs(m["hash"], 32) and _hexs(m["key"], 128):
             members[m["hash"]] = _member(m["hash"], m["key"], m["name"], m["color"], m["bike"])
+            members[m["hash"]]["pt"] = _pt(m.get("pt"))
     i_am_leader = bool(d["iAmLeader"])
     if (_g["my_hash"] not in members or d["leader"] not in members or not _hexs(d["id"], 32)
             or i_am_leader != (d["leader"] == _g["my_hash"]) or d["state"] not in ("joining", "active")):
@@ -1133,7 +1327,8 @@ def _handle(message):
         _drop_room(room)
     elif kind == "hello" and room["iAmLeader"]:
         sender.update(name=_clean(body.get("name"), 40, sender["name"]),
-                      color=_color(body.get("color")), bike=_clean(body.get("bike"), 60))
+                      color=_color(body.get("color")), bike=_clean(body.get("bike"), 60),
+                      pt=_pt(body.get("pt")) or sender.get("pt", ""))
         _broadcast_roster(room)
         _save_room(room)
     elif kind == "leave" and room["iAmLeader"]:
@@ -1164,9 +1359,10 @@ def _on_join(room, src, body, message):
     if not known and len(room["members"]) >= MAX_MEMBERS:
         return
     m = _member(src, key, body.get("name"), body.get("color"), body.get("bike"))
+    m["pt"] = _pt(body.get("pt"))
     if known:
         old = room["members"][src]
-        old.update(name=m["name"], color=m["color"], bike=m["bike"])
+        old.update(name=m["name"], color=m["color"], bike=m["bike"], pt=m["pt"] or old.get("pt", ""))
     else:
         room["members"][src] = m
         _event("member_joined", "%s joined the room." % m["name"], room)
@@ -1181,6 +1377,7 @@ def _on_roster(room, body):
     if not isinstance(entries, list) or len(entries) > MAX_MEMBERS:
         return
     new = {}
+    # My own token is mine to say, not the roster's.
     for e in entries:
         if not isinstance(e, dict):
             return
@@ -1188,6 +1385,7 @@ def _on_roster(room, body):
         if not h or not k or _dest_hash_of_key(k) != h:
             return
         new[h] = _member(h, k, e.get("name"), e.get("color"), e.get("bike"))
+        new[h]["pt"] = _pt(e.get("pt"))
     if _g["my_hash"] not in new or room["leader"] not in new:
         return
     old = room["members"]
@@ -1195,6 +1393,8 @@ def _on_roster(room, body):
         if h in old:
             for f in ("lat", "lon", "speed", "bearing", "fixAt", "heardAt"):
                 m[f] = old[h][f]
+            if not m["pt"]:  # a leader on an older Paddock sends no tokens: keep the one we had
+                m["pt"] = old[h].get("pt", "")
     first = room["state"] == "joining"
     changed = False
     if first:
@@ -1449,7 +1649,10 @@ def _chat_timers(now):
         e = room["idx"].get(_g["my_hash"] + ":" + i) if room else None
         if not e or not e.get("rc") or e["rc"].get(h) != "pending":
             del _g["pend"][key]
-        elif t - since >= PENDING_S:
+            continue
+        if t - since >= WAKE_AFTER_S:
+            _wake(room, h, "msg")
+        if t - since >= PENDING_S:
             del _g["pend"][key]
             e["rc"][h] = "waiting"
             dirty.add(rid)

@@ -78,7 +78,15 @@ internal class VoiceCall(
     }
 
     /** Whether Android lets an incoming call light the screen (Settings: full-screen notifications). */
-    fun fullScreenAllowed(): Boolean = notifications?.canUseFullScreenIntent() ?: false
+    fun fullScreenAllowed(): Boolean {
+        if (notifications?.canUseFullScreenIntent() != true) return false
+        // Some phones (OxygenOS 16) answer true above and deny it anyway: their app-op says deny.
+        val ops = context.getSystemService(android.app.AppOpsManager::class.java) ?: return true
+        val mode = runCatching {
+            ops.unsafeCheckOpNoThrow("android:use_full_screen_intent", android.os.Process.myUid(), context.packageName)
+        }.getOrDefault(android.app.AppOpsManager.MODE_ALLOWED)
+        return mode == android.app.AppOpsManager.MODE_ALLOWED || mode == android.app.AppOpsManager.MODE_DEFAULT
+    }
 
     fun micAllowed(): Boolean =
         context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED

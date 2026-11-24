@@ -56,7 +56,9 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
     @Volatile private var latestFix: Location? = null
     private val locationListener = LocationListener { latestFix = it }
     private var tracking = false
-    private val notifier = Notifier(host.context)
+    internal val notifier = Notifier(host.context)
+    /** The push token last given to Python (contract 51); it changes now and then. */
+    private var sharedToken: String? = null
     private val voice: VoiceCall = VoiceCall(host.context, { engine }, object : VoiceCall.Actions {
         override fun answer() { answerCall() }
         override fun decline() { declineCall() }
@@ -176,8 +178,10 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
             // Every relay sends announces of the whole network: held all night they kept a phone
             // awake (23/11, 40% overnight). Only while needed, unless the rider chose Always on;
             // never after the rider's Disconnect.
+            // Also while a message I wrote is not delivered yet (10 min at most): the rider it rang
+            // fetches it from this phone.
             val wanted = !_disconnected.value && (_alwaysOn.value || parsed.riding != null || parsed.call != null ||
-                nowMs - lastInFrontAt < OFFLINE_AFTER_MILLIS)
+                nowMs - lastInFrontAt < OFFLINE_AFTER_MILLIS || json.optBoolean("holding"))
             val next = parsed.copy(standby = !wanted && !_disconnected.value)
             val wasRiding = _state.value.riding != null
             val callBefore = _state.value.call
@@ -197,6 +201,27 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
                 log(if (wanted) "relays connected" else "relays dropped until needed")
             }
             if (inFront && !wasInFront) module.callAttr("woke")
+            holdOutbox(json.optBoolean("holding"), inFront)
+            // Contract 51: my token to the rooms, their wakes to the push service, and "I am here" to
+            // whoever rang me once the relays are back.
+            val token = Push.token(host).orEmpty()
+            if (token != sharedToken) {
+                module.callAttr("set_push_token", token)
+                sharedToken = token
+            }
+            Push.send(json.optJSONArray("wakes"), ::log) { member -> call { it.callAttr("push_gone", member) } }
+            if (wanted) Push.takeRecent(System.currentTimeMillis()).forEach { wake ->
+                // A call tapped while the caller still dials (90 s): call them back, which is the
+                // answer. Anything else, or a call too old: tell them I am here, so what waits comes.
+                if (wake.kind == "call" && System.currentTimeMillis() - wake.at < CALLBACK_WITHIN_MILLIS && voice.micAllowed()) {
+                    main.post { holdCall(true) }
+                    if (!answered(module.callAttr("voice_callback", wake.roomId, wake.from), "The call could not be answered.")) {
+                        main.post { holdCall(false) }
+                    }
+                } else {
+                    module.callAttr("here", wake.roomId, wake.from)
+                }
+            }
             wasInFront = inFront
             // A ride ends by Stop, by leaving that room, or by its leader closing it; one restored
             // after a restart starts the keep-alive here (refused if the app is in the background).
@@ -280,6 +305,7 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
         if (before == null) return
         for (room in state.rooms) {
             val added = room.unread - (before[room.id] ?: 0)
+            if (added > 0) Push.fetched(room.id)
             if (added <= 0 || (inFront && chatRoom == room.id)) continue
             val latest = runCatching {
                 StateJson.chat(JSONObject(module.callAttr("chat", room.id, 0L, added.coerceAtMost(5)).toString()))
@@ -512,6 +538,27 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
         return host.keepAlive(reason)
     }
 
+    /**
+     * While a message I wrote is not delivered (10 min at most): without a foreground service Android
+     * freezes MOTO-HUB in the background within seconds and the relays go quiet. Started only while
+     * the app is in front, where Android allows it (the message was just written there).
+     */
+    private var outboxKeepAlive: AutoCloseable? = null
+
+    private fun holdOutbox(on: Boolean, inFront: Boolean) {
+        if (on && outboxKeepAlive == null && inFront) {
+            main.post {
+                if (outboxKeepAlive == null) outboxKeepAlive = runCatching { host.keepAlive("Paddock: delivering your message") }
+                    .onFailure { log("outbox keepAlive refused: ${it.javaClass.simpleName}") }.getOrNull()
+            }
+        } else if (!on && outboxKeepAlive != null) {
+            main.post {
+                runCatching { outboxKeepAlive?.close() }
+                outboxKeepAlive = null
+            }
+        }
+    }
+
     /** Held for the length of a call, from the tap that starts or answers it. Main thread. */
     private var callKeepAlive: AutoCloseable? = null
 
@@ -710,6 +757,7 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
     fun release() {
         voice.release()
         runCatching { callKeepAlive?.close() }
+        runCatching { outboxKeepAlive?.close() }
         runCatching { locations?.removeUpdates(locationListener) }
         runCatching { keepAlive?.close() }
         keepAlive = null
@@ -772,6 +820,8 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
         /** After leaving MOTO-HUB, the relays stay this long: a quick look at another app keeps them. */
         const val OFFLINE_AFTER_MILLIS = 60_000L
         const val POLL_MILLIS = 1000L
+        /** The caller dials 90 s after ringing this phone (paddock_voice.WOKEN_RING_S), less what it took to get here. */
+        const val CALLBACK_WITHIN_MILLIS = 80_000L
         const val POSITION_MILLIS = 10_000L
         const val CHAT_PAGE = 60
         const val GROUP_CHAT_LIMIT = 8L

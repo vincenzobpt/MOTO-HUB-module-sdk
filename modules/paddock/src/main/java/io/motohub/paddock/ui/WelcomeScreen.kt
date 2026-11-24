@@ -53,7 +53,8 @@ internal fun WelcomeScreen(onMakeId: () -> Unit, onRestore: () -> Unit, onHowItW
                     )
                     InfoBlock(
                         PI.PHONES, P.ok, P.okSoft, "Phones talk to each other",
-                        "MOTO-HUB runs no server for Paddock and receives nothing from it."
+                        "Messages go from phone to phone, encrypted. MOTO-HUB only rings a rider's phone when their app is asleep, " +
+                            "and never sees names, messages or positions."
                     )
                     InfoBlock(
                         PI.LOCK, P.ok, P.okSoft, "End-to-end encrypted",

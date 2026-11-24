@@ -17,13 +17,13 @@ plugins {
 
 motohubModule {
     id = "paddock"
-    version = "0.5.21"
+    version = "0.5.22"
     entryClass = "io.motohub.paddock.PaddockEntry"
     // Native libraries (39). Map pins that move (refreshSeconds, 44) are read by an app at 44 or
     // later and ignored before it: the module still runs, the pins move when the map moves.
     contractVersion = 39
     displayName = "Paddock"
-    description = "Ride together, privately: a QR to open a room, everyone on the NAV map. No account, no server."
+    description = "Ride together, privately: a QR to open a room, everyone on the NAV map. No account."
 }
 
 android {

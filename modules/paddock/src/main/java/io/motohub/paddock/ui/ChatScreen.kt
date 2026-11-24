@@ -152,6 +152,12 @@ internal fun ChatScreen(controller: PaddockController, room: Room, slot: BackSlo
                 }
             }
 
+            // Opened from a push: the message is on its way from the sender's phone.
+            val fetching by io.motohub.paddock.engine.Push.fetching.collectAsState()
+            fetching[room.id]?.takeIf { now * 1000L - it.second < io.motohub.paddock.engine.Push.FETCH_SHOWN_MILLIS }?.let { (name, _) ->
+                WaitingRow("Fetching the new message…", "From $name's phone", Modifier.padding(horizontal = 16.dp, vertical = 6.dp))
+            }
+
             ChatComposer(room.name, draft, { draft = it }, onQuick = { quick = true }) {
                 val text = draft.trim()
                 if (text.isNotEmpty()) {
