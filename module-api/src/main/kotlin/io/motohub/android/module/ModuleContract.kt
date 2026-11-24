@@ -225,8 +225,14 @@ object MotoHubModuleContract {
      * 50: how a module is doing. ModuleStatus, a new capability: a level, a label and a detail
      *    line, drawn on the module's card in Settings > Modules all the time, quiet states
      *    included. New type only; the minimum stays at 3.
+     * 51: a doorbell for a module whose rider is away. MotoHubModuleHost.pushToken, this install's
+     *    Firebase Cloud Messaging token, which a module shares with the people who may ring this
+     *    phone (Paddock: the riders of a room); ModulePushReceiver, a new capability, gets the data
+     *    of a push sent to that token with "m" = the module's id and shows the notification. An
+     *    append on the app's side (an older app answers pushToken with AbstractMethodError: catch
+     *    LinkageError) and a new type; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 50
+    const val CONTRACT_VERSION = 51
 
     /**
      * The oldest contract this app can still run.
@@ -426,6 +432,14 @@ interface MotoHubModuleHost {
      * is a plain [keepAlive]. Nothing is recorded by it: the module opens the microphone itself.
      */
     fun keepAliveWithMicrophone(reason: String): AutoCloseable
+
+    /**
+     * This install's Firebase Cloud Messaging token (contract 51), or null: no Google Play services,
+     * a build without Firebase, or not known yet (the app asks for it at start; ask again later).
+     * The token changes now and then: read it each time it is shared, not once. A push sent to it
+     * whose data has "m" = this module's id reaches the module's [ModulePushReceiver].
+     */
+    fun pushToken(): String?
 }
 
 /**

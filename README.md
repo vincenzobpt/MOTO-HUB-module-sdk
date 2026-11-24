@@ -97,7 +97,9 @@ pins drawn above everything, `host.showOnMap` and `ModuleFeaturePlacement.NAV_ME
 shortcut on the Ride page) ADV-SOLO 0.1.73, contract 47 (the keep-alive that also holds the microphone)
 ADV-SOLO 0.1.74, and contracts 48 (`ModuleGroupRide`, a group ride on the rider's dashboard) and 49
 (`ModuleDashboardFrames`, the frames a dashboard listener sent) ADV-SOLO 0.1.76, and contract 50
-(`ModuleStatus`, how a module is doing, on its card in Settings ▸ Modules) ADV-SOLO 0.1.77.
+(`ModuleStatus`, how a module is doing, on its card in Settings ▸ Modules) ADV-SOLO 0.1.77, and contract 51
+(`pushToken` and `ModulePushReceiver`, a push doorbell for a rider whose MOTO-HUB is in the background)
+ADV-SOLO 0.1.77.
 This SDK builds with Kotlin 2.4, so a module built here declares **37 or later**; a
 module built with Kotlin 2.0 that uses none of the newer calls can keep declaring 10 and run on
 0.1.25 and later. See [docs/contract.md](docs/contract.md#versioning).

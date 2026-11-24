@@ -195,5 +195,6 @@ the KDoc of `MotoHubModuleContract`.
 | 48 | `ModuleGroupRide` (a group ride on the rider's own dashboard: the riding room, its riders with distance and speed, its latest messages, and `sendQuick` for the one-tap messages a dashboard button sends; new type only) | 0.1.76 |
 | 49 | `ModuleDashboardFrames` (a dashboard listener that also counts the video frames its encoder produced, so the app can tell a picture that reaches the screen from one that does not, and rebuild the scene; new type only, implement it only when the class resolves) | 0.1.76 |
 | 50 | `ModuleStatus`, `ModuleStatusState`, `ModuleStatusLevel` (how a module is doing, drawn on its card in Settings ▸ Modules all the time: a level that picks the colour, a label and an optional detail line; new type only) | 0.1.77 |
+| 51 | `MotoHubModuleHost.pushToken`, `ModulePushReceiver` (a doorbell: this install's Firebase Cloud Messaging token for the module to share, and the data of a push sent to it with `"m"` = the module's id, for the module to show as a notification; an append on the app's side, catch `LinkageError` on an older app, and a new type) | 0.1.77 |
 
 This repository tags every contract release as `contract-<n>`.
