@@ -69,7 +69,7 @@ The full walk-through, including how to start your own module, is in
 
 ## Status
 
-The contract is at **version 45**. It only grows by appending, and the app still loads modules
+The contract is at **version 49**. It only grows by appending, and the app still loads modules
 built against contract 3 or later. Contracts 11 to 14 (rides, the 3D scene, ride and route
 actions, the rider's AI) need ADV-SOLO 0.1.29, contract 15 (draft, real-time and H.265 video
 exports) ADV-SOLO 0.1.30, contract 16 (credits in the film's credit roll) ADV-SOLO 0.1.31,
@@ -93,7 +93,10 @@ yes/no words and the meaning of requests live in a module) and 41 (voice control
 pages) ADV-SOLO 0.1.58, contract 42 (the borrowed Compose moving to 1.11) ADV-SOLO 0.1.67, contract 43
 (`ModuleMotionSource`, a motion sensor on the motorcycle) ADV-SOLO 0.1.72, and contracts 44
 (`ModuleMapLayer.refreshSeconds`: NAV map pins that move on their own) and 45 (`ModuleMapLayer.live`
-pins drawn above everything, `host.showOnMap` and `ModuleFeaturePlacement.NAV_MENU`) ADV-SOLO 0.1.73.
+pins drawn above everything, `host.showOnMap` and `ModuleFeaturePlacement.NAV_MENU`) and 46 (a module's
+shortcut on the Ride page) ADV-SOLO 0.1.73, contract 47 (the keep-alive that also holds the microphone)
+ADV-SOLO 0.1.74, and contracts 48 (`ModuleGroupRide`, a group ride on the rider's dashboard) and 49
+(`ModuleDashboardFrames`, the frames a dashboard listener sent) ADV-SOLO 0.1.76.
 This SDK builds with Kotlin 2.4, so a module built here declares **37 or later**; a
 module built with Kotlin 2.0 that uses none of the newer calls can keep declaring 10 and run on
 0.1.25 and later. See [docs/contract.md](docs/contract.md#versioning).

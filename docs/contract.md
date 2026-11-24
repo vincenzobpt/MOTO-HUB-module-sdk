@@ -132,7 +132,7 @@ These all come from real failures on real motorcycles.
 
 ## Versioning
 
-`MotoHubModuleContract.CONTRACT_VERSION` (currently **48**) is bumped whenever anything in
+`MotoHubModuleContract.CONTRACT_VERSION` (currently **49**) is bumped whenever anything in
 `io.motohub.android.module` changes shape. The contract **only grows by appending**: new
 capabilities, and new members on interfaces the *app* implements. An older module simply does
 not answer a capability it predates, and never calls a host member it does not know.
@@ -193,5 +193,6 @@ the KDoc of `MotoHubModuleContract`.
 | 46 | `ModuleRideShortcut` (a module's shortcut on the Ride page, under Connect, beside "Hey Motohub": title, subtitle, unread badge, a live alert, red when urgent, and a running timer with a glow while it shares the rider's position; a tap opens one of its features) | 0.1.73 |
 | 47 | `host.keepAliveWithMicrophone(reason)` (the keep-alive of contract 34 that also holds the microphone, so a module's voice call goes on with the screen off; an older app answers it with AbstractMethodError, so catch LinkageError and fall back to `keepAlive`) | 0.1.74 |
 | 48 | `ModuleGroupRide` (a group ride on the rider's own dashboard: the riding room, its riders with distance and speed, its latest messages, and `sendQuick` for the one-tap messages a dashboard button sends; new type only) | 0.1.76 |
+| 49 | `ModuleDashboardFrames` (a dashboard listener that also counts the video frames its encoder produced, so the app can tell a picture that reaches the screen from one that does not, and rebuild the scene; new type only, implement it only when the class resolves) | 0.1.76 |
 
 This repository tags every contract release as `contract-<n>`.

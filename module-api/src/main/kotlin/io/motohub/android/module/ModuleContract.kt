@@ -219,8 +219,11 @@ object MotoHubModuleContract {
      *    one-tap messages (Stop, Fuel, Help...) a dashboard button sends. The app draws it as the
      *    Paddock card of a dash; the module owns the room and the chat. New types only; the minimum
      *    stays at 3.
+     * 49: what reached the screen. ModuleDashboardFrames, implemented by a dashboard listener: the
+     *    frames a module sent since attach, so the app can rebuild a scene that composes nothing
+     *    into the module's surface. New type only; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 48
+    const val CONTRACT_VERSION = 49
 
     /**
      * The oldest contract this app can still run.

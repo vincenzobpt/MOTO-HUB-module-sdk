@@ -220,6 +220,26 @@ interface ModuleDashboardListener {
 }
 
 /**
+ * A [ModuleDashboardListener] that also counts what reached the screen (contract 49): the app reads
+ * it with `as?` on the listener it was given in [ModuleDashboardHost.attach].
+ *
+ * The app sees what it draws, never what the module sends. A virtual display can compose into the
+ * module's surface and have nothing come out of it (a Samsung Fold after a scene rebuild, with the
+ * phone's own screen on); this count is how the app notices and builds the scene again.
+ *
+ * A module implements it only when the app has it (the class resolves): on an older app a listener
+ * naming it would not load at all.
+ */
+interface ModuleDashboardFrames {
+    /**
+     * Video frames the module's encoder produced from the surface since the dashboard was attached,
+     * whether or not the screen showed them (a unit holding its own screen still gets them encoded);
+     * it only grows.
+     */
+    fun framesSent(): Long
+}
+
+/**
  * Where the rider is going, as the app's own navigation engine sees it.
  *
  * Deliberately not [ModuleGuidance]. That one travels the other way - a module telling the app

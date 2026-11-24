@@ -87,6 +87,8 @@ internal class AapPhoneSession(
 
     // Statistics for the periodic line and the outcome.
     @Volatile private var framesSent = 0
+    /** Frames out of the encoder, sent or not: what the app's watchdog reads (the unit may hold its screen). */
+    @Volatile private var framesEncoded = 0L
     @Volatile private var keyFramesSent = 0
     @Volatile private var acksSeen = 0
 
@@ -381,13 +383,20 @@ internal class AapPhoneSession(
     ) {
         val done = CountDownLatch(1)
         attachDone = done
-        val listener = object : ModuleDashboardListener {
-            override fun onStopped(reason: String) {
-                // A refusal arrives here inside attach(), before [dashboard] is set: that is not a
-                // session that ran. A stop after it is the app ending one that did. Both are for
-                // good: a redial meets the same refusal, and every redial on a head unit that makes
-                // a new network asks the rider to confirm a Wi-Fi join (rider E67E, 2026-11-13).
-                end("the app stopped the dashboard: $reason", well = dashboard != null, forGood = true)
+        val stop: (String) -> Unit = { reason ->
+            // A refusal arrives here inside attach(), before [dashboard] is set: that is not a
+            // session that ran. A stop after it is the app ending one that did. Both are for
+            // good: a redial meets the same refusal, and every redial on a head unit that makes
+            // a new network asks the rider to confirm a Wi-Fi join (rider E67E, 2026-11-13).
+            end("the app stopped the dashboard: $reason", well = dashboard != null, forGood = true)
+        }
+        // The app counts what we send only from contract 49; an older one has no such type, and a
+        // listener naming it would not load there.
+        val listener: ModuleDashboardListener = if (FRAMES_COUNTED) {
+            CountingDashboardListener(stop) { framesEncoded }
+        } else {
+            object : ModuleDashboardListener {
+                override fun onStopped(reason: String) = stop(reason)
             }
         }
         Thread({
@@ -446,6 +455,7 @@ internal class AapPhoneSession(
     }
 
     private fun onFrame(data: ByteArray, presentationTimeUs: Long, keyFrame: Boolean) {
+        framesEncoded++
         val v = video ?: return
         if (!awaitWindow()) return
         // Media data: an 8-byte big-endian timestamp in microseconds, then the access unit.
