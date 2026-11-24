@@ -1,0 +1,9 @@
+# Contract 50 (maintainer addition 5). Only in Wt9011Status, built when the app asks for
+# ModuleStatus by class name, which only an app at 50 or later does: an older app never loads it.
+Lio/motohub/android/module/ModuleStatusState;<init>(Lio/motohub/android/module/ModuleStatusLevel;Ljava/lang/String;Ljava/lang/String;)V
+Lio/motohub/android/module/ModuleStatusState;getDetail()Ljava/lang/String;
+Lio/motohub/android/module/ModuleStatusState;getLabel()Ljava/lang/String;
+Lio/motohub/android/module/ModuleStatusState;getLevel()Lio/motohub/android/module/ModuleStatusLevel;
+Lio/motohub/android/module/ModuleStatusLevel;ACTIVE:Lio/motohub/android/module/ModuleStatusLevel;
+Lio/motohub/android/module/ModuleStatusLevel;CONNECTING:Lio/motohub/android/module/ModuleStatusLevel;
+Lio/motohub/android/module/ModuleStatusLevel;OFF:Lio/motohub/android/module/ModuleStatusLevel;

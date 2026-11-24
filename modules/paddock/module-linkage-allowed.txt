@@ -1,3 +1,12 @@
 # Contract 45. Called only inside `catch (_: LinkageError)` in PaddockEngine.showOnMap, which falls
 # back to navigateTo (contract 31) on an app before 45.
 Lio/motohub/android/module/MotoHubModuleHost;showOnMap(DD)V
+
+# Contract 50. Only in engine/StatusLink, built when the app asks for ModuleStatus by class name,
+# which only an app at 50 or later does: an older app never loads it.
+Lio/motohub/android/module/ModuleStatusState;<init>(Lio/motohub/android/module/ModuleStatusLevel;Ljava/lang/String;Ljava/lang/String;)V
+Lio/motohub/android/module/ModuleStatusLevel;ACTIVE:Lio/motohub/android/module/ModuleStatusLevel;
+Lio/motohub/android/module/ModuleStatusLevel;ATTENTION:Lio/motohub/android/module/ModuleStatusLevel;
+Lio/motohub/android/module/ModuleStatusLevel;CONNECTING:Lio/motohub/android/module/ModuleStatusLevel;
+Lio/motohub/android/module/ModuleStatusLevel;OFF:Lio/motohub/android/module/ModuleStatusLevel;
+Lio/motohub/android/module/ModuleStatusLevel;READY:Lio/motohub/android/module/ModuleStatusLevel;
