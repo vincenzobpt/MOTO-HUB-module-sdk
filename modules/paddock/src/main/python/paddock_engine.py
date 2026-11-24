@@ -37,6 +37,9 @@ _g = {"started": False, "events": [], "rooms": {}, "riding": None, "profile": No
       "push_token": "", "wakes": collections.deque(), "rung": {}, "woke_at": {}}
 # Announce-handler threads touch only the propagation-node list, under this small lock (never _lock).
 _pn_lock = threading.Lock()
+# Mailbox jobs (see _pn_job): the only code that changes LXMF's outbound node after start.
+_pn_cv = threading.Condition()
+_pn_jobs = collections.deque()
 
 APP_TYPE = "paddock/1"
 # A join is asked DIRECT every 15 s for 90 s, then through the mailbox (the leader's MOTO-HUB may be
@@ -59,6 +62,13 @@ FETCH_FAST_S, FETCH_FAST_PUSH_S, FETCH_FAST_WOKE_S = 15, 300, 120
 # A message of mine not delivered yet keeps the relays up this long after it was written, so the rider
 # I rang can fetch it from me (paddock_sync) even if I put the phone away at once.
 HOLD_FOR_OUTBOX_S = 600
+# Room mailbox: the leader's propagation node, shared in the roster ("p", the last ROOM_PNS_MAX, newest
+# first), so a sender leaves a message where its recipient looks. "v" in a rider's profile entry says
+# their Paddock understands it; an older rider gets mailbox copies on the sender's own node as before.
+PADDOCK_LEVEL, ROOM_PNS_MAX, PN_SHARE_GAP_S = 22, 3, 300
+# One node at a time: LXMF has a single outbound node, and changing it drops a transfer in progress.
+# A job switches, sends or fetches, waits for the outcome this long at most, then the next job runs.
+PN_SEND_WAIT_S, PN_FETCH_WAIT_S, FETCH_PNS_MAX = 60, 40, 4
 _TOKEN = re.compile(r"^[A-Za-z0-9_:\-]{20,4096}$")
 QUICK = {"stop": "Stop", "fuel": "Fuel", "slow": "Slow down", "wait": "Wait for me",
          "photo": "Photo stop", "spot": "Share my spot", "emergency": "Emergency"}
@@ -171,7 +181,7 @@ def _dest_hash_of_key(key_hex):
 
 def _profile_entry():
     p = _g["profile"]
-    return {"name": p["name"], "color": p["color"], "bike": p["bike"], "pt": _g["push_token"]}
+    return {"name": p["name"], "color": p["color"], "bike": p["bike"], "pt": _g["push_token"], "v": PADDOCK_LEVEL}
 
 
 def _pt(v):
@@ -179,7 +189,11 @@ def _pt(v):
     return v if isinstance(v, str) and _TOKEN.match(v) else ""
 
 
-def _member(hash_, key, name, color, bike, pt=""):
+def _lvl(v):
+    return v if isinstance(v, int) and not isinstance(v, bool) and 0 <= v < 10000 else 0
+
+
+def _member(hash_, key, name, color, bike, pt="", v=0):
     # Every member's key is made known to Reticulum at once: LXMF validates a sender's signature
     # only for a remembered identity, and would otherwise drop their positions until we had
     # written to them first.
@@ -190,7 +204,7 @@ def _member(hash_, key, name, color, bike, pt=""):
             pass
     return {"hash": hash_, "key": key, "name": _clean(name, 40, "Rider"), "color": _color(color),
             "bike": _clean(bike, 60), "lat": None, "lon": None, "speed": None, "bearing": None,
-            "fixAt": None, "heardAt": None, "pt": _pt(pt)}
+            "fixAt": None, "heardAt": None, "pt": _pt(pt), "v": _lvl(v)}
 
 
 def _remember(dest_hash, public_key):
@@ -208,8 +222,8 @@ def _save_room(room):
     data = {"id": room["id"], "name": room["name"], "link": room["link"], "leader": room["leader"],
             "iAmLeader": room["iAmLeader"], "state": room["state"], "createdAt": room["createdAt"],
             "lastActivity": room["lastActivity"], "readRx": room["readRx"],
-            "relays": [list(r) for r in room.get("relays", [])],
-            "members": [{k: m.get(k, "") for k in ("hash", "key", "name", "color", "bike", "pt")}
+            "relays": [list(r) for r in room.get("relays", [])], "pns": room.get("pns", []),
+            "members": [dict({k: m.get(k, "") for k in ("hash", "key", "name", "color", "bike", "pt")}, v=m.get("v", 0))
                         for m in room["members"].values()]}
     os.makedirs(_path("rooms"), exist_ok=True)
     p = _room_file(room["id"])
@@ -230,7 +244,7 @@ def _save_ride():
 
 
 def _send(room, dest_hex, key_hex, kind, data=None, extra=None, opportunistic=False,
-          content="", method=None, track=None, mailbox=False):
+          content="", method=None, track=None, mailbox=False, pn=None):
     """Queue one LXMF message; the router sends it in its own thread. Never blocks for long.
     track = (room id, chat id, recipient, via): delivery/failure is noted in _g["dlq"] (chat).
     mailbox: a DIRECT message that fails goes again through the propagation node, so a rider whose
@@ -261,12 +275,27 @@ def _send(room, dest_hex, key_hex, kind, data=None, extra=None, opportunistic=Fa
             msg.register_failed_callback(lambda m: threading.Thread(
                 target=_send, args=(room, dest_hex, key_hex, kind, data, extra),
                 kwargs={"method": LXMF.LXMessage.PROPAGATED}, daemon=True).start()
-                if _pn_current() is not None else None)
+                if _mailbox_known() else None)
+        if msg.desired_method == LXMF.LXMessage.PROPAGATED:
+            # A mailbox copy: on the room's node when the recipient looks there, else on mine. Failing
+            # on the room's node, it goes once more on mine (dedup by id on the other side).
+            target = pn or _target_pn(room["id"], dest_hex)
+            home = _g.get("home_pn")
+            if not target:
+                return failed()
+            if pn is None and home and target != home:
+                msg.register_failed_callback(lambda m: threading.Thread(
+                    target=_send, args=(room, dest_hex, key_hex, kind, data, extra),
+                    kwargs={"content": content, "method": LXMF.LXMessage.PROPAGATED, "track": track, "pn": home},
+                    daemon=True).start())
         if track:
             # Both callbacks run inside the router's outbound lock: never take _lock there.
             msg.register_delivery_callback(lambda m: _dl_note(track, m))
             msg.register_failed_callback(lambda m: _dl_note(track, m, True))
-        _g["router"].handle_outbound(msg)
+        if msg.desired_method == LXMF.LXMessage.PROPAGATED:
+            _pn_job("send", target, msg)
+        else:
+            _g["router"].handle_outbound(msg)
     except Exception as e:
         print("send %s failed: %r" % (kind, e))
         failed()
@@ -278,8 +307,9 @@ def _others(room):
 
 def _roster_payload(room):
     return {"n": room["name"], "l": room["leader"], "x": _fmt_relays(room.get("relays") or _live_relays()),
+            "p": room.get("pns", []),
             "m": [{"d": m["hash"], "k": m["key"], "name": m["name"], "color": m["color"],
-                   "bike": m["bike"], "pt": m.get("pt", "")} for m in room["members"].values()]}
+                   "bike": m["bike"], "pt": m.get("pt", ""), "v": m.get("v", 0)} for m in room["members"].values()]}
 
 
 def _broadcast_roster(room):
@@ -295,7 +325,7 @@ def _send_join(room, method=None):
 
 def _mail_join(room):
     """The leader did not answer DIRECT: leave the request in the mailbox for when they are back."""
-    if room.get("mailed") or _pn_current() is None:
+    if room.get("mailed") or not _mailbox_known():
         return
     room["mailed"] = True
     _send_join(room, _g["LXMF"].LXMessage.PROPAGATED)
@@ -664,6 +694,8 @@ def create_room(name):
         rid = os.urandom(16).hex()
         room = _new_room(rid, name, _g["my_hash"], _g["key"], _make_link(rid, _g["key"], name), True)
         room["relays"] = live
+        if _g.get("home_pn"):
+            room["pns"] = [_g["home_pn"]]
         _save_room(room)
         return json.dumps({"ok": True, "id": rid, "link": _room_link(room)})
 
@@ -1159,7 +1191,7 @@ def _tick():
     _drain()
     if not _g["net_on"]:
         return  # relays parked: no joins, mailbox, announces or relay top-up until set_online(True)
-    if _pn_current() is None and now - _g["last_pn_eval"] >= PN_EVAL_S:
+    if not _g.get("home_pn") and now - _g["last_pn_eval"] >= PN_EVAL_S:
         _g["last_pn_eval"] = now
         _pick_pn()
     joining = any(r["state"] == "joining" for r in _g["rooms"].values())
@@ -1190,6 +1222,29 @@ def _tick():
         if now - room["last_try"] >= (JOIN_RETRY_LATE_S if late else JOIN_RETRY_S):
             _send_join(room)
     _maybe_topup(now)
+    home = _g.get("home_pn")
+    for room in _g["rooms"].values():
+        pns = room.get("pns", [])
+        # The room's node changes only when it is gone (no path, no identity), never for a nearer
+        # one: every rider looks there, and a rider who missed the new roster still looks at the old.
+        # Just started, nothing is known yet: a node counts as gone only after 10 minutes without a path.
+        gone = False
+        if pns and room["iAmLeader"]:
+            node = bytes.fromhex(pns[0])
+            if not (_g["RNS"].Transport.has_path(node) and _g["RNS"].Identity.recall(node) is not None):
+                if now - room.get("p_ask", 0) >= 60:
+                    room["p_ask"] = now
+                    _g["RNS"].Transport.request_path(node)
+                gone = now - _g["since"] > 600
+        if (room["iAmLeader"] and home and (not pns or (gone and pns[0] != home))
+                and now - room.get("p_at", 0) >= PN_SHARE_GAP_S):
+            # The room had none, or its node is gone: mine; the old ones stay listed, since messages
+            # may still wait there.
+            room["p_at"] = now
+            room["pns"] = ([home] + [x for x in pns if x != home])[:ROOM_PNS_MAX]
+            _save_room(room)
+            _broadcast_roster(room)
+    _apply_pn()
     live = _live_relays()
     for room in _g["rooms"].values():
         # A leader on relays the room does not know yet tells it (at most every 5 min: relays come
@@ -1212,6 +1267,7 @@ def _load_room(d):
         if _hexs(m["hash"], 32) and _hexs(m["key"], 128):
             members[m["hash"]] = _member(m["hash"], m["key"], m["name"], m["color"], m["bike"])
             members[m["hash"]]["pt"] = _pt(m.get("pt"))
+            members[m["hash"]]["v"] = _lvl(m.get("v"))
     i_am_leader = bool(d["iAmLeader"])
     if (_g["my_hash"] not in members or d["leader"] not in members or not _hexs(d["id"], 32)
             or i_am_leader != (d["leader"] == _g["my_hash"]) or d["state"] not in ("joining", "active")):
@@ -1223,7 +1279,7 @@ def _load_room(d):
             "members": members, "started": now, "last_try": 0,
             "createdAt": int(d.get("createdAt") or now), "lastActivity": int(d.get("lastActivity") or now),
             "readRx": int(d.get("readRx") or 0), "rx": 0, "chat": [], "idx": {},
-            "relays": _valid_relays(d.get("relays"))}
+            "relays": _valid_relays(d.get("relays")), "pns": _valid_pns(d.get("pns"))}
     _chat_load(room)
     return room
 
@@ -1328,7 +1384,7 @@ def _handle(message):
     elif kind == "hello" and room["iAmLeader"]:
         sender.update(name=_clean(body.get("name"), 40, sender["name"]),
                       color=_color(body.get("color")), bike=_clean(body.get("bike"), 60),
-                      pt=_pt(body.get("pt")) or sender.get("pt", ""))
+                      pt=_pt(body.get("pt")) or sender.get("pt", ""), v=_lvl(body.get("v")))
         _broadcast_roster(room)
         _save_room(room)
     elif kind == "leave" and room["iAmLeader"]:
@@ -1359,10 +1415,10 @@ def _on_join(room, src, body, message):
     if not known and len(room["members"]) >= MAX_MEMBERS:
         return
     m = _member(src, key, body.get("name"), body.get("color"), body.get("bike"))
-    m["pt"] = _pt(body.get("pt"))
+    m["pt"], m["v"] = _pt(body.get("pt")), _lvl(body.get("v"))
     if known:
         old = room["members"][src]
-        old.update(name=m["name"], color=m["color"], bike=m["bike"], pt=m["pt"] or old.get("pt", ""))
+        old.update(name=m["name"], color=m["color"], bike=m["bike"], pt=m["pt"] or old.get("pt", ""), v=m["v"])
     else:
         room["members"][src] = m
         _event("member_joined", "%s joined the room." % m["name"], room)
@@ -1385,7 +1441,7 @@ def _on_roster(room, body):
         if not h or not k or _dest_hash_of_key(k) != h:
             return
         new[h] = _member(h, k, e.get("name"), e.get("color"), e.get("bike"))
-        new[h]["pt"] = _pt(e.get("pt"))
+        new[h]["pt"], new[h]["v"] = _pt(e.get("pt")), _lvl(e.get("v"))
     if _g["my_hash"] not in new or room["leader"] not in new:
         return
     old = room["members"]
@@ -1418,6 +1474,10 @@ def _on_roster(room, body):
             _event("room_renamed", "The room is now called %s." % name, room)
             changed = True
     room["members"] = new
+    pns = _valid_pns(body.get("p"))
+    if pns and pns != room.get("pns"):
+        room["pns"] = pns
+        _apply_pn()
     shared = _parse_relays(body.get("x"))
     if shared and shared != room.get("relays"):
         room["relays"] = _valid_relays(shared + room.get("relays", []))
@@ -1623,7 +1683,7 @@ def _drain():
                 pass  # the rider is gone: the only real "failed"
             elif cur == "mailbox" or via == "re":
                 continue
-            elif via == "direct" and cur == "pending" and _pn_current() is not None and key not in _g["handed"]:
+            elif via == "direct" and cur == "pending" and _mailbox_known() and key not in _g["handed"]:
                 # LXMF 1.3.1 has no try_propagation_on_fail: hand it to the mailbox ourselves.
                 _g["handed"].add(key)
                 threading.Thread(target=_chat_out, args=(rid, dict(e), [h], "prop"), daemon=True).start()
@@ -1656,7 +1716,7 @@ def _chat_timers(now):
             del _g["pend"][key]
             e["rc"][h] = "waiting"
             dirty.add(rid)
-            if _pn_current() is not None and key not in _g["handed"]:
+            if _mailbox_known() and key not in _g["handed"]:
                 _g["handed"].add(key)
                 threading.Thread(target=_chat_out, args=(rid, dict(e), [h], "prop"), daemon=True).start()
     for rid in dirty:
@@ -1826,8 +1886,102 @@ def _pn_current():
     return cur.hex() if cur else None
 
 
+def _valid_pns(v):
+    return [h for h in v if _hexs(h, 32)][:ROOM_PNS_MAX] if isinstance(v, list) else []
+
+
+def _mailbox_known():
+    return bool(_g.get("home_pn") or _preferred_pn())
+
+
+def _preferred_pn():
+    """The node I keep LXMF on between jobs: the room node of my most active room, else my own."""
+    try:  # also called by the mailbox worker without _lock: a room may come or go meanwhile
+        rooms = sorted(list(_g["rooms"].values()), key=lambda r: r["lastActivity"], reverse=True)
+    except RuntimeError:
+        rooms = []
+    for r in rooms:
+        if r.get("pns"):
+            return r["pns"][0]
+    return _g.get("home_pn")
+
+
+def _apply_pn():
+    """Between jobs, LXMF's node is the preferred one (what a message that LXMF retries on its own uses)."""
+    pref = _preferred_pn()
+    if pref and not _g.get("pn_busy") and _pn_current() != pref:
+        try:
+            _g["router"].set_outbound_propagation_node(bytes.fromhex(pref))
+        except Exception as e:
+            print("mailbox select error: %r" % (e,))
+
+
+def _target_pn(rid, dest_hex):
+    """Where a mailbox copy for dest_hex goes: the room's node if they understand room nodes."""
+    room = _g["rooms"].get(rid)
+    m = room["members"].get(dest_hex) if room else None
+    if room and room.get("pns") and m and m.get("v", 0) >= PADDOCK_LEVEL:
+        return room["pns"][0]
+    return _g.get("home_pn") or _preferred_pn()
+
+
+def _pn_job(kind, pn, arg=None):
+    """Queue a mailbox job: ("send", node, LXMessage) or ("fetch", node). One worker runs them in order."""
+    with _pn_cv:
+        if kind == "fetch" and any(j[0] == "fetch" and j[1] == pn for j in _pn_jobs):
+            return
+        if kind == "send":
+            # A message to deliver goes before queued fetches (each may wait PN_FETCH_WAIT_S).
+            i = next((n for n, j in enumerate(_pn_jobs) if j[0] == "fetch"), len(_pn_jobs))
+            _pn_jobs.insert(i, (kind, pn, arg))
+        else:
+            _pn_jobs.append((kind, pn, arg))
+        if not _g.get("pn_worker"):
+            _g["pn_worker"] = True
+            threading.Thread(target=_pn_worker, daemon=True).start()
+        _pn_cv.notify()
+
+
+def _pn_worker():
+    LXMF, RNS = _g["LXMF"], _g["RNS"]
+    router = _g["router"]
+    R = LXMF.LXMRouter
+    busy_fetch = (R.PR_IDLE, R.PR_PATH_REQUESTED, R.PR_LINK_ESTABLISHING, R.PR_LINK_ESTABLISHED,
+                  R.PR_REQUEST_SENT, R.PR_RECEIVING, R.PR_RESPONSE_RECEIVED)
+    busy_send = (LXMF.LXMessage.GENERATING, LXMF.LXMessage.OUTBOUND, LXMF.LXMessage.SENDING)
+    while True:
+        with _pn_cv:
+            while not _pn_jobs:
+                _g["pn_busy"] = False
+                _apply_pn()
+                _pn_cv.wait()
+            kind, pn, arg = _pn_jobs.popleft()
+            _g["pn_busy"] = True
+        try:
+            node = bytes.fromhex(pn)
+            if RNS.Identity.recall(node) is None:
+                RNS.Transport.request_path(node)  # LXMF waits for the path itself (attempts, then fails)
+            router.set_outbound_propagation_node(node)
+            until = time.time() + (PN_SEND_WAIT_S if kind == "send" else PN_FETCH_WAIT_S)
+            if kind == "send":
+                router.handle_outbound(arg)
+                while time.time() < until and arg.state in busy_send:
+                    time.sleep(0.3)
+            else:
+                router.propagation_transfer_state = R.PR_IDLE
+                router.request_messages_from_propagation_node(_g["ident"])
+                time.sleep(0.3)
+                while time.time() < until and router.propagation_transfer_state in busy_fetch[1:]:
+                    time.sleep(0.3)
+                print("mailbox %s: state %s" % (pn[:8], router.propagation_transfer_state))
+        except Exception as e:
+            print("mailbox job %s failed: %r" % (kind, e))
+
+
 def _pick_pn():
-    """Nearest (fewest hops) known node; switches only to a strictly nearer one."""
+    """My own node: the nearest (fewest hops) known one; switches only to a strictly nearer one.
+    Rooms whose leader shares a node use theirs (_preferred_pn); mine is the fallback and what I share
+    as a leader."""
     RNS = _g["RNS"]
     try:
         with _pn_lock:
@@ -1837,10 +1991,10 @@ def _pick_pn():
             if not hops:
                 return
             best = min(hops, key=hops.get)
-            cur = _pn_current()
+            cur = _g.get("home_pn")
             if cur == best or (cur in hops and hops[cur] <= hops[best]):
                 return
-            _g["router"].set_outbound_propagation_node(bytes.fromhex(best))
+            _g["home_pn"] = best
             _g["last_fetch"] = 0
             _save_pn(known, best)
     except Exception as e:
@@ -1863,26 +2017,27 @@ def _restore_pn():
         with _pn_lock:
             _g["pns"] = [h for h in d.get("nodes", []) if _hexs(h, 32)][-MAX_PNS:]
         if _hexs(d.get("chosen"), 32):
-            _g["router"].set_outbound_propagation_node(bytes.fromhex(d["chosen"]))
+            _g["home_pn"] = d["chosen"]
     except Exception:
         pass
+    _apply_pn()
+
+
+def _fetch_pns(fast):
+    """The nodes to read: the preferred one, my own, then the other rooms' (newest node first)."""
+    out = []
+    for h in [_preferred_pn(), _g.get("home_pn")] + [x for r in sorted(
+            _g["rooms"].values(), key=lambda r: r["lastActivity"], reverse=True) for x in r.get("pns", [])]:
+        if h and h not in out:
+            out.append(h)
+    return out[:3 if fast else FETCH_PNS_MAX]
 
 
 def _maybe_fetch(gap):
-    """Ask the mailbox for what waits for me (in a thread: LXMF may wait for a path)."""
-    pn, now = _pn_current(), _now()
-    if not pn or now - _g["since"] < FETCH_FIRST_S or now - _g["last_fetch"] < gap:
-        return
-    RNS = _g["RNS"]
-    if RNS.Identity.recall(bytes.fromhex(pn)) is None:
-        RNS.Transport.request_path(bytes.fromhex(pn))
+    """Ask the mailboxes for what waits for me (jobs: LXMF may wait for a path)."""
+    now = _now()
+    if not _mailbox_known() or now - _g["since"] < FETCH_FIRST_S or now - _g["last_fetch"] < gap:
         return
     _g["last_fetch"] = now
-    router, ident = _g["router"], _g["ident"]
-
-    def job():
-        try:
-            router.request_messages_from_propagation_node(ident)
-        except Exception as e:
-            print("mailbox fetch failed: %r" % (e,))
-    threading.Thread(target=job, daemon=True).start()
+    for pn in _fetch_pns(gap <= FETCH_FAST_S):
+        _pn_job("fetch", pn)

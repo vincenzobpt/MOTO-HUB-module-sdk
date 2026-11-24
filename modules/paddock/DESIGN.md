@@ -191,6 +191,11 @@ returns null, or a short sentence saying why not.
   deletes that cache.
 - Chat messages a rider could not receive wait on a public propagation node, encrypted so that
   only that rider can read them; the node sees who it is for, the size and when, not the text.
+  A room uses its leader's node (roster field "p", the last 3, newest first; it changes only when
+  the node is gone), so sender and recipient look in the same place; riders before 0.5.23 ("v" < 22)
+  get their copy on the sender's own node, as before. LXMF has one outbound node at a time, so
+  every mailbox send and fetch is a job of one worker that switches node, waits for the outcome and
+  switches back.
 
 ## Credits
 See `NOTICE.md`.
