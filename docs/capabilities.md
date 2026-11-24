@@ -17,6 +17,7 @@ as the Android Auto module does.
 | [`ModuleAccessoryBridge`](#usb-accessories-moduleaccessoryprobe-and-moduleaccessorybridge) | 10 | diagnostics bridge a USB head unit to Android Auto |
 | [`ModuleExtensions`](#adding-to-another-module-moduleextensions-and-modulebridge) | 22 | it draws the card of the module you add to, or that module asks `host.modules.extensions()` |
 | [`ModuleLiveStatus`](#something-live-modulelivestatus) | 27 | it draws the Ride page |
+| [`ModuleStatus`](#how-a-module-is-doing-modulestatus) | 50 | it draws Settings ▸ Modules |
 | [`ModuleRideShortcut`](#a-shortcut-on-the-ride-page-modulerideshortcut) | 46 | it draws the Ride page: about every second while it shows |
 | [`ModuleMapLayer`](#pins-on-the-nav-map-modulemaplayer) | 30 | the NAV map settles somewhere new, every `refreshSeconds` while it shows your layer (44), or the rider taps one of your pins |
 | [`ModuleMapOverlay`](#your-data-in-the-nav-phone-only) | 32 | the rider switches your layer on in the NAV map's layers menu |
@@ -335,6 +336,35 @@ Keep one `MutableStateFlow` and set it from wherever the work starts and stops; 
 do. The app draws the pill itself, the same for every module, so `label` is the only thing you
 choose: the pill already says "live", so do not repeat it. A module that answers
 `ModuleLiveStatus` declares contract **27**, and needs ADV-SOLO 0.1.40 or later.
+
+---
+
+## How a module is doing: `ModuleStatus`
+
+For a module whose **state the rider wants to see in the list of modules**: online or offline,
+a sensor connected or not, recording or idle. The app draws it on your module's card in
+Settings ▸ Modules, all the time, quiet states included. It is not drawn on the Ride page: that
+is what [`ModuleLiveStatus`](#something-live-modulelivestatus) is for.
+
+```kotlin
+interface ModuleStatus {                           // a capability, since contract 50
+    val status: StateFlow<ModuleStatusState?>      // null: nothing to say
+}
+
+class ModuleStatusState(
+    val level: ModuleStatusLevel,                  // the colour of the mark
+    val label: String,                             // one or two words: "Online", "Connected"
+    val detail: String? = null                     // a line under it: "Sunday group · 4 riders"
+)
+
+enum class ModuleStatusLevel { ACTIVE, READY, CONNECTING, ATTENTION, OFF }
+```
+
+`ACTIVE` is green and pulses (in touch, sending, recording), `READY` is green and still,
+`CONNECTING` amber, `ATTENTION` red (something needs the rider), `OFF` grey. Keep one
+`MutableStateFlow` and set it from anywhere. A module that answers `ModuleStatus` declares
+contract **50**, and needs ADV-SOLO 0.1.77 or later; to keep loading on an older app, hand the
+capability out by class name, as `ModuleRideShortcut` explains.
 
 ---
 

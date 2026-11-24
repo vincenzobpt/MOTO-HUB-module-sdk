@@ -222,8 +222,11 @@ object MotoHubModuleContract {
      * 49: what reached the screen. ModuleDashboardFrames, implemented by a dashboard listener: the
      *    frames a module sent since attach, so the app can rebuild a scene that composes nothing
      *    into the module's surface. New type only; the minimum stays at 3.
+     * 50: how a module is doing. ModuleStatus, a new capability: a level, a label and a detail
+     *    line, drawn on the module's card in Settings > Modules all the time, quiet states
+     *    included. New type only; the minimum stays at 3.
      */
-    const val CONTRACT_VERSION = 49
+    const val CONTRACT_VERSION = 50
 
     /**
      * The oldest contract this app can still run.

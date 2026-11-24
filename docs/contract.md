@@ -194,5 +194,6 @@ the KDoc of `MotoHubModuleContract`.
 | 47 | `host.keepAliveWithMicrophone(reason)` (the keep-alive of contract 34 that also holds the microphone, so a module's voice call goes on with the screen off; an older app answers it with AbstractMethodError, so catch LinkageError and fall back to `keepAlive`) | 0.1.74 |
 | 48 | `ModuleGroupRide` (a group ride on the rider's own dashboard: the riding room, its riders with distance and speed, its latest messages, and `sendQuick` for the one-tap messages a dashboard button sends; new type only) | 0.1.76 |
 | 49 | `ModuleDashboardFrames` (a dashboard listener that also counts the video frames its encoder produced, so the app can tell a picture that reaches the screen from one that does not, and rebuild the scene; new type only, implement it only when the class resolves) | 0.1.76 |
+| 50 | `ModuleStatus`, `ModuleStatusState`, `ModuleStatusLevel` (how a module is doing, drawn on its card in Settings ▸ Modules all the time: a level that picks the colour, a label and an optional detail line; new type only) | 0.1.77 |
 
 This repository tags every contract release as `contract-<n>`.
