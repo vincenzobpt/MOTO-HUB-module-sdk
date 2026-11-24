@@ -114,6 +114,11 @@ internal object Push {
         fetching.value = wakes.filter { it.kind == "msg" && !it.fetchedIt }.associate { it.roomId to (it.name to it.at) }
     }
 
+    /** A wake of [kind] for [roomId] came in the last [millis]: whoever sent it. */
+    fun rangRecently(roomId: String, kind: String, now: Long, millis: Long): Boolean = synchronized(wakes) {
+        wakes.any { it.roomId == roomId && it.kind == kind && now - it.at < millis }
+    }
+
     fun remember(wake: Wake) = synchronized(wakes) {
         wakes.removeAll { it.roomId == wake.roomId && it.from == wake.from }
         wakes.add(wake)
@@ -152,12 +157,17 @@ internal class PushReceiver(private val storage: File, private val notifier: Not
         val name = (0 until (members?.length() ?: 0)).map { members!!.getJSONObject(it) }
             .firstOrNull { it.optString("hash").startsWith(from) }?.optString("name")?.ifBlank { null } ?: "A rider"
         Push.attach(storage)
-        Push.remember(Push.Wake(roomId, from, kind, System.currentTimeMillis(), name))
+        val now = System.currentTimeMillis()
+        // The link carries the leader's token: anyone holding it could ring "join" again and again.
+        // One loud notification per room every JOIN_GAP_MILLIS is enough to bring the leader in.
+        val joinAlreadyRung = kind == "join" && Push.rangRecently(roomId, "join", now, JOIN_GAP_MILLIS)
+        Push.remember(Push.Wake(roomId, from, kind, now, name))
         return when (kind) {
             "msg" -> notifier.postWakeMessage(roomId, roomName, name)
             "call" -> notifier.postWakeCall(roomId, roomName, name)
             // Not a member yet, so no name: opening the room reconnects Paddock and lets them in.
             "join" -> {
+                if (joinAlreadyRung) return true
                 notifier.post(roomName, "A rider is asking to join $roomName. Open Paddock to let them in.", roomId, loud = true)
                 true
             }
@@ -168,5 +178,6 @@ internal class PushReceiver(private val storage: File, private val notifier: Not
     private companion object {
         val ROOM = Regex("[0-9a-f]{32}")
         val FROM = Regex("[0-9a-f]{8,16}")
+        const val JOIN_GAP_MILLIS = 10 * 60_000L
     }
 }

@@ -223,10 +223,9 @@ internal class VoiceAudio(
         }
     }
 
-    private var base = 0
     /** Frame indexes wrap at 65536 (22 minutes): map them onto a line that does not. */
     private fun unwrap(ix: Int): Int {
-        if (playIndex < 0) return ix + base
+        if (playIndex < 0) return ix
         val cur = playIndex
         var v = (cur and 0xFFFF.inv()) or ix
         if (v < cur - 0x8000) v += 0x10000 else if (v > cur + 0x8000) v -= 0x10000

@@ -17,7 +17,7 @@ plugins {
 
 motohubModule {
     id = "paddock"
-    version = "0.5.26"
+    version = "0.5.27"
     entryClass = "io.motohub.paddock.PaddockEntry"
     // Native libraries (39). Map pins that move (refreshSeconds, 44) are read by an app at 44 or
     // later and ignored before it: the module still runs, the pins move when the map moves.

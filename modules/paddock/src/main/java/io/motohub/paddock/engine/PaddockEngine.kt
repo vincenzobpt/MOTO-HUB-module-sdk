@@ -135,7 +135,7 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
         _state.value = PaddockState(stage = EngineStage.STARTING, startStep = "Unpacking Paddock (first time only)")
         py.execute {
             try {
-                val home = ModulePython.unpack(storage, host.context.noBackupFilesDir, ::log)
+                val home = ModulePython.unpack(host.context.noBackupFilesDir, ::log)
                 step("Starting the secure engine")
                 ModulePython.loadNativeLibraries(home, ::log)
                 ModulePython.start(home, storage)
@@ -307,9 +307,10 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
             val added = room.unread - (before[room.id] ?: 0)
             if (added > 0) Push.fetched(room.id)
             if (added <= 0 || (inFront && chatRoom == room.id)) continue
+            // By arrival, not by the chat's order: a message from the mailbox sits back where it was written.
             val latest = runCatching {
-                StateJson.chat(JSONObject(module.callAttr("chat", room.id, 0L, added.coerceAtMost(5)).toString()))
-            }.getOrDefault(emptyList()).lastOrNull { !it.mine && it.kind != ChatKind.EVENT } ?: continue
+                StateJson.chat(JSONObject(module.callAttr("newest_unread", room.id).toString()))
+            }.getOrDefault(emptyList()).firstOrNull() ?: continue
             val body = when (latest.kind) {
                 ChatKind.QUICK -> latest.quick?.label ?: latest.text
                 else -> latest.text
@@ -744,10 +745,11 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
         val tmp = File(storage, "$IDENTITY.tmp")
         tmp.writeBytes(key)
         if (!tmp.renameTo(File(storage, IDENTITY))) error("could not save the rider ID")
-        // The room belonged to the old ID.
-        File(storage, "room.json").delete()
+        // The rooms, their chats and the mailbox store belonged to the old ID.
         File(storage, "ride.json").delete()
         File(storage, "rooms").deleteRecursively()
+        File(storage, "chat").deleteRecursively()
+        File(storage, "lxmf").deleteRecursively()
     }
 
     /**
@@ -789,7 +791,7 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
         var saved = File(storage, RELAY).takeIf { it.isFile }?.readText()?.trim().orEmpty()
         // The old Settings page came filled with rns.kin.earth and a Save button: that file is the
         // old default saved, not a choice. Gone, so the rider gets the automatic relays.
-        if (saved == "$OLD_DEFAULT_HOST:$DEFAULT_PORT") {
+        if (saved == "$DEFAULT_HOST:$DEFAULT_PORT") {
             File(storage, RELAY).delete()
             saved = ""
         }
@@ -810,7 +812,6 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
     private companion object {
         // Columba's default community node; the rider can change it in Settings.
         const val DEFAULT_HOST = "rns.kin.earth"
-        const val OLD_DEFAULT_HOST = "rns.kin.earth"
         const val DEFAULT_PORT = 4242
         const val PROFILE = "profile.json"
         const val IDENTITY = "identity"

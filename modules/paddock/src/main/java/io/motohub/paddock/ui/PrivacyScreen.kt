@@ -39,7 +39,7 @@ internal fun PrivacyScreen(onBack: () -> Unit) {
         InfoBlock(
             PI.PHONES, P.ok, P.okSoft, "What is kept, and where",
             "On this phone: your rider ID, your profile, the relay you chose, and your rooms with their riders. A MOTO-HUB " +
-                "backup file (.mhb) you make includes your rider ID too. When you leave a room or its leader " +
+                "backup file (.mhb) you make includes your rider ID and your rooms' keys too: keep it like a password. When you leave a room or its leader " +
                 "deletes it, Paddock deletes it with its riders' names, bikes and positions; Reticulum's routing cache keeps only " +
                 "their Paddock addresses (random codes, no names) until you forget your rider ID."
         )

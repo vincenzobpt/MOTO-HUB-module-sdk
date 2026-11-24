@@ -25,8 +25,7 @@ All functions take/return plain str/int/float/bool; structured values are JSON s
 is a **permanent group** ("Sunday group", "Track days"): the rider keeps as many as they like,
 some led, some joined. Each lives in `<storage>/rooms/<id>.json` (atomic write) and survives
 restarts and module updates. **Positions go to one room at a time, only while riding with it**
-(`start_ride`); every other room is quiet. A v0.1 `<storage>/room.json` is migrated once into
-`rooms/` (and was riding if it was active).
+(`start_ride`); every other room is quiet.
 
 | Function | Does |
 |---|---|
@@ -41,7 +40,7 @@ restarts and module updates. **Positions go to one room at a time, only while ri
 | `stop_ride()` | No room is riding; positions stop. |
 | `send_position(lat, lon, alt, speed_mps, bearing, accuracy_m, fix_epoch_s)` | To every other member of the riding room. No-op when not riding. |
 | `poll() -> json` | Whole state (§4) + events since last poll. Cheap, never blocks. Also runs timers: join retries, announces. |
-| `remove_member(id, hash) -> json` | Leader only: the rider leaves the roster (new roster to everyone, `removed` to them). |
+| `remove_member(id, hash) -> json` | Leader only: the rider leaves the roster (new roster to everyone, `removed` to them) and is banned from the room: a `join` from their ID is ignored. |
 | `send_text(id, text) -> json` | Chat (§3b): to every other member; `{"ok": true, "msg": "<local id>"}`. Text ≤ 2000 chars. |
 | `send_quick(id, kind, lat, lon) -> json` | A quick message (`stop`, `fuel`, `slow`, `wait`, `photo`, `spot`, `emergency`); `lat`/`lon` NaN when unknown (`spot` and `emergency` carry them). |
 | `chat(id, before_ms, limit) -> json` | `{"messages": […]}` (§4b), newest last, at most `limit`, older than `before_ms` (0 = latest). |
@@ -67,8 +66,7 @@ Positions received from a room's members are kept for that room whether or not I
 
 **Room link** (also the QR text; shareable as text):
 `paddock://join?v=2&r=<room id, 16 random bytes, base64url>&k=<leader public key, 64 bytes, base64url>&n=<room name, URL-encoded>`
-(no padding; the leader's LXMF destination hash is derived from the key). v1 links
-(`v=1&r=<hex>&d=<dest hex32>&k=<key hex128>&n=…`) are still accepted.
+(no padding; the leader's LXMF destination hash is derived from the key).
 Possessing the link = invited. Show it only to people you ride with.
 
 | `t` | From → to | Data | Method |
@@ -76,8 +74,8 @@ Possessing the link = invited. Show it only to people you ride with.
 | `join` | joiner → leader | `name, color, bike, k` (joiner public key hex128) | DIRECT |
 | `roster` | leader → every member | `n` room name, `m` = list of `{d, k, name, color, bike}` incl. leader, `l` leader dest | DIRECT |
 | `hello` | member → leader | profile changed: `name, color, bike` | DIRECT |
-| `leave` | member → leader | — | DIRECT |
-| `close` | leader → every member | — | DIRECT |
+| `leave` | member → leader | — | DIRECT, then mailbox |
+| `close` | leader → every member | — | DIRECT, then mailbox |
 | `pos` | member → every other member | `FIELD_TELEMETRY (0x02)` = Sideband Telemeter (time + location), packed exactly like Columba's `TelemeterCodec.kt` / Sideband's `sense.py` | OPPORTUNISTIC |
 
 - Before the first message to someone: `RNS.Identity.remember(...)` their public key (we have it
@@ -112,9 +110,10 @@ Link (`paddock_sync`) hands over `{"i": <chat id>, "e": <envelope of the chat bo
 Why: LXMF's X25519 falls to a future quantum computer, and mailbox copies and relayed traffic can be
 recorded today. The envelope needs the secret, which never travels through Reticulum. Limits: calls are not
 sealed; metadata (who, when, size) is as visible as before; a removed rider still knows the secret
-(they get nothing more, and reading recorded traffic would also need a quantum computer); the
-link is the room's password. The secret is kept in `rooms/<id>.json`; "Back up my rider ID" does not include it (whether a
-MOTO-HUB `.mhb` copies module storage is not checked).
+(their ID is banned from the room, but a new ID could join again until the room gets a new link;
+reading recorded traffic would also need a quantum computer); the
+link is the room's password. The secret is kept in `rooms/<id>.json`; "Back up my rider ID" does not include it. A
+MOTO-HUB `.mhb` backup copies module storage (identity key and room secrets included): it is a password.
 
 ## 3b. Chat
 

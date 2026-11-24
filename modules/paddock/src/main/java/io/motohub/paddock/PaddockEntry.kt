@@ -103,9 +103,7 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
         // A rider in any room is reachable as soon as MOTO-HUB opens: joins, chat and the mailbox
         // arrive without opening Paddock. With no room, nothing connects anywhere.
         val rooms = java.io.File(host.storage, "rooms").listFiles { f -> f.name.endsWith(".json") }.orEmpty()
-        if (rooms.isNotEmpty() || java.io.File(host.storage, "ride.json").isFile ||
-            java.io.File(host.storage, "room.json").isFile
-        ) {
+        if (rooms.isNotEmpty() || java.io.File(host.storage, "ride.json").isFile) {
             engine.ensureStarted()
         }
     }

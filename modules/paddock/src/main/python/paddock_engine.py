@@ -50,6 +50,8 @@ JOIN_RETRY_S, JOIN_MAILBOX_AFTER_S, JOIN_RETRY_LATE_S, ANNOUNCE_EVERY_S = 15, 30
 # While a join waits, the mailbox is asked this often (instead of every 10 min).
 FETCH_JOINING_S = 120
 MAX_MEMBERS = 40
+# Riders a leader removed, per room: their join is ignored (the link they keep still names the room).
+MAX_BANNED = 200
 DEFAULT_COLOR = "#EDEFF2"
 CHAT_MAX_TEXT, CHAT_KEEP = 2000, 1000
 PN_EVAL_S, FETCH_FIRST_S, FETCH_MIN_GAP_S, FETCH_EVERY_S = 300, 8, 120, 600
@@ -225,7 +227,7 @@ def _save_room(room):
             "iAmLeader": room["iAmLeader"], "state": room["state"], "createdAt": room["createdAt"],
             "lastActivity": room["lastActivity"], "readRx": room["readRx"],
             "relays": [list(r) for r in room.get("relays", [])], "pns": room.get("pns", []),
-            "pq": room.get("pq", ""),
+            "pq": room.get("pq", ""), "banned": room.get("banned", []),
             "members": [dict({k: m.get(k, "") for k in ("hash", "key", "name", "color", "bike", "pt")}, v=m.get("v", 0))
                         for m in room["members"].values()]}
     os.makedirs(_path("rooms"), exist_ok=True)
@@ -615,7 +617,6 @@ def start(storage, node_host, node_port, name, color, bike):
         paddock_voice.init(_g, _member_by_identity, _wake_call)
         paddock_sync.init(_g, _sync_pending, _sync_delivered, _sync_ingest)
         _announce()
-        _migrate_v01()
         _restore_rooms()
         _restore_pn()
         _g["started"] = True
@@ -703,16 +704,22 @@ def set_profile(name, color, bike):
     with _lock:
         _g["profile"] = {"name": _clean(name, 40, "Rider"), "color": _color(color),
                          "bike": _clean(bike, 60)}
-        for room in _g["rooms"].values():
-            me = room["members"].get(_g["my_hash"])
-            if me:
-                me.update(_profile_entry())
-            if room["iAmLeader"]:
-                _broadcast_roster(room)
-            elif room["state"] == "active":
-                leader = room["members"][room["leader"]]
-                _send(room, leader["hash"], leader["key"], "hello", _profile_entry())
-            _save_room(room)
+        _tell_rooms_about_me()
+
+
+def _tell_rooms_about_me():
+    """Under _lock: my roster entry changed (profile, push token). As leader, a new roster to my rooms'
+    members; as member, `hello` to the leader of every room I joined."""
+    for room in _g["rooms"].values():
+        me = room["members"].get(_g["my_hash"])
+        if me:
+            me.update(_profile_entry())
+        if room["iAmLeader"]:
+            _broadcast_roster(room)
+        elif room["state"] == "active":
+            leader = room["members"][room["leader"]]
+            _send(room, leader["hash"], leader["key"], "hello", _profile_entry())
+        _save_room(room)
 
 
 def _new_room(rid, name, leader_hash, leader_key, link, i_am_leader):
@@ -783,8 +790,6 @@ def join_room(link):
             elif p.get("v") == "2":
                 rid, k = _hexs(_unb64u(p.get("r"), 16), 32), _hexs(_unb64u(p.get("k"), 64), 128)
                 d = _dest_hash_of_key(k) if k else None
-            elif p.get("v") == "1":
-                rid, d, k = _hexs(p.get("r"), 32), _hexs(p.get("d"), 32), _hexs(p.get("k"), 128)
             elif str(p.get("v", "")).isdigit() and int(p["v"]) > PQ_LINK_VERSION:
                 return json.dumps({"ok": False, "error": "This room needs a newer Paddock: update it in Modules."})
             else:
@@ -849,7 +854,8 @@ def leave_room(room_id):
         if room["iAmLeader"]:
             return delete_room(room_id)
         leader = room["members"][room["leader"]]
-        _send(room, leader["hash"], leader["key"], "leave")
+        # Mailbox too: a leader away now would otherwise keep me in the room for good.
+        _send(room, leader["hash"], leader["key"], "leave", mailbox=True)
         _drop_room(room)
 
 
@@ -861,7 +867,8 @@ def delete_room(room_id):
         if not room["iAmLeader"]:
             return leave_room(room_id)
         for m in _others(room):
-            _send(room, m["hash"], m["key"], "close")
+            # Mailbox too: a rider away now would otherwise keep a room that no longer exists.
+            _send(room, m["hash"], m["key"], "close", mailbox=True)
         _drop_room(room)
 
 
@@ -921,22 +928,26 @@ def poll():
 
 # ---------------------------------------------------------------- voice (paddock_voice.py)
 
+def _by_identity(room, identity_hex):
+    """Hash of the other rider of [room] whose RNS identity this is, else None. Copies the members:
+    the voice side calls it without _lock."""
+    for h, m in list(room["members"].items()):
+        try:
+            if h != _g["my_hash"] and _g["RNS"].Identity.truncated_hash(bytes.fromhex(m["key"])).hex() == identity_hex:
+                return h
+        except Exception:
+            pass
+    return None
+
+
 def _member_by_identity(identity_hash_hex):
     """(name, room id) of a rider with this identity in one of my active rooms, else None.
     Called from an RNS thread holding no lock of the voice side."""
     with _lock:
-        RNS = _g["RNS"]
         for room in _g["rooms"].values():
-            if room["state"] != "active":
-                continue
-            for m in room["members"].values():
-                if m["hash"] == _g["my_hash"]:
-                    continue
-                try:
-                    if RNS.Identity.truncated_hash(bytes.fromhex(m["key"])).hex() == identity_hash_hex:
-                        return m["name"], room["id"]
-                except Exception:
-                    pass
+            h = _by_identity(room, identity_hash_hex) if room["state"] == "active" else None
+            if h:
+                return room["members"][h]["name"], room["id"]
     return None
 
 
@@ -1051,16 +1062,7 @@ def set_push_token(token):
         if not _g["started"] or token == _g["push_token"]:
             return
         _g["push_token"] = token
-        for room in _g["rooms"].values():
-            me = room["members"].get(_g["my_hash"])
-            if me:
-                me["pt"] = token
-            if room["iAmLeader"]:
-                _broadcast_roster(room)
-            elif room["state"] == "active":
-                leader = room["members"][room["leader"]]
-                _send(room, leader["hash"], leader["key"], "hello", _profile_entry())
-            _save_room(room)
+        _tell_rooms_about_me()
 
 
 def _wake(room, h, kind):
@@ -1081,15 +1083,8 @@ def _wake(room, h, kind):
 def _wake_call(identity_hash_hex, room_id):
     """For paddock_voice: ring the phone of the rider I am calling. No _lock (voice holds _clock)."""
     room = _g["rooms"].get(room_id)
-    if not room:
-        return False
-    for h, m in list(room["members"].items()):
-        try:
-            if _g["RNS"].Identity.truncated_hash(bytes.fromhex(m["key"])).hex() == identity_hash_hex:
-                return _wake(room, h, "call")
-        except Exception:
-            pass
-    return False
+    h = _by_identity(room, identity_hash_hex) if room else None
+    return _wake(room, h, "call") if h else False
 
 
 def push_gone(member_hash):
@@ -1118,22 +1113,11 @@ def here(room_id, sender_prefix):
                 _g["sync"].pull(m["key"], room["id"])  # newer: fetch it from them now
 
 
-def _sync_member(room, identity_hex):
-    RNS = _g["RNS"]
-    for h, m in room["members"].items():
-        try:
-            if h != _g["my_hash"] and RNS.Identity.truncated_hash(bytes.fromhex(m["key"])).hex() == identity_hex:
-                return h
-        except Exception:
-            pass
-    return None
-
-
 def _sync_pending(identity_hex, rid):
     """paddock_sync, sender's side: my chat messages still on their way to this rider (None: not one)."""
     with _lock:
         room = _g["rooms"].get(rid)
-        h = _sync_member(room, identity_hex) if room and room["state"] == "active" else None
+        h = _by_identity(room, identity_hex) if room and room["state"] == "active" else None
         if h is None:
             return None
         out = []
@@ -1148,7 +1132,7 @@ def _sync_pending(identity_hex, rid):
 def _sync_delivered(identity_hex, rid, ids):
     with _lock:
         room = _g["rooms"].get(rid)
-        h = _sync_member(room, identity_hex) if room else None
+        h = _by_identity(room, identity_hex) if room else None
         if h is not None:
             for i in ids:
                 _g["dlq"].append((rid, i, h, "link", "delivered"))
@@ -1237,7 +1221,7 @@ def reset_identity():
         base = _g.get("storage")
         if not base:
             return
-        for name in ("identity", "room.json", "ride.json", "python.log", "pn.json"):
+        for name in ("identity", "ride.json", "python.log", "pn.json"):
             try:
                 os.remove(os.path.join(base, name))
             except OSError:
@@ -1356,7 +1340,7 @@ def _tick():
 
 
 def _load_room(d):
-    """A room from its saved dict (rooms/<id>.json or a v0.1 room.json); None if invalid."""
+    """A room from its saved dict (rooms/<id>.json); None if invalid."""
     members = {}
     for m in d["members"]:
         if _hexs(m["hash"], 32) and _hexs(m["key"], 128):
@@ -1374,7 +1358,8 @@ def _load_room(d):
             "members": members, "started": now, "last_try": 0,
             "createdAt": int(d.get("createdAt") or now), "lastActivity": int(d.get("lastActivity") or now),
             "readRx": int(d.get("readRx") or 0), "rx": 0, "chat": [], "idx": {},
-            "relays": _valid_relays(d.get("relays")), "pns": _valid_pns(d.get("pns"))}
+            "relays": _valid_relays(d.get("relays")), "pns": _valid_pns(d.get("pns")),
+            "banned": [h for h in d.get("banned") or [] if _hexs(h, 32)][-MAX_BANNED:]}
     if d.get("pq"):
         # A post-quantum room never falls back to plain messages: a damaged secret drops the room.
         if not _hexs(d["pq"], 64) or _rid_of_secret(d["pq"]) != room["id"]:
@@ -1382,27 +1367,6 @@ def _load_room(d):
         room["pq"] = d["pq"]
     _chat_load(room)
     return room
-
-
-def _migrate_v01():
-    """One time: a v0.1 <storage>/room.json becomes rooms/<id>.json (riding if it was active)."""
-    p = _path("room.json")
-    try:
-        with open(p) as f:
-            room = _load_room(json.load(f))
-        if room is None:
-            print("room.json invalid, ignored")
-            return
-        if not os.path.exists(_room_file(room["id"])):
-            _save_room(room)
-        if room["state"] == "active" and not os.path.exists(_path("ride.json")):
-            _g["riding"] = room["id"]
-            _save_ride()
-        os.remove(p)
-    except FileNotFoundError:
-        pass
-    except Exception as e:
-        print("room.json unreadable, ignored: %r" % (e,))
 
 
 def _restore_rooms():
@@ -1514,8 +1478,8 @@ def _on_join(room, src, body, message):
     key = _hexs(body.get("k"), 128)
     # The key must hash to the sender; an unknown-source message cannot be signature-checked yet,
     # but a wrong signature is rejected. Knowing the room id is the invitation.
-    if not key or _dest_hash_of_key(key) != src:
-        return
+    if not key or _dest_hash_of_key(key) != src or src in room.get("banned", ()):
+        return  # a removed rider keeps the link: their ID may not come back with it
     if message.unverified_reason == _g["LXMF"].LXMessage.SIGNATURE_INVALID:
         return
     known = src in room["members"]
@@ -1692,7 +1656,12 @@ def _chat_event(room, text):
 
 
 def _unread(room):
-    return sum(1 for e in room["chat"] if e["kind"] != "event" and not e["mine"] and e["rx"] > room["readRx"])
+    # poll() asks every second: counted again only when something arrived (rx) or was read (readRx).
+    key = (room["rx"], room["readRx"])
+    if room.get("unread_at") != key:
+        room["unread_at"] = key
+        room["unread_n"] = sum(1 for e in room["chat"] if e["kind"] != "event" and not e["mine"] and e["rx"] > room["readRx"])
+    return room["unread_n"]
 
 
 def _who(room, e):
@@ -1901,6 +1870,15 @@ def chat(room_id, before_ms, limit):
         return json.dumps({"messages": [_chat_json(room, e) for e in msgs[-min(limit, CHAT_KEEP):]]})
 
 
+def newest_unread(room_id):
+    """The unread message that arrived last, as chat() gives it: by receive order, since a mailbox copy
+    sits earlier in the chat (its send time) than messages read before it came."""
+    with _lock:
+        room = _g["rooms"].get(room_id)
+        new = [e for e in room["chat"] if e["kind"] != "event" and not e["mine"] and e["rx"] > room["readRx"]] if room else []
+        return json.dumps({"messages": [_chat_json(room, max(new, key=lambda e: e["rx"]))] if new else []})
+
+
 def mark_read(room_id):
     with _lock:
         room = _g["rooms"].get(room_id)
@@ -1919,8 +1897,9 @@ def remove_member(room_id, hash_):
         m = room["members"].get(hash_)
         if m is None or hash_ == _g["my_hash"]:
             return json.dumps({"ok": False, "error": "This rider is not in the room."})
-        _send(room, m["hash"], m["key"], "removed")
+        _send(room, m["hash"], m["key"], "removed", mailbox=True)
         del room["members"][hash_]
+        room["banned"] = (room.get("banned", []) + [hash_])[-MAX_BANNED:]
         _event("member_left", "%s was removed from the room." % m["name"], room)
         _touch(room)
         _broadcast_roster(room)

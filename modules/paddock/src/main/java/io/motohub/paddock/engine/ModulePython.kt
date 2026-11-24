@@ -21,15 +21,13 @@ import java.util.zip.ZipInputStream
 internal object ModulePython {
     private const val PREFIX = "paddock-py/chaquopy/"
 
-    /** Unpacks once per module file; returns the Python home with app/requirements/stdlib/bootstrap. */
     /**
+     * Unpacks once per module file; returns the Python home with app/requirements/stdlib/bootstrap.
      * The Python files go to [noBackupDir], not the module's storage: MOTO-HUB's .mhb backup copies
      * every module's storage, and these ~60 MB come back from the module file anyway.
      */
-    fun unpack(storage: File, noBackupDir: File, log: (String) -> Unit): File {
+    fun unpack(noBackupDir: File, log: (String) -> Unit): File {
         val jar = moduleJar()
-        // Where 0.1.0 and 0.1.1 unpacked them: inside the backup.
-        File(storage, "py").takeIf { it.isDirectory }?.deleteRecursively()
         val home = File(noBackupDir, "paddock-py")
         val stamp = File(home, ".stamp")
         val expected = "${jar.length()}-${jar.lastModified()}"
