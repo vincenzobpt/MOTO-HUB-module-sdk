@@ -68,6 +68,7 @@ internal fun RoomScreen(
     onBack: () -> Unit
 ) {
     var quickOpen by remember { mutableStateOf(false) }
+    var pqInfo by remember { mutableStateOf(false) }
     var removing by remember { mutableStateOf<Member?>(null) }
     val sendQuick: (QuickKind) -> Unit = { kind ->
         controller.sendQuick(room.id, kind)
@@ -113,7 +114,8 @@ internal fun RoomScreen(
                 chat = { ChatCard(room, myHash, onChat) },
                 onQuick = sendQuick,
                 onMore = { quickOpen = true },
-                onRemove = { removing = it }
+                onRemove = { removing = it },
+                onPq = { pqInfo = true }
             )
         }
 
@@ -127,6 +129,11 @@ internal fun RoomScreen(
             }
         }
         QuickSheet(quickOpen, slot, room.name, sendQuick) { quickOpen = false }
+        Sheet(pqInfo, slot, "Post-quantum room", { pqInfo = false }) {
+            PqMark(72.dp)
+            Spacer(Modifier.height(14.dp))
+            Txt(PQ_EXPLAINED, Ty.BODY, P.text2)
+        }
         val target = removing
         ConfirmSheet(
             target != null, slot, PI.USERS, danger = true,
@@ -207,7 +214,8 @@ private fun ActiveRoom(
     chat: @Composable @ComposableTarget(ModuleUi.UI_APPLIER) () -> Unit,
     onQuick: (QuickKind) -> Unit,
     onMore: () -> Unit,
-    onRemove: (Member) -> Unit
+    onRemove: (Member) -> Unit,
+    onPq: () -> Unit
 ) {
     val context = LocalContext.current
     val now = rememberNowSeconds()
@@ -234,6 +242,10 @@ private fun ActiveRoom(
             PIcon(PI.CROWN, P.text2, 16.dp)
         }
         Txt(if (room.members.size == 1) "1 rider" else "${room.members.size} riders", Ty.SMALL, P.dim, maxLines = 1)
+    }
+    if (room.pq) {
+        Spacer(Modifier.height(10.dp))
+        PqPill(onPq)
     }
     Spacer(Modifier.height(20.dp))
 
@@ -410,6 +422,13 @@ internal fun RoomCode(controller: PaddockController, room: Room) {
             else "The leader lets them in, so the leader's phone must be online when they scan.",
             Ty.SMALL, P.dim, align = TextAlign.Center
         )
+        if (room.pq) {
+            Spacer(Modifier.height(10.dp))
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                PqMark(20.dp)
+                Txt("The code carries the room key: keep it among your riders.", Ty.SMALL, P.okText, maxLines = 2)
+            }
+        }
         Spacer(Modifier.height(16.dp))
         SecondaryButton("Share link", PI.SHARE) { controller.shareRoomLink(context, room.id) }
         Spacer(Modifier.height(8.dp))

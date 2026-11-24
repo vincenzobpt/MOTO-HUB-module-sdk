@@ -42,7 +42,7 @@ private val START_STEPS = listOf("Unpacking Paddock (first time only)", "Startin
 
 /**
  * The module's home: the ride in progress (if any) on top, who I am, whether Paddock is ready,
- * the two things to do - open a room or join one - and my rooms, led and joined. While the
+ * the two things to do - create a room or join one - and my rooms, led and joined. While the
  * engine starts, its steps take the place of the actions and the rooms.
  */
 @Composable
@@ -80,7 +80,7 @@ internal fun HomeScreen(
                     )
                     Spacer(Modifier.height(S.gap))
                 }
-                ActionTile(PI.FLAG, "Open a room", "A group you lead. Your riders join by scanning its code.", primary = true, onClick = onOpenRoom)
+                ActionTile(PI.FLAG, "Create a room", "A group you lead. Your riders join by scanning its code.", primary = true, onClick = onOpenRoom)
                 Spacer(Modifier.height(12.dp))
                 // Two ways in, side by side and the same height: neither hides behind the other.
                 Row(Modifier.fillMaxWidth().height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -152,7 +152,7 @@ private fun YourRooms(rooms: List<Room>, myHash: String, onRoom: (String) -> Uni
                 Txt("No rooms yet", Ty.BODY_STRONG, P.text)
                 Txt(
                     "A room is a group you ride with again and again: your Sunday group, track days, a trip to the " +
-                        "mountains. Open one and invite your riders, or join one with its QR code. Rooms keep their " +
+                        "mountains. Create one and invite your riders, or join one with its QR code. Rooms keep their " +
                         "chat and stay on this phone until you leave them.",
                     Ty.SMALL, P.dim
                 )
@@ -207,6 +207,7 @@ private fun RoomRow(room: Room, now: Long, myHash: String, onClick: () -> Unit) 
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Txt(room.name, Ty.HEADING, P.text, Modifier.weight(1f, fill = false), maxLines = 1)
+                if (room.pq) PqMark(18.dp)
                 when {
                     room.riding -> Tag("Riding", P.ok, P.okSoft)
                     room.phase == RoomPhase.JOINING -> Tag("Joining…", P.text2, P.surfaceHi)

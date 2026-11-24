@@ -173,7 +173,7 @@ internal fun SettingsScreen(
 /** A plain on/off switch: the row around it takes the tap. */
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
-private fun OnOffSwitch(on: Boolean) {
+internal fun OnOffSwitch(on: Boolean) {
     Box(
         Modifier.size(width = 52.dp, height = 32.dp).clip(CircleShape)
             .background(if (on) P.accent else P.surfaceHi).border(1.dp, if (on) P.accent else P.line, CircleShape)

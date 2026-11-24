@@ -73,7 +73,11 @@ internal fun PrivacyScreen(onBack: () -> Unit) {
         InfoBlock(
             PI.LOCK, P.ok, P.okSoft, "The cryptography",
             "Keys are agreed with X25519, messages are encrypted with AES-256 and signed with Ed25519: the " +
-                "cryptography of Reticulum and LXMF."
+                "cryptography of Reticulum and LXMF.\n\n" +
+                "In a post-quantum room (the default) every message, quick message and position is first sealed with " +
+                "the room's own key (AES-256 with HMAC-SHA256). That key is made on the leader's phone and travels only " +
+                "in the room's code and link, never through Reticulum, so a future quantum computer that breaks X25519 " +
+                "still finds a sealed message. Calls are not sealed this way."
         )
         Spacer(Modifier.height(S.section))
         SectionLabel("Built on open source")

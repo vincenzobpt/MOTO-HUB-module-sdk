@@ -89,8 +89,32 @@ Possessing the link = invited. Show it only to people you ride with.
   proof-of-work would hold a new rider's first announce for about a minute, and nobody could
   reach them meanwhile. 1.6 nodes accept unstamped announces; a relay that enforces stamps would not.
 - Join: retry `join` every 15 s until a `roster` containing me arrives; after 90 s the `join` also goes to the mailbox and is retried DIRECT every 2 min, never given up on its own (the rider cancels). `roster` falls back to the mailbox when DIRECT fails. With any room, the engine starts with MOTO-HUB, and coming back to the front announces and reads the mailbox at once.
-  The leader accepts anyone who sends the right room id.
+  The leader accepts anyone who sends the right room id (in a post-quantum room: a `join` that opens with the room key).
 - Freshness: a member's position is `fresh` ≤ 60 s old, `stale` ≤ 10 min, then hidden on the map.
+
+## 3c. Post-quantum rooms (0.5.26)
+
+New rooms are post-quantum unless the leader turns off "Post-quantum security" (a classic v2 room, for riders who
+cannot update). The leader makes a 32-byte **room secret**; it travels only in the room link:
+`paddock://join?v=3&s=<secret, base64url>&k=<leader key>&n=<name>` (+ `x`, `t`, `p` as in v2).
+The room id is `sha256("paddock/room" + secret)[:16]`, so the link is only ~22 chars longer than v2.
+Paddocks before 0.5.26 refuse a v3 link ("not a Paddock room link"); a newer link version says
+"needs a newer Paddock".
+
+Every message of the room (`join`, `roster`, `hello`, `leave`, `close`, `removed`, `here`, `pos`,
+`msg`, `quick`) is sent as `{"t": "e", "r": <room id>, "e": <envelope>}`, LXMF content empty.
+The envelope is an RNS `Token` (AES-256-CBC + HMAC-SHA256, random IV) under
+`hkdf(64, secret, salt=room id, context="paddock/pq/v1")`, over msgpack `{"b": body, "f": fields, "r": room id}`:
+`b` is the plain body above, `f` the extra LXMF fields (the position's `FIELD_TELEMETRY`).
+A message of a post-quantum room that is not a valid envelope is dropped (no downgrade). The sync
+Link (`paddock_sync`) hands over `{"i": <chat id>, "e": <envelope of the chat body>}`.
+
+Why: LXMF's X25519 falls to a future quantum computer, and mailbox copies and relayed traffic can be
+recorded today. The envelope needs the secret, which never travels through Reticulum. Limits: calls are not
+sealed; metadata (who, when, size) is as visible as before; a removed rider still knows the secret
+(they get nothing more, and reading recorded traffic would also need a quantum computer); the
+link is the room's password. The secret is kept in `rooms/<id>.json`; "Back up my rider ID" does not include it (whether a
+MOTO-HUB `.mhb` copies module storage is not checked).
 
 ## 3b. Chat
 

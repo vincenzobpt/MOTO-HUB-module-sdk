@@ -5,12 +5,15 @@
 package io.motohub.paddock.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -25,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import io.motohub.android.module.ModuleUi
 import io.motohub.paddock.engine.PaddockController
@@ -40,6 +44,7 @@ import java.util.Locale
 @ComposableTarget(ModuleUi.UI_APPLIER)
 internal fun CreateRoomScreen(controller: PaddockController, rooms: List<Room>, onCreated: (String) -> Unit, onBack: () -> Unit) {
     var name by remember { mutableStateOf(defaultRoomName()) }
+    var pq by remember { mutableStateOf(true) }
     var before by remember { mutableStateOf<Set<String>?>(null) }
     val opening = before != null
     LaunchedEffect(controller) {
@@ -54,12 +59,12 @@ internal fun CreateRoomScreen(controller: PaddockController, rooms: List<Room>, 
     }
 
     Page(
-        "Open a room", onBack,
+        "Create a room", onBack,
         bottom = {
-            if (opening) WaitingRow("Opening the room…", "Your phone is creating the room and its QR code.")
-            else PrimaryButton("Open room", PI.FLAG, name.isNotBlank()) {
+            if (opening) WaitingRow("Creating the room…", "Your phone is creating the room and its QR code.")
+            else PrimaryButton("Create room", PI.FLAG, name.isNotBlank()) {
                 before = roomIds(rooms)
-                controller.createRoom(name.trim())
+                controller.createRoom(name.trim(), classic = !pq)
             }
         }
     ) {
@@ -71,6 +76,32 @@ internal fun CreateRoomScreen(controller: PaddockController, rooms: List<Room>, 
         Txt("A room is a group you ride with again and again. Every rider in it sees its name.", Ty.BODY, P.dim)
         Spacer(Modifier.height(20.dp))
         Field("Room name", name, { name = it }, "Sunday group", 40)
+        Spacer(Modifier.height(S.section))
+        SectionLabel("Protection")
+        Card {
+            Row(
+                Modifier.fillMaxWidth().heightIn(min = 72.dp)
+                    .clickable(role = Role.Switch) { pq = !pq }
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                if (pq) PqMark(32.dp) else PIcon(PI.LOCK, P.dim, 28.dp)
+                Column(Modifier.weight(1f)) {
+                    Txt(if (pq) "Post-quantum security activated" else "Classic room", Ty.BODY_STRONG, P.text, maxLines = 2)
+                    Txt(
+                        if (pq) "Every rider needs Paddock 0.5.26 or newer"
+                        else "Also older Paddocks can join, without the post-quantum seal",
+                        Ty.SMALL, P.dim, maxLines = 2
+                    )
+                }
+                OnOffSwitch(pq)
+            }
+        }
+        Txt(
+            "Turn it off only if a rider of the group cannot update Paddock.",
+            Ty.SMALL, P.dim, Modifier.padding(start = 4.dp, top = 10.dp)
+        )
         Spacer(Modifier.height(S.section))
         SectionLabel("What happens next")
         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {

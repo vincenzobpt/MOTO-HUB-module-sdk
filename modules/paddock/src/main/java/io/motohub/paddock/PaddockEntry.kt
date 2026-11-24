@@ -29,7 +29,7 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
         contractVersion = 39,
         entryClass = "io.motohub.paddock.PaddockEntry",
         displayName = "Paddock",
-        description = "Ride together, privately: a QR to open a room, everyone on the NAV map. No account."
+        description = "Ride together, privately: a QR to join a room, everyone on the NAV map. No account."
     )
 
     private val engine = PaddockEngine(host)

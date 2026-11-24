@@ -56,6 +56,7 @@ internal object StateJson {
             createdAt = o.longOrNull("createdAt") ?: 0,
             lastActivity = o.longOrNull("lastActivity") ?: 0,
             riding = id == ridingId,
+            pq = o.optBoolean("pq", false),
             unread = o.optInt("unread", 0).coerceAtLeast(0),
             last = o.optJSONObject("last")?.let { l ->
                 LastMessage(

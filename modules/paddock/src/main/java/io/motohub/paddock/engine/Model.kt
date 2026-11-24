@@ -81,7 +81,9 @@ data class Room(
     /** Chat messages not read yet. */
     val unread: Int = 0,
     /** The latest chat message, for the rooms list; null before the first. */
-    val last: LastMessage? = null
+    val last: LastMessage? = null,
+    /** Post-quantum room: every message is sealed with the room key from its link (v3). */
+    val pq: Boolean = false
 )
 
 data class LastMessage(val fromHash: String, val name: String, val quick: Boolean, val text: String, val atMillis: Long)
@@ -233,7 +235,7 @@ interface PaddockController {
     fun ensureStarted()
 
     /** The new room shows up in [state]; a [PaddockEvent] says if it failed. */
-    fun createRoom(name: String)
+    fun createRoom(name: String, classic: Boolean = false)
     /** False when [link] is not a Paddock room link. */
     fun joinRoom(link: String): Boolean
     /** Leader only: every member sees the new name. */

@@ -25,4 +25,7 @@ work of others:
 - **CPython** — Python Software Foundation License.
 - **cryptography**, **cffi** (PyCA) — Apache-2.0 / BSD; **pyserial** — BSD; **u-msgpack**,
   if present — MIT.
+- **Cormorant Garamond** by Christian Thalmann — <https://github.com/CatharsisFonts/Cormorant>,
+  SIL Open Font License 1.1. The italic Q of the post-quantum mark (`ui/PqMark.kt`) is its outline;
+  no font file ships with Paddock.
 - **ZXing** — <https://github.com/zxing/zxing>, Apache License 2.0. QR codes.

@@ -9,6 +9,7 @@ into Java. LXMF/RNS threads and Kotlin meet only under _lock.
 """
 import base64
 import collections
+import hashlib
 import ipaddress
 import json
 import math
@@ -224,6 +225,7 @@ def _save_room(room):
             "iAmLeader": room["iAmLeader"], "state": room["state"], "createdAt": room["createdAt"],
             "lastActivity": room["lastActivity"], "readRx": room["readRx"],
             "relays": [list(r) for r in room.get("relays", [])], "pns": room.get("pns", []),
+            "pq": room.get("pq", ""),
             "members": [dict({k: m.get(k, "") for k in ("hash", "key", "name", "color", "bike", "pt")}, v=m.get("v", 0))
                         for m in room["members"].values()]}
     os.makedirs(_path("rooms"), exist_ok=True)
@@ -266,6 +268,12 @@ def _send(room, dest_hex, key_hex, kind, data=None, extra=None, opportunistic=Fa
             RNS.Transport.request_path(dest.hash)
         body = {"t": kind, "r": room["id"]}
         body.update(data or {})
+        if room.get("pq"):
+            # Kind, data, telemetry: all inside the envelope; the LXMF content stays empty.
+            # The room id is already outside and inside the seal: not a third time (a position must fit one packet).
+            inner = {k: v for k, v in body.items() if k != "r"}
+            body = {"t": "e", "r": room["id"], "e": _seal(room, {"b": inner, "f": dict(extra or {})})}
+            extra, content = None, ""
         fields = {LXMF.FIELD_CUSTOM_TYPE: APP_TYPE, LXMF.FIELD_CUSTOM_DATA: body}
         fields.update(extra or {})
         msg = LXMF.LXMessage(dest, _g["dest"], content, fields=fields,
@@ -369,11 +377,53 @@ def _drop_room(room):
         _save_ride()
 
 
-def _make_link(rid, key_hex, name):
+def _make_link(rid, key_hex, name, pq=None):
     # v2: binary fields in base64url and no destination hash (it follows from the key), so the
     # QR has ~40% fewer cells than v1 and reads more easily in sunlight.
+    # v3 (post-quantum): the room secret s= replaces r= (the room id follows from it).
+    if pq:
+        return "paddock://join?v=3&s=%s&k=%s&n=%s" % (
+            _b64u(bytes.fromhex(pq)), _b64u(bytes.fromhex(key_hex)), urllib.parse.quote(name, safe=""))
     return "paddock://join?v=2&r=%s&k=%s&n=%s" % (
         _b64u(bytes.fromhex(rid)), _b64u(bytes.fromhex(key_hex)), urllib.parse.quote(name, safe=""))
+
+
+# ---------------------------------------------------------------- post-quantum room key (DESIGN.md 2c)
+# The room secret travels only in the link; every message of the room is sealed with it before
+# LXMF encrypts it again. A future quantum computer that breaks X25519 still finds a sealed body.
+PQ_LINK_VERSION, PQ_INFO = 3, b"paddock/pq/v1"
+
+
+def _rid_of_secret(pq_hex):
+    """The room id (hex, 16 bytes) of a room secret: public in every message, the secret is not."""
+    return hashlib.sha256(b"paddock/room" + bytes.fromhex(pq_hex)).hexdigest()[:32]
+
+
+def _pq_token(room):
+    tok = room.get("tok")
+    if tok is None:
+        C = _g["RNS"].Cryptography
+        key = C.hkdf(length=64, derive_from=bytes.fromhex(room["pq"]), salt=bytes.fromhex(room["id"]), context=PQ_INFO)
+        tok = room["tok"] = C.Token(key)  # 64 bytes: AES-256-CBC + HMAC-SHA256
+    return tok
+
+
+def _seal(room, obj):
+    return _pq_token(room).encrypt(_msgpack().packb(dict(obj, r=room["id"])))
+
+
+def _open(room, blob):
+    """The sealed dict, or None (wrong key, tampered, not for this room)."""
+    try:
+        obj = _msgpack().unpackb(_pq_token(room).decrypt(bytes(blob)))
+        return obj if isinstance(obj, dict) and obj.get("r") == room["id"] else None
+    except Exception:
+        return None
+
+
+def _msgpack():
+    import RNS.vendor.umsgpack as msgpack
+    return msgpack
 
 
 def _ep(i):
@@ -693,7 +743,7 @@ def _unb64u(text, size):
         return None
 
 
-def create_room(name):
+def create_room(name, classic=False):
     with _lock:
         if not _g["started"]:
             return json.dumps({"ok": False, "error": "Not started."})
@@ -706,8 +756,11 @@ def create_room(name):
                                "so your riders can always reach you: it is connecting to more. Try again in a few "
                                "seconds." % (len(live), "" if len(live) == 1 else "s", need)})
         name = _clean(name, 64, "Paddock")
-        rid = os.urandom(16).hex()
-        room = _new_room(rid, name, _g["my_hash"], _g["key"], _make_link(rid, _g["key"], name), True)
+        pq = None if classic else os.urandom(32).hex()
+        rid = _rid_of_secret(pq) if pq else os.urandom(16).hex()
+        room = _new_room(rid, name, _g["my_hash"], _g["key"], _make_link(rid, _g["key"], name, pq), True)
+        if pq:
+            room["pq"] = pq
         room["relays"] = live
         if _g.get("home_pn"):
             room["pns"] = [_g["home_pn"]]
@@ -722,11 +775,18 @@ def join_room(link):
             if q.scheme != "paddock" or q.netloc != "join":
                 raise ValueError
             p = {k: v[0] for k, v in urllib.parse.parse_qs(q.query).items()}
-            if p.get("v") == "2":
+            pq = None
+            if p.get("v") == "3":
+                pq, k = _hexs(_unb64u(p.get("s"), 32), 64), _hexs(_unb64u(p.get("k"), 64), 128)
+                rid = _rid_of_secret(pq) if pq else None
+                d = _dest_hash_of_key(k) if k else None
+            elif p.get("v") == "2":
                 rid, k = _hexs(_unb64u(p.get("r"), 16), 32), _hexs(_unb64u(p.get("k"), 64), 128)
                 d = _dest_hash_of_key(k) if k else None
             elif p.get("v") == "1":
                 rid, d, k = _hexs(p.get("r"), 32), _hexs(p.get("d"), 32), _hexs(p.get("k"), 128)
+            elif str(p.get("v", "")).isdigit() and int(p["v"]) > PQ_LINK_VERSION:
+                return json.dumps({"ok": False, "error": "This room needs a newer Paddock: update it in Modules."})
             else:
                 raise ValueError
             if not (rid and d and k) or not _g["started"]:
@@ -754,6 +814,8 @@ def join_room(link):
             return json.dumps({"ok": False, "error": "You are already in this room." + (
                 " Paddock now also uses its leader's relays." if shared else "")})
         room = _new_room(rid, _clean(p.get("n"), 64, "Paddock"), d, k, link.strip(), False)
+        if pq:
+            room["pq"] = pq
         room["relays"] = shared
         if pn:
             # Only a leader whose Paddock reads room nodes puts one in the link.
@@ -772,7 +834,7 @@ def rename_room(room_id, name):
         if not room or not room["iAmLeader"]:
             return json.dumps({"ok": False, "error": "Only the leader can rename a room."})
         room["name"] = _clean(name, 64, room["name"])
-        room["link"] = _make_link(room["id"], _g["key"], room["name"])
+        room["link"] = _make_link(room["id"], _g["key"], room["name"], room.get("pq"))
         _touch(room)
         _broadcast_roster(room)
         _save_room(room)
@@ -1078,7 +1140,8 @@ def _sync_pending(identity_hex, rid):
         for e in room["chat"]:
             if e["mine"] and e.get("rc") and e["rc"].get(h) in ("pending", "waiting", "mailbox", "failed"):
                 kind, d = _chat_body(e)
-                out.append(dict(d, t=kind))
+                # "i" stays outside: paddock_sync marks the ids it handed over as delivered.
+                out.append({"i": d["i"], "e": _seal(room, dict(d, t=kind))} if room.get("pq") else dict(d, t=kind))
         return out[-RESEND_MAX:]
 
 
@@ -1103,6 +1166,8 @@ def _sync_ingest(key_hex, rid, entries):
         sender = room["members"][src]
         sender["heardAt"] = _now()
         for e in entries[:RESEND_MAX]:
+            if room.get("pq"):
+                e = _open(room, e["e"]) if isinstance(e, dict) and isinstance(e.get("e"), (bytes, bytearray)) else None
             if isinstance(e, dict) and e.get("t") in ("msg", "quick"):
                 _on_chat(room, sender, src, e["t"], e)
 
@@ -1204,7 +1269,7 @@ def _room_json(r):
     return {"id": r["id"], "name": r["name"], "link": _room_link(r), "state": r["state"],
             "iAmLeader": r["iAmLeader"], "leader": r["leader"], "createdAt": r["createdAt"],
             "lastActivity": r["lastActivity"], "unread": _unread(r), "last": _last(r),
-            "members": members}
+            "pq": bool(r.get("pq")), "members": members}
 
 
 def _rooms_json():
@@ -1310,6 +1375,11 @@ def _load_room(d):
             "createdAt": int(d.get("createdAt") or now), "lastActivity": int(d.get("lastActivity") or now),
             "readRx": int(d.get("readRx") or 0), "rx": 0, "chat": [], "idx": {},
             "relays": _valid_relays(d.get("relays")), "pns": _valid_pns(d.get("pns"))}
+    if d.get("pq"):
+        # A post-quantum room never falls back to plain messages: a damaged secret drops the room.
+        if not _hexs(d["pq"], 64) or _rid_of_secret(d["pq"]) != room["id"]:
+            return None
+        room["pq"] = d["pq"]
     _chat_load(room)
     return room
 
@@ -1391,6 +1461,13 @@ def _handle(message):
     room = _g["rooms"].get(rid) if isinstance(rid, str) else None
     if room is None:
         return
+    if room.get("pq"):
+        # Only sealed messages count in a post-quantum room: never a plain one in its place.
+        inner = _open(room, body.get("e")) if body.get("t") == "e" and isinstance(body.get("e"), (bytes, bytearray)) else None
+        if inner is None or not isinstance(inner.get("b"), dict) or not isinstance(inner.get("f"), dict):
+            return
+        body, fields = dict(inner["b"], r=room["id"]), dict(fields)
+        fields.update({k: v for k, v in inner["f"].items() if isinstance(k, int)})
     kind = body.get("t")
     src = message.source_hash.hex()
     now = _now()
@@ -1500,7 +1577,7 @@ def _on_roster(room, body):
         name = _clean(body.get("n"), 64, room["name"])
         if name != room["name"]:
             room["name"] = name
-            room["link"] = _make_link(room["id"], room["members"][room["leader"]]["key"], name)
+            room["link"] = _make_link(room["id"], room["members"][room["leader"]]["key"], name, room.get("pq"))
             _event("room_renamed", "The room is now called %s." % name, room)
             changed = True
     room["members"] = new
@@ -1679,7 +1756,7 @@ def _chat_out(rid, e, hashes, via):
         if m is None:
             _g["dlq"].append(track + ("failed",))
             continue
-        _send({"id": rid}, h, m["key"], kind, data, content=e["text"], method=method, track=track)
+        _send(room, h, m["key"], kind, data, content=e["text"], method=method, track=track)
 
 
 def _dl_note(track, lxm, failed=False):

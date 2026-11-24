@@ -352,8 +352,8 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
         main.post { if (_state.value.riding == null) holdRide(false) }
     }
 
-    override fun createRoom(name: String) {
-        call { module -> answered(module.callAttr("create_room", name.trim().ifEmpty { "Ride" }.take(40)), "The room could not be created.") }
+    override fun createRoom(name: String, classic: Boolean) {
+        call { module -> answered(module.callAttr("create_room", name.trim().ifEmpty { "Ride" }.take(40), classic), "The room could not be created.") }
     }
 
     override fun joinRoom(link: String): Boolean {
