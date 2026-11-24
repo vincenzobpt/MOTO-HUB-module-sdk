@@ -25,7 +25,7 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
     // Must agree with motohubModule { } in build.gradle.kts.
     override val manifest = ModuleManifest(
         id = "paddock",
-        version = "0.5.16",
+        version = "0.5.21",
         contractVersion = 39,
         entryClass = "io.motohub.paddock.PaddockEntry",
         displayName = "Paddock",
@@ -41,6 +41,9 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
     // By lazy, by name: ModuleGroupRide is contract 48, which an older app lacks.
     private val groupRide by lazy { io.motohub.paddock.engine.GroupRideLink(engine) }
 
+    // By lazy, by name: ModuleStatus is contract 50, which an older app lacks.
+    private val statusLink = lazy { io.motohub.paddock.engine.StatusLink(engine) }
+
     private val features = object : ModuleFeatures {
         override fun features() = listOfNotNull(
             ModuleFeature(
@@ -52,6 +55,28 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
             ),
             // First in the NAV's app menu (contract 45), the way back to the room during a ride.
             // By name: on an older app the constant does not exist and the entry is left out.
+            // One hidden page per room (NONE: shown nowhere, opened by id), so a notification about
+            // a room opens that room. The ids come from the room files too: at a cold start from
+            // the notification the engine has not read the rooms yet.
+            *roomIds().map { roomId ->
+                ModuleFeature(
+                    id = ROOM_FEATURE_PREFIX + roomId,
+                    title = "Paddock room",
+                    description = "A room in Paddock",
+                    placement = ModuleFeaturePlacement.NONE,
+                    screen = { onBack -> PaddockApp(engine, host, onBack, startRoom = roomId) }
+                )
+            }.toTypedArray(),
+            // And its chat, for a notification about a message.
+            *roomIds().map { roomId ->
+                ModuleFeature(
+                    id = CHAT_FEATURE_PREFIX + roomId,
+                    title = "Paddock chat",
+                    description = "A room's chat in Paddock",
+                    placement = ModuleFeaturePlacement.NONE,
+                    screen = { onBack -> PaddockApp(engine, host, onBack, startRoom = roomId, startChat = true) }
+                )
+            }.toTypedArray(),
             navMenu?.let {
                 ModuleFeature(
                     id = NAV_FEATURE,
@@ -63,6 +88,10 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
             }
         )
     }
+
+    private fun roomIds(): Set<String> =
+        engine.state.value.rooms.map { it.id }.toSet() +
+            java.io.File(host.storage, "rooms").list().orEmpty().filter { it.endsWith(".json") }.map { it.removeSuffix(".json") }
 
     init {
         host.log.log("PADDOCK loaded")
@@ -84,11 +113,13 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
         else -> when (type.name) {
             RIDE_SHORTCUT -> rideShortcut as T
             GROUP_RIDE -> groupRide as T
+            STATUS -> statusLink.value as T
             else -> null
         }
     }
 
     override fun release() {
+        if (statusLink.isInitialized()) statusLink.value.release()
         engine.release()
         host.log.log("PADDOCK released (Python stays loaded until the app restarts)")
     }
@@ -97,6 +128,10 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
         const val FEATURE = "paddock"
         const val NAV_FEATURE = "paddock-nav"
         const val RIDE_SHORTCUT = "io.motohub.android.module.ModuleRideShortcut"
+        /** Followed by a room id; Notifier builds the same ids. */
+        const val ROOM_FEATURE_PREFIX = "room:"
+        const val CHAT_FEATURE_PREFIX = "chat:"
+        const val STATUS = "io.motohub.android.module.ModuleStatus"
         const val GROUP_RIDE = "io.motohub.android.module.ModuleGroupRide"
     }
 }

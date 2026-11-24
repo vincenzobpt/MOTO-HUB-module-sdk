@@ -206,7 +206,9 @@ data class PaddockState(
     /** Every room, newest activity first. */
     val rooms: List<Room> = emptyList(),
     /** The voice call on now, if any (VOICE.md). */
-    val call: Call? = null
+    val call: Call? = null,
+    /** Running, but the relays are dropped until needed (no ride, no call, MOTO-HUB not on screen). */
+    val standby: Boolean = false
 ) {
     /** The room I ride with, if any. */
     val riding: Room? get() = rooms.firstOrNull { it.riding }
@@ -294,6 +296,13 @@ interface PaddockController {
      */
     val alwaysOn: StateFlow<Boolean>
     fun setAlwaysOn(on: Boolean)
+    /**
+     * The rider tapped Disconnect: no relay, no automatic start at the next MOTO-HUB start, until
+     * [connect]. Kept on disk. A ride and a call end with it.
+     */
+    val disconnected: StateFlow<Boolean>
+    fun disconnect()
+    fun connect()
     val defaultRelay: String
     /**
      * Ends MOTO-HUB's process and opens it again: the only cure once Python is loaded twice or the

@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import io.motohub.android.module.ModuleUi
 import io.motohub.android.module.MotoHubModuleHost
+import io.motohub.paddock.engine.EngineStage
 import io.motohub.paddock.engine.PaddockController
 import kotlinx.coroutines.delay
 
@@ -55,11 +56,28 @@ private sealed interface Screen {
  */
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
-fun PaddockApp(controller: PaddockController, host: MotoHubModuleHost, onBack: () -> Unit) {
+fun PaddockApp(
+    controller: PaddockController,
+    host: MotoHubModuleHost,
+    onBack: () -> Unit,
+    /** A room to open straight away, from a notification about it; back from it goes to Home. */
+    startRoom: String? = null,
+    /** With [startRoom]: its chat on top of it, from a notification about a message. */
+    startChat: Boolean = false
+) {
     val state by controller.state.collectAsState()
     val profile by controller.profile.collectAsState()
+    val disconnected by controller.disconnected.collectAsState()
     val root: Screen = if (profile == null) Screen.Welcome else Screen.Home
-    var stack by remember(root) { mutableStateOf<List<Screen>>(emptyList()) }
+    var stack by remember(root, startRoom, startChat) {
+        mutableStateOf<List<Screen>>(
+            when {
+                root != Screen.Home || startRoom == null -> emptyList()
+                startChat -> listOf(Screen.Room(startRoom), Screen.Chat(startRoom))
+                else -> listOf(Screen.Room(startRoom))
+            }
+        )
+    }
     val top = if (stack.isEmpty()) root else stack[stack.size - 1]
     val slot = remember { BackSlot() }
     val push: (Screen) -> Unit = { s -> stack = ArrayList(stack).apply { add(s) } }
@@ -68,6 +86,9 @@ fun PaddockApp(controller: PaddockController, host: MotoHubModuleHost, onBack: (
         stack = ArrayList(stack.subList(0, if (stack.isEmpty()) 0 else stack.size - 1)).apply { add(s) }
     }
     LaunchedEffect(state.rooms, stack) {
+        // Only a running engine knows the rooms: opened from a notification at a cold start, the
+        // room arrives a moment later and must not be dropped before it does.
+        if (state.stage != EngineStage.RUNNING) return@LaunchedEffect
         val kept = ArrayList<Screen>(stack.size)
         for (s in stack) {
             val gone = (s is Screen.Room && state.room(s.id) == null) || (s is Screen.Invite && state.room(s.id) == null) ||
@@ -126,7 +147,10 @@ fun PaddockApp(controller: PaddockController, host: MotoHubModuleHost, onBack: (
                             onSettings = { push(Screen.Settings) },
                             onRetry = { controller.ensureStarted() },
                             onRestart = { context -> controller.restartMotoHub(context) },
-                            onBack = back
+                            onBack = back,
+                            disconnected = disconnected,
+                            onDisconnect = { controller.disconnect() },
+                            onConnect = { controller.connect() }
                         )
                         is Screen.Room -> {
                             val r = state.room(top.id)

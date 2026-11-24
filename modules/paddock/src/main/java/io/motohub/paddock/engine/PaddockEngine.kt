@@ -79,6 +79,24 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
         log("always on: $on")
     }
 
+    private val _disconnected = MutableStateFlow(File(storage, DISCONNECTED).isFile)
+    override val disconnected: StateFlow<Boolean> = _disconnected
+
+    override fun disconnect() {
+        File(storage, DISCONNECTED).writeText("1")
+        _disconnected.value = true
+        if (_state.value.riding != null) stopRide()
+        if (_state.value.call != null) hangUp()
+        log("disconnected by the rider")
+    }
+
+    override fun connect() {
+        File(storage, DISCONNECTED).delete()
+        _disconnected.value = false
+        log("connected by the rider")
+        ensureStarted()
+    }
+
     private val _state = MutableStateFlow(PaddockState())
     override val state: StateFlow<PaddockState> = _state
     private val _profile = MutableStateFlow(readProfile())
@@ -107,6 +125,8 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
     }
 
     override fun ensureStarted() {
+        // Disconnected: nothing starts until the rider taps Connect.
+        if (_disconnected.value) return
         val p = _profile.value ?: return
         val stage = _state.value.stage
         if (stage == EngineStage.RUNNING || stage == EngineStage.STARTING || needsRestart) return
@@ -149,7 +169,16 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
         val module = engine ?: return
         try {
             val json = JSONObject(module.callAttr("poll").toString())
-            val next = StateJson.parse(json, _state.value)
+            val parsed = StateJson.parse(json, _state.value)
+            val inFront = inForeground()
+            val nowMs = SystemClock.elapsedRealtime()
+            if (inFront) lastInFrontAt = nowMs
+            // Every relay sends announces of the whole network: held all night they kept a phone
+            // awake (23/11, 40% overnight). Only while needed, unless the rider chose Always on;
+            // never after the rider's Disconnect.
+            val wanted = !_disconnected.value && (_alwaysOn.value || parsed.riding != null || parsed.call != null ||
+                nowMs - lastInFrontAt < OFFLINE_AFTER_MILLIS)
+            val next = parsed.copy(standby = !wanted && !_disconnected.value)
             val wasRiding = _state.value.riding != null
             val callBefore = _state.value.call
             _state.value = next
@@ -161,13 +190,7 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
                 _events.tryEmit(it)
                 notify(it)
             }
-            val inFront = inForeground()
             val riding = next.riding != null
-            val nowMs = SystemClock.elapsedRealtime()
-            if (inFront) lastInFrontAt = nowMs
-            // Every relay sends announces of the whole network: held all night they kept a phone
-            // awake (23/11, 40% overnight). Only while needed, unless the rider chose Always on.
-            val wanted = _alwaysOn.value || riding || next.call != null || nowMs - lastInFrontAt < OFFLINE_AFTER_MILLIS
             if (wanted != relaysOn) {
                 module.callAttr("set_online", wanted)
                 relaysOn = wanted
@@ -183,6 +206,7 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
                 main.post { reopenRide() }
             }
             if (riding) sendPositionIfDue(module)
+            notifyNewMessages(module, next, inFront)
             chatRoom?.let { room -> refreshChat(module, room, (next.room(room)?.unread ?: 0) > 0) }
             updateGroupRide(module, next)
         } catch (t: Throwable) {
@@ -243,12 +267,40 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
         return null
     }
 
+    /** Unread count per room at the last poll; null until the first poll, which notifies nothing. Python thread only. */
+    private var lastUnread: Map<String, Int>? = null
+
+    /**
+     * A notification for chat messages that arrived since the last poll, unless that room's chat
+     * is on screen. The newest one is shown, with how many are unread. Python thread only.
+     */
+    private fun notifyNewMessages(module: PyObject, state: PaddockState, inFront: Boolean) {
+        val before = lastUnread
+        lastUnread = state.rooms.associate { it.id to it.unread }
+        if (before == null) return
+        for (room in state.rooms) {
+            val added = room.unread - (before[room.id] ?: 0)
+            if (added <= 0 || (inFront && chatRoom == room.id)) continue
+            val latest = runCatching {
+                StateJson.chat(JSONObject(module.callAttr("chat", room.id, 0L, added.coerceAtMost(5)).toString()))
+            }.getOrDefault(emptyList()).lastOrNull { !it.mine && it.kind != ChatKind.EVENT } ?: continue
+            val body = when (latest.kind) {
+                ChatKind.QUICK -> latest.quick?.label ?: latest.text
+                else -> latest.text
+            }
+            notifier.postMessages(
+                room.id, room.name, "${latest.name}: $body", room.unread,
+                urgent = latest.quick == QuickKind.EMERGENCY
+            )
+        }
+    }
+
     /** Someone came into a room, or I was let in: worth a notification, not only a toast. */
     private fun notify(event: PaddockEvent) {
         val name = event.roomId?.let { _state.value.room(it)?.name } ?: "Paddock"
         when (event) {
-            is PaddockEvent.MemberJoined -> notifier.post(name, event.text)
-            is PaddockEvent.RoomJoined -> notifier.post(name, event.text)
+            is PaddockEvent.MemberJoined -> notifier.post(name, event.text, event.roomId)
+            is PaddockEvent.RoomJoined -> notifier.post(name, event.text, event.roomId)
             else -> Unit
         }
     }
@@ -306,6 +358,7 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
 
     override fun openChat(roomId: String) {
         chatRoom = roomId
+        notifier.cancelMessages(roomId)
         chatLimit = CHAT_PAGE
         _chat.value = ChatView(roomId = roomId, loading = true)
         call { module -> refreshChat(module, roomId, markRead = true) }
@@ -715,6 +768,7 @@ internal class PaddockEngine(private val host: MotoHubModuleHost) : PaddockContr
         const val IDENTITY = "identity"
         const val RELAY = "relay.txt"
         const val ALWAYS_ON = "always_on"
+        const val DISCONNECTED = "disconnected"
         /** After leaving MOTO-HUB, the relays stay this long: a quick look at another app keeps them. */
         const val OFFLINE_AFTER_MILLIS = 60_000L
         const val POLL_MILLIS = 1000L

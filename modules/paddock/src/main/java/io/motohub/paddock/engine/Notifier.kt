@@ -21,7 +21,8 @@ internal class Notifier(private val context: Context) {
     private var created = false
     private var nextId = BASE_ID
 
-    fun post(title: String, text: String) {
+    /** [roomId]: the room the news is about, opened by a tap; null opens Paddock's home. */
+    fun post(title: String, text: String, roomId: String? = null) {
         val manager = manager ?: return
         runCatching {
             if (!created) {
@@ -34,8 +35,13 @@ internal class Notifier(private val context: Context) {
             // The app's own small icon: a module jar carries no resources of its own.
             val icon = context.resources.getIdentifier("ic_notification", "drawable", context.packageName)
                 .takeIf { it != 0 } ?: android.R.drawable.stat_notify_chat
+            // MOTO-HUB opens the module page named in the extras (plain strings: no link to the app).
+            // One request code per notification, so each keeps its own room.
             val open = context.packageManager.getLaunchIntentForPackage(context.packageName)?.let {
-                PendingIntent.getActivity(context, 0, it, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                it.putExtra(EXTRA_MODULE_ID, "paddock")
+                    .putExtra(EXTRA_FEATURE_ID, roomId?.let { id -> "room:$id" } ?: "paddock")
+                    .addFlags(android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                PendingIntent.getActivity(context, nextId, it, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
             }
             val n = Notification.Builder(context, CHANNEL)
                 .setSmallIcon(icon)
@@ -49,8 +55,61 @@ internal class Notifier(private val context: Context) {
         }
     }
 
+    /**
+     * New chat messages in [roomId]: one notification per room, replaced by the next message, so a
+     * busy chat does not fill the shade. A tap opens that room's chat. An emergency rings loud.
+     */
+    fun postMessages(roomId: String, roomName: String, text: String, unread: Int, urgent: Boolean) {
+        val manager = manager ?: return
+        runCatching {
+            if (!messagesCreated) {
+                manager.createNotificationChannel(
+                    NotificationChannel(CHANNEL_MESSAGES, "Paddock messages", NotificationManager.IMPORTANCE_HIGH)
+                        .apply { description = "Chat messages in your Paddock rooms" }
+                )
+                messagesCreated = true
+            }
+            val icon = context.resources.getIdentifier("ic_notification", "drawable", context.packageName)
+                .takeIf { it != 0 } ?: android.R.drawable.stat_notify_chat
+            val id = messageId(roomId)
+            val open = context.packageManager.getLaunchIntentForPackage(context.packageName)?.let {
+                it.putExtra(EXTRA_MODULE_ID, "paddock")
+                    .putExtra(EXTRA_FEATURE_ID, "chat:$roomId")
+                    .addFlags(android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                PendingIntent.getActivity(context, id, it, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+            }
+            val n = Notification.Builder(context, CHANNEL_MESSAGES)
+                .setSmallIcon(icon)
+                .setContentTitle(roomName)
+                .setContentText(text)
+                .setStyle(Notification.BigTextStyle().bigText(text))
+                .setCategory(Notification.CATEGORY_MESSAGE)
+                .setAutoCancel(true)
+                .apply {
+                    if (unread > 1) setSubText("$unread unread")
+                    if (urgent) setCategory(Notification.CATEGORY_ALARM)
+                    open?.let { setContentIntent(it) }
+                }
+                .build()
+            manager.notify(id, n)
+        }
+    }
+
+    /** The room's chat is on screen: its message notification has nothing left to say. */
+    fun cancelMessages(roomId: String) {
+        runCatching { manager?.cancel(messageId(roomId)) }
+    }
+
+    private var messagesCreated = false
+
+    private fun messageId(roomId: String) = MESSAGES_BASE_ID + (roomId.hashCode() and 0x3FF)
+
     private companion object {
+        const val CHANNEL_MESSAGES = "paddock_messages"
+        const val MESSAGES_BASE_ID = 47_200
         const val CHANNEL = "paddock_rooms"
         const val BASE_ID = 47_100
+        const val EXTRA_MODULE_ID = "io.motohub.android.extra.OPEN_MODULE_ID"
+        const val EXTRA_FEATURE_ID = "io.motohub.android.extra.OPEN_MODULE_FEATURE_ID"
     }
 }

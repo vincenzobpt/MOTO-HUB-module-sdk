@@ -10,6 +10,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import io.motohub.android.module.ModuleRideShortcut
+import io.motohub.paddock.engine.EngineStage
 import io.motohub.paddock.engine.PaddockController
 import io.motohub.paddock.engine.QuickKind
 import java.io.File
@@ -34,14 +35,22 @@ internal class RideShortcut(
     override fun title() = "Go to your Paddock"
 
     override fun subtitle(): String {
+        if (controller.disconnected.value) return "Disconnected · open to connect"
         val state = controller.state.value
         state.riding?.let { return "Riding with ${it.name}" }
         val count = state.rooms.size.takeIf { it > 0 } ?: roomsOnDisk()
-        return when (count) {
+        val rooms = when (count) {
             0 -> "Create or join a room"
             1 -> "1 room"
             else -> "$count rooms"
         }
+        val link = when {
+            state.stage == EngineStage.RUNNING && state.online -> "Online"
+            state.stage == EngineStage.RUNNING && state.standby -> "Standby"
+            state.stage == EngineStage.RUNNING || state.stage == EngineStage.STARTING -> "Connecting"
+            else -> "Offline"
+        }
+        return "$link · $rooms"
     }
 
     override fun badge(): Int = controller.state.value.rooms.sumOf { it.unread }

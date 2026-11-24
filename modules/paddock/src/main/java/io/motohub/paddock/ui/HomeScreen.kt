@@ -58,7 +58,10 @@ internal fun HomeScreen(
     onSettings: () -> Unit,
     onRetry: () -> Unit,
     onRestart: (android.content.Context) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    disconnected: Boolean = false,
+    onDisconnect: () -> Unit = {},
+    onConnect: () -> Unit = {}
 ) {
     Page("Paddock", onBack, trailing = { RoundIconButton(PI.GEAR, "Settings", onSettings) }) {
         val riding = state.riding
@@ -66,9 +69,9 @@ internal fun HomeScreen(
             RidingBanner(riding, state.myHash) { onRoom(riding.id) }
             Spacer(Modifier.height(S.gap))
         }
-        RiderCard(profile, state)
+        RiderCard(profile, state, disconnected, onDisconnect)
         Spacer(Modifier.height(S.section))
-        when (state.stage) {
+        if (disconnected) DisconnectedPanel(onConnect) else when (state.stage) {
             EngineStage.RUNNING -> {
                 if (!state.online) {
                     WaitingRow(
@@ -240,7 +243,7 @@ internal fun UnreadBadge(text: String) {
 /** Me, as my rooms' riders see me, and whether this phone is private and online. */
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
-private fun RiderCard(profile: Profile, state: PaddockState) {
+private fun RiderCard(profile: Profile, state: PaddockState, disconnected: Boolean, onDisconnect: () -> Unit) {
     val color = riderColor(profile.color)
     Column(
         Modifier.fillMaxWidth().clip(RoundedCornerShape(S.cardRadius))
@@ -257,16 +260,38 @@ private fun RiderCard(profile: Profile, state: PaddockState) {
         }
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Pill("Private · end-to-end encrypted", P.ok, P.okSoft) { PIcon(PI.LOCK, P.ok, 16.dp) }
-            RelayPill(state)
+            RelayPill(state, disconnected)
         }
+        // The rider's own off switch: stays off, across MOTO-HUB restarts, until Connect.
+        if (!disconnected && (state.stage == EngineStage.RUNNING || state.stage == EngineStage.STARTING)) {
+            SecondaryButton("Disconnect", PI.RELAY, modifier = Modifier.fillMaxWidth(), onClick = onDisconnect)
+        }
+    }
+}
+
+/** Disconnected by the rider: nothing connects until Connect. */
+@Composable
+@ComposableTarget(ModuleUi.UI_APPLIER)
+private fun DisconnectedPanel(onConnect: () -> Unit) {
+    Column(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(S.cardRadius)).background(P.surface).padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Txt("You are disconnected", Ty.HEADING, P.text)
+        Txt(
+            "Paddock does not connect, not even when MOTO-HUB starts, until you tap Connect. Your rooms are kept.",
+            Ty.SMALL, P.dim
+        )
+        PrimaryButton("Connect", PI.RELAY, true, Modifier.fillMaxWidth(), onClick = onConnect)
     }
 }
 
 @Composable
 @ComposableTarget(ModuleUi.UI_APPLIER)
-private fun RelayPill(state: PaddockState) {
+private fun RelayPill(state: PaddockState, disconnected: Boolean) {
     val host = relayHost(state.node)
     when {
+        disconnected -> Pill("Disconnected", P.text2, P.surfaceHi) { LiveDot(P.text2, 14.dp, pulse = false) }
         state.stage == EngineStage.RUNNING && state.online ->
             Pill("Relay online · $host", P.ok, P.okSoft) { LiveDot(P.ok, 14.dp) }
         state.stage == EngineStage.RUNNING ->
