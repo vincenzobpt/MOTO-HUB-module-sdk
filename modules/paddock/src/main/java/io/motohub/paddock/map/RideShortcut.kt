@@ -15,7 +15,8 @@ import io.motohub.paddock.engine.QuickKind
 import java.io.File
 
 /**
- * "Go to your Paddock" on the Ride page (contract 46): shown while the rider has a room. Read by
+ * "Go to your Paddock" on the Ride page (contract 46): always shown while Paddock is installed, so
+ * the rider reaches it with or without a room. Read by
  * the app every second on the main thread, so every answer comes from memory or one small listing.
  * Loaded only by an app at 46 or later: an older app never asks for it.
  */
@@ -28,7 +29,7 @@ internal class RideShortcut(
     // Python may not run yet (it starts when Paddock opens or a ride resumes): the room files say.
     private fun roomsOnDisk(): Int = File(storage, "rooms").list()?.count { it.endsWith(".json") } ?: 0
 
-    override fun shown(): Boolean = controller.state.value.rooms.isNotEmpty() || roomsOnDisk() > 0
+    override fun shown(): Boolean = true
 
     override fun title() = "Go to your Paddock"
 
@@ -36,7 +37,11 @@ internal class RideShortcut(
         val state = controller.state.value
         state.riding?.let { return "Riding with ${it.name}" }
         val count = state.rooms.size.takeIf { it > 0 } ?: roomsOnDisk()
-        return if (count == 1) "1 room" else "$count rooms"
+        return when (count) {
+            0 -> "Create or join a room"
+            1 -> "1 room"
+            else -> "$count rooms"
+        }
     }
 
     override fun badge(): Int = controller.state.value.rooms.sumOf { it.unread }
