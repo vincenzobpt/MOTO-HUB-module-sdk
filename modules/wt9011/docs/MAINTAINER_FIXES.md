@@ -75,3 +75,16 @@ after the module unloaded.
 
 **Behaviour now:** `onScanResult` returns at once when `released` is true or `scanning` is false.
 `openGatt` returns when `released` is true.
+
+## Addition 5: the sensor's state on the module's card (0.3.1)
+
+**Where:** `Wt9011Status.kt`, `Wt9011Module.capability()` and `publishPill()` in `Wt9011Entry.kt`.
+
+**Why:** Settings ▸ Modules shows how each module is doing (contract 50, `ModuleStatus`). Before
+0.3.1 the card said nothing while the sensor was off, because the Ride page pill only exists while
+fresh data arrives.
+
+**Behaviour now:** the card shows **Connected** (lean and battery), **Waiting for data** (linked,
+no fresh frame) or **Not connected** (the last sensor's name). The capability is handed out by
+class name, so the module still declares contract 43 and loads on an older app. Marked
+`MOTO-HUB-FIX 2026-11-24` in the code.

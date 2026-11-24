@@ -11,7 +11,7 @@ plugins {
 
 motohubModule {
     id = "wt9011"
-    version = "0.3.0"
+    version = "0.3.1"
     entryClass = "io.github.sur00t.wt9011.Wt9011Entry"
     // ModuleMotionSource, which hands every sample to MOTO-HUB, arrived with contract 43.
     contractVersion = 43

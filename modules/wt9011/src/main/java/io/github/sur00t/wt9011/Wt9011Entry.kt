@@ -113,7 +113,7 @@ private class Wt9011Module(private val host: MotoHubModuleHost) :
     // Must agree with motohubModule { } in build.gradle.kts.
     override val manifest = ModuleManifest(
         id = "wt9011",
-        version = "0.3.0",
+        version = "0.3.1",
         contractVersion = 43,
         entryClass = "io.github.sur00t.wt9011.Wt9011Entry",
         displayName = "WT9011 IMU",
@@ -127,6 +127,9 @@ private class Wt9011Module(private val host: MotoHubModuleHost) :
 
     private val main = Handler(Looper.getMainLooper())
     private var lastPillLabel: String? = null
+
+    // MOTO-HUB-FIX 2026-11-24, addition 5: by lazy, by name - ModuleStatus is contract 50.
+    private val cardStatus = lazy { Wt9011Status() }
 
     /**
      * The pill is driven from here and not from the screen: the whole point of it is that lean is
@@ -168,6 +171,7 @@ private class Wt9011Module(private val host: MotoHubModuleHost) :
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any> capability(type: Class<T>): T? = when {
         type.isInstance(this) -> this as T
+        type.name == MODULE_STATUS -> cardStatus.value.also { publishPill() } as T
         else -> null
     }
 
@@ -196,6 +200,9 @@ private class Wt9011Module(private val host: MotoHubModuleHost) :
             )
         } else {
             null
+        }
+        if (cardStatus.isInitialized()) {
+            cardStatus.value.publish(snapshot, fresh, ride?.let { String.format(Locale.ROOT, "Lean %.0f°", abs(it.leanDeg)) })
         }
         if (label != lastPillLabel) {
             lastPillLabel = label
@@ -407,6 +414,7 @@ private class Wt9011Module(private val host: MotoHubModuleHost) :
         const val FEATURE_DIAGNOSTICS = "wt9011-diagnostics"
         const val RENDER_PERIOD_MS = 100L
         const val PILL_PERIOD_MS = 500L
+        const val MODULE_STATUS = "io.motohub.android.module.ModuleStatus"
         const val PILL_STALE_MS = 1000L
     }
 }
