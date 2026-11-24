@@ -42,9 +42,10 @@ _pn_cv = threading.Condition()
 _pn_jobs = collections.deque()
 
 APP_TYPE = "paddock/1"
-# A join is asked DIRECT every 15 s for 90 s, then through the mailbox (the leader's MOTO-HUB may be
-# closed) and DIRECT again every 2 min: it never gives up on its own, the rider cancels.
-JOIN_RETRY_S, JOIN_MAILBOX_AFTER_S, JOIN_RETRY_LATE_S, ANNOUNCE_EVERY_S = 15, 90, 120, 600
+# A join is asked DIRECT every 15 s for 30 s, then also through the room's mailbox (the leader's MOTO-HUB
+# may be closed; the joiner's own relays drop a minute after it leaves the screen) and DIRECT again every
+# 2 min: it never gives up on its own, the rider cancels.
+JOIN_RETRY_S, JOIN_MAILBOX_AFTER_S, JOIN_RETRY_LATE_S, ANNOUNCE_EVERY_S = 15, 30, 120, 600
 # While a join waits, the mailbox is asked this often (instead of every 10 min).
 FETCH_JOINING_S = 120
 MAX_MEMBERS = 40
@@ -430,6 +431,14 @@ def _room_link(room):
     rs = room.get("relays") or (_live_relays() if room["iAmLeader"] else [])
     if rs:
         params.append(("x", _fmt_relays(rs[:ROOM_RELAYS_MAX])))
+    params = [(k, v) for k, v in params if k not in ("p", "t")]
+    leader_pt = _g["push_token"] if room["iAmLeader"] else room["members"].get(room["leader"], {}).get("pt")
+    if leader_pt:
+        # The leader's push token: a rider asking to join rings the leader's phone like a message does.
+        params.append(("t", leader_pt))
+    if room.get("pns"):
+        # The room's mailbox node: a join left there while the leader is away is read when they are back.
+        params.append(("p", _b64u(bytes.fromhex(room["pns"][0]))))
     return "paddock://join?" + urllib.parse.urlencode(params, safe=":,[]", quote_via=urllib.parse.quote)
 
 
@@ -729,8 +738,15 @@ def join_room(link):
         if d == _g["my_hash"]:
             return json.dumps({"ok": False, "error": "This is your own room."})
         shared = _parse_relays(p.get("x"))
+        pn, pt = _unb64u(p.get("p"), 16), _pt(p.get("t"))
         if rid in _g["rooms"]:
             room = _g["rooms"][rid]
+            if room["state"] == "joining" and (pn or pt):
+                if pn:
+                    room["pns"] = [pn]
+                if pt:
+                    room["members"][room["leader"]]["pt"] = pt
+                _save_room(room)
             if shared:  # scanning the code again brings the leader's relays
                 room["relays"] = _valid_relays(shared + room.get("relays", []))
                 _save_room(room)
@@ -739,6 +755,11 @@ def join_room(link):
                 " Paddock now also uses its leader's relays." if shared else "")})
         room = _new_room(rid, _clean(p.get("n"), 64, "Paddock"), d, k, link.strip(), False)
         room["relays"] = shared
+        if pn:
+            # Only a leader whose Paddock reads room nodes puts one in the link.
+            room["pns"] = [pn]
+            room["members"][d]["v"] = PADDOCK_LEVEL
+        room["members"][d]["pt"] = pt
         _ensure_relays(shared)
         _send_join(room)
         _save_room(room)
@@ -1222,6 +1243,9 @@ def _tick():
     for room in list(_g["rooms"].values()):
         if room["state"] != "joining":
             continue
+        if not room.get("rang") and now - room["started"] >= WAKE_AFTER_S:
+            # No answer yet: ring the leader's phone (their MOTO-HUB may be in the background).
+            room["rang"] = _wake(room, room["leader"], "join")
         late = now - room["started"] > JOIN_MAILBOX_AFTER_S
         if late:
             _mail_join(room)

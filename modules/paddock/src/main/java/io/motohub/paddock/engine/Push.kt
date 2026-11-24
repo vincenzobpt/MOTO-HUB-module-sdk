@@ -156,6 +156,11 @@ internal class PushReceiver(private val storage: File, private val notifier: Not
         return when (kind) {
             "msg" -> notifier.postWakeMessage(roomId, roomName, name)
             "call" -> notifier.postWakeCall(roomId, roomName, name)
+            // Not a member yet, so no name: opening the room reconnects Paddock and lets them in.
+            "join" -> {
+                notifier.post(roomName, "A rider is asking to join $roomName. Open Paddock to let them in.", roomId, loud = true)
+                true
+            }
             else -> false
         }
     }

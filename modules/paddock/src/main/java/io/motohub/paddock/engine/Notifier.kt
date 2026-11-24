@@ -21,8 +21,11 @@ internal class Notifier(private val context: Context) {
     private var created = false
     private var nextId = BASE_ID
 
-    /** [roomId]: the room the news is about, opened by a tap; null opens Paddock's home. */
-    fun post(title: String, text: String, roomId: String? = null) {
+    /**
+     * [roomId]: the room the news is about, opened by a tap; null opens Paddock's home. [loud]: on the
+     * messages channel (sound, on screen), for news that waits on me, like a rider asking to join.
+     */
+    fun post(title: String, text: String, roomId: String? = null, loud: Boolean = false) {
         val manager = manager ?: return
         runCatching {
             if (!created) {
@@ -31,6 +34,13 @@ internal class Notifier(private val context: Context) {
                         .apply { description = "Riders joining your Paddock rooms" }
                 )
                 created = true
+            }
+            if (loud && !messagesCreated) {
+                manager.createNotificationChannel(
+                    NotificationChannel(CHANNEL_MESSAGES, "Paddock messages", NotificationManager.IMPORTANCE_HIGH)
+                        .apply { description = "Chat messages in your Paddock rooms" }
+                )
+                messagesCreated = true
             }
             // The app's own small icon: a module jar carries no resources of its own.
             val icon = context.resources.getIdentifier("ic_notification", "drawable", context.packageName)
@@ -43,7 +53,7 @@ internal class Notifier(private val context: Context) {
                     .addFlags(android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 PendingIntent.getActivity(context, nextId, it, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
             }
-            val n = Notification.Builder(context, CHANNEL)
+            val n = Notification.Builder(context, if (loud) CHANNEL_MESSAGES else CHANNEL)
                 .setSmallIcon(icon)
                 .setContentTitle(title)
                 .setContentText(text)
