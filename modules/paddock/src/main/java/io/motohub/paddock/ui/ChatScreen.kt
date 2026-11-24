@@ -153,9 +153,21 @@ internal fun ChatScreen(controller: PaddockController, room: Room, slot: BackSlo
             }
 
             // Opened from a push: the message is on its way from the sender's phone.
+            // Until the message comes: first that it is being fetched, then, if nothing came in 45 s,
+            // why (the sender's phone is offline: it arrives when it connects, or from the mailbox).
             val fetching by io.motohub.paddock.engine.Push.fetching.collectAsState()
-            fetching[room.id]?.takeIf { now * 1000L - it.second < io.motohub.paddock.engine.Push.FETCH_SHOWN_MILLIS }?.let { (name, _) ->
-                WaitingRow("Fetching the new message…", "From $name's phone", Modifier.padding(horizontal = 16.dp, vertical = 6.dp))
+            val openedAt = remember(room.id) { now }
+            fetching[room.id]?.let { (name, _) ->
+                if ((now - openedAt) * 1000L < io.motohub.paddock.engine.Push.FETCH_SHOWN_MILLIS) {
+                    WaitingRow("Fetching the new message…", "From $name's phone", Modifier.padding(horizontal = 16.dp, vertical = 6.dp))
+                } else {
+                    Notice(
+                        PI.CLOCK, P.warn, P.warnSoft,
+                        "Not here yet: $name's phone is offline. The message arrives when their Paddock connects again, " +
+                            "or from the mailbox if they left it there.",
+                        Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+                    )
+                }
             }
 
             ChatComposer(room.name, draft, { draft = it }, onQuick = { quick = true }) {

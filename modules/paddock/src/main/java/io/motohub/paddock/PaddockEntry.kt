@@ -98,6 +98,8 @@ private class PaddockModule(private val host: MotoHubModuleHost) : MotoHubModule
 
     init {
         host.log.log("PADDOCK loaded")
+        // Pushes that woke this phone before Android ended MOTO-HUB (what the chat shows, who to answer).
+        io.motohub.paddock.engine.Push.attach(host.storage)
         // A rider in any room is reachable as soon as MOTO-HUB opens: joins, chat and the mailbox
         // arrive without opening Paddock. With no room, nothing connects anywhere.
         val rooms = java.io.File(host.storage, "rooms").listFiles { f -> f.name.endsWith(".json") }.orEmpty()

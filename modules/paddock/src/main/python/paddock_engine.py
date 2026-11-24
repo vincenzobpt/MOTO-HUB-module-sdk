@@ -244,7 +244,7 @@ def _save_ride():
 
 
 def _send(room, dest_hex, key_hex, kind, data=None, extra=None, opportunistic=False,
-          content="", method=None, track=None, mailbox=False, pn=None):
+          content="", method=None, track=None, mailbox=False, pn=None, chain=None):
     """Queue one LXMF message; the router sends it in its own thread. Never blocks for long.
     track = (room id, chat id, recipient, via): delivery/failure is noted in _g["dlq"] (chat).
     mailbox: a DIRECT message that fails goes again through the propagation node, so a rider whose
@@ -277,16 +277,22 @@ def _send(room, dest_hex, key_hex, kind, data=None, extra=None, opportunistic=Fa
                 kwargs={"method": LXMF.LXMessage.PROPAGATED}, daemon=True).start()
                 if _mailbox_known() else None)
         if msg.desired_method == LXMF.LXMessage.PROPAGATED:
-            # A mailbox copy: on the room's node when the recipient looks there, else on mine. Failing
-            # on the room's node, it goes once more on mine (dedup by id on the other side).
-            target = pn or _target_pn(room["id"], dest_hex)
-            home = _g.get("home_pn")
+            # A mailbox copy: on the room's node when the recipient looks there, else on mine. A node
+            # that does not take it (public nodes come and go) passes it to the next one of
+            # _deposit_pns: the room's older nodes, mine, then other known ones. The recipient reads
+            # the room's nodes and its own; a copy on two nodes is dropped by id on its side.
+            if pn is None:
+                chain = _deposit_pns(room["id"], dest_hex)
+                pn = chain.pop(0) if chain else None
+            target = pn
             if not target:
                 return failed()
-            if pn is None and home and target != home:
+            if chain:
+                rest = list(chain)
                 msg.register_failed_callback(lambda m: threading.Thread(
                     target=_send, args=(room, dest_hex, key_hex, kind, data, extra),
-                    kwargs={"content": content, "method": LXMF.LXMessage.PROPAGATED, "track": track, "pn": home},
+                    kwargs={"content": content, "method": LXMF.LXMessage.PROPAGATED, "track": track,
+                            "pn": rest[0], "chain": rest[1:]},
                     daemon=True).start())
         if track:
             # Both callbacks run inside the router's outbound lock: never take _lock there.
@@ -1923,6 +1929,20 @@ def _target_pn(rid, dest_hex):
     if room and room.get("pns") and m and m.get("v", 0) >= PADDOCK_LEVEL:
         return room["pns"][0]
     return _g.get("home_pn") or _preferred_pn()
+
+
+def _deposit_pns(rid, dest_hex):
+    """Nodes to try, in order, for a mailbox copy to dest_hex (at most 5)."""
+    room = _g["rooms"].get(rid)
+    out = [_target_pn(rid, dest_hex)] + (room.get("pns", []) if room else []) + [_g.get("home_pn")]
+    with _pn_lock:
+        known = list(reversed(_g["pns"]))
+    out += [h for h in known if _g["RNS"].Identity.recall(bytes.fromhex(h)) is not None][:3]
+    seen = []
+    for h in out:
+        if h and h not in seen:
+            seen.append(h)
+    return seen[:5]
 
 
 def _pn_job(kind, pn, arg=None):

@@ -59,32 +59,80 @@ internal object Push {
     }
 
     /**
+     * The pushes that woke this phone, on disk (push_wakes.json): Android may end MOTO-HUB between the
+     * push and the rider's tap, and both what the chat shows and the "I am here" to the sender must
+     * still be there after it. Read once by [attach], before anything else asks.
+     */
+    data class Wake(
+        val roomId: String, val from: String, val kind: String, val at: Long, val name: String,
+        /** "I am here" or the call-back already done. */
+        val said: Boolean = false,
+        /** The message came: the chat no longer says it is fetching it. */
+        val fetchedIt: Boolean = false
+    )
+
+    private var file: File? = null
+    private val wakes = ArrayList<Wake>()
+
+    /**
      * Rooms whose chat a push said has a new message not fetched yet: room id -> (sender's name, when).
-     * The chat shows that it is fetching it (every wait is visible); the engine clears it when the
-     * message comes, and the chat stops showing it after [FETCH_SHOWN_MILLIS] anyway.
+     * The chat shows that it is fetching it for [FETCH_SHOWN_MILLIS] after it opened, then that the
+     * sender is offline (every wait is visible); cleared when the message comes.
      */
     val fetching = kotlinx.coroutines.flow.MutableStateFlow<Map<String, Pair<String, Long>>>(emptyMap())
-    const val FETCH_SHOWN_MILLIS = 60_000L
+    const val FETCH_SHOWN_MILLIS = 45_000L
+    private const val KEEP_MILLIS = 15 * 60_000L
 
-    fun fetched(roomId: String) {
-        if (roomId in fetching.value) fetching.value = fetching.value - roomId
+    fun attach(storage: File) = synchronized(wakes) {
+        if (file != null) return
+        file = File(storage, "push_wakes.json")
+        runCatching {
+            val a = JSONArray(file!!.readText())
+            for (i in 0 until a.length()) {
+                val o = a.getJSONObject(i)
+                wakes.add(Wake(o.getString("r"), o.getString("f"), o.getString("k"), o.getLong("at"),
+                    o.optString("n", "A rider"), o.optBoolean("said"), o.optBoolean("got")))
+            }
+        }
+        changed()
     }
 
-    /** A push that woke this phone, kept until Paddock is online to say "I am here" to its sender. */
-    data class Wake(val roomId: String, val from: String, val kind: String, val at: Long)
-
-    private val inbox = ArrayList<Wake>()
-
-    fun remember(wake: Wake) = synchronized(inbox) {
-        inbox.removeAll { it.roomId == wake.roomId && it.from == wake.from }
-        inbox.add(wake)
+    /** Under the lock: drop old wakes, save, and publish what the chats show. */
+    private fun changed() {
+        val now = System.currentTimeMillis()
+        wakes.removeAll { now - it.at > KEEP_MILLIS }
+        file?.let { f ->
+            runCatching {
+                val a = JSONArray()
+                wakes.forEach {
+                    a.put(JSONObject().put("r", it.roomId).put("f", it.from).put("k", it.kind).put("at", it.at)
+                        .put("n", it.name).put("said", it.said).put("got", it.fetchedIt))
+                }
+                File(f.path + ".tmp").apply { writeText(a.toString()) }.renameTo(f)
+            }
+        }
+        fetching.value = wakes.filter { it.kind == "msg" && !it.fetchedIt }.associate { it.roomId to (it.name to it.at) }
     }
 
-    /** The wakes of the last 15 minutes, once. */
-    fun takeRecent(now: Long): List<Wake> = synchronized(inbox) {
-        val recent = inbox.filter { now - it.at < 15 * 60_000L }
-        inbox.clear()
-        recent
+    fun remember(wake: Wake) = synchronized(wakes) {
+        wakes.removeAll { it.roomId == wake.roomId && it.from == wake.from }
+        wakes.add(wake)
+        changed()
+    }
+
+    fun fetched(roomId: String) = synchronized(wakes) {
+        if (wakes.none { it.roomId == roomId && !it.fetchedIt }) return
+        for (i in wakes.indices) if (wakes[i].roomId == roomId) wakes[i] = wakes[i].copy(fetchedIt = true)
+        changed()
+    }
+
+    /** The wakes not acted on yet (last 15 minutes), once. */
+    fun takeRecent(now: Long): List<Wake> = synchronized(wakes) {
+        val todo = wakes.filter { !it.said && now - it.at < KEEP_MILLIS }
+        if (todo.isEmpty()) return emptyList()
+        for (i in wakes.indices) if (!wakes[i].said) wakes[i] = wakes[i].copy(said = true)
+        changed()
+        todo
     }
 }
 
@@ -103,8 +151,8 @@ internal class PushReceiver(private val storage: File, private val notifier: Not
         val members = room.optJSONArray("members")
         val name = (0 until (members?.length() ?: 0)).map { members!!.getJSONObject(it) }
             .firstOrNull { it.optString("hash").startsWith(from) }?.optString("name")?.ifBlank { null } ?: "A rider"
-        Push.remember(Push.Wake(roomId, from, kind, System.currentTimeMillis()))
-        if (kind == "msg") Push.fetching.value = Push.fetching.value + (roomId to (name to System.currentTimeMillis()))
+        Push.attach(storage)
+        Push.remember(Push.Wake(roomId, from, kind, System.currentTimeMillis(), name))
         return when (kind) {
             "msg" -> notifier.postWakeMessage(roomId, roomName, name)
             "call" -> notifier.postWakeCall(roomId, roomName, name)
