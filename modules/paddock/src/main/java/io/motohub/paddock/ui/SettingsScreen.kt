@@ -113,8 +113,8 @@ internal fun SettingsScreen(
                     "This uses battery every hour, also when you are not riding. Turn it off if your battery drops too fast."
                 else "Paddock connects to the relays only when it is needed: while you ride with a room, during a Paddock call, " +
                     "and while MOTO-HUB is on screen (and for one minute after you leave it). The rest of the time it uses almost no battery.\n\n" +
-                    "Meanwhile a rider who writes or calls you rings your phone: tap the notification and the message " +
-                    "or the call comes in. Room invites wait in the mailbox and arrive when you open MOTO-HUB.",
+                    "Meanwhile a rider who writes, calls or asks to join your room rings your phone: tap the notification " +
+                    "and the message, the call or the rider comes in.",
                 Ty.SMALL, P.dim, Modifier.padding(start = 4.dp, top = 10.dp)
             )
 

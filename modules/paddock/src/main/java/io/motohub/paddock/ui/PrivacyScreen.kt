@@ -45,9 +45,10 @@ internal fun PrivacyScreen(onBack: () -> Unit) {
         )
         InfoBlock(
             PI.PHONES, P.ok, P.okSoft, "The doorbell",
-            "When a rider of your room cannot be reached because MOTO-HUB is in the background on their phone, " +
-                "MOTO-HUB's push service asks Google to ring it: \"a message\" or \"a call\", with a random room code. " +
-                "No names, no text, no positions, and it keeps nothing. Your phone's push code goes only to the riders of your rooms."
+            "When a rider cannot be reached because MOTO-HUB is in the background on their phone, MOTO-HUB's push " +
+                "service asks Google to ring it: \"a message\", \"a call\" or \"a rider asking to join\", with a random room code. " +
+                "No names, no text, no positions, and it keeps nothing. Your phone's push code goes only to the riders of your " +
+                "rooms and, if you lead a room, into its QR code and link."
         )
         InfoBlock(
             PI.RELAY, P.ok, P.okSoft, "What the relay sees",

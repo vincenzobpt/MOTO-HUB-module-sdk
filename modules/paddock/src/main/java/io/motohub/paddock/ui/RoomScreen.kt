@@ -184,8 +184,8 @@ private fun Joining(room: Room, onCancel: () -> Unit) {
         Txt("Asking the leader of ${room.name} to let you in…", Ty.TITLE, P.text, align = TextAlign.Center)
         Spacer(Modifier.height(10.dp))
         Txt(
-            "If the leader's MOTO-HUB is closed, you are let in as soon as they open it. You can leave this " +
-                "screen: a notification tells you when you are in.",
+            "If the leader's MOTO-HUB is in the background, Paddock rings their phone. You can leave this screen or " +
+                "close MOTO-HUB: a notification tells you when you are in.",
             Ty.BODY, P.dim, align = TextAlign.Center
         )
         Spacer(Modifier.height(S.section))
